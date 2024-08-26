@@ -94,7 +94,7 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    private(set) var defaultHomeserverAddress = "matrix.org"
+    private(set) var defaultHomeserverAddress = "https://zos-home-2-e24b9412096f.herokuapp.com"
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
@@ -169,7 +169,7 @@ final class AppSettings {
         #endif
     }
     
-    let pushGatewayBaseURL: URL = "https://matrix.org/_matrix/push/v1/notify"
+    let pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableNotifications
