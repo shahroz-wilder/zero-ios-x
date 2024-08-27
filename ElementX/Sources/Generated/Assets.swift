@@ -46,6 +46,9 @@ internal enum Asset {
     internal static let notificationsPromptGraphic = ImageAsset(name: "images/notifications-prompt-graphic")
     internal static let pollWinner = ImageAsset(name: "images/poll-winner")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
+    internal static let conversationsListHeader = ImageAsset(name: "images/conversations-list-header")
+    internal static let landingBackground = ImageAsset(name: "images/landing-background")
+    internal static let zeroLogoMark = ImageAsset(name: "images/zero-logo-mark")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
