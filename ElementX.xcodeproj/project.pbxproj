@@ -121,6 +121,8 @@
 		184D6FD42C7D8F45006266D8 /* ZSessionDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */; };
 		184D6FD62C7D9261006266D8 /* ZSSOToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD52C7D9261006266D8 /* ZSSOToken.swift */; };
 		18867F4F1C8991EEC56EA932 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
+		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
+		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
 		192A3CDCD0174AD1E4A128E4 /* AudioRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2441E2424E78A40FC95DBA76 /* AudioRecorderTests.swift */; };
 		1950A80CD198BED283DFC2CE /* ClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */; };
@@ -1288,6 +1290,8 @@
 		184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSession.swift; sourceTree = "<group>"; };
 		184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSessionDataResponse.swift; sourceTree = "<group>"; };
 		184D6FD52C7D9261006266D8 /* ZSSOToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSSOToken.swift; sourceTree = "<group>"; };
+		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
+		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientProxy.swift; sourceTree = "<group>"; };
 		18FE0CDF1FFA92EA7EE17B0B /* RoomTimelineControllerFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineControllerFactoryProtocol.swift; sourceTree = "<group>"; };
 		190EC7285D3CFEF0D3011BCF /* GeoURI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoURI.swift; sourceTree = "<group>"; };
@@ -2678,6 +2682,38 @@
 				184D6FD52C7D9261006266D8 /* ZSSOToken.swift */,
 			);
 			path = Response;
+			sourceTree = "<group>";
+		};
+		18CB801A2C7F1CEB003BC289 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				18CB801B2C7F1CF5003BC289 /* Login */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		18CB801B2C7F1CF5003BC289 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				18CB801C2C7F2CCC003BC289 /* View */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		18CB801C2C7F2CCC003BC289 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		18CB801F2C7F3094003BC289 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				18CB80202C7F310E003BC289 /* ViewModifiers.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		1C62F5382CC9D9F7DCEC344A /* UserDiscoveryService */ = {
@@ -5021,6 +5057,8 @@
 		CC8F34922C7DE37A002D92F9 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				18CB801F2C7F3094003BC289 /* Utilities */,
+				18CB801A2C7F1CEB003BC289 /* Authentication */,
 				CC8F34932C7DE383002D92F9 /* LandingScreen */,
 			);
 			path = Screens;
@@ -6373,6 +6411,7 @@
 				037006FB6DF1374F94E4058D /* Dictionary.swift in Sources */,
 				EDF8919F15DE0FF00EF99E70 /* DocumentPicker.swift in Sources */,
 				4FDC8A9764CFDA90CE035725 /* Duration.swift in Sources */,
+				18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */,
 				2955F4C160CFD7794D819C64 /* EffectsScene.swift in Sources */,
 				AE1160076F663BF14E0E893A /* EffectsView.swift in Sources */,
 				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
@@ -6952,6 +6991,7 @@
 				4BB51476A29E7E27BC14EA22 /* UserDetailsEditScreenViewModel.swift in Sources */,
 				0ACAA31FD0399CEEBA3ECC21 /* UserDetailsEditScreenViewModelProtocol.swift in Sources */,
 				828EA5009557C2B9DCD4CA0F /* UserDiscoverySection.swift in Sources */,
+				18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */,
 				044DD8F80231BC30570F7965 /* UserDiscoveryService.swift in Sources */,
 				1C409A26A99F0371C47AFA51 /* UserDiscoveryServiceProtocol.swift in Sources */,
 				988BA75A182738150894A23F /* UserIndicator.swift in Sources */,

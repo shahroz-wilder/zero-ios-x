@@ -46,7 +46,13 @@ internal enum Asset {
     internal static let notificationsPromptGraphic = ImageAsset(name: "images/notifications-prompt-graphic")
     internal static let pollWinner = ImageAsset(name: "images/poll-winner")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
+    internal static let backgroundLevel1 = ImageAsset(name: "images/background-level-1")
+    internal static let backgroundLevel2 = ImageAsset(name: "images/background-level-2")
+    internal static let backgroundLevel3 = ImageAsset(name: "images/background-level-3")
     internal static let conversationsListHeader = ImageAsset(name: "images/conversations-list-header")
+    internal static let defaultAuthTextfield = ImageAsset(name: "images/default-auth-textfield")
+    internal static let defaultLoginButton = ImageAsset(name: "images/default-login-button")
+    internal static let defaultWalletConnectButton = ImageAsset(name: "images/default-wallet-connect-button")
     internal static let landingBackground = ImageAsset(name: "images/landing-background")
     internal static let zeroLogoMark = ImageAsset(name: "images/zero-logo-mark")
   }
