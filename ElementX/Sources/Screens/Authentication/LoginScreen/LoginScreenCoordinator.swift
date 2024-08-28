@@ -80,7 +80,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(LoginScreen(context: viewModel.context))
+        AnyView(ZeroLoginScreen(context: viewModel.context))
     }
     
     // MARK: - Private

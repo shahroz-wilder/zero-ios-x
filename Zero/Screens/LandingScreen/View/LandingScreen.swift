@@ -38,7 +38,7 @@ struct LandingScreen: View {
         Image(asset: Asset.Images.zeroLogoMark)
             .frame(width: 32, height: 32)
             .padding(.bottom, 70)
-            .padding(.top, 48)
+            .padding(.top, 60)
     }
     
     var actionButton: some View {
