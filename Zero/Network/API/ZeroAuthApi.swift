@@ -53,13 +53,20 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     }
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
-        let url = "\(appSettings.defaultHomeserverAddress)/\(AuthEndPoints.matrixSessionEndPoint)"
+        let homeAddress = appSettings.defaultHomeserverAddress
+        let url = "\(homeAddress)/\(AuthEndPoints.matrixSessionEndPoint)"
+        var host = ""
+        if let range = homeAddress.range(of: "https://") {
+            host = String(homeAddress[range.upperBound...])
+        } else {
+            host = homeAddress
+        }
         let parameters: Parameters = [
             "token": ssoToken,
             "type": AuthConstants.ssoTokenType
         ]
         let headers: HTTPHeaders = [
-            "Host": "zero-staging-new-9476d8d7e22a.herokuapp.com",
+            "Host": host,
             "Origin": AuthConstants.origin
         ]
         return try await APIManager.shared.request(url, method: .post, parameters: parameters, headers: headers)
