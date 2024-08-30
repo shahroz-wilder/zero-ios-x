@@ -61,9 +61,9 @@ struct LoginScreenViewState: BindableState {
 
 struct LoginScreenBindings {
     /// The username input by the user.
-    var username = "ryan.vanalstine@wilderworld.com"
+    var username = ""
     /// The password input by the user.
-    var password = "August0630!"
+    var password = ""
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<LoginScreenErrorType>?
 }

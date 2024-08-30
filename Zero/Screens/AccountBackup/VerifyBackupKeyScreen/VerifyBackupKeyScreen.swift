@@ -92,8 +92,9 @@ struct VerifyBackupKeyScreen: View {
             "",
             text: $context.confirmationRecoveryKey,
             prompt: Text("Backup phrase")
-                .foregroundColor(Asset.Colors.textSecondary.swiftUIColor)
+                .foregroundColor(Asset.Colors.greyScale150.swiftUIColor)
         )
+        .foregroundColor(Asset.Colors.textPrimary.swiftUIColor)
         .padding()
         .textFieldStyle(PlainTextFieldStyle())
         .frame(height: 40)
