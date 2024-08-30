@@ -117,7 +117,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                       userId: zeroMatrixSession.userID,
                                       deviceId: zeroMatrixSession.deviceID,
                                       homeserverUrl: zeroMatrixSession.homeServer,
-                                      oidcData: nil, slidingSyncProxy: nil)
+                                      oidcData: nil,
+                                      slidingSyncVersion: .native)
                 try await client.restoreSession(session: session)
                 return await userSession(for: client)
             case .failure(let error):
