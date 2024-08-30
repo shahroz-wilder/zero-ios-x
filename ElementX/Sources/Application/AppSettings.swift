@@ -212,7 +212,7 @@ final class AppSettings {
     #endif
         
     /// Whether the user has opted in to send analytics.
-    @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.optedOut, storageType: .userDefaults(store))
     var analyticsConsentState
     
     @UserPreference(key: UserDefaultsKeys.hasRunNotificationPermissionsOnboarding, defaultValue: false, storageType: .userDefaults(store))
