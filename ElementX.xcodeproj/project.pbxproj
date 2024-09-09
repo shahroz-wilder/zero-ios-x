@@ -119,6 +119,8 @@
 		184D6FD22C7D8C8D006266D8 /* ZMatrixSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */; };
 		184D6FD42C7D8F45006266D8 /* ZSessionDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */; };
 		184D6FD62C7D9261006266D8 /* ZSSOToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD52C7D9261006266D8 /* ZSSOToken.swift */; };
+		1882EB752C8F7612001DA2A9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1882EB742C8F7612001DA2A9 /* Alamofire */; };
+		1882EB772C8F7612001DA2A9 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 1882EB762C8F7612001DA2A9 /* AlamofireDynamic */; };
 		18867F4F1C8991EEC56EA932 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
@@ -1278,7 +1280,7 @@
 		127A57D053CE8C87B5EFB089 /* Consumable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consumable.swift; sourceTree = "<group>"; };
 		127C8472672A5BA09EF1ACF8 /* CurrentValuePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentValuePublisher.swift; sourceTree = "<group>"; };
 		128501375217576AF0FE3E92 /* RoomAttachmentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomAttachmentPicker.swift; sourceTree = "<group>"; };
-		1304D9191300873EADA52D6E /* IntegrationTests.xctestplan */ = {isa = PBXFileReference; path = IntegrationTests.xctestplan; sourceTree = "<group>"; };
+		1304D9191300873EADA52D6E /* IntegrationTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = IntegrationTests.xctestplan; sourceTree = "<group>"; };
 		130ED565A078F7E0B59D9D25 /* UNTextInputNotificationResponse+Creator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNTextInputNotificationResponse+Creator.swift"; sourceTree = "<group>"; };
 		136F80A613B55BDD071DCEA5 /* JoinRoomScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinRoomScreenModels.swift; sourceTree = "<group>"; };
 		13802897C7AFA360EA74C0B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -2365,6 +2367,7 @@
 				CB137BFB3E083C33E398A6CB /* KeychainAccess in Frameworks */,
 				3C549A0BF39F8A854D45D9FD /* Kingfisher in Frameworks */,
 				41DFDD212D1BE57CA50D783B /* KZFileWatchers in Frameworks */,
+				1882EB752C8F7612001DA2A9 /* Alamofire in Frameworks */,
 				184D6FC22C7D83B1006266D8 /* Alamofire in Frameworks */,
 				6298AB0906DDD3525CD78C6B /* LoremSwiftum in Frameworks */,
 				407DCE030E0F9B7C9861D38A /* LRUCache in Frameworks */,
@@ -2375,6 +2378,7 @@
 				B0CB16349B96262AA65A04AF /* Sentry in Frameworks */,
 				36AD4DD4C798E22584ED3200 /* SentrySwiftUI in Frameworks */,
 				36CD6E11B37396E14F032CB6 /* Version in Frameworks */,
+				1882EB772C8F7612001DA2A9 /* AlamofireDynamic in Frameworks */,
 				A0D7E5BD0298A97DCBDCE40B /* Emojibase in Frameworks */,
 				44F0E1B576C7599DF8022071 /* WysiwygComposer in Frameworks */,
 				A93661C962B12942C08864B6 /* SwiftOGG in Frameworks */,
@@ -5704,6 +5708,8 @@
 				391D11F92DFC91666AA1503F /* SwiftOGG */,
 				2A4106A0A96DC4C273128AA5 /* DSWaveformImageViews */,
 				184D6FC12C7D83B1006266D8 /* Alamofire */,
+				1882EB742C8F7612001DA2A9 /* Alamofire */,
+				1882EB762C8F7612001DA2A9 /* AlamofireDynamic */,
 			);
 			productName = ElementX;
 			productReference = 4CD6AC7546E8D7E5C73CEA48 /* ElementX.app */;
@@ -5852,7 +5858,7 @@
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
 				44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
-				184D6FC02C7D83B1006266D8 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				1882EB732C8F7612001DA2A9 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -7779,6 +7785,14 @@
 				minimumVersion = 5.13.0;
 			};
 		};
+		1882EB732C8F7612001DA2A9 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/krzysztofzablocki/KZFileWatchers";
@@ -7980,8 +7994,17 @@
 		};
 		184D6FC12C7D83B1006266D8 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 184D6FC02C7D83B1006266D8 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		1882EB742C8F7612001DA2A9 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1882EB732C8F7612001DA2A9 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		1882EB762C8F7612001DA2A9 /* AlamofireDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1882EB732C8F7612001DA2A9 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = AlamofireDynamic;
 		};
 		19CD5B074D7DD44AF4C58BB6 /* SwiftState */ = {
 			isa = XCSwiftPackageProductDependency;
