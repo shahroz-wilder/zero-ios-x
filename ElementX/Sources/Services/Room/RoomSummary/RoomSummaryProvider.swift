@@ -17,6 +17,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
+    private let zeroUserApi: ZeroUsersApiProtocol
 
     private let roomListPageSize = 200
     
@@ -71,6 +72,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
+        self.zeroUserApi = ZeroUsersApi(appSettings: appSettings)
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -270,11 +272,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
+        var displayName: String? = nil
+//        if let matrixUsers = roomDetails.matrixUsers, !matrixUsers.isEmpty {
+//            displayName = roomInfo.displayName ?? matrixUsers[roomInfo.id]?.displayName
+//        }
+        
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
                            isInvite: roomInfo.membership == .invited,
                            inviter: inviterProxy,
-                           name: roomInfo.displayName ?? roomInfo.id,
+                           name: roomInfo.displayName ?? displayName ?? roomInfo.id,
                            isDirect: roomInfo.isDirect,
                            avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
@@ -372,11 +379,23 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
+        fetchAllRoomMembers()
+        
         rooms = rooms.map {
             self.buildRoomSummary(from: $0.roomListItem)
         }
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
+    }
+    
+    private func fetchAllRoomMembers() {
+//        let allRoomMembers = rooms.compactMap {
+//            let roomMembersIterator = $0.roomListItem.fullRoom().members()
+//            let roomMembers = try? await roomMembersIterator.nextChunk(chunkSize: roomMembersIterator.len())
+//            roomMembers?.map {
+//                $0.userId
+//            } ?? []
+//        }
     }
 }
 

@@ -40,6 +40,7 @@ final class AppSettings {
         case elementCallPictureInPictureEnabled
         
         case zeroAccessToken
+        case zeroMatrixUsers
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -283,4 +284,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.zeroAccessToken, defaultValue: nil, storageType: .userDefaults(store))
     var zeroAccessToken: String?
+    
+    // MARK: - ZERO Users
+    
+    @UserPreference(key: UserDefaultsKeys.zeroMatrixUsers, defaultValue: nil, storageType: .userDefaults(store))
+    var zeroMatrixUsers: [ZMatrixUser]?
 }
