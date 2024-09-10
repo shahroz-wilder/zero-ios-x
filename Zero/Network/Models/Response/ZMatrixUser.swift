@@ -10,8 +10,6 @@ public struct ZMatrixUser: Codable, Identifiable {
     public let isPending: Bool
     public let matrixId: String
     public let matrixAccessToken: String?
-    public let createdAt: Date
-    public let updatedAt: Date
     public let profileSummary: ZMatrixUserProfile?
     public let primaryZID: String?
     public let primaryWalletAddress: String?
@@ -28,12 +26,6 @@ public struct ZMatrixUser: Codable, Identifiable {
         }
         
         return handle
-    }
-    
-    public var joinedString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM, yyyy"
-        return formatter.string(from: createdAt)
     }
 }
 

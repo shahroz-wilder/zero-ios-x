@@ -61,6 +61,7 @@ internal enum Asset {
     internal static let conversationsListHeader = ImageAsset(name: "images/conversations-list-header")
     internal static let crossIcon = ImageAsset(name: "images/cross-icon")
     internal static let defaultAuthTextfield = ImageAsset(name: "images/default-auth-textfield")
+    internal static let defaultAvatarIcon = ImageAsset(name: "images/default-avatar-icon")
     internal static let defaultLoginButton = ImageAsset(name: "images/default-login-button")
     internal static let defaultWalletConnectButton = ImageAsset(name: "images/default-wallet-connect-button")
     internal static let landingBackground = ImageAsset(name: "images/landing-background")

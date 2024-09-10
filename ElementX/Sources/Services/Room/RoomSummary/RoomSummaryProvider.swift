@@ -52,6 +52,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
+    private var areRoomMembersFetched: Bool = false
+    private var allRoomMatrixUsers: [ZMatrixUser] = []
+    
     /// Build a new summary provider with the given parameters
     /// - Parameters:
     ///   - shouldUpdateVisibleRange: whether this summary provider should forward visible ranges
@@ -72,7 +75,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
-        self.zeroUserApi = ZeroUsersApi(appSettings: appSettings)
+        zeroUserApi = ZeroUsersApi(appSettings: appSettings)
+        allRoomMatrixUsers = appSettings.zeroMatrixUsers ?? []
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -193,7 +197,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     try roomListService.subscribeToRooms(roomIds: roomIDs,
                                                          settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
                                                                          timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                                                         includeHeroes: false))
+                                                                         includeHeroes: true))
                 } catch {
                     MXLog.error("Failed subscribing to rooms with error: \(error)")
                 }
@@ -209,7 +213,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         rooms = diffs.reduce(rooms) { currentItems, diff in
-            processDiff(diff, on: currentItems)
+            fetchAllRoomMembers()
+            return processDiff(diff, on: currentItems)
         }
     }
     
@@ -261,8 +266,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         if let latestRoomMessage = roomDetails.latestEvent {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, id: "0")
+            let author = allRoomMatrixUsers.first { $0.matrixId == matrixFormattedUserId(userId: lastMessage.sender.id) }
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
-            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
+            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage, author: author)
         }
         
         var inviterProxy: RoomMemberProxyProtocol?
@@ -273,17 +279,29 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         var displayName: String? = nil
-//        if let matrixUsers = roomDetails.matrixUsers, !matrixUsers.isEmpty {
-//            displayName = roomInfo.displayName ?? matrixUsers[roomInfo.id]?.displayName
-//        }
+        var roomAvatar: String? = nil
+        let roomUsers = getRoomMemberIds(
+            roomInfo: roomInfo,
+            lastEventSender: roomDetails.latestEvent?.sender()
+        ).compactMap { memberId -> ZMatrixUser? in
+            allRoomMatrixUsers.first { $0.matrixId == memberId }
+        }
+        if roomInfo.activeMembersCount > 2 {
+            displayName = roomInfo.displayName
+            roomAvatar = roomInfo.avatarUrl
+        } else {
+            let roomDirectUser = roomUsers.first
+            displayName = roomDirectUser?.displayName
+            roomAvatar = roomDirectUser?.profileSummary?.profileImage
+        }
         
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
                            isInvite: roomInfo.membership == .invited,
                            inviter: inviterProxy,
-                           name: roomInfo.displayName ?? displayName ?? roomInfo.id,
+                           name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
-                           avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
+                           avatarURL: URL(string: roomAvatar ?? ""),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
                            lastMessage: attributedLastMessage,
                            lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
@@ -378,9 +396,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
-        
-        fetchAllRoomMembers()
-        
+                
         rooms = rooms.map {
             self.buildRoomSummary(from: $0.roomListItem)
         }
@@ -389,13 +405,51 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     private func fetchAllRoomMembers() {
-//        let allRoomMembers = rooms.compactMap {
-//            let roomMembersIterator = $0.roomListItem.fullRoom().members()
-//            let roomMembers = try? await roomMembersIterator.nextChunk(chunkSize: roomMembersIterator.len())
-//            roomMembers?.map {
-//                $0.userId
-//            } ?? []
-//        }
+        if !rooms.isEmpty && !areRoomMembersFetched {
+            areRoomMembersFetched = true
+            Task {
+                do {
+                    let members = try await rooms.concurrentMap { room -> [String] in
+                        let roomInfo = try await room.roomListItem.roomInfo()
+                        let roomLastEvent = await room.roomListItem.latestEvent()
+                        return self.getRoomMemberIds(roomInfo: roomInfo, lastEventSender: roomLastEvent?.sender())
+                    }
+                        .flatMap { $0 }
+                        .uniqued { $0 }
+                    let zeroUsersResponse = try await zeroUserApi.fetchUsers(fromMatrixIds: members)
+                    switch zeroUsersResponse {
+                    case .success(let zeroMatrixUsers):
+                        allRoomMatrixUsers = zeroMatrixUsers
+                        appSettings.zeroMatrixUsers = zeroMatrixUsers
+                    case .failure(let error):
+                        print(error)
+                    }
+                } catch {
+                    print("Error while fetching all room members userIds")
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    private func getRoomMemberIds(roomInfo: RoomInfo, lastEventSender: String?) -> [String] {
+        var roomMemberIds: Array<String> = []
+        let roomHeroIds = roomInfo.heroes.map { $0.userId }
+        roomMemberIds.append(contentsOf: roomHeroIds)
+        let roomUserIdsFromPL = roomInfo.userPowerLevels.map { $0.key }
+        roomMemberIds.append(contentsOf: roomUserIdsFromPL)
+        if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: appSettings.zeroHomeServerPostfix) {
+            roomMemberIds.append(matrixFormattedRoomName)
+        }
+        if let lastMessageSender = lastEventSender {
+            let lastMessageSenderFormatted = matrixFormattedUserId(userId: lastMessageSender)
+            roomMemberIds.append(lastMessageSenderFormatted)
+        }
+        return roomMemberIds.uniqued { $0 }
+    }
+    
+    private func matrixFormattedUserId(userId: String) -> String {
+        userId.toMatrixUserIdFormat(appSettings.zeroHomeServerPostfix) ?? userId
     }
 }
 

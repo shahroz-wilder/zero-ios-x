@@ -123,6 +123,8 @@ final class AppSettings {
     /// Any domains that Element web may be hosted on - used for handling links.
     let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     
+    let zeroHomeServerPostfix = "zos-home-2.zero.tech"
+    
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
     
