@@ -14,6 +14,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
+    private let appSettings: AppSettings
     let timeline: TimelineProxyProtocol
     
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
@@ -76,6 +77,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var roomInfo: RoomInfo?
+    private var allRoomMatrixUsers: [ZMatrixUser] = []
+    
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id: String = room.id()
@@ -89,7 +93,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     var name: String? {
-        roomListItem.displayName()
+        getZeroRoomName()
     }
         
     var topic: String? {
@@ -97,19 +101,20 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     var avatarURL: URL? {
-        roomListItem.avatarUrl().flatMap(URL.init(string:))
+        URL(string: getZeroRoomAvatarUrl() ?? "")
     }
     
     var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            let heroes = room.heroes()
-            
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
-        }
-        
-        return .room(id: id, name: name, avatarURL: avatarURL)
+//        if isDirect, avatarURL == nil {
+//            let heroes = room.heroes()
+//            
+//            if heroes.count == 1 {
+//                return .heroes(heroes.map(UserProfileProxy.init))
+//            }
+//        }
+//        
+//        return .room(id: id, name: name, avatarURL: avatarURL)
+        .room(id: id, name: name, avatarURL: avatarURL)
     }
     
     var isDirect: Bool {
@@ -161,13 +166,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     init(roomListService: RoomListServiceProtocol,
          roomListItem: RoomListItemProtocol,
-         room: RoomProtocol) async throws {
+         room: RoomProtocol,
+         appSettings: AppSettings) async throws {
         self.roomListService = roomListService
         self.roomListItem = roomListItem
         self.room = room
+        self.appSettings = appSettings
+        self.allRoomMatrixUsers = appSettings.zeroMatrixUsers ?? []
         
         timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live)
         
+        Task {
+            self.roomInfo = try? await roomListItem.roomInfo()
+        }
         Task {
             await updateMembers()
         }
@@ -709,6 +720,62 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             
             typingMembersSubject.send(typingMembers)
         })
+    }
+    
+    private func getZeroRoomName() -> String? {
+        if let roomInfo = self.roomInfo {
+            let roomUsers = getRoomMemberIds(
+                roomInfo: roomInfo,
+                lastEventSender: nil
+            ).compactMap { memberId -> ZMatrixUser? in
+                allRoomMatrixUsers.first { $0.matrixId == memberId }
+            }
+            if roomInfo.activeMembersCount > 2 || roomInfo.isDirect == false {
+                return roomInfo.displayName
+            } else {
+                return roomUsers.first(where: { $0.matrixId != room.ownUserId() })?.displayName
+            }
+        } else {
+            return roomListItem.displayName()
+        }
+    }
+    
+    private func getZeroRoomAvatarUrl() -> String? {
+        if let roomInfo = self.roomInfo {
+            let roomUsers = getRoomMemberIds(
+                roomInfo: roomInfo,
+                lastEventSender: nil
+            ).compactMap { memberId -> ZMatrixUser? in
+                allRoomMatrixUsers.first { $0.matrixId == memberId }
+            }
+            if roomInfo.activeMembersCount > 2 || roomInfo.isDirect == false {
+                return roomListItem.avatarUrl()
+            } else {
+                return roomUsers.first(where: { $0.matrixId != room.ownUserId() })?.profileSummary?.profileImage
+            }
+        } else {
+            return roomListItem.avatarUrl()
+        }
+    }
+    
+    private func getRoomMemberIds(roomInfo: RoomInfo, lastEventSender: String?) -> [String] {
+        var roomMemberIds: Array<String> = []
+        let roomHeroIds = roomInfo.heroes.map { $0.userId }
+        roomMemberIds.append(contentsOf: roomHeroIds)
+        let roomUserIdsFromPL = roomInfo.userPowerLevels.map { $0.key }
+        roomMemberIds.append(contentsOf: roomUserIdsFromPL)
+        if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: appSettings.zeroHomeServerPostfix) {
+            roomMemberIds.append(matrixFormattedRoomName)
+        }
+        if let lastMessageSender = lastEventSender {
+            let lastMessageSenderFormatted = matrixFormattedUserId(userId: lastMessageSender)
+            roomMemberIds.append(lastMessageSenderFormatted)
+        }
+        return roomMemberIds.uniqued { $0 }
+    }
+    
+    private func matrixFormattedUserId(userId: String) -> String {
+        userId.toMatrixUserIdFormat(appSettings.zeroHomeServerPostfix) ?? userId
     }
 }
 

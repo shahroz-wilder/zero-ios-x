@@ -125,9 +125,16 @@ struct AvatarHeaderView<Footer: View>: View {
     private var avatar: some View {
         switch avatarInfo {
         case .room(let roomAvatar):
-            RoomAvatarImage(avatar: roomAvatar,
-                            avatarSize: avatarSize,
-                            mediaProvider: mediaProvider)
+            switch roomAvatar {
+            case .room(let id, let name, let avatarURL):
+                AvatarView(url: avatarURL,
+                           placeholder: Asset.Images.defaultAvatarIcon,
+                           style: .extraLarge)
+            default:
+                RoomAvatarImage(avatar: roomAvatar,
+                                avatarSize: avatarSize,
+                                mediaProvider: mediaProvider)
+            }
         case .user(let userProfile):
             LoadableAvatarImage(url: userProfile.avatarURL,
                                 name: userProfile.displayName,

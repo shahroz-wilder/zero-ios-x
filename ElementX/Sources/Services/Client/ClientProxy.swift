@@ -757,7 +757,8 @@ class ClientProxy: ClientProxyProtocol {
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
-                                                      appSettings: appSettings)
+                                                      appSettings: appSettings,
+                                                      loggedInUser: userID)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
@@ -765,7 +766,8 @@ class ClientProxy: ClientProxyProtocol {
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
-                                                               appSettings: appSettings)
+                                                               appSettings: appSettings,
+                                                               loggedInUser: userID)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
@@ -874,7 +876,8 @@ class ClientProxy: ClientProxyProtocol {
                 
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
-                                                          room: roomListItem.fullRoom())
+                                                          room: roomListItem.fullRoom(),
+                                                          appSettings: appSettings)
                 
                 return .joined(roomProxy)
             case .left:

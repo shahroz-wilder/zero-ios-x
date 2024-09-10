@@ -30,12 +30,12 @@ struct RoomMembersListScreenMemberCell: View {
                             .foregroundColor(.compound.textPrimary)
                             .lineLimit(1)
                         
-                        if let subtitle {
-                            Text(subtitle)
-                                .font(.compound.bodySM)
-                                .foregroundColor(.compound.textSecondary)
-                                .lineLimit(1)
-                        }
+//                        if let subtitle {
+//                            Text(subtitle)
+//                                .font(.compound.bodySM)
+//                                .foregroundColor(.compound.textSecondary)
+//                                .lineLimit(1)
+//                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
