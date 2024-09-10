@@ -44,9 +44,9 @@ struct AvatarHeaderView<Footer: View>: View {
         
         var badges = [Badge]()
         badges.append(.encrypted(room.isEncrypted))
-        if room.isPublic {
-            badges.append(.public)
-        }
+//        if room.isPublic {
+//            badges.append(.public)
+//        }
         self.badges = badges
     }
     
@@ -155,13 +155,13 @@ struct AvatarHeaderView<Footer: View>: View {
                 .multilineTextAlignment(.center)
                 .textSelection(.enabled)
             
-            if let subtitle {
-                Text(subtitle)
-                    .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyLG)
-                    .multilineTextAlignment(.center)
-                    .textSelection(.enabled)
-            }
+//            if let subtitle {
+//                Text(subtitle)
+//                    .foregroundColor(.compound.textSecondary)
+//                    .font(.compound.bodyLG)
+//                    .multilineTextAlignment(.center)
+//                    .textSelection(.enabled)
+//            }
             
             if !badges.isEmpty {
                 badgesStack

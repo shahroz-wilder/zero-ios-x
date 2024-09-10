@@ -26,6 +26,9 @@ struct TimelineItemMenu: View {
                 .padding(.bottom, 4.0)
                 .frame(idealWidth: 300.0)
             
+//            messagePreview
+//                .frame(idealWidth: 300.0)
+            
             Divider()
                 .background(Color.compound.bgSubtlePrimary)
             
@@ -46,7 +49,9 @@ struct TimelineItemMenu: View {
                             .background(Color.compound.bgSubtlePrimary)
                     }
                     
-                    viewsForActions(actions.debugActions)
+                    if !actions.debugActions.isEmpty {
+                        viewsForActions(actions.debugActions)
+                    }
                 }
             }
         }
