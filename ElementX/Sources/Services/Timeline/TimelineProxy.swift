@@ -25,13 +25,16 @@ final class TimelineProxy: TimelineProxyProtocol {
         innerTimelineProvider
     }
     
+    private let appSettings: AppSettings
+    
     deinit {
         backPaginationStatusObservationToken?.cancel()
     }
     
-    init(timeline: Timeline, kind: TimelineKind) {
+    init(timeline: Timeline, kind: TimelineKind, appSettings: AppSettings) {
         self.timeline = timeline
         self.kind = kind
+        self.appSettings = appSettings
     }
     
     func subscribeForUpdates() async {
@@ -47,7 +50,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await RoomTimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
+        let provider = await RoomTimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher, appSettings: appSettings)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()

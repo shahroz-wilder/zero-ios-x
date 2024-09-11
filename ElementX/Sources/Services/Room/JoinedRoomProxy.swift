@@ -39,7 +39,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                         let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil,
                                                                                                    maxEventsToLoad: 100,
                                                                                                    maxConcurrentRequests: 10),
-                                                               kind: .pinned)
+                                                               kind: .pinned,
+                                                               appSettings: appSettings)
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
                         return timeline
@@ -172,9 +173,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         self.appSettings = appSettings
-        self.allRoomMatrixUsers = appSettings.zeroMatrixUsers ?? []
+        allRoomMatrixUsers = appSettings.zeroMatrixUsers ?? []
         
-        timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live)
+        timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live, appSettings: appSettings)
         
         Task {
             self.roomInfo = try? await roomListItem.roomInfo()
@@ -221,7 +222,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
             let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
-            return .success(TimelineProxy(timeline: timeline, kind: .detached))
+            return .success(TimelineProxy(timeline: timeline, kind: .detached, appSettings: appSettings))
         } catch let error as FocusEventError {
             switch error {
             case .InvalidEventId(_, let error):
@@ -266,7 +267,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         do {
             let membersNoSyncIterator = try await room.membersNoSync()
             if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
-                membersSubject.value = members.map(RoomMemberProxy.init)
+                membersSubject.value = members.map { member in
+                    let zeroMember = allRoomMatrixUsers.first(where: { $0.matrixId == member.userId })
+                    return RoomMemberProxy.init(member: member, zeroMember: zeroMember)
+                }
             }
         } catch {
             MXLog.error("[RoomProxy] Failed updating members using no sync API: \(error)")
@@ -276,7 +280,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             // Then we update members using the sync API, this is slower but will get us the latest members
             let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-                membersSubject.value = members.map(RoomMemberProxy.init)
+                membersSubject.value = members.map { member in
+                    let zeroMember = allRoomMatrixUsers.first(where: { $0.matrixId == member.userId })
+                    return RoomMemberProxy.init(member: member, zeroMember: zeroMember)
+                }
             }
         } catch {
             MXLog.error("[RoomProxy] Failed updating members using sync API: \(error)")

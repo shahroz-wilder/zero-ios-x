@@ -136,11 +136,14 @@ struct AvatarHeaderView<Footer: View>: View {
                                 mediaProvider: mediaProvider)
             }
         case .user(let userProfile):
-            LoadableAvatarImage(url: userProfile.avatarURL,
-                                name: userProfile.displayName,
-                                contentID: userProfile.userID,
-                                avatarSize: avatarSize,
-                                mediaProvider: mediaProvider)
+//            LoadableAvatarImage(url: userProfile.avatarURL,
+//                                name: userProfile.displayName,
+//                                contentID: userProfile.userID,
+//                                avatarSize: avatarSize,
+//                                mediaProvider: mediaProvider)
+            AvatarView(url: userProfile.avatarURL,
+                       placeholder: Asset.Images.defaultAvatarIcon,
+                       style: .extraLarge)
         }
     }
     

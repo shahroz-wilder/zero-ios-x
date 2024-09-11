@@ -16,12 +16,15 @@ struct RoomMembersListScreenMemberCell: View {
             context.send(viewAction: .selectMember(member))
         } label: {
             HStack(spacing: 8) {
-                LoadableAvatarImage(url: avatarURL,
-                                    name: avatarName,
-                                    contentID: member.id,
-                                    avatarSize: .user(on: .roomDetails),
-                                    mediaProvider: context.mediaProvider)
-                    .accessibilityHidden(true)
+//                LoadableAvatarImage(url: avatarURL,
+//                                    name: avatarName,
+//                                    contentID: member.id,
+//                                    avatarSize: .user(on: .roomDetails),
+//                                    mediaProvider: context.mediaProvider)
+//                    .accessibilityHidden(true)
+                AvatarView(url: avatarURL,
+                           placeholder: Asset.Images.defaultAvatarIcon,
+                           style: .medium)
                 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     VStack(alignment: .leading, spacing: 0) {
