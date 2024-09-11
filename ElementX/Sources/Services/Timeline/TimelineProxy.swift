@@ -159,7 +159,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(item: timelineItem, newContent: newContent) == true else {
+            guard try await timeline.edit(item: timelineItem, newContent: .roomMessage(content: newContent)) == true else {
                 return .failure(.failedEditing)
             }
             
@@ -463,7 +463,13 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
             
-            try await timeline.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent)
+            guard try await timeline.edit(item: originalEvent,
+                                          newContent: .pollStart(pollData: .init(question: question,
+                                                                                 answers: answers,
+                                                                                 maxSelections: 1,
+                                                                                 pollKind: .init(pollKind: pollKind)))) else {
+                return .failure(.failedEditing)
+            }
             
             MXLog.info("Finished editing poll with eventID: \(eventID)")
             
