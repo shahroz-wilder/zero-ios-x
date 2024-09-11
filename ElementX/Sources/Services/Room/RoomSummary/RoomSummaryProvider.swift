@@ -18,6 +18,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
     private let zeroUserApi: ZeroUsersApiProtocol
+    private let loggedInUserId: String
 
     private let roomListPageSize = 200
     
@@ -66,7 +67,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          name: String,
          shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         loggedInUser: String) {
         self.roomListService = roomListService
         self.roomListServiceStatePublisher = roomListServiceStatePublisher
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
@@ -77,6 +79,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.appSettings = appSettings
         zeroUserApi = ZeroUsersApi(appSettings: appSettings)
         allRoomMatrixUsers = appSettings.zeroMatrixUsers ?? []
+        loggedInUserId = loggedInUser
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -286,14 +289,19 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         ).compactMap { memberId -> ZMatrixUser? in
             allRoomMatrixUsers.first { $0.matrixId == memberId }
         }
-        if roomInfo.activeMembersCount > 2 {
+        
+        if roomInfo.activeMembersCount > 2 || roomInfo.isDirect == false {
             displayName = roomInfo.displayName
             roomAvatar = roomInfo.avatarUrl
         } else {
-            let roomDirectUser = roomUsers.first
+            let roomDirectUser = roomUsers.first(where: { $0.matrixId != loggedInUserId })
             displayName = roomDirectUser?.displayName
             roomAvatar = roomDirectUser?.profileSummary?.profileImage
         }
+//        print("ROOM_NAME: \(displayName)")
+//        print("ROOM_ACTIVE_COUNT: \(roomInfo.activeMembersCount)")
+//        print("ROOM_INVITED_COUNT: \(roomInfo.invitedMembersCount)")
+//        print("ROOM_IS_DIRECT: \(roomInfo.isDirect)")
         
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
