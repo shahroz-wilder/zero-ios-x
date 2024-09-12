@@ -137,6 +137,7 @@
 		1882EB8E2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB8D2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift */; };
 		1882EB912C90F0F5001DA2A9 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB902C90F0F5001DA2A9 /* AvatarView.swift */; };
 		1882EB932C90FE9C001DA2A9 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */; };
+		1882EB9A2C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */; };
 		18867F4F1C8991EEC56EA932 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
@@ -1330,6 +1331,7 @@
 		1882EB8D2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoomInfo+Extensions.swift"; sourceTree = "<group>"; };
 		1882EB902C90F0F5001DA2A9 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMatrixUsersService.swift; sourceTree = "<group>"; };
 		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
 		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientProxy.swift; sourceTree = "<group>"; };
@@ -2679,6 +2681,7 @@
 		184D6FBF2C7D8036006266D8 /* Zero */ = {
 			isa = PBXGroup;
 			children = (
+				1882EB982C91B9F6001DA2A9 /* Utils */,
 				1882EB8A2C90C8DC001DA2A9 /* Extensions */,
 				CC8F34922C7DE37A002D92F9 /* Screens */,
 				184D6FC52C7D8563006266D8 /* Network */,
@@ -2765,6 +2768,14 @@
 				1882EB902C90F0F5001DA2A9 /* AvatarView.swift */,
 			);
 			path = CommonViews;
+			sourceTree = "<group>";
+		};
+		1882EB982C91B9F6001DA2A9 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		18CB801A2C7F1CEB003BC289 /* Authentication */ = {
@@ -6662,6 +6673,7 @@
 				89B909AC66B96FA054EF3C14 /* InvitedRoomProxy.swift in Sources */,
 				6A54F52443EC52AC5CD772C0 /* JoinRoomScreen.swift in Sources */,
 				AFE2AB612A1460E49578D746 /* JoinRoomScreenCoordinator.swift in Sources */,
+				1882EB9A2C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift in Sources */,
 				DEDBD3E9CFCC9F20CAC79881 /* JoinRoomScreenModels.swift in Sources */,
 				EF47D802A404A53F15D5D4B6 /* JoinRoomScreenViewModel.swift in Sources */,
 				7B66DA4E7E5FE4D1A0FCEAA4 /* JoinRoomScreenViewModelProtocol.swift in Sources */,

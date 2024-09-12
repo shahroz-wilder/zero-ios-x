@@ -15,8 +15,6 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
     // MARK: - Public
     
     func fetchUsers(fromMatrixIds ids: [String]) async throws -> Result<[ZMatrixUser], any Error> {
-        let localUsers = appSettings.zeroMatrixUsers ?? []
-        
         let parameters: Parameters = [
             "matrixIds": ids
         ]
@@ -32,14 +30,7 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
         
         switch result {
         case .success(let matrixUsers):
-            var cacheUsers: Set<ZMatrixUser> = []
-            cacheUsers.formUnion(localUsers)
-            cacheUsers.formUnion(matrixUsers)
-            
-            let users = Array(cacheUsers)
-            appSettings.zeroMatrixUsers = users
-            
-            return .success(users)
+            return .success(matrixUsers)
         case .failure(let error):
             return .failure(error)
         }

@@ -116,6 +116,8 @@ class ClientProxy: ClientProxyProtocol {
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
+    private let zeroMatrixUsersService: ZeroMatrixUsersService
+    
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
          appSettings: AppSettings) async {
@@ -130,6 +132,11 @@ class ClientProxy: ClientProxyProtocol {
         notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
+        
+        /// Configure ZeroMatrixUserUtil
+        var loggedInUser: String = (try? client.userId()) ?? ""
+        let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
+        zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi, appSettings: appSettings, loggedInUserId: loggedInUser)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -758,7 +765,7 @@ class ClientProxy: ClientProxyProtocol {
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
                                                       appSettings: appSettings,
-                                                      loggedInUser: userID)
+                                                      zeroMatrixUsersService: zeroMatrixUsersService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
@@ -767,7 +774,7 @@ class ClientProxy: ClientProxyProtocol {
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
                                                                appSettings: appSettings,
-                                                               loggedInUser: userID)
+                                                               zeroMatrixUsersService: zeroMatrixUsersService)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
@@ -877,7 +884,7 @@ class ClientProxy: ClientProxyProtocol {
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
                                                           room: roomListItem.fullRoom(),
-                                                          appSettings: appSettings)
+                                                          zeroMatrixUsersService: zeroMatrixUsersService)
                 
                 return .joined(roomProxy)
             case .left:

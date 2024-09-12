@@ -14,7 +14,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
-    private let appSettings: AppSettings
+    private let zeroMatrixUsersService: ZeroMatrixUsersService
     let timeline: TimelineProxyProtocol
     
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
@@ -39,8 +39,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                         let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil,
                                                                                                    maxEventsToLoad: 100,
                                                                                                    maxConcurrentRequests: 10),
+                                                               room: room,
                                                                kind: .pinned,
-                                                               appSettings: appSettings)
+                                                               zeroMatrixUsersService: zeroMatrixUsersService)
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
                         return timeline
@@ -79,7 +80,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     private var roomInfo: RoomInfo?
-    private var allRoomMatrixUsers: [ZMatrixUser] = []
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
@@ -168,15 +168,17 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     init(roomListService: RoomListServiceProtocol,
          roomListItem: RoomListItemProtocol,
          room: RoomProtocol,
-         appSettings: AppSettings) async throws {
+         zeroMatrixUsersService: ZeroMatrixUsersService) async throws {
         self.roomListService = roomListService
         self.roomListItem = roomListItem
         self.room = room
-        self.appSettings = appSettings
-        allRoomMatrixUsers = appSettings.zeroMatrixUsers ?? []
+        self.zeroMatrixUsersService = zeroMatrixUsersService
         
-        timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live, appSettings: appSettings)
+        timeline = try await TimelineProxy(timeline: room.timeline(), room: room, kind: .live, zeroMatrixUsersService: zeroMatrixUsersService)
         
+        Task {
+            await fetchAllRoomUsers()
+        }
         Task {
             self.roomInfo = try? await roomListItem.roomInfo()
         }
@@ -222,7 +224,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
             let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
-            return .success(TimelineProxy(timeline: timeline, kind: .detached, appSettings: appSettings))
+            return .success(TimelineProxy(timeline: timeline, room: room, kind: .detached, zeroMatrixUsersService: zeroMatrixUsersService))
         } catch let error as FocusEventError {
             switch error {
             case .InvalidEventId(_, let error):
@@ -268,7 +270,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let membersNoSyncIterator = try await room.membersNoSync()
             if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
                 membersSubject.value = members.map { member in
-                    let zeroMember = allRoomMatrixUsers.first(where: { $0.matrixId == member.userId })
+                    let zeroMember = zeroMatrixUsersService.getMatrixUser(userId: member.userId)
                     return RoomMemberProxy.init(member: member, zeroMember: zeroMember)
                 }
             }
@@ -281,13 +283,22 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
                 membersSubject.value = members.map { member in
-                    let zeroMember = allRoomMatrixUsers.first(where: { $0.matrixId == member.userId })
+                    let zeroMember = zeroMatrixUsersService.getMatrixUser(userId: member.userId)
                     return RoomMemberProxy.init(member: member, zeroMember: zeroMember)
                 }
             }
         } catch {
             MXLog.error("[RoomProxy] Failed updating members using sync API: \(error)")
         }
+    }
+    
+    private func fetchAllRoomUsers() async {
+        do {
+            let membersIterator = try await room.members()
+            if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
+                try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map({ $0.userId }))
+            }
+        } catch {}
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
@@ -731,17 +742,12 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private func getZeroRoomName() -> String? {
         if let roomInfo = self.roomInfo {
-            let roomUsers = getRoomMemberIds(
-                roomInfo: roomInfo,
-                lastEventSender: nil
-            ).compactMap { memberId -> ZMatrixUser? in
-                allRoomMatrixUsers.first { $0.matrixId == memberId }
+            var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
+            if displayName?.stringMatchesUserIdFormatRegex() == true {
+                let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
+                displayName = user?.displayName
             }
-            if roomInfo.activeMembersCount > 2 || roomInfo.isDirect == false {
-                return roomInfo.displayName
-            } else {
-                return roomUsers.first(where: { $0.matrixId != room.ownUserId() })?.displayName
-            }
+            return displayName
         } else {
             return roomListItem.displayName()
         }
@@ -749,40 +755,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private func getZeroRoomAvatarUrl() -> String? {
         if let roomInfo = self.roomInfo {
-            let roomUsers = getRoomMemberIds(
-                roomInfo: roomInfo,
-                lastEventSender: nil
-            ).compactMap { memberId -> ZMatrixUser? in
-                allRoomMatrixUsers.first { $0.matrixId == memberId }
+            var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
+            var roomAvatar: String? = roomInfo.avatarUrl
+            if displayName?.stringMatchesUserIdFormatRegex() == true {
+                let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
+                roomAvatar = user?.profileSummary?.profileImage
             }
-            if roomInfo.activeMembersCount > 2 || roomInfo.isDirect == false {
-                return roomListItem.avatarUrl()
-            } else {
-                return roomUsers.first(where: { $0.matrixId != room.ownUserId() })?.profileSummary?.profileImage
-            }
+            return roomAvatar
         } else {
             return roomListItem.avatarUrl()
         }
-    }
-    
-    private func getRoomMemberIds(roomInfo: RoomInfo, lastEventSender: String?) -> [String] {
-        var roomMemberIds: Array<String> = []
-        let roomHeroIds = roomInfo.heroes.map { $0.userId }
-        roomMemberIds.append(contentsOf: roomHeroIds)
-        let roomUserIdsFromPL = roomInfo.userPowerLevels.map { $0.key }
-        roomMemberIds.append(contentsOf: roomUserIdsFromPL)
-        if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: appSettings.zeroHomeServerPostfix) {
-            roomMemberIds.append(matrixFormattedRoomName)
-        }
-        if let lastMessageSender = lastEventSender {
-            let lastMessageSenderFormatted = matrixFormattedUserId(userId: lastMessageSender)
-            roomMemberIds.append(lastMessageSenderFormatted)
-        }
-        return roomMemberIds.uniqued { $0 }
-    }
-    
-    private func matrixFormattedUserId(userId: String) -> String {
-        userId.toMatrixUserIdFormat(appSettings.zeroHomeServerPostfix) ?? userId
     }
 }
 

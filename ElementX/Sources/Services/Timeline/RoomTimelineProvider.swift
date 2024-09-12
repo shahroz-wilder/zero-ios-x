@@ -47,11 +47,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         roomTimelineObservationToken?.cancel()
     }
 
-    init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>, appSettings: AppSettings?) {
+    init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>, zeroMatrixUsersService: ZeroMatrixUsersService?) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.kind = kind
-        allRoomUsers = appSettings?.zeroMatrixUsers ?? []
+        allRoomUsers = zeroMatrixUsersService?.getAllRoomUsers() ?? []
         
         paginationStatePublisher
             .sink { [weak self] in
