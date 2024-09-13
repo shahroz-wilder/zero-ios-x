@@ -9,10 +9,11 @@ class APIManager {
     func request<T: Decodable>(_ url: String,
                                method: HTTPMethod,
                                parameters: Parameters? = nil,
-                               headers: HTTPHeaders? = nil) async throws -> Result<T, Error> {
+                               headers: HTTPHeaders? = nil,
+                               encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<T, Error> {
         
         return try await withCheckedThrowingContinuation({ continuation in
-            AF.request(url, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
                 .validate()
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
@@ -29,13 +30,14 @@ class APIManager {
                                          method: HTTPMethod,
                                          appSettings: AppSettings,
                                          parameters: Parameters? = nil,
-                                         headers: HTTPHeaders? = nil) async throws -> Result<T, Error> {
+                                         headers: HTTPHeaders? = nil,
+                                         encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<T, Error> {
         var authHeaders = headers
         if let accessToken = appSettings.zeroAccessToken {
             authHeaders = getAuthHeaders(headers: headers, accessToken: accessToken)
         }
         return try await withCheckedThrowingContinuation({ continuation in
-            AF.request(url, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: authHeaders)
+            AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: authHeaders)
                 .validate()
                 .responseDecodable(of: T.self) { response in
                     switch response.result {

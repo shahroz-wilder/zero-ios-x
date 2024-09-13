@@ -13,6 +13,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let stateEventStringBuilder: RoomStateEventStringBuilder
     private let matrixUsers: [ZMatrixUser]
+    private let messageContentHandler: MessageContentHandler
+    private let zeroAttachmentService: ZeroAttachmentService
     
     /// The Matrix ID of the current user.
     private let userID: String
@@ -20,11 +22,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     init(userID: String,
          attributedStringBuilder: AttributedStringBuilderProtocol,
          stateEventStringBuilder: RoomStateEventStringBuilder,
+         zeroAttachmentService: ZeroAttachmentService,
          zeroUsers: [ZMatrixUser]) {
         self.userID = userID
         self.attributedStringBuilder = attributedStringBuilder
         self.stateEventStringBuilder = stateEventStringBuilder
-        self.matrixUsers = zeroUsers
+        
+        matrixUsers = zeroUsers
+        messageContentHandler = MessageContentHandler()
+        self.zeroAttachmentService = zeroAttachmentService
     }
     
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool) -> RoomTimelineItemProtocol? {
@@ -43,7 +49,22 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             
             return buildStickerTimelineItem(eventItemProxy, body, imageInfo, url, isOutgoing)
         case .failedToParseMessageLike(let eventType, let error):
-            return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
+            /// If message content parsing is failed (IMAGE case in this), we need to handle the content ourself rather than returning unsupportedTimelineItem
+            if let messageContent = messageContentHandler.parseMessageContent(contentJsonString: eventItemProxy.debugInfo.originalJSON) {
+                /// checking image or video case here only for now, for other cases, we will return unsupportedTimelineItem
+                /// until we need to handle other messageTypes explicitly in future
+                if messageContent.content.isImage || messageContent.content.isVideo {
+                    if messageContent.content.isImage {
+                        return buildCustomImageTimelineItem(for: eventItemProxy, messageContent.content, isOutgoing)
+                    } else {
+                        return buildCustomVideoTimelineItem(for: eventItemProxy, messageContent.content, isOutgoing)
+                    }
+                } else {
+                    return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
+                }
+            } else {
+                return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
+            }
         case .failedToParseState(let eventType, _, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .message:
@@ -219,6 +240,26 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                     encryptionAuthenticity: authenticity(eventItemProxy.shieldState)))
     }
     
+    private func buildCustomImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                        _ messageContent: MessageContent,
+                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        ImageRoomTimelineItem(id: eventItemProxy.id,
+                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                              isOutgoing: isOutgoing,
+                              isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              isThreaded: false,
+                              sender: eventItemProxy.sender,
+                              content: buildCustomImageTimelineItemContent(messageContent),
+                              //TODO: we need to handle reply details if image is in reply to an existing message
+                              replyDetails: nil,
+                              properties: RoomTimelineItemProperties(isEdited: false,
+                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                     encryptionAuthenticity: authenticity(eventItemProxy.shieldState)))
+    }
+    
     private func buildImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         _ messageTimelineItem: Message,
                                         _ messageContent: ImageMessageContent,
@@ -234,6 +275,26 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               content: buildImageTimelineItemContent(messageContent),
                               replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                               properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
+                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus,
+                                                                     orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
+                                                                     encryptionAuthenticity: authenticity(eventItemProxy.shieldState)))
+    }
+    
+    private func buildCustomVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                        _ messageContent: MessageContent,
+                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        VideoRoomTimelineItem(id: eventItemProxy.id,
+                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                              isOutgoing: isOutgoing,
+                              isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              isThreaded: false,
+                              sender: eventItemProxy.sender,
+                              content: buildCustomVideoTimelineItemContent(messageContent),
+                              //TODO: we need to handle reply details if image is in reply to an existing message
+                              replyDetails: nil,
+                              properties: RoomTimelineItemProperties(isEdited: false,
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus,
                                                                      orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
@@ -518,6 +579,43 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                                             contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
     }
+    
+    private func buildCustomImageTimelineItemContent(_ messageContent: MessageContent) -> ImageRoomTimelineItemContent {
+        let width: CGFloat? = messageContent.info?.width ?? messageContent.info?.w
+        let height: CGFloat? = messageContent.info?.height ?? messageContent.info?.h
+        let fallbackName: String = messageContent.info?.name ?? "Image"
+        
+        var aspectRatio: CGFloat?
+        if let width, let height, width > 0, height > 0 {
+            aspectRatio = width / height
+        }
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        var attachmentData: Data?
+        Task {
+            if !messageContent.isRemoteImage {
+                do {
+                    attachmentData = try await zeroAttachmentService.downloadMessageAttachment(messageContent)
+                } catch {
+                    print(error)
+                }
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        
+        return .init(body: messageContent.body ?? "",
+                     source: MediaSourceProxy(url: URL("about:blank"), mimeType: messageContent.info?.mimeType),
+                     thumbnailSource: nil,
+                     width: width,
+                     height: height,
+                     aspectRatio: aspectRatio,
+                     blurhash: nil,
+                     contentType: UTType(mimeType: messageContent.info?.mimeType, fallbackFilename: fallbackName),
+                     isZeroImage: true,
+                     imageData: attachmentData,
+                     imageURL: messageContent.url)
+    }
 
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
@@ -537,6 +635,39 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      aspectRatio: aspectRatio,
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+    }
+    
+    private func buildCustomVideoTimelineItemContent(_ messageContent: MessageContent) -> VideoRoomTimelineItemContent {
+        let width: CGFloat? = messageContent.info?.width ?? messageContent.info?.w
+        let height: CGFloat? = messageContent.info?.height ?? messageContent.info?.h
+        let fallbackName: String = messageContent.info?.name ?? "Video"
+        
+        var aspectRatio: CGFloat?
+        if let width, let height, width > 0, height > 0 {
+            aspectRatio = width / height
+        }
+        
+//        var videoURL = URL("about:blank")
+//        let semaphore = DispatchSemaphore(value: 0)
+//        Task {
+//            do {
+//                videoURL = try await zeroAttachmentService.downloadMessageAttachment(messageContent)
+//            } catch {
+//                print(error)
+//            }
+//            semaphore.signal()
+//        }
+//        semaphore.wait()
+        
+        return .init(body: messageContent.body ?? "",
+                     duration: 0,
+                     source: MediaSourceProxy(url: URL("about:blank"), mimeType: messageContent.info?.mimeType),
+                     thumbnailSource: nil,
+                     width: width,
+                     height: height,
+                     aspectRatio: aspectRatio,
+                     blurhash: nil,
+                     contentType: UTType(mimeType: messageContent.info?.mimeType, fallbackFilename: fallbackName))
     }
 
     private func buildVideoTimelineItemContent(_ messageContent: VideoMessageContent) -> VideoRoomTimelineItemContent {
