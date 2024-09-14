@@ -50,21 +50,22 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildStickerTimelineItem(eventItemProxy, body, imageInfo, url, isOutgoing)
         case .failedToParseMessageLike(let eventType, let error):
             /// If message content parsing is failed (IMAGE case in this), we need to handle the content ourself rather than returning unsupportedTimelineItem
-            if let messageContent = messageContentHandler.parseMessageContent(contentJsonString: eventItemProxy.debugInfo.originalJSON) {
-                /// checking image or video case here only for now, for other cases, we will return unsupportedTimelineItem
-                /// until we need to handle other messageTypes explicitly in future
-                if messageContent.content.isImage || messageContent.content.isVideo {
-                    if messageContent.content.isImage {
-                        return buildCustomImageTimelineItem(for: eventItemProxy, messageContent.content, isOutgoing)
-                    } else {
-                        return buildCustomVideoTimelineItem(for: eventItemProxy, messageContent.content, isOutgoing)
-                    }
-                } else {
-                    return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
-                }
-            } else {
-                return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
-            }
+//            if let messageContent = messageContentHandler.parseMessageContent(contentJsonString: eventItemProxy.debugInfo.originalJSON) {
+//                /// checking image or video case here only for now, for other cases, we will return unsupportedTimelineItem
+//                /// until we need to handle other messageTypes explicitly in future
+//                if messageContent.content.isImage || messageContent.content.isVideo {
+//                    if messageContent.content.isImage {
+//                        return buildCustomImageTimelineItem(for: eventItemProxy, messageContent.content, isOutgoing)
+//                    } else {
+//                        return buildCustomVideoTimelineItem(for: eventItemProxy, messageContent.content, isOutgoing)
+//                    }
+//                } else {
+//                    return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
+//                }
+//            } else {
+//                return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
+//            }
+            return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .failedToParseState(let eventType, _, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .message:
