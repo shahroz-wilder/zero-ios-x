@@ -114,6 +114,13 @@
 		172E6E9A612ADCF10A62CF13 /* BugReportServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A68BCE6438873D2661D93D0 /* BugReportServiceProtocol.swift */; };
 		1795EA6A6C4942CAE0459DF0 /* SecureBackupKeyBackupScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B612853BFB68373249777B /* SecureBackupKeyBackupScreenViewModel.swift */; };
 		17BC15DA08A52587466698C5 /* RoomMessageEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E815FF3CC5E5A355E3A25E /* RoomMessageEventStringBuilder.swift */; };
+		1827256F2C9994A000B513B5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0724EBDFE8BB4C9E5547C57D /* Client.swift */; };
+		182725702C99952900B513B5 /* WebRegistrationScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C161B06F417CA5D1F1E088 /* WebRegistrationScreenModels.swift */; };
+		182725712C9995AB00B513B5 /* WebRegistrationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D851A10FDA55579960DC61 /* WebRegistrationScreenCoordinator.swift */; };
+		182725722C9995B100B513B5 /* WebRegistrationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6702BC84D3CC2421D78CD4E /* WebRegistrationScreenViewModel.swift */; };
+		182725732C9995B400B513B5 /* WebRegistrationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F418426410F3823F3EB0828 /* WebRegistrationScreenViewModelProtocol.swift */; };
+		182725742C9995B800B513B5 /* WebRegistrationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B065EC39C99C1303A101C1C /* WebRegistrationScreen.swift */; };
+		182725752C99990100B513B5 /* MockAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA38899517F08FE2AF34EB45 /* MockAuthenticationService.swift */; };
 		184D6FC22C7D83B1006266D8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 184D6FC12C7D83B1006266D8 /* Alamofire */; };
 		184D6FC82C7D86D6006266D8 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC72C7D86D6006266D8 /* APIManager.swift */; };
 		184D6FCA2C7D88D2006266D8 /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC92C7D88D2006266D8 /* APIConfigs.swift */; };
@@ -525,7 +532,7 @@
 		18E9A5942C9829970082DDA4 /* MessageForwardingScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E60332509665C00179ACF6 /* MessageForwardingScreenViewModel.swift */; };
 		18E9A5952C9829970082DDA4 /* MessageForwardingScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC10CCC8D68B863E20660DBC /* MessageForwardingScreenViewModelProtocol.swift */; };
 		18E9A5962C9829970082DDA4 /* MessageText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E0B4A34E69BD2132BEC521 /* MessageText.swift */; };
-		18E9A5972C9829970082DDA4 /* MockAuthenticationServiceProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C2B80DD0BF6F10BB5FA922 /* MockAuthenticationServiceProxy.swift */; };
+		18E9A5972C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A5982C9829970082DDA4 /* MockMediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD6E621CC5E6D4830D96D2D /* MockMediaProvider.swift */; };
 		18E9A5992C9829970082DDA4 /* MockRoomTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D7074991B3267B26D89B22 /* MockRoomTimelineController.swift */; };
 		18E9A59A2C9829970082DDA4 /* MockServerSelectionScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E057FB1F07A5C201C89061 /* MockServerSelectionScreenState.swift */; };
@@ -7706,11 +7713,14 @@
 				18E9A4B12C9829970082DDA4 /* CompletionSuggestionService.swift in Sources */,
 				18E9A4B22C9829970082DDA4 /* CompletionSuggestionServiceProtocol.swift in Sources */,
 				18E9A4B32C9829970082DDA4 /* CompletionSuggestionView.swift in Sources */,
+				182725702C99952900B513B5 /* WebRegistrationScreenModels.swift in Sources */,
 				18E9A4B42C9829970082DDA4 /* ComposerDraftService.swift in Sources */,
 				18E9A4B52C9829970082DDA4 /* ComposerDraftServiceMock.swift in Sources */,
 				18E9A4B62C9829970082DDA4 /* ComposerDraftServiceProtocol.swift in Sources */,
+				182725742C9995B800B513B5 /* WebRegistrationScreen.swift in Sources */,
 				18E9A4B72C9829970082DDA4 /* ComposerToolbar.swift in Sources */,
 				18E9A4B82C9829970082DDA4 /* ComposerToolbarModels.swift in Sources */,
+				182725732C9995B400B513B5 /* WebRegistrationScreenViewModelProtocol.swift in Sources */,
 				18E9A4B92C9829970082DDA4 /* ComposerToolbarViewModel.swift in Sources */,
 				18E9A4BA2C9829970082DDA4 /* ComposerToolbarViewModelProtocol.swift in Sources */,
 				18E9A4BB2C9829970082DDA4 /* CompoundIcon.swift in Sources */,
@@ -7933,7 +7943,7 @@
 				18E9A5942C9829970082DDA4 /* MessageForwardingScreenViewModel.swift in Sources */,
 				18E9A5952C9829970082DDA4 /* MessageForwardingScreenViewModelProtocol.swift in Sources */,
 				18E9A5962C9829970082DDA4 /* MessageText.swift in Sources */,
-				18E9A5972C9829970082DDA4 /* MockAuthenticationServiceProxy.swift in Sources */,
+				18E9A5972C9829970082DDA4 /* (null) in Sources */,
 				18E9A5982C9829970082DDA4 /* MockMediaProvider.swift in Sources */,
 				18E9A5992C9829970082DDA4 /* MockRoomTimelineController.swift in Sources */,
 				18E9A59A2C9829970082DDA4 /* MockServerSelectionScreenState.swift in Sources */,
@@ -8158,6 +8168,7 @@
 				18E9A6752C9829970082DDA4 /* RoomTimelineController.swift in Sources */,
 				18E9A6762C9829970082DDA4 /* RoomTimelineControllerFactory.swift in Sources */,
 				18E9A6772C9829970082DDA4 /* RoomTimelineControllerFactoryMock.swift in Sources */,
+				182725722C9995B100B513B5 /* WebRegistrationScreenViewModel.swift in Sources */,
 				18E9A6782C9829970082DDA4 /* RoomTimelineControllerFactoryProtocol.swift in Sources */,
 				18E9A6792C9829970082DDA4 /* ZeroAttachmentApi.swift in Sources */,
 				18E9A67A2C9829970082DDA4 /* RoomTimelineControllerProtocol.swift in Sources */,
@@ -8258,11 +8269,13 @@
 				18E9A6D92C9829970082DDA4 /* StaticLocationScreenViewModel.swift in Sources */,
 				18E9A6DA2C9829970082DDA4 /* StaticLocationScreenViewModelProtocol.swift in Sources */,
 				18E9A6DB2C9829970082DDA4 /* StickerRoomTimelineItem.swift in Sources */,
+				182725752C99990100B513B5 /* MockAuthenticationService.swift in Sources */,
 				18E9A6DC2C9829970082DDA4 /* StickerRoomTimelineView.swift in Sources */,
 				18E9A6DD2C9829970082DDA4 /* String.swift in Sources */,
 				18E9A6DE2C9829970082DDA4 /* Strings+SAS.swift in Sources */,
 				18E9A6DF2C9829970082DDA4 /* Strings+Untranslated.swift in Sources */,
 				18E9A6E02C9829970082DDA4 /* Strings.swift in Sources */,
+				1827256F2C9994A000B513B5 /* Client.swift in Sources */,
 				18E9A6E12C9829970082DDA4 /* SwipeRightAction.swift in Sources */,
 				18E9A6E22C9829970082DDA4 /* SwipeToReplyView.swift in Sources */,
 				18E9A6E32C9829970082DDA4 /* Task.swift in Sources */,
@@ -8279,6 +8292,7 @@
 				18E9A6EE2C9829970082DDA4 /* TextRoomTimelineItemContent.swift in Sources */,
 				18E9A6EF2C9829970082DDA4 /* TextRoomTimelineView.swift in Sources */,
 				18E9A6F02C9829970082DDA4 /* ThreadDecorator.swift in Sources */,
+				182725712C9995AB00B513B5 /* WebRegistrationScreenCoordinator.swift in Sources */,
 				18E9A6F12C9829970082DDA4 /* TimelineBubbleLayout.swift in Sources */,
 				18E9A6F22C9829970082DDA4 /* TimelineDeliveryStatusView.swift in Sources */,
 				18E9A6F32C9829970082DDA4 /* TimelineInteractionHandler.swift in Sources */,

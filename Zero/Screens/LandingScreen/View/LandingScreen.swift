@@ -54,7 +54,7 @@ struct LandingScreen: View {
 }
 
 #Preview {
-    let viewModel = AuthenticationStartScreenViewModel()
+    let viewModel = AuthenticationStartScreenViewModel(webRegistrationEnabled: false)
     
     return LandingScreen(context: viewModel.context)
 }
