@@ -220,6 +220,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    var canDeactivateAccount: Bool {
+        client.canDeactivateAccount()
+    }
+    
     var userIDServerName: String? {
         do {
             return try client.userIdServerName()
@@ -550,6 +554,16 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed logging out with error: \(error)")
             return nil
+        }
+    }
+    
+    func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.deactivateAccount(authData: password.map { .password(passwordDetails: .init(identifier: userID, password: $0)) },
+                                               eraseData: eraseData)
+            return .success(())
+        } catch {
+            return .failure(.sdkError(error))
         }
     }
     
