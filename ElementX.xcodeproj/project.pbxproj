@@ -146,6 +146,11 @@
 		1882EB932C90FE9C001DA2A9 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */; };
 		1882EB9A2C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */; };
 		18867F4F1C8991EEC56EA932 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
+		18A042152C9AB5F100727739 /* DeactivateAccountScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1009E4A78F86DA42E1EAF0 /* DeactivateAccountScreenCoordinator.swift */; };
+		18A042162C9AB5F600727739 /* DeactivateAccountScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78CAD0B964C66FD06EF83E /* DeactivateAccountScreenModels.swift */; };
+		18A042172C9AB5FA00727739 /* DeactivateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC3FDB58F57386741A4FC7F /* DeactivateAccountScreenViewModel.swift */; };
+		18A042182C9AB5FE00727739 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EE3B877D91030248B1242D /* DeactivateAccountScreenViewModelProtocol.swift */; };
+		18A042192C9AB60300727739 /* DeactivateAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E49D10BFA7E4D70A947888C /* DeactivateAccountScreen.swift */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
@@ -7839,6 +7844,7 @@
 				18E9A5092C9829970082DDA4 /* FileRoomTimelineItemContent.swift in Sources */,
 				18E9A50A2C9829970082DDA4 /* FileRoomTimelineView.swift in Sources */,
 				18E9A50B2C9829970082DDA4 /* FlowCoordinatorProtocol.swift in Sources */,
+				18A042172C9AB5FA00727739 /* DeactivateAccountScreenViewModel.swift in Sources */,
 				18E9A50C2C9829970082DDA4 /* FormButtonStyles.swift in Sources */,
 				18E9A50D2C9829970082DDA4 /* VerifyBackupKeyScreen.swift in Sources */,
 				18E9A50E2C9829970082DDA4 /* FormattedBodyText.swift in Sources */,
@@ -8257,6 +8263,7 @@
 				18E9A6AA2C9829970082DDA4 /* ServerConfirmationScreen.swift in Sources */,
 				18E9A6AB2C9829970082DDA4 /* ServerConfirmationScreenCoordinator.swift in Sources */,
 				18E9A6AC2C9829970082DDA4 /* ServerConfirmationScreenModels.swift in Sources */,
+				18A042182C9AB5FE00727739 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */,
 				18E9A6AD2C9829970082DDA4 /* ServerConfirmationScreenViewModel.swift in Sources */,
 				18E9A6AE2C9829970082DDA4 /* ServerConfirmationScreenViewModelProtocol.swift in Sources */,
 				18E9A6AF2C9829970082DDA4 /* ServerSelectionScreen.swift in Sources */,
@@ -8329,6 +8336,7 @@
 				18E9A6F02C9829970082DDA4 /* ThreadDecorator.swift in Sources */,
 				182725712C9995AB00B513B5 /* WebRegistrationScreenCoordinator.swift in Sources */,
 				18E9A6F12C9829970082DDA4 /* TimelineBubbleLayout.swift in Sources */,
+				18A042162C9AB5F600727739 /* DeactivateAccountScreenModels.swift in Sources */,
 				18E9A6F22C9829970082DDA4 /* TimelineDeliveryStatusView.swift in Sources */,
 				18E9A6F32C9829970082DDA4 /* TimelineInteractionHandler.swift in Sources */,
 				18E9A6F42C9829970082DDA4 /* TimelineItemAccessibilityModifier.swift in Sources */,
@@ -8365,6 +8373,7 @@
 				18E9A7132C9829970082DDA4 /* UIConstants.swift in Sources */,
 				18E9A7142C9829970082DDA4 /* UIDevice.swift in Sources */,
 				18E9A7152C9829970082DDA4 /* UIFont+AttributedStringBuilder.m in Sources */,
+				18A042192C9AB60300727739 /* DeactivateAccountScreen.swift in Sources */,
 				18E9A7162C9829970082DDA4 /* UITestsAppCoordinator.swift in Sources */,
 				18E9A7172C9829970082DDA4 /* UITestsNotificationCenter.swift in Sources */,
 				18E9A7182C9829970082DDA4 /* UITestsScreenIdentifier.swift in Sources */,
@@ -8395,6 +8404,7 @@
 				18E9A7312C9829970082DDA4 /* UserIndicatorModalView.swift in Sources */,
 				18E9A7322C9829970082DDA4 /* UserIndicatorPresenter.swift in Sources */,
 				18E9A7332C9829970082DDA4 /* UserIndicatorToastView.swift in Sources */,
+				18A042152C9AB5F100727739 /* DeactivateAccountScreenCoordinator.swift in Sources */,
 				18E9A7342C9829970082DDA4 /* UserNotificationCenterProtocol.swift in Sources */,
 				18E9A7352C9829970082DDA4 /* UserPreference.swift in Sources */,
 				18E9A7362C9829970082DDA4 /* UserProfile+Mock.swift in Sources */,
