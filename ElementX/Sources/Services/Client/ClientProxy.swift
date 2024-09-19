@@ -473,7 +473,7 @@ class ClientProxy: ClientProxyProtocol {
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
             let userId = try client.userId()
-            let displayName = try await getMatrixUser(userId: userId)?.displayName
+            let displayName = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)?.displayName
             userDisplayNameSubject.send(displayName)
             return .success(())
         } catch {
@@ -498,21 +498,13 @@ class ClientProxy: ClientProxyProtocol {
     func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
         do {
             let userId = try client.userId()
-            let avatarURL = try await getMatrixUser(userId: userId)?.profileImageURL
+            let avatarURL = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)?.profileImageURL
             loadCachedAvatarURLTask?.cancel()
             userAvatarURLSubject.send(avatarURL)
             return .success(())
         } catch {
             MXLog.error("Failed loading user avatar URL with error: \(error)")
             return .failure(.sdkError(error))
-        }
-    }
-    
-    private func getMatrixUser(userId: String) async throws -> ZMatrixUser? {
-        if let user = zeroMatrixUsersService.getMatrixUser(userId: userId) {
-            return user
-        } else {
-            return try await zeroMatrixUsersService.fetchZeroUsers(userIds: [userId]).first
         }
     }
     
