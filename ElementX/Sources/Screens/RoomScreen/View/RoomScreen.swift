@@ -119,7 +119,7 @@ struct RoomScreen: View {
     private var scrollToBottomButton: some View {
         Button { timelineContext.send(viewAction: .scrollToBottom) } label: {
             Image(systemName: "chevron.down")
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
                 .fontWeight(.semibold)
                 .foregroundColor(.compound.iconSecondary)
                 .padding(13)
