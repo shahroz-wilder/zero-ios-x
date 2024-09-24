@@ -5,20 +5,22 @@ public extension Font {
 }
 
 public struct ZeroFonts {
-    public let bodyXS = Font.caption
-    public let bodyXSSemibold = Font.caption.weight(.semibold)
-    public let bodySM = Font.footnote
-    public let bodySMSemibold = Font.footnote.weight(.semibold)
-    public let bodyMD = Font.subheadline
-    public let bodyMDSemibold = Font.subheadline.weight(.semibold)
-    public let bodyLG = Font.body
-    public let bodyLGSemibold = Font.body.weight(.semibold)
-    public let headingSM = Font.title3
-    public let headingSMSemibold = Font.title3.weight(.semibold)
-    public let headingMD = Font.title2
-    public let headingMDBold = Font.title2.bold()
-    public let headingLG = Font.title
-    public let headingLGBold = Font.title.bold()
-    public let headingXL = Font.largeTitle
-    public let headingXLBold = Font.largeTitle.bold()
+    /// Font sizes reference from https://gist.github.com/zacwest/916d31da5d03405809c4
+
+    public let bodyXS = Font.inter(size: 12) // caption
+    public let bodyXSSemibold = Font.inter(size: 12, weight: .semibold)
+    public let bodySM = Font.inter(size: 13) // footnote
+    public let bodySMSemibold = Font.inter(size: 13, weight: .semibold)
+    public let bodyMD = Font.inter(size: 15) // subHeadline
+    public let bodyMDSemibold = Font.inter(size: 15, weight: .semibold)
+    public let bodyLG = Font.inter(size: 17) // body
+    public let bodyLGSemibold = Font.inter(size: 17, weight: .semibold)
+    public let headingSM = Font.inter(size: 20) // title3
+    public let headingSMSemibold = Font.inter(size: 20, weight: .semibold)
+    public let headingMD = Font.inter(size: 22) // title2
+    public let headingMDBold = Font.inter(size: 22, weight: .bold)
+    public let headingLG = Font.inter(size: 28) // title1
+    public let headingLGBold = Font.inter(size: 28, weight: .bold)
+    public let headingXL = Font.inter(size: 34) // largeTitle
+    public let headingXLBold = Font.inter(size: 34, weight: .bold)
 }
