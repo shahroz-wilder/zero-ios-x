@@ -180,6 +180,8 @@
 		18A042172C9AB5FA00727739 /* DeactivateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC3FDB58F57386741A4FC7F /* DeactivateAccountScreenViewModel.swift */; };
 		18A042182C9AB5FE00727739 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EE3B877D91030248B1242D /* DeactivateAccountScreenViewModelProtocol.swift */; };
 		18A042192C9AB60300727739 /* DeactivateAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E49D10BFA7E4D70A947888C /* DeactivateAccountScreen.swift */; };
+		18BF59CF2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
+		18BF59D02CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
@@ -2311,6 +2313,7 @@
 		1882EB902C90F0F5001DA2A9 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMatrixUsersService.swift; sourceTree = "<group>"; };
+		18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ZeroLaunchScreen.storyboard; sourceTree = "<group>"; };
 		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
 		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentHandler.swift; sourceTree = "<group>"; };
@@ -3855,6 +3858,14 @@
 				18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		18BF59CD2CA4A4DA006D7BAB /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */,
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 		18CB801A2C7F1CEB003BC289 /* Authentication */ = {
@@ -6285,6 +6296,7 @@
 		CC8F34922C7DE37A002D92F9 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				18BF59CD2CA4A4DA006D7BAB /* Launch */,
 				1882EB8F2C90F0E0001DA2A9 /* CommonViews */,
 				18CB801F2C7F3094003BC289 /* Utilities */,
 				18CB801A2C7F1CEB003BC289 /* Authentication */,
@@ -7191,6 +7203,7 @@
 				18E9A7682C9829970082DDA4 /* Untranslated.stringsdict in Resources */,
 				1868A8B52CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */,
 				18E9A7692C9829970082DDA4 /* message.caf in Resources */,
+				18BF59D02CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */,
 				18E9A76A2C9829970082DDA4 /* target.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7220,6 +7233,7 @@
 				2797C9D9BA642370F1C85D78 /* Untranslated.stringsdict in Resources */,
 				1868A8B42CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */,
 				E67418DACEDBC29E988E6ACD /* message.caf in Resources */,
+				18BF59CF2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */,
 				DFF7D6A6C26DDD40D00AE579 /* target.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9640,6 +9654,7 @@
 				INFOPLIST_FILE = "Zero/Zero-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -9674,6 +9689,7 @@
 				INFOPLIST_FILE = "Zero/Zero-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
