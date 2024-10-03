@@ -2321,7 +2321,7 @@
 		1868A8A02CA21A2100DC382D /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		1868A8A12CA21A2100DC382D /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
 		1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChatApi.swift; sourceTree = "<group>"; };
-		1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZSentMessage.swift; path = Zero/Network/Models/Response/ZSentMessage.swift; sourceTree = SOURCE_ROOT; };
+		1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZSentMessage.swift; path = Zero/Sources/Network/Models/Response/ZSentMessage.swift; sourceTree = SOURCE_ROOT; };
 		1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyResponse.swift; sourceTree = "<group>"; };
 		1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroUsersApi.swift; sourceTree = "<group>"; };
@@ -3744,16 +3744,24 @@
 			path = PreviewTests;
 			sourceTree = "<group>";
 		};
-		184D6FBF2C7D8036006266D8 /* Zero */ = {
+		18115E4F2CAE9D47001A8F4A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				18D1EE242CAE998A007BEB15 /* SupportingFiles */,
-				1868A86B2CA2175A00DC382D /* Resources */,
 				18E99FEE2C9447620082DDA4 /* Models */,
 				1882EB982C91B9F6001DA2A9 /* Utils */,
 				1882EB8A2C90C8DC001DA2A9 /* Extensions */,
 				CC8F34922C7DE37A002D92F9 /* Screens */,
 				184D6FC52C7D8563006266D8 /* Network */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		184D6FBF2C7D8036006266D8 /* Zero */ = {
+			isa = PBXGroup;
+			children = (
+				18115E4F2CAE9D47001A8F4A /* Sources */,
+				18D1EE242CAE998A007BEB15 /* SupportingFiles */,
+				1868A86B2CA2175A00DC382D /* Resources */,
 			);
 			path = Zero;
 			sourceTree = "<group>";
