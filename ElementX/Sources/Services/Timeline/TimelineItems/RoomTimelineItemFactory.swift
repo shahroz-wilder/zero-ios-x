@@ -776,7 +776,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 sender = TimelineItemSender(id: senderID,
                                             displayName: user?.displayName ?? displayName,
                                             isDisplayNameAmbiguous: false,
-                                            avatarURL: URL(string: user?.profileSummary?.profileImage ?? ""))
+                                            avatarURL: avatarUrl.flatMap(URL.init(string:)))
             default:
                 sender = TimelineItemSender(id: senderID,
                                             displayName: nil,

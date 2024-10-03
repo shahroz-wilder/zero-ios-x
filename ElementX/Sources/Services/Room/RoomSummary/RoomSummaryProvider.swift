@@ -278,7 +278,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            inviter: inviterProxy,
                            name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
-                           avatarURL: URL(string: roomAvatar ?? ""),
+                           avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
                            lastMessage: attributedLastMessage,
                            lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,

@@ -503,10 +503,9 @@ class ClientProxy: ClientProxyProtocol {
 
     func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
         do {
-            let userId = try client.userId()
-            let avatarURL = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)?.profileImageURL
+            let urlString = try await client.avatarUrl()
             loadCachedAvatarURLTask?.cancel()
-            userAvatarURLSubject.send(avatarURL)
+            userAvatarURLSubject.send(urlString.flatMap(URL.init))
             return .success(())
         } catch {
             MXLog.error("Failed loading user avatar URL with error: \(error)")
