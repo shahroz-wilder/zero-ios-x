@@ -117,6 +117,9 @@
 		172E6E9A612ADCF10A62CF13 /* BugReportServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A68BCE6438873D2661D93D0 /* BugReportServiceProtocol.swift */; };
 		1795EA6A6C4942CAE0459DF0 /* SecureBackupKeyBackupScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B612853BFB68373249777B /* SecureBackupKeyBackupScreenViewModel.swift */; };
 		17BC15DA08A52587466698C5 /* RoomMessageEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E815FF3CC5E5A355E3A25E /* RoomMessageEventStringBuilder.swift */; };
+		18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
+		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
+		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		1827256F2C9994A000B513B5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0724EBDFE8BB4C9E5547C57D /* Client.swift */; };
 		182725702C99952900B513B5 /* WebRegistrationScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C161B06F417CA5D1F1E088 /* WebRegistrationScreenModels.swift */; };
 		182725712C9995AB00B513B5 /* WebRegistrationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D851A10FDA55579960DC61 /* WebRegistrationScreenCoordinator.swift */; };
@@ -128,7 +131,6 @@
 		18326FD92CA53E7400389CB2 /* ZeroColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18326FD72CA53E6D00389CB2 /* ZeroColors.swift */; };
 		184D6FC22C7D83B1006266D8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 184D6FC12C7D83B1006266D8 /* Alamofire */; };
 		184D6FC82C7D86D6006266D8 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC72C7D86D6006266D8 /* APIManager.swift */; };
-		184D6FCA2C7D88D2006266D8 /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC92C7D88D2006266D8 /* APIConfigs.swift */; };
 		184D6FCD2C7D8AC2006266D8 /* ZeroAuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */; };
 		184D6FD22C7D8C8D006266D8 /* ZMatrixSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */; };
 		184D6FD42C7D8F45006266D8 /* ZSessionDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */; };
@@ -671,7 +673,6 @@
 		18E9A5EE2C9829970082DDA4 /* PollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B19D10B102956066AF117B /* PollOptionView.swift */; };
 		18E9A5EF2C9829970082DDA4 /* PollRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5281C5CDC4A712265A0B5FBF /* PollRoomTimelineItem.swift */; };
 		18E9A5F02C9829970082DDA4 /* PollRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8548D48512127CCC17C520 /* PollRoomTimelineView.swift */; };
-		18E9A5F12C9829970082DDA4 /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC92C7D88D2006266D8 /* APIConfigs.swift */; };
 		18E9A5F22C9829970082DDA4 /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638790D3F915F0909315C47A /* PollView.swift */; };
 		18E9A5F32C9829970082DDA4 /* PostHogAnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */; };
 		18E9A5F42C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -2300,11 +2301,11 @@
 		16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
 		1734A445A58ED855B977A0A8 /* TracingConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracingConfigurationTests.swift; sourceTree = "<group>"; };
+		18115E512CAEA4D4001A8F4A /* ZeroContants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroContants.swift; sourceTree = "<group>"; };
 		18326FD72CA53E6D00389CB2 /* ZeroColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroColors.swift; sourceTree = "<group>"; };
 		18486B87745B1811E7FBD3D2 /* AnalyticsPromptScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreenModels.swift; sourceTree = "<group>"; };
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		184D6FC72C7D86D6006266D8 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
-		184D6FC92C7D88D2006266D8 /* APIConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigs.swift; sourceTree = "<group>"; };
 		184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAuthApi.swift; sourceTree = "<group>"; };
 		184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSession.swift; sourceTree = "<group>"; };
 		184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSessionDataResponse.swift; sourceTree = "<group>"; };
@@ -3747,6 +3748,7 @@
 		18115E4F2CAE9D47001A8F4A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				18115E502CAEA4C0001A8F4A /* Constants */,
 				18E99FEE2C9447620082DDA4 /* Models */,
 				1882EB982C91B9F6001DA2A9 /* Utils */,
 				1882EB8A2C90C8DC001DA2A9 /* Extensions */,
@@ -3754,6 +3756,14 @@
 				184D6FC52C7D8563006266D8 /* Network */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		18115E502CAEA4C0001A8F4A /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				18115E512CAEA4D4001A8F4A /* ZeroContants.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 		184D6FBF2C7D8036006266D8 /* Zero */ = {
@@ -3780,7 +3790,6 @@
 			isa = PBXGroup;
 			children = (
 				184D6FC72C7D86D6006266D8 /* APIManager.swift */,
-				184D6FC92C7D88D2006266D8 /* APIConfigs.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -7560,6 +7569,7 @@
 			files = (
 				A2172B5A26976F9174228B8A /* AppHooks.swift in Sources */,
 				43F06DF42EC00B3CE2B020A4 /* AppSettings.swift in Sources */,
+				18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */,
 				F253AAB4C8F06208173C9C4A /* Assets.swift in Sources */,
 				484202C5D50983442D24D061 /* AttributedString.swift in Sources */,
 				CDCA8A559E098503DDE29477 /* AttributedStringBuilder.swift in Sources */,
@@ -8236,7 +8246,6 @@
 				18E9A5EE2C9829970082DDA4 /* PollOptionView.swift in Sources */,
 				18E9A5EF2C9829970082DDA4 /* PollRoomTimelineItem.swift in Sources */,
 				18E9A5F02C9829970082DDA4 /* PollRoomTimelineView.swift in Sources */,
-				18E9A5F12C9829970082DDA4 /* APIConfigs.swift in Sources */,
 				18E9A5F22C9829970082DDA4 /* PollView.swift in Sources */,
 				18E9A5F32C9829970082DDA4 /* PostHogAnalyticsClient.swift in Sources */,
 				18E9A5F42C9829970082DDA4 /* (null) in Sources */,
@@ -8248,6 +8257,7 @@
 				18E9A5FA2C9829970082DDA4 /* QRCodeLoginScreenCoordinator.swift in Sources */,
 				18E9A5FB2C9829970082DDA4 /* QRCodeLoginScreenModels.swift in Sources */,
 				18E9A5FC2C9829970082DDA4 /* QRCodeLoginScreenViewModel.swift in Sources */,
+				18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
 				18E9A5FD2C9829970082DDA4 /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
 				18E9A5FE2C9829970082DDA4 /* QRCodeLoginService.swift in Sources */,
 				18E9A5FF2C9829970082DDA4 /* QRCodeLoginServiceProtocol.swift in Sources */,
@@ -8965,6 +8975,7 @@
 				B5479997ECC516C121E6625E /* LocationMarkerView.swift in Sources */,
 				D46C33F8B61B55F0C8C2D15F /* LocationRoomTimelineItem.swift in Sources */,
 				854E82E064BA53CD0BC45600 /* LocationRoomTimelineItemContent.swift in Sources */,
+				18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
 				973C48F9E4EFB808F61BE401 /* LocationRoomTimelineView.swift in Sources */,
 				29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */,
 				36DE961B784087D5E18EF9BA /* LogViewerScreen.swift in Sources */,
@@ -9112,7 +9123,6 @@
 				4716587A9BA69ED8FD1B986B /* PollOptionView.swift in Sources */,
 				864C0D3A4077BF433DBC691F /* PollRoomTimelineItem.swift in Sources */,
 				128FFD8A3D85845F9A927F47 /* PollRoomTimelineView.swift in Sources */,
-				184D6FCA2C7D88D2006266D8 /* APIConfigs.swift in Sources */,
 				1307268DC41730E5BCF7D9A0 /* PollView.swift in Sources */,
 				DF504B10A4918F971A57BEF2 /* PostHogAnalyticsClient.swift in Sources */,
 				6793E75E3EBE48EBB8F857AF /* ProcessInfo.swift in Sources */,

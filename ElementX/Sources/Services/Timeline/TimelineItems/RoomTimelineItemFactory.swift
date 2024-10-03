@@ -553,7 +553,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     func convertTextToHTML(text: String, htmlBody: String?) -> String {
         let baseUrl = "https://matrix.to/#/@"
-        let domain = ":zos-home-2.zero.tech"
+        let domain = ":\(ZeroContants.appServer.matrixHomeServerPostfix)"
         
         // Use a regular expression to find user mentions in the format @[Name](user:UUID)
         let regexPattern = #"@\[(.+?)\]\(user:(.+?)\)"#

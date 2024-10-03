@@ -37,6 +37,6 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
     // MARK: - Constants
     
     private enum UserEndPoints {
-        static let matrixUsersEndPoint = "\(APIConfigs.zeroURLRoot)matrix/users/zero"
+        static let matrixUsersEndPoint = "\(ZeroContants.appServer.zeroRootUrl)matrix/users/zero"
     }
 }

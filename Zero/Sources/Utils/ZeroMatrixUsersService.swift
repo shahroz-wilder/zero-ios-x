@@ -74,7 +74,7 @@ class ZeroMatrixUsersService {
         roomMemberIds.formUnion(roomHeroIds)
         let roomUserIdsFromPL = roomInfo.userPowerLevels.map(\.key)
         roomMemberIds.formUnion(roomUserIdsFromPL)
-        if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: appSettings.zeroHomeServerPostfix) {
+        if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: ZeroContants.appServer.matrixHomeServerPostfix) {
             roomMemberIds.insert(matrixFormattedRoomName)
         }
         if let lastMessageSender = lastEventSender {
@@ -84,7 +84,7 @@ class ZeroMatrixUsersService {
     }
     
     func matrixFormattedUserId(userId: String) -> String {
-        userId.toMatrixUserIdFormat(appSettings.zeroHomeServerPostfix) ?? userId
+        userId.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) ?? userId
     }
     
     func areUsersFetched() -> Bool { !allZeroUsers.isEmpty }
