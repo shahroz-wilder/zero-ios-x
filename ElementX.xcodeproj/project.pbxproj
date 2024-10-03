@@ -194,6 +194,8 @@
 		18BF59D02CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
+		18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
+		18D1EE282CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
 		18E99FED2C9446EB0082DDA4 /* MessageContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */; };
 		18E99FF02C9447740082DDA4 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEF2C9447740082DDA4 /* MessageContent.swift */; };
@@ -582,7 +584,7 @@
 		18E9A5972C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A5982C9829970082DDA4 /* MockMediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD6E621CC5E6D4830D96D2D /* MockMediaProvider.swift */; };
 		18E9A5992C9829970082DDA4 /* MockRoomTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D7074991B3267B26D89B22 /* MockRoomTimelineController.swift */; };
-		18E9A59A2C9829970082DDA4 /* MockServerSelectionScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E057FB1F07A5C201C89061 /* MockServerSelectionScreenState.swift */; };
+		18E9A59A2C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A59B2C9829970082DDA4 /* MockSoftLogoutScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5644919DB2022397D9D5825A /* MockSoftLogoutScreenState.swift */; };
 		18E9A59C2C9829970082DDA4 /* NSItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72EFC8C634469F9262659C7 /* NSItemProvider.swift */; };
 		18E9A59D2C9829970082DDA4 /* NSRegularExpresion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */; };
@@ -2333,13 +2335,14 @@
 		18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ZeroLaunchScreen.storyboard; sourceTree = "<group>"; };
 		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
 		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
+		18D1EE252CAE99AC007BEB15 /* Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zero.entitlements; sourceTree = "<group>"; };
+		18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ZeroInfo.plist; sourceTree = "<group>"; };
 		18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentHandler.swift; sourceTree = "<group>"; };
 		18E99FEF2C9447740082DDA4 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
 		18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAttachmentService.swift; sourceTree = "<group>"; };
 		18E99FF32C944F670082DDA4 /* ZeroAttachmentApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAttachmentApi.swift; sourceTree = "<group>"; };
 		18E99FF52C9450F00082DDA4 /* ZAttachmentUploadInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAttachmentUploadInfo.swift; sourceTree = "<group>"; };
 		18E9A7922C9829970082DDA4 /* Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zero.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		18E9A7932C9829980082DDA4 /* Zero-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Zero-Info.plist"; path = "/Users/apple/Git/Zero App/ZeroX/zero-ios-x/Zero-Info.plist"; sourceTree = "<absolute>"; };
 		18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientProxy.swift; sourceTree = "<group>"; };
 		18FE0CDF1FFA92EA7EE17B0B /* RoomTimelineControllerFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineControllerFactoryProtocol.swift; sourceTree = "<group>"; };
 		190EC7285D3CFEF0D3011BCF /* GeoURI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoURI.swift; sourceTree = "<group>"; };
@@ -3609,7 +3612,6 @@
 		0B7746360C4753B5A014838F /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				18E9A7932C9829980082DDA4 /* Zero-Info.plist */,
 				3D4DD336905C72F95EAF34B7 /* ElementX-Bridging-Header.h */,
 				9C5E81214D27A6B898FC397D /* ElementX.entitlements */,
 				81B17DB1BC3B0C62AF84D230 /* Info.plist */,
@@ -3745,6 +3747,7 @@
 		184D6FBF2C7D8036006266D8 /* Zero */ = {
 			isa = PBXGroup;
 			children = (
+				18D1EE242CAE998A007BEB15 /* SupportingFiles */,
 				1868A86B2CA2175A00DC382D /* Resources */,
 				18E99FEE2C9447620082DDA4 /* Models */,
 				1882EB982C91B9F6001DA2A9 /* Utils */,
@@ -3917,6 +3920,15 @@
 				18CB80202C7F310E003BC289 /* ViewModifiers.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		18D1EE242CAE998A007BEB15 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */,
+				18D1EE252CAE99AC007BEB15 /* Zero.entitlements */,
+			);
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		18E99FEE2C9447620082DDA4 /* Models */ = {
@@ -7220,6 +7232,7 @@
 				18E9A7602C9829970082DDA4 /* InfoPlist.strings in Resources */,
 				18E9A7612C9829970082DDA4 /* Localizable.strings in Resources */,
 				18E9A7622C9829970082DDA4 /* Localizable.stringsdict in Resources */,
+				18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */,
 				1868A8AF2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				18E9A7632C9829970082DDA4 /* MapAssets.xcassets in Resources */,
 				18E9A7642C9829970082DDA4 /* PrivacyInfo.xcprivacy in Resources */,
@@ -7250,6 +7263,7 @@
 				B6DA66EFC13A90846B625836 /* InfoPlist.strings in Resources */,
 				5F5488FBC9CFEB6F433D74A4 /* Localizable.strings in Resources */,
 				0EA6537A07E2DC882AEA5962 /* Localizable.stringsdict in Resources */,
+				18D1EE282CAE99B9007BEB15 /* ZeroInfo.plist in Resources */,
 				1868A8AE2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				6860721DB3091BE08164C132 /* MapAssets.xcassets in Resources */,
 				8B408C574E35E1C9B43A50CE /* PrivacyInfo.xcprivacy in Resources */,
@@ -8126,7 +8140,7 @@
 				18E9A5972C9829970082DDA4 /* (null) in Sources */,
 				18E9A5982C9829970082DDA4 /* MockMediaProvider.swift in Sources */,
 				18E9A5992C9829970082DDA4 /* MockRoomTimelineController.swift in Sources */,
-				18E9A59A2C9829970082DDA4 /* MockServerSelectionScreenState.swift in Sources */,
+				18E9A59A2C9829970082DDA4 /* (null) in Sources */,
 				18E9A59B2C9829970082DDA4 /* MockSoftLogoutScreenState.swift in Sources */,
 				18E9A59C2C9829970082DDA4 /* NSItemProvider.swift in Sources */,
 				18E9A59D2C9829970082DDA4 /* NSRegularExpresion.swift in Sources */,
@@ -9691,11 +9705,11 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
-				CODE_SIGN_ENTITLEMENTS = ElementX/SupportingFiles/ElementX.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Zero/SupportingFiles/Zero.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
-				INFOPLIST_FILE = "Zero/Zero-Info.plist";
+				INFOPLIST_FILE = Zero/SupportingFiles/ZeroInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
@@ -9726,11 +9740,11 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
-				CODE_SIGN_ENTITLEMENTS = ElementX/SupportingFiles/ElementX.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Zero/SupportingFiles/Zero.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
-				INFOPLIST_FILE = "Zero/Zero-Info.plist";
+				INFOPLIST_FILE = Zero/SupportingFiles/ZeroInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
