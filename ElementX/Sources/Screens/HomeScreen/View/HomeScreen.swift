@@ -154,9 +154,9 @@ struct HomeScreen: View {
             .accessibilityLabel(L10n.commonSettings)
         }
         
-//        ToolbarItem(placement: .primaryAction) {
-//            newRoomButton
-//        }
+        ToolbarItem(placement: .primaryAction) {
+            newRoomButton
+        }
     }
     
     private var bloom: some View {
