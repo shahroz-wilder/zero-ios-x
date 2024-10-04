@@ -136,12 +136,12 @@ struct CreateRoomScreen: View {
     private var securitySection: some View {
         Section {
             ListRow(label: .default(title: "Encrypted Group",
-                                    description: L10n.screenCreateRoomPrivateOptionDescription,
+                                    description: "Encrypted Groups are ideal for more focused, intimate conversations and are encrypted by default. Check this box if you are creating a room intended for smaller groups.",
                                     icon: \.lock,
                                     iconAlignment: .top),
                     kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
             ListRow(label: .default(title: "Super Group",
-                                    description: L10n.screenCreateRoomPublicOptionDescription,
+                                    description: "Super Groups are designed to accommodate larger communities and are not encrypted by default. Check this box if you are creating a room intended for larger groups (10+ people).",
                                     icon: \.public,
                                     iconAlignment: .top),
                     kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
