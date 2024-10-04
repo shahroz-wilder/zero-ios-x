@@ -27,7 +27,7 @@ class ZeroMatrixUsersService {
                 storeUsers(zeroUsers: zeroUsers)
                 return zeroUsers.first
             case .failure(let error):
-                print(error)
+                MXLog.error(error)
                 return nil
             }
         }
@@ -41,10 +41,21 @@ class ZeroMatrixUsersService {
             case .success(let zeroUsers):
                 storeUsers(zeroUsers: zeroUsers)
             case .failure(let error):
-                print(error)
+                MXLog.error(error)
             }
         }
         return allZeroUsers
+    }
+    
+    func searchZeroUsers(query: String) async throws -> [ZMatrixSearchedUser] {
+        let response = try await zeroUsersApi.searchUsers(query)
+        switch response {
+        case .success(let zeroUsers):
+            return zeroUsers
+        case .failure(let error):
+            MXLog.error(error)
+            return []
+        }
     }
     
     func getMatrixUser(userId: String) -> ZMatrixUser? {

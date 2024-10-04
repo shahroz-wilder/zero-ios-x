@@ -117,6 +117,8 @@
 		172E6E9A612ADCF10A62CF13 /* BugReportServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A68BCE6438873D2661D93D0 /* BugReportServiceProtocol.swift */; };
 		1795EA6A6C4942CAE0459DF0 /* SecureBackupKeyBackupScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B612853BFB68373249777B /* SecureBackupKeyBackupScreenViewModel.swift */; };
 		17BC15DA08A52587466698C5 /* RoomMessageEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E815FF3CC5E5A355E3A25E /* RoomMessageEventStringBuilder.swift */; };
+		180EE5D62CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
+		180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
 		18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
@@ -2301,6 +2303,7 @@
 		16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
 		1734A445A58ED855B977A0A8 /* TracingConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracingConfigurationTests.swift; sourceTree = "<group>"; };
+		180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSearchedUser.swift; sourceTree = "<group>"; };
 		18115E512CAEA4D4001A8F4A /* ZeroContants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroContants.swift; sourceTree = "<group>"; };
 		18326FD72CA53E6D00389CB2 /* ZeroColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroColors.swift; sourceTree = "<group>"; };
 		18486B87745B1811E7FBD3D2 /* AnalyticsPromptScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreenModels.swift; sourceTree = "<group>"; };
@@ -3825,6 +3828,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */,
 				184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */,
 				184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */,
 				184D6FD52C7D9261006266D8 /* ZSSOToken.swift */,
@@ -8199,6 +8203,7 @@
 				18E9A5BF2C9829970082DDA4 /* NotificationSettingsScreenModels.swift in Sources */,
 				18E9A5C02C9829970082DDA4 /* NotificationSettingsScreenViewModel.swift in Sources */,
 				18E9A5C12C9829970082DDA4 /* NotificationSettingsScreenViewModelProtocol.swift in Sources */,
+				180EE5D62CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */,
 				18E9A5C22C9829970082DDA4 /* OIDCAccountSettingsPresenter.swift in Sources */,
 				18E9A5C32C9829970082DDA4 /* OIDCAuthenticationPresenter.swift in Sources */,
 				18E9A5C42C9829970082DDA4 /* OIDCConfigurationProxy.swift in Sources */,
@@ -8819,6 +8824,7 @@
 				565868808A1DA565707394ED /* CurrentValuePublisher.swift in Sources */,
 				A722F426FD81FC67706BB1E0 /* CustomLayoutLabelStyle.swift in Sources */,
 				12C867E85E6D12EEDFD0B127 /* CustomStringConvertible.swift in Sources */,
+				180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */,
 				C4F69156C31A447FEFF2A47C /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				9905C1B1C6EFE38F3A6533F3 /* Data.swift in Sources */,
 				C6C06DDA8881260303FBA3A0 /* Date.swift in Sources */,
