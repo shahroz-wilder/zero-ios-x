@@ -42,7 +42,7 @@ struct SettingsScreen: View {
         Section {
             ListRow(kind: .custom {
                 Button {
-                    // context.send(viewAction: .userDetails)
+                    context.send(viewAction: .userDetails)
                 } label: {
                     HStack(spacing: 12) {
                         LoadableAvatarImage(url: context.viewState.userAvatarURL,
