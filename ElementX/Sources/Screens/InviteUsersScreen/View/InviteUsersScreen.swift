@@ -156,7 +156,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         return InviteUsersScreenViewModel(clientProxy: ClientProxyMock(.init()),
                                           selectedUsers: .init([]),
                                           roomType: .draft,
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           userDiscoveryService: userDiscoveryService,
                                           userIndicatorController: UserIndicatorControllerMock())
     }()

@@ -43,7 +43,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: URL.picturesDirectory),
-                       mediaProvider: MockMediaProvider())
+                       mediaProvider: MediaProviderMock(configuration: .init()))
             .previewLayout(.sizeThatFits)
             .padding()
         
@@ -51,7 +51,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: nil),
-                       mediaProvider: MockMediaProvider())
+                       mediaProvider: MediaProviderMock(configuration: .init()))
             .previewLayout(.sizeThatFits)
             .padding()
     }
