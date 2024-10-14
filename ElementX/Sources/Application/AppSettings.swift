@@ -47,6 +47,7 @@ final class AppSettings {
         case pinningEnabled
         case enableOnlySignedDeviceIsolationMode
         case identityPinningViolationNotificationsEnabled
+        case knockingEnabled
         
         case zeroAccessToken
         case zeroMatrixUsers
@@ -285,6 +286,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.identityPinningViolationNotificationsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var identityPinningViolationNotificationsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var knockingEnabled
 
     #endif
     
