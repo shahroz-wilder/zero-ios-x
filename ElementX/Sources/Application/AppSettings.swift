@@ -13,6 +13,8 @@ protocol CommonSettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideTimelineMedia: Bool { get }
+    
+    var zeroMatrixUsers: [ZMatrixUser]? { get }
 }
 
 /// Store Element specific app settings.
