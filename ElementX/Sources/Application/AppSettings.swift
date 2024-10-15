@@ -44,9 +44,9 @@ final class AppSettings {
         
         // Feature flags
         case slidingSyncDiscovery
+        case optimizeMediaUploads
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
-        case pinningEnabled
         case enableOnlySignedDeviceIsolationMode
         case identityPinningViolationNotificationsEnabled
         case knockingEnabled
@@ -286,6 +286,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .forceNative, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
     
+    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: false, storageType: .userDefaults(store))
+    var optimizeMediaUploads
+	
     @UserPreference(key: UserDefaultsKeys.identityPinningViolationNotificationsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var identityPinningViolationNotificationsEnabled
     
