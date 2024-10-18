@@ -620,7 +620,12 @@ class ClientProxy: ClientProxyProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         do {
-             return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
+            let zeroUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
+            let matrixUsers = try await zeroUsers.concurrentMap { zeroUser in
+                let userProfile = try await self.client.getProfile(userId: zeroUser.matrixId)
+                return UserProfileProxy(sdkUserProfile: userProfile)
+            }
+            return .success(.init(results: matrixUsers, limited: false))
         } catch {
             MXLog.error("Failed searching users with error: \(error)")
             return .failure(.sdkError(error))
