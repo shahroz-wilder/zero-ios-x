@@ -520,6 +520,7 @@ class ClientProxy: ClientProxyProtocol {
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setDisplayName(name: name)
+            try await zeroMatrixUsersService.updateUserName(displayName: name)
             Task {
                 await self.loadUserDisplayName()
             }
@@ -553,6 +554,11 @@ class ClientProxy: ClientProxyProtocol {
             try await client.uploadAvatar(mimeType: mimeType, data: data)
             Task {
                 await self.loadUserAvatarURL()
+            }
+            Task {
+                if let urlString = try await client.avatarUrl() {
+                    try await zeroMatrixUsersService.updateUserAvatar(avatarUrl: urlString)
+                }
             }
             return .success(())
         } catch {

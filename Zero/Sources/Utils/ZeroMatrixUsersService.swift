@@ -102,6 +102,14 @@ class ZeroMatrixUsersService {
     
     func getAllRoomUsers() -> [ZMatrixUser] { allZeroUsers }
     
+    func updateUserAvatar(avatarUrl: String) async throws {
+        _ = try await zeroUsersApi.updateUserProfile(displayName: nil, profileImage: avatarUrl, primaryZID: nil)
+    }
+    
+    func updateUserName(displayName: String) async throws {
+        _ = try await zeroUsersApi.updateUserProfile(displayName: displayName, profileImage: nil, primaryZID: nil)
+    }
+    
     private func getZeroUsersToFetch(_ userIds: [String]) -> [String] {
         let existingUserIds = allZeroUsers.map(\.matrixId)
         return userIds.filter { !existingUserIds.contains($0) }.uniqued { $0 }
