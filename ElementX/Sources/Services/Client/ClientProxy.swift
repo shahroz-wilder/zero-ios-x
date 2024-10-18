@@ -134,7 +134,7 @@ class ClientProxy: ClientProxyProtocol {
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
         /// Configure ZeroMatrixUserUtil
-        var loggedInUser: String = (try? client.userId()) ?? ""
+        let loggedInUser: String = (try? client.userId()) ?? ""
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
         zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi, appSettings: appSettings, loggedInUserId: loggedInUser)
 
@@ -508,7 +508,7 @@ class ClientProxy: ClientProxyProtocol {
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
             let userId = try client.userId()
-            let displayName = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)?.displayName
+            let displayName = try await client.displayName()
             userDisplayNameSubject.send(displayName)
             return .success(())
         } catch {
@@ -614,13 +614,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         do {
-            // return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
-            
-            let zeroSearchUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
-            let mappedMatrixUsers = try await zeroSearchUsers.concurrentMap { zeroUser in
-                try await self.client.getProfile(userId: zeroUser.matrixId)
-            }
-            return .success(.init(zeroSearchResults: zeroSearchUsers, mappedMatrixUsers: mappedMatrixUsers))
+             return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
         } catch {
             MXLog.error("Failed searching users with error: \(error)")
             return .failure(.sdkError(error))
@@ -788,16 +782,14 @@ class ClientProxy: ClientProxyProtocol {
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
-                                                      appSettings: appSettings,
-                                                      zeroMatrixUsersService: zeroMatrixUsersService)
+                                                      appSettings: appSettings)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
-                                                               appSettings: appSettings,
-                                                               zeroMatrixUsersService: zeroMatrixUsersService)
+                                                               appSettings: appSettings)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
@@ -909,7 +901,6 @@ class ClientProxy: ClientProxyProtocol {
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
                                                           room: roomListItem.fullRoom(),
-                                                          zeroMatrixUsersService: zeroMatrixUsersService,
                                                           zeroChatApi: zeroChatApi)
                 
                 return .joined(roomProxy)

@@ -16,7 +16,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
-    private let zeroMatrixUsersService: ZeroMatrixUsersService
     
     private let roomListPageSize = 200
     
@@ -61,8 +60,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          name: String,
          shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
-         appSettings: AppSettings,
-         zeroMatrixUsersService: ZeroMatrixUsersService) {
+         appSettings: AppSettings) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
@@ -70,7 +68,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
-        self.zeroMatrixUsersService = zeroMatrixUsersService
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -198,7 +195,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         rooms = diffs.reduce(rooms) { currentItems, diff in
-            fetchAllRoomMembers()
             return processDiff(diff, on: currentItems)
         }
     }
@@ -251,9 +247,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         if let latestRoomMessage = roomDetails.latestEvent {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, uniqueID: .init(id: "0"))
-            let author = zeroMatrixUsersService.getMatrixUser(userId: lastMessage.sender.id)
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
-            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage, author: author)
+            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
         }
         
         var inviterProxy: RoomMemberProxyProtocol?
@@ -266,9 +261,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
         let roomAvatar: String? = roomInfo.avatarUrl ?? roomInfo.heroes.first?.avatarUrl
         
-        if displayName?.stringMatchesUserIdFormatRegex() == true {
-            let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
-            displayName = user?.displayName
+        if roomInfo.isDirect || roomInfo.joinedMembersCount <= 1 {
+            displayName = roomInfo.heroes.first?.displayName
         }
         
         return RoomSummary(roomListItem: roomListItem,
@@ -378,26 +372,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
-    }
-    
-    private func fetchAllRoomMembers() {
-        if !rooms.isEmpty {
-            Task {
-                do {
-                    let members = try await rooms.concurrentMap { room -> [String] in
-                        let roomInfo = try await room.roomListItem.roomInfo()
-                        let roomLastEvent = await room.roomListItem.latestEvent()
-                        return self.zeroMatrixUsersService.getRoomMemberIds(roomInfo: roomInfo, lastEventSender: roomLastEvent?.sender)
-                    }
-                    .flatMap { $0 }
-                    .uniqued { $0 }
-                    let _ = try await zeroMatrixUsersService.fetchZeroUsers(userIds: members)
-                } catch {
-                    MXLog.verbose("Error while fetching all room members userIds")
-                    MXLog.error(error)
-                }
-            }
-        }
     }
 }
 
