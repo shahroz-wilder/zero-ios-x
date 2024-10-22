@@ -30,6 +30,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var roomListServiceStateCancellable: AnyCancellable?
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
     private var stateUpdatesTaskHandle: TaskHandle?
+    private var zeroUsersService: ZeroMatrixUsersService
     
     private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
     private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
@@ -60,7 +61,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          name: String,
          shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         zeroUsersService: ZeroMatrixUsersService) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
@@ -68,6 +70,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
+        self.zeroUsersService = zeroUsersService
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -213,10 +216,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
 
-    private func fetchRoomDetails(from roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?) {
+    private func fetchRoomDetails(from roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?, directUserProfile: UserProfile?) {
         class FetchResult {
             var roomInfo: RoomInfo?
             var latestEvent: EventTimelineItem?
+            var directUserProfile: UserProfile?
         }
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -225,14 +229,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         Task {
             do {
                 result.latestEvent = await roomListItem.latestEvent()
-                result.roomInfo = try await roomListItem.roomInfo()
+                let roomInfo = try await roomListItem.roomInfo()
+                result.roomInfo = roomInfo
+                if roomInfo.isDisplayNameAmbiguous(), let directUser = roomInfo.heroes.first {
+                    result.directUserProfile = try await zeroUsersService.getMatrixUserProfile(userId: directUser.userId)
+                }
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
             }
             semaphore.signal()
         }
         semaphore.wait()
-        return (result.roomInfo, result.latestEvent)
+        return (result.roomInfo, result.latestEvent, result.directUserProfile)
     }
     
     private func buildRoomSummary(from roomListItem: RoomListItem) -> RoomSummary {
@@ -259,10 +267,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
-        let roomAvatar: String? = roomInfo.avatarUrl ?? roomInfo.heroes.first?.avatarUrl
+        var roomAvatar: String? = roomInfo.avatarUrl ?? roomInfo.heroes.first?.avatarUrl
         
-        if roomInfo.isDirect || roomInfo.joinedMembersCount <= 1 {
-            displayName = roomInfo.heroes.first?.displayName
+        if let directUser = roomDetails.directUserProfile {
+            displayName = directUser.displayName
+            roomAvatar = directUser.avatarUrl
         }
         
         return RoomSummary(roomListItem: roomListItem,
@@ -407,5 +416,23 @@ private class RoomListStateObserver: RoomListLoadingStateListener {
     
     func onUpdate(state: RoomListLoadingState) {
         onUpdateClosure(state)
+    }
+}
+
+private extension RoomInfo {
+    func isDisplayNameAmbiguous() -> Bool {
+        let input = displayName ?? rawName ?? ""
+        // Define the regex pattern for 5 sections separated by hyphens
+        let uuidPattern = "^[a-fA-F0-9]+-[a-fA-F0-9]+-[a-fA-F0-9]+-[a-fA-F0-9]+-[a-fA-F0-9]+$"
+        
+        // Check if the input matches the pattern
+        let regex = try? NSRegularExpression(pattern: uuidPattern)
+        let range = NSRange(location: 0, length: input.utf16.count)
+        
+        if let _ = regex?.firstMatch(in: input, options: [], range: range) {
+            return true // If the input matches the pattern
+        }
+        
+        return false // If the input doesn't match the pattern
     }
 }

@@ -136,7 +136,12 @@ class ClientProxy: ClientProxyProtocol {
         /// Configure ZeroMatrixUserUtil
         let loggedInUser: String = (try? client.userId()) ?? ""
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
-        zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi, appSettings: appSettings, loggedInUserId: loggedInUser)
+        zeroMatrixUsersService = ZeroMatrixUsersService(
+            zeroUsersApi: zeroUsersApi,
+            appSettings: appSettings,
+            loggedInUserId: loggedInUser,
+            client: client
+        )
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -793,14 +798,16 @@ class ClientProxy: ClientProxyProtocol {
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
-                                                      appSettings: appSettings)
+                                                      appSettings: appSettings,
+                                                      zeroUsersService: zeroMatrixUsersService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
-                                                               appSettings: appSettings)
+                                                               appSettings: appSettings,
+                                                               zeroUsersService: zeroMatrixUsersService)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
@@ -809,7 +816,6 @@ class ClientProxy: ClientProxyProtocol {
             syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
             roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
             roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
-
         } catch {
             MXLog.error("Failed building room list service with error: \(error)")
         }
