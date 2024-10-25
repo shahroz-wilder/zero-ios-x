@@ -50,6 +50,7 @@ final class AppSettings {
         case enableOnlySignedDeviceIsolationMode
         case identityPinningViolationNotificationsEnabled
         case knockingEnabled
+        case frequentEmojisEnabled
         
         case zeroAccessToken
         case zeroMatrixUsers
@@ -294,6 +295,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.frequentEmojisEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var frequentEmojisEnabled
 
     #endif
     
