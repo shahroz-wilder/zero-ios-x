@@ -535,7 +535,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildTextTimelineItemContent(_ messageContent: TextMessageContent, _ senderId: String) -> TextRoomTimelineItemContent {
         var htmlBody = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
-        if messageContent.formatted?.format == .html, senderId == userID {
+        if messageContent.formatted?.format == .html {
             htmlBody = convertTextToHTML(text: messageContent.body, htmlBody: htmlBody)
         }
         let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody) : attributedStringBuilder.fromPlain(messageContent.body))

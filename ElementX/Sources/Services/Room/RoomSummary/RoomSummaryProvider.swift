@@ -233,7 +233,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 let roomInfo = try await roomListItem.roomInfo()
                 roomDetails.roomInfo = roomInfo
                 
-                let isDirectChat = roomInfo.isDirect || roomInfo.joinedMembersCount <= 2
+                let isDirectChat = (roomInfo.joinedMembersCount <= 2) || (roomInfo.isDirect && roomInfo.joinedMembersCount <= 2)
                 let shouldFetchProfile = (roomInfo.avatarUrl ?? "").isBlank
                 if isDirectChat, shouldFetchProfile {
                     if let userInfo = roomInfo.heroes.first {

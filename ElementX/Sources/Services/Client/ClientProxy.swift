@@ -134,11 +134,9 @@ class ClientProxy: ClientProxyProtocol {
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
         /// Configure ZeroMatrixUserUtil
-        let loggedInUser: String = (try? client.userId()) ?? ""
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
         zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,
                                                         appSettings: appSettings,
-                                                        loggedInUserId: loggedInUser,
                                                         client: client)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
