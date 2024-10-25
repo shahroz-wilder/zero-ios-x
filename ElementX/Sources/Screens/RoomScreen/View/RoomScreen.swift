@@ -27,15 +27,15 @@ struct RoomScreen: View {
 
     var body: some View {
         timeline
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .overlay(alignment: .top) {
-                Group {
-                    if roomContext.viewState.shouldShowPinnedEventsBanner {
-                        pinnedItemsBanner
-                    }
-                }
-                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
-            }
+//            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+//            .overlay(alignment: .top) {
+//                Group {
+//                    if roomContext.viewState.shouldShowPinnedEventsBanner {
+//                        pinnedItemsBanner
+//                    }
+//                }
+//                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
+//            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 VStack(spacing: 0) {
                     RoomScreenFooterView(details: roomContext.viewState.footerDetails,

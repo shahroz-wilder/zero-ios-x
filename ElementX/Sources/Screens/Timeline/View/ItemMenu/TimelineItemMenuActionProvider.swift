@@ -44,8 +44,12 @@ struct TimelineItemMenuActionProvider {
                 break
             }
             
+//            return .init(isReactable: false,
+//                         actions: [.copyPermalink],
+//                         debugActions: debugActions,
+//                         emojiProvider: emojiProvider)
             return .init(isReactable: false,
-                         actions: [.copyPermalink],
+                         actions: [],
                          debugActions: debugActions,
                          emojiProvider: emojiProvider)
         }
@@ -105,7 +109,11 @@ struct TimelineItemMenuActionProvider {
 //            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
 //        }
 
-        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable,
+//        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable,
+//                     actions: actions,
+//                     debugActions: debugActions,
+//                     emojiProvider: emojiProvider)
+        return .init(isReactable: item.isReactable,
                      actions: actions,
                      debugActions: debugActions,
                      emojiProvider: emojiProvider)
