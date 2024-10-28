@@ -64,9 +64,9 @@ struct TimelineItemMenuActionProvider {
             }
         }
         
-        if item.isForwardable {
-            actions.append(.forward(itemID: item.id))
-        }
+//        if item.isForwardable {
+//            actions.append(.forward(itemID: item.id))
+//        }
 
         if item.isEditable {
             actions.append(.edit)
