@@ -719,7 +719,7 @@ class ClientProxy: ClientProxyProtocol {
         
         for roomID in roomIdentifiers {
             guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
-                  roomProxy.isDirect,
+                  roomProxy.infoPublisher.value.isDirect,
                   let members = await roomProxy.members() else {
                 continue
             }
@@ -893,15 +893,18 @@ class ClientProxy: ClientProxyProtocol {
             
             switch roomListItem.membership() {
             case .invited:
-                return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                     room: roomListItem.invitedRoom()))
+                return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                                           room: roomListItem.invitedRoom(),
+                                                           zeroUsersService: zeroMatrixUsersService))
             case .knocked:
                 if appSettings.knockingEnabled {
-                    return try .knocked(KnockedRoomProxy(roomListItem: roomListItem,
-                                                         room: roomListItem.invitedRoom()))
+                    return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
+                                                               room: roomListItem.invitedRoom(),
+                                                               zeroUsersService: zeroMatrixUsersService))
                 } else {
-                    return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                         room: roomListItem.invitedRoom()))
+                    return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                                               room: roomListItem.invitedRoom(),
+                                                               zeroUsersService: zeroMatrixUsersService))
                 }
             case .joined:
                 if roomListItem.isTimelineInitialized() == false {
