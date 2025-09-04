@@ -18,9 +18,12 @@ enum AuthenticationStartScreenCoordinatorAction {
     case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
     case loginDirectlyWithPassword(loginHint: String?)
     case verifyInviteCode(inviteCode: String)
+    
+    /// Login was successful.
+    case signedIn(UserSessionProtocol)
 }
 
-enum AuthenticationStartScreenViewModelAction: Equatable {
+enum AuthenticationStartScreenViewModelAction {
     case loginWithQR
     case login
     case register
@@ -29,6 +32,9 @@ enum AuthenticationStartScreenViewModelAction: Equatable {
     case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
     case loginDirectlyWithPassword(loginHint: String?)
     case verifyInviteCode(inviteCode: String)
+    
+    /// Login was successful.
+    case signedIn(UserSessionProtocol)
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
@@ -80,4 +86,7 @@ enum AuthenticationStartScreenViewAction {
     case register
     case reportProblem
     case verifyInviteCode(inviteCode: String)
+    
+    /// Open wallet connect modal
+    case openWalletConnectModal
 }

@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import ReownAppKit
 
 typealias AuthenticationStartScreenViewModelType = StateStoreViewModelV2<AuthenticationStartScreenViewState, AuthenticationStartScreenViewAction>
 
@@ -56,6 +57,27 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         }
         
         super.init(initialViewState: initialViewState)
+        
+        AppKit.instance.sessionSettlePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.startLoading()
+            }
+            .store(in: &cancellables)
+        
+        AppKit.instance.sessionResponsePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] response in
+                self?.stopLoading()
+                switch response.result {
+                case let .response(value):
+                    self?.loginWithWallet(token: value.stringRepresentation.replacingOccurrences(of: "\"", with: ""))
+                case let .error(error):
+                    MXLog.error("Session error: \(error)")
+                    self?.state.bindings.alertInfo = AlertInfo(id: .genericError)
+                }
+            }
+            .store(in: &cancellables)
     }
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {
@@ -75,6 +97,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             }
         case .verifyInviteCode(let invite):
             actionsSubject.send(.verifyInviteCode(inviteCode: invite))
+        case .openWalletConnectModal:
+            presentWalletConnectModal()
         }
     }
     
@@ -113,6 +137,26 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             actionsSubject.send(.loginDirectlyWithOIDC(data: oidcData, window: window))
         case .failure:
             displayError()
+        }
+    }
+    
+    private func presentWalletConnectModal() {
+        WalletConnectService.shared.presentWalletConnectModal()
+    }
+    
+    private func loginWithWallet(token: String) {
+        startLoading()
+        
+        Task {
+            defer { stopLoading() }
+            switch await authenticationService.loginWithWeb3(web3Token: token,
+                                                             initialDeviceName: UIDevice.current.initialDeviceName,
+                                                             deviceID: nil) {
+            case .success(let userSession):
+                actionsSubject.send(.signedIn(userSession))
+            case .failure(let error):
+                displayError()
+            }
         }
     }
     

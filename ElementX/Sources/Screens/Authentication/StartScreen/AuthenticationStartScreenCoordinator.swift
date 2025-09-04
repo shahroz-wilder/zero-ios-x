@@ -56,6 +56,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.loginDirectlyWithPassword(loginHint: loginHint))
                 case .verifyInviteCode(let invite):
                     actionsSubject.send(.verifyInviteCode(inviteCode: invite))
+                case .signedIn(let userSession):
+                    actionsSubject.send(.signedIn(userSession))
                 }
             }
             .store(in: &cancellables)

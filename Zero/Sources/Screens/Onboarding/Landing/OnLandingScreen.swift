@@ -51,7 +51,9 @@ struct OnLandingScreen: View {
         OnboardingLoginActionButton(icon: Asset.Images.logoEmail, onClick: {
             context.send(viewAction: .login)
         })
-        OnboardingLoginActionButton(icon: Asset.Images.logoWalletConnect, onClick: {})
+        OnboardingLoginActionButton(icon: Asset.Images.logoWalletConnect, onClick: {
+            context.send(viewAction: .openWalletConnectModal)
+        })
         OnboardingLoginActionButton(icon: Asset.Images.iconMore, onClick: {
             withAnimation(.easeInOut(duration: 0.3)) {
                 showExtendedLoginActions.toggle()
