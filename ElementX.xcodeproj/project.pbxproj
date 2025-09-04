@@ -1829,6 +1829,16 @@
 		790935842E425399003423D7 /* ZStakingUserRewardsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790935822E425390003423D7 /* ZStakingUserRewardsInfo.swift */; };
 		79096A332E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */; };
 		79096A342E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */; };
+		790A47382E6A41840033604D /* OtpVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47372E6A41810033604D /* OtpVerificationView.swift */; };
+		790A47392E6A41840033604D /* OtpVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47372E6A41810033604D /* OtpVerificationView.swift */; };
+		790A473B2E6A41950033604D /* OtpVerificationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A473A2E6A418F0033604D /* OtpVerificationScreenViewModelProtocol.swift */; };
+		790A473C2E6A41950033604D /* OtpVerificationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A473A2E6A418F0033604D /* OtpVerificationScreenViewModelProtocol.swift */; };
+		790A473E2E6A419B0033604D /* OtpVerificationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A473D2E6A41980033604D /* OtpVerificationScreenViewModel.swift */; };
+		790A473F2E6A419B0033604D /* OtpVerificationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A473D2E6A41980033604D /* OtpVerificationScreenViewModel.swift */; };
+		790A47412E6A41A10033604D /* OtpVerificationScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47402E6A419E0033604D /* OtpVerificationScreenModel.swift */; };
+		790A47422E6A41A10033604D /* OtpVerificationScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47402E6A419E0033604D /* OtpVerificationScreenModel.swift */; };
+		790A47442E6A41A70033604D /* OtpVerificationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47432E6A41A30033604D /* OtpVerificationScreenCoordinator.swift */; };
+		790A47452E6A41A70033604D /* OtpVerificationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47432E6A41A30033604D /* OtpVerificationScreenCoordinator.swift */; };
 		790AB79B2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */; };
@@ -3796,6 +3806,11 @@
 		7909357F2E425353003423D7 /* ZStakingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZStakingStatus.swift; sourceTree = "<group>"; };
 		790935822E425390003423D7 /* ZStakingUserRewardsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZStakingUserRewardsInfo.swift; sourceTree = "<group>"; };
 		79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInProgressView.swift; sourceTree = "<group>"; };
+		790A47372E6A41810033604D /* OtpVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationView.swift; sourceTree = "<group>"; };
+		790A473A2E6A418F0033604D /* OtpVerificationScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		790A473D2E6A41980033604D /* OtpVerificationScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenViewModel.swift; sourceTree = "<group>"; };
+		790A47402E6A419E0033604D /* OtpVerificationScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenModel.swift; sourceTree = "<group>"; };
+		790A47432E6A41A30033604D /* OtpVerificationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenCoordinator.swift; sourceTree = "<group>"; };
 		790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModel.swift; sourceTree = "<group>"; };
 		790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenModels.swift; sourceTree = "<group>"; };
@@ -7137,6 +7152,26 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		790A47352E6A41580033604D /* OtpVerificationScreen */ = {
+			isa = PBXGroup;
+			children = (
+				790A47432E6A41A30033604D /* OtpVerificationScreenCoordinator.swift */,
+				790A47402E6A419E0033604D /* OtpVerificationScreenModel.swift */,
+				790A473D2E6A41980033604D /* OtpVerificationScreenViewModel.swift */,
+				790A473A2E6A418F0033604D /* OtpVerificationScreenViewModelProtocol.swift */,
+				790A47362E6A417D0033604D /* View */,
+			);
+			path = OtpVerificationScreen;
+			sourceTree = "<group>";
+		};
+		790A47362E6A417D0033604D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				790A47372E6A41810033604D /* OtpVerificationView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		790AB7982E1BDD9700555B1F /* ZeroProSubscription */ = {
 			isa = PBXGroup;
 			children = (
@@ -8970,6 +9005,7 @@
 				9E6D88E8AFFBF2C1D589C0FA /* UIConstants.swift */,
 				79281A762E6A333C00D86DD6 /* ForgotPasswordScreen */,
 				90F48FEF84016ED42A94BA24 /* LoginScreen */,
+				790A47352E6A41580033604D /* OtpVerificationScreen */,
 				BA1938A75D8C780F694CEB62 /* ServerConfirmationScreen */,
 				2D0D49B0533C4C2EB889BF3A /* ServerSelectionScreen */,
 				5B2C520AB9863B8CBC8EB3CA /* SoftLogoutScreen */,
@@ -10673,6 +10709,7 @@
 				188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */,
 				18E9A50D2C9829970082DDA4 /* VerifyBackupKeyScreen.swift in Sources */,
 				18E9A50E2C9829970082DDA4 /* FormattedBodyText.swift in Sources */,
+				790A47422E6A41A10033604D /* OtpVerificationScreenModel.swift in Sources */,
 				185454C02CFDE66E003CA957 /* CreateAccountScreenModels.swift in Sources */,
 				18E9A50F2C9829970082DDA4 /* FormattingToolbar.swift in Sources */,
 				18E9A5102C9829970082DDA4 /* FullscreenDialog.swift in Sources */,
@@ -10942,6 +10979,7 @@
 				18E9A5C82C9829970082DDA4 /* OverridableAvatarImage.swift in Sources */,
 				18E9A5C92C9829970082DDA4 /* PHGPostHogConfiguration.swift in Sources */,
 				18E9A5CA2C9829970082DDA4 /* PHGPostHogMock.swift in Sources */,
+				790A473B2E6A41950033604D /* OtpVerificationScreenViewModelProtocol.swift in Sources */,
 				18E9A5CB2C9829970082DDA4 /* PHGPostHogProtocol.swift in Sources */,
 				18E9A5CC2C9829970082DDA4 /* PINTextField.swift in Sources */,
 				18E9A5CD2C9829970082DDA4 /* PaginationIndicatorRoomTimelineItem.swift in Sources */,
@@ -11225,6 +11263,7 @@
 				18E9A6912C9829970082DDA4 /* Section.swift in Sources */,
 				18E9A6922C9829970082DDA4 /* SecureBackupController.swift in Sources */,
 				1868A8C62CA33BBE00DC382D /* EmptyResponse.swift in Sources */,
+				790A47392E6A41840033604D /* OtpVerificationView.swift in Sources */,
 				18E9A6932C9829970082DDA4 /* SecureBackupControllerProtocol.swift in Sources */,
 				1896C50B2CC7DAB800142C49 /* KnockedRoomProxy.swift in Sources */,
 				18E9A6942C9829970082DDA4 /* SecureBackupKeyBackupScreen.swift in Sources */,
@@ -11277,6 +11316,7 @@
 				796CD43E2E53612C000D6078 /* SpaceScreenViewModel.swift in Sources */,
 				18E9A6B02C9829970082DDA4 /* ServerSelectionScreenCoordinator.swift in Sources */,
 				18E9A6B12C9829970082DDA4 /* ServerSelectionScreenModels.swift in Sources */,
+				790A473E2E6A419B0033604D /* OtpVerificationScreenViewModel.swift in Sources */,
 				18E9A6B22C9829970082DDA4 /* ServerSelectionScreenViewModel.swift in Sources */,
 				18E9A6B32C9829970082DDA4 /* ServerSelectionScreenViewModelProtocol.swift in Sources */,
 				18E9A6B42C9829970082DDA4 /* ServiceLocator.swift in Sources */,
@@ -11506,6 +11546,7 @@
 				18E9A7592C9829970082DDA4 /* WaveformInteractionModifier.swift in Sources */,
 				18E9A75A2C9829970082DDA4 /* WaveformSource.swift in Sources */,
 				79DB42AA2E4BF0D700F6E809 /* ZWalletStakingRewardsToken.swift in Sources */,
+				790A47442E6A41A70033604D /* OtpVerificationScreenCoordinator.swift in Sources */,
 				18E9A75B2C9829970082DDA4 /* WindowManager.swift in Sources */,
 				79C6F7322DF8277D003CEBB9 /* TombstonedAvatarImage.swift in Sources */,
 				79B2A79C2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */,
@@ -11710,6 +11751,7 @@
 				67E9926C4572C54F59FCA91A /* AuthenticationFlowCoordinator.swift in Sources */,
 				9847B056C1A216C314D21E68 /* AuthenticationService.swift in Sources */,
 				56DACDD379A86A1F5DEFE7BE /* AuthenticationServiceProtocol.swift in Sources */,
+				790A47412E6A41A10033604D /* OtpVerificationScreenModel.swift in Sources */,
 				94871CA883F44022086FE750 /* AuthenticationStartLogo.swift in Sources */,
 				3A68752BB9D51B8713C0FC2C /* AuthenticationStartScreen.swift in Sources */,
 				7C9BDF1FC7BD46C4676536AB /* AuthenticationStartScreenBackgroundImage.swift in Sources */,
@@ -12249,6 +12291,7 @@
 				C292A8DA07E6DBD66E946383 /* RageshakeConfiguration.swift in Sources */,
 				18AF61632CF85F1900921644 /* ZeroListRowAccessory.swift in Sources */,
 				C9A631FD968249B4BA0B7B3C /* ReactionsSummaryView.swift in Sources */,
+				790A473F2E6A419B0033604D /* OtpVerificationScreenViewModel.swift in Sources */,
 				743790BF6A5B0577EA74AF14 /* ReadMarkerRoomTimelineItem.swift in Sources */,
 				2BBC0EB1E07963810A5D7423 /* ReadMarkerRoomTimelineView.swift in Sources */,
 				91ABC91758A6E4A5FAA2E9C4 /* ReadReceipt.swift in Sources */,
@@ -12279,6 +12322,7 @@
 				797751752DD9F889006CF62D /* FeedUserProfileScreenModels.swift in Sources */,
 				108D3C0707A90B0F848CDBB9 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
 				7909357B2E42519F003423D7 /* ZeroStakingApi.swift in Sources */,
+				790A47382E6A41840033604D /* OtpVerificationView.swift in Sources */,
 				9A0326D2375075871D2AB537 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
 				ED3E91E6166E4923791ACA84 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */,
 				A494741843F087881299ACF0 /* RestorationToken.swift in Sources */,
@@ -12596,6 +12640,7 @@
 				18D5D9BA2CEB762800107940 /* UserRewardsSettingsScreenCoordinator.swift in Sources */,
 				1555A7643D85187D4851040C /* TemplateScreen.swift in Sources */,
 				47305C0911C9E1AA774A4000 /* TemplateScreenCoordinator.swift in Sources */,
+				790A47452E6A41A70033604D /* OtpVerificationScreenCoordinator.swift in Sources */,
 				CCBEC2100CAF2EEBE9DB4156 /* TemplateScreenModels.swift in Sources */,
 				275EDE8849A2AC1D9309ED7C /* TemplateScreenViewModel.swift in Sources */,
 				799616352E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */,
@@ -12732,6 +12777,7 @@
 				9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */,
 				79281A7C2E6A339400D86DD6 /* ForgotPasswordScreenViewModelProtocol.swift in Sources */,
 				F7BC744FFA7FE248FAE7F570 /* UserIndicatorToastView.swift in Sources */,
+				790A473C2E6A41950033604D /* OtpVerificationScreenViewModelProtocol.swift in Sources */,
 				79DB42A52E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */,
 				E3291AD16D7A5CB14781819C /* UserNotificationCenterProtocol.swift in Sources */,
 				2932570AA418974979D16DED /* UserPreference.swift in Sources */,

@@ -80,6 +80,8 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             presentWalletConnectModal()
         case .forgotPassword:
             actionsSubject.send(.forgotPassword)
+        case .sendVerificationOtp:
+            sendVerificationCode()
         }
     }
     
@@ -132,6 +134,21 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             case .failure(let error):
                 stopLoading()
                 analytics.signpost.endLogin()
+                handleError(error)
+            }
+        }
+    }
+    
+    private func sendVerificationCode() {
+        Task {
+            startLoading(isInteractionBlocking: true)
+            defer { stopLoading() }
+            
+            let result = await authenticationService.requestOtp(email: state.bindings.username)
+            switch result {
+            case .success:
+                actionsSubject.send(.verifyOtp(state.bindings.username))
+            case .failure(let error):
                 handleError(error)
             }
         }

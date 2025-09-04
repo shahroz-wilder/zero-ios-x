@@ -13,6 +13,10 @@ protocol ZeroAuthApiProtocol {
     func linkMatrixUserToZero(matrixUserId: String) async throws -> Result<Void, Error>
     
     func requestResetPassword(email: String) async throws -> Result<Void, Error>
+    
+    func requestOtp(email: String) async throws -> Result<Void, Error>
+    
+    func verifyOtp(email: String, otp: String) async throws -> Result<ZSSOToken, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -154,6 +158,43 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         }
     }
     
+    func requestOtp(email: String) async throws -> Result<Void, any Error> {
+        let parameters: [String: Any] = ["email": email]
+        let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(AuthEndPoints.requestOtpEndPoint,
+                                                                                        method: .post,
+                                                                                        appSettings: appSettings,
+                                                                                        parameters: parameters)
+        switch result {
+        case .success:
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func verifyOtp(email: String, otp: String) async throws -> Result<ZSSOToken, any Error> {
+        let parameters: [String: Any] = ["email": email, "code": otp]
+        let result: Result<ZSessionDataResponse, Error> = try await APIManager.shared.authorisedRequest(AuthEndPoints.verifyOtpEndPoint,
+                                                                                        method: .post,
+                                                                                        appSettings: appSettings,
+                                                                                        parameters: parameters)
+        switch result {
+        case .success(let sessionData):
+            // save Access Token
+            appSettings.zeroAccessToken = sessionData.accessToken
+            // fetch SSO Token
+            let ssoResult: Result<ZSSOToken, Error> = try await fetchSSOToken()
+            switch ssoResult {
+            case .success(let ssoToken):
+                return .success(ssoToken)
+            case .failure(let error):
+                return .failure(error)
+            }
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum AuthEndPoints {
@@ -168,6 +209,8 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let linkMatrixUserEndpoint = "\(hostURL)matrix/link-zero-user"
         
         static let requestResetPasswordEndPoint = "\(hostURL)api/v2/accounts/request-password-reset"
+        static let requestOtpEndPoint = "\(hostURL)api/otp/request"
+        static let verifyOtpEndPoint = "\(hostURL)api/otp/verify"
     }
     
     private enum AuthConstants {

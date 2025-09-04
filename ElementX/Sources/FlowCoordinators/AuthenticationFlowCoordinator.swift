@@ -176,9 +176,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addRoutes(event: .applyProvisioningParameters, transitions: [.initial => .startScreen,
                                                                                   .startScreen => .startScreen]) { [weak self] context in
-            guard let provisioningParameters = context.userInfo as? AccountProvisioningParameters else { fatalError("The authentication configuration is missing.") }
-            self?.showStartScreen(fromState: context.fromState, applying: provisioningParameters)
-        }
+                                                                                      guard let provisioningParameters = context.userInfo as? AccountProvisioningParameters else { fatalError("The authentication configuration is missing.") }
+                                                                                      self?.showStartScreen(fromState: context.fromState, applying: provisioningParameters)
+                                                                                  }
         
         // QR Code
         
@@ -207,19 +207,19 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.serverConfirmationScreen => .oidcAuthentication,
                                                                        .startScreen => .oidcAuthentication]) { [weak self] context in
-            guard let (oidcData, window) = context.userInfo as? (OIDCAuthorizationDataProxy, UIWindow) else {
-                fatalError("Missing the OIDC data and presentation anchor.")
-            }
-            self?.showOIDCAuthentication(oidcData: oidcData, presentationAnchor: window, fromState: context.fromState)
-        }
+                                                                           guard let (oidcData, window) = context.userInfo as? (OIDCAuthorizationDataProxy, UIWindow) else {
+                                                                               fatalError("Missing the OIDC data and presentation anchor.")
+                                                                           }
+                                                                           self?.showOIDCAuthentication(oidcData: oidcData, presentationAnchor: window, fromState: context.fromState)
+                                                                       }
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .serverConfirmationScreen), transitions: [.oidcAuthentication => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .startScreen), transitions: [.oidcAuthentication => .startScreen])
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverConfirmationScreen => .loginScreen,
                                                                            .startScreen => .loginScreen]) { [weak self] context in
-            let loginHint = context.userInfo as? String
-            self?.showLoginScreen(loginHint: loginHint, fromState: context.fromState)
-        }
+                                                                               let loginHint = context.userInfo as? String
+                                                                               self?.showLoginScreen(loginHint: loginHint, fromState: context.fromState)
+                                                                           }
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .serverConfirmationScreen), transitions: [.loginScreen => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .startScreen), transitions: [.loginScreen => .startScreen])
         
@@ -235,9 +235,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .signedIn, transitions: [.qrCodeLoginScreen => .complete,
                                                                .oidcAuthentication => .complete,
                                                                .loginScreen => .complete]) { [weak self] context in
-            guard let userSession = context.userInfo as? UserSessionProtocol else { fatalError("The user session wasn't included in the context") }
-            self?.userHasSignedIn(userSession: userSession)
-        }
+                                                                   guard let userSession = context.userInfo as? UserSessionProtocol else { fatalError("The user session wasn't included in the context") }
+                                                                   self?.userHasSignedIn(userSession: userSession)
+                                                               }
         
         // Logging
         
@@ -433,7 +433,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
-
+                
                 switch action {
                 case .signedIn(let userSession):
                     stateMachine.tryEvent(.signedIn, userInfo: userSession)
@@ -442,6 +442,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     navigationStackCoordinator.pop(animated: false)
                 case .forgotPassword:
                     presentForgotPasswordScreen()
+                case .verifyOtp(let email):
+                    presentVerifyOtpScreen(email: email)
                 }
             }
             .store(in: &cancellables)
@@ -471,7 +473,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - Completion
-        
+    
     private func userHasSignedIn(userSession: UserSessionProtocol) {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
     }
@@ -531,7 +533,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
-
+                
                 switch action {
                 case .accountCreated(let userSession):
                     CreateAccountHelper.shared.inviteCode = inviteCode
@@ -553,10 +555,29 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
-
+                
                 switch action {
                 case .login:
                     navigationStackCoordinator.pop(animated: true)
+                }
+            }
+            .store(in: &cancellables)
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentVerifyOtpScreen(email: String) {
+        let parameters = OtpVerificationScreenParameters(authenticationService: authenticationService,
+                                                         appSettings: appSettings,
+                                                         userIndicatorController: userIndicatorController,
+                                                         userEmail: email)
+        let coordinator = OtpVerificationScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .signedIn(let userSession):
+                    stateMachine.tryEvent(.signedIn, userInfo: userSession)
                 }
             }
             .store(in: &cancellables)

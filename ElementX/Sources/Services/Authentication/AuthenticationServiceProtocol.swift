@@ -39,6 +39,8 @@ enum AuthenticationServiceError: Error, Equatable {
     case invalidInviteCode
     case failedCreatingUserAccount
     case failedRequestResetPassword
+    case failedRequestOtp
+    case failedVerifyOtp
 }
 
 protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
@@ -69,6 +71,8 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     func reset()
         
     func requestResetPassword(email: String) async -> Result<Void, AuthenticationServiceError>
+    func requestOtp(email: String) async -> Result<Void, AuthenticationServiceError>
+    func verifyOtp(email: String, code: String, initialDeviceName: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }
 
 // MARK: - OIDC

@@ -101,7 +101,7 @@ struct OnLoginScreen: View {
                 if selectedEmailAuthMethod == .password {
                     isPasswordFocused = true
                 } else {
-                    
+                    context.send(viewAction: .sendVerificationOtp)
                 }
             }
         }
@@ -124,7 +124,7 @@ struct OnLoginScreen: View {
     }
     
     var generateLinkButton: some View {
-        Button(action: {  }) {
+        Button(action: { context.send(viewAction: .sendVerificationOtp) }) {
             Text("Generate Link")
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.black)

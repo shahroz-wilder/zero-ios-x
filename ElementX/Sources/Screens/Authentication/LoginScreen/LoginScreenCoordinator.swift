@@ -24,6 +24,7 @@ enum LoginScreenCoordinatorAction {
     /// Login was successful.
     case signedIn(UserSessionProtocol)
     case forgotPassword
+    case verifyOtp(String)
 }
 
 // Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
@@ -66,6 +67,8 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.signedIn(userSession))
                 case .forgotPassword:
                     actionsSubject.send(.forgotPassword)
+                case .verifyOtp(let email):
+                    actionsSubject.send(.verifyOtp(email))
                 }
             }
             .store(in: &cancellables)

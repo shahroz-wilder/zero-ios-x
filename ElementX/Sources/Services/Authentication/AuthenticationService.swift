@@ -277,6 +277,58 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    func requestOtp(email: String) async -> Result<Void, AuthenticationServiceError> {
+        do {
+            let result = try await zeroAuthApiProxy.authApi.requestOtp(email: email)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.failedRequestOtp)
+            }
+        } catch {
+            MXLog.error("Failed to request OTP: \(error)")
+            return .failure(.failedRequestOtp)
+        }
+    }
+    
+    func verifyOtp(email: String, code: String, initialDeviceName: String?) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
+        guard let client else { return .failure(.failedVerifyOtp) }
+        do {
+            let result = try await zeroAuthApiProxy.authApi.verifyOtp(email: email, otp: code)
+            switch result {
+            case .success(let zeroSSOToken):
+                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: nil)
+                
+                try await checkAndLinkMatrixUser(client.userId())
+                
+                let refreshToken = try? client.session().refreshToken
+                if refreshToken != nil {
+                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
+                    _ = try? await client.logout()
+                    return .failure(.sessionTokenRefreshNotSupported)
+                }
+                StateBus.shared.onUserAuthStateChanged(.authorised)
+                return await userSession(for: client)
+            case .failure(_):
+                return .failure(.failedLoggingIn)
+            }
+        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
+            MXLog.error("Failed logging in with error kind: \(errorKind)")
+            switch errorKind {
+            case .forbidden:
+                return .failure(.invalidCredentials)
+            case .userDeactivated:
+                return .failure(.accountDeactivated)
+            default:
+                return .failure(.failedLoggingIn)
+            }
+        } catch {
+            MXLog.error("Failed to verify OTP: \(error)")
+            return .failure(.failedVerifyOtp)
+        }
+    }
+    
     func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
             let result = try await zeroAuthApiProxy.createAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)

@@ -13,6 +13,7 @@ enum LoginScreenViewModelAction {
     /// Login was successful.
     case signedIn(UserSessionProtocol)
     case forgotPassword
+    case verifyOtp(String)
     
     var isConfiguredForOIDC: Bool {
         switch self {
@@ -66,6 +67,7 @@ enum LoginScreenViewAction {
     case openWalletConnectModal
     /// Forgot password
     case forgotPassword
+    case sendVerificationOtp
 }
 
 enum LoginScreenErrorType: Hashable {
