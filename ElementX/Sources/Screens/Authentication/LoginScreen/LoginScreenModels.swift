@@ -12,6 +12,7 @@ enum LoginScreenViewModelAction {
     case configuredForOIDC
     /// Login was successful.
     case signedIn(UserSessionProtocol)
+    case forgotPassword
     
     var isConfiguredForOIDC: Bool {
         switch self {
@@ -31,6 +32,10 @@ struct LoginScreenViewState: BindableState {
     
     /// The types of login supported by the homeserver.
     var loginMode: LoginMode { homeserver.loginMode }
+    
+    var hasValidEmail: Bool {
+        !bindings.username.isEmpty
+    }
     
     /// `true` if the username and password are ready to be submitted.
     var hasValidCredentials: Bool {
@@ -59,6 +64,8 @@ enum LoginScreenViewAction {
     case next
     /// Open wallet connect modal
     case openWalletConnectModal
+    /// Forgot password
+    case forgotPassword
 }
 
 enum LoginScreenErrorType: Hashable {

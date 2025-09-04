@@ -262,6 +262,21 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    func requestResetPassword(email: String) async -> Result<Void, AuthenticationServiceError> {
+        do {
+            let result = try await zeroAuthApiProxy.authApi.requestResetPassword(email: email)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.failedRequestResetPassword)
+            }
+        } catch {
+            MXLog.error("Failed to request reset password: \(error)")
+            return .failure(.failedRequestResetPassword)
+        }
+    }
+    
     func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
             let result = try await zeroAuthApiProxy.createAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)

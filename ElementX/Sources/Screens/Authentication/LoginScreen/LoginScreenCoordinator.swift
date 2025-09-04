@@ -23,6 +23,7 @@ enum LoginScreenCoordinatorAction {
     case configuredForOIDC
     /// Login was successful.
     case signedIn(UserSessionProtocol)
+    case forgotPassword
 }
 
 // Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
@@ -63,6 +64,8 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.configuredForOIDC)
                 case .signedIn(let userSession):
                     actionsSubject.send(.signedIn(userSession))
+                case .forgotPassword:
+                    actionsSubject.send(.forgotPassword)
                 }
             }
             .store(in: &cancellables)
@@ -73,6 +76,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(ZeroLoginScreen(context: viewModel.context))
+        AnyView(OnLoginScreen(context: viewModel.context))
     }
 }

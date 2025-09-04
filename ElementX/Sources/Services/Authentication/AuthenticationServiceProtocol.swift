@@ -38,6 +38,7 @@ enum AuthenticationServiceError: Error, Equatable {
     
     case invalidInviteCode
     case failedCreatingUserAccount
+    case failedRequestResetPassword
 }
 
 protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
@@ -66,6 +67,8 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     
     /// Resets the current configuration requiring `configure(for:flow:)` to be called again.
     func reset()
+        
+    func requestResetPassword(email: String) async -> Result<Void, AuthenticationServiceError>
 }
 
 // MARK: - OIDC

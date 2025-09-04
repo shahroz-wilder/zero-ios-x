@@ -78,6 +78,8 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             login()
         case .openWalletConnectModal:
             presentWalletConnectModal()
+        case .forgotPassword:
+            actionsSubject.send(.forgotPassword)
         }
     }
     

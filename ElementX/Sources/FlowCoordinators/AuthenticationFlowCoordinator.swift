@@ -438,6 +438,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 case .configuredForOIDC:
                     // Pop back to the confirmation screen for OIDC login to continue.
                     navigationStackCoordinator.pop(animated: false)
+                case .forgotPassword:
+                    presentForgotPasswordScreen()
                 }
             }
             .store(in: &cancellables)
@@ -535,6 +537,24 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 case .openLoginScreen:
                     navigationStackCoordinator.pop(animated: false)
                     stateMachine.tryEvent(.continueWithPassword, userInfo: nil)
+                }
+            }
+            .store(in: &cancellables)
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentForgotPasswordScreen() {
+        let parameters = ForgotPasswordScreenParameters(authenticationService: authenticationService,
+                                                        appSettings: appSettings,
+                                                        userIndicatorController: userIndicatorController)
+        let coordinator = ForgotPasswordScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                switch action {
+                case .login:
+                    navigationStackCoordinator.pop(animated: true)
                 }
             }
             .store(in: &cancellables)

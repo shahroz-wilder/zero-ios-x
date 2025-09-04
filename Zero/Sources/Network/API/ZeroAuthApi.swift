@@ -11,6 +11,8 @@ protocol ZeroAuthApiProtocol {
     func loginWithWeb3(web3Token: String) async throws -> Result<ZSSOToken, Error>
     
     func linkMatrixUserToZero(matrixUserId: String) async throws -> Result<Void, Error>
+    
+    func requestResetPassword(email: String) async throws -> Result<Void, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -138,6 +140,20 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         return try await APIManager.shared.request(url, method: .post, parameters: parameters, headers: headers)
     }
     
+    func requestResetPassword(email: String) async throws -> Result<Void, any Error> {
+        let parameters: [String: Any] = ["email": email]
+        let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(AuthEndPoints.requestResetPasswordEndPoint,
+                                                                                        method: .post,
+                                                                                        appSettings: appSettings,
+                                                                                        parameters: parameters)
+        switch result {
+        case .success:
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum AuthEndPoints {
@@ -150,6 +166,8 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let nonceOrAuthoriseEndpoint = "\(hostURL)authentication/nonceOrAuthorize"
         
         static let linkMatrixUserEndpoint = "\(hostURL)matrix/link-zero-user"
+        
+        static let requestResetPasswordEndPoint = "\(hostURL)api/v2/accounts/request-password-reset"
     }
     
     private enum AuthConstants {

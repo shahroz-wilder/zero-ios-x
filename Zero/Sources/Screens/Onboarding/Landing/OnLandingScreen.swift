@@ -48,7 +48,9 @@ struct OnLandingScreen: View {
     
     @ViewBuilder
     var loginActions: some View {
-        OnboardingLoginActionButton(icon: Asset.Images.logoEmail, onClick: {})
+        OnboardingLoginActionButton(icon: Asset.Images.logoEmail, onClick: {
+            context.send(viewAction: .login)
+        })
         OnboardingLoginActionButton(icon: Asset.Images.logoWalletConnect, onClick: {})
         OnboardingLoginActionButton(icon: Asset.Images.iconMore, onClick: {
             withAnimation(.easeInOut(duration: 0.3)) {
