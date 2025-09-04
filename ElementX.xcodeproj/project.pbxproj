@@ -1861,6 +1861,10 @@
 		79281A672E6723C900D86DD6 /* SpaceServiceProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A56746AD99ABDA97189E1 /* SpaceServiceProxy.swift */; };
 		79281A682E6723EB00D86DD6 /* SpaceRoomListProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2B564CA6570E1487A7C7CC /* SpaceRoomListProxy.swift */; };
 		79281A692E67240400D86DD6 /* SpaceRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355C8C46DA9C0B45F1B7FC4F /* SpaceRoomProxy.swift */; };
+		79281A6E2E69A1D200D86DD6 /* OnLandingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A6D2E69A1AB00D86DD6 /* OnLandingScreen.swift */; };
+		79281A6F2E69A1D200D86DD6 /* OnLandingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A6D2E69A1AB00D86DD6 /* OnLandingScreen.swift */; };
+		79281A712E69A3B700D86DD6 /* LandingScreenTabPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A702E69A3AD00D86DD6 /* LandingScreenTabPager.swift */; };
+		79281A722E69A3B700D86DD6 /* LandingScreenTabPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A702E69A3AD00D86DD6 /* LandingScreenTabPager.swift */; };
 		792A87AA2DAD8F51009C3E4F /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADECBBB672497BCD4822468 /* Result.swift */; };
 		792E928C2E5CEBD000C88D7B /* SearchUserScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E928B2E5CEBC300C88D7B /* SearchUserScreenCoordinator.swift */; };
 		792E928D2E5CEBD000C88D7B /* SearchUserScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E928B2E5CEBC300C88D7B /* SearchUserScreenCoordinator.swift */; };
@@ -3792,6 +3796,8 @@
 		790AB7BE2E1DB65800555B1F /* ZWalletTransactionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTransactionResponse.swift; sourceTree = "<group>"; };
 		790AB7C12E1DB6A700555B1F /* ZWalletTransactionReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTransactionReceipt.swift; sourceTree = "<group>"; };
 		7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaSelectedProtocol.swift; sourceTree = "<group>"; };
+		79281A6D2E69A1AB00D86DD6 /* OnLandingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnLandingScreen.swift; sourceTree = "<group>"; };
+		79281A702E69A3AD00D86DD6 /* LandingScreenTabPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingScreenTabPager.swift; sourceTree = "<group>"; };
 		792E928B2E5CEBC300C88D7B /* SearchUserScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserScreenCoordinator.swift; sourceTree = "<group>"; };
 		792E928E2E5CEBD300C88D7B /* SearchUserScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserScreenModels.swift; sourceTree = "<group>"; };
 		792E92912E5CEBD900C88D7B /* SearchUserScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserScreenViewModel.swift; sourceTree = "<group>"; };
@@ -7142,6 +7148,31 @@
 			path = ZeroSubscriptions;
 			sourceTree = "<group>";
 		};
+		79281A6A2E69A10200D86DD6 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				79281A6B2E69A18400D86DD6 /* Landing */,
+				79281A6C2E69A19000D86DD6 /* Login */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		79281A6B2E69A18400D86DD6 /* Landing */ = {
+			isa = PBXGroup;
+			children = (
+				79281A702E69A3AD00D86DD6 /* LandingScreenTabPager.swift */,
+				79281A6D2E69A1AB00D86DD6 /* OnLandingScreen.swift */,
+			);
+			path = Landing;
+			sourceTree = "<group>";
+		};
+		79281A6C2E69A19000D86DD6 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		792E928A2E5CEB8A00C88D7B /* SearchUserScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -8489,12 +8520,13 @@
 		CC8F34922C7DE37A002D92F9 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				18BF59CD2CA4A4DA006D7BAB /* Launch */,
-				1882EB8F2C90F0E0001DA2A9 /* CommonViews */,
-				18CB801F2C7F3094003BC289 /* Utilities */,
-				18CB801A2C7F1CEB003BC289 /* Authentication */,
 				CCFDEC8C2C81137200C17FC3 /* AccountBackup */,
+				18CB801A2C7F1CEB003BC289 /* Authentication */,
+				1882EB8F2C90F0E0001DA2A9 /* CommonViews */,
 				CC8F34932C7DE383002D92F9 /* LandingScreen */,
+				18BF59CD2CA4A4DA006D7BAB /* Launch */,
+				79281A6A2E69A10200D86DD6 /* Onboarding */,
+				18CB801F2C7F3094003BC289 /* Utilities */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -10792,6 +10824,7 @@
 				79AD65542D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */,
 				18E9A5922C9829970082DDA4 /* MessageForwardingScreenCoordinator.swift in Sources */,
 				189334A22D071BEE00CC87B9 /* MediaEventsTimelineFlowCoordinator.swift in Sources */,
+				79281A6F2E69A1D200D86DD6 /* OnLandingScreen.swift in Sources */,
 				79281A682E6723EB00D86DD6 /* SpaceRoomListProxy.swift in Sources */,
 				790922642E1FB1F900833940 /* SwipeToConfirmButton.swift in Sources */,
 				79FCB1A82DA5BA3600669122 /* DeclineAndBlockScreenCoordinator.swift in Sources */,
@@ -10945,6 +10978,7 @@
 				18D467AB2D109BD200861AA6 /* VoiceMessageRoomTimelineView.swift in Sources */,
 				795A0C8A2D78453B000928B7 /* ZeroAuthApiProxy.swift in Sources */,
 				18E9A5FC2C9829970082DDA4 /* QRCodeLoginScreenViewModel.swift in Sources */,
+				79281A722E69A3B700D86DD6 /* LandingScreenTabPager.swift in Sources */,
 				7995C3BB2D89650100E4D98E /* CharacterSet.swift in Sources */,
 				18E9A5FD2C9829970082DDA4 /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
 				79FCB1A72DA5BA1F00669122 /* ReportRoomScreen.swift in Sources */,
@@ -12555,6 +12589,7 @@
 				A6FFC4C5154C446BAD6B40D8 /* TimelineItemProvider.swift in Sources */,
 				5CEA0BF496F00339A9E4486B /* TimelineItemProviderProtocol.swift in Sources */,
 				440123E29E2F9B001A775BBE /* TimelineItemProxy.swift in Sources */,
+				79281A712E69A3B700D86DD6 /* LandingScreenTabPager.swift in Sources */,
 				9586E90A447C4896C0CA3A8E /* TimelineItemReplyDetails.swift in Sources */,
 				799D857E2E2703A7000A362A /* ReceiveTransactionView.swift in Sources */,
 				F3ECA377FF77E81A4F1FA062 /* TimelineItemSendInfoLabel.swift in Sources */,
@@ -12604,6 +12639,7 @@
 				298F9EC30E918F12AB7F1EE8 /* TypingIndicatorView.swift in Sources */,
 				36AC963F2F04069B7FF1AA0C /* UIConstants.swift in Sources */,
 				A37EED79941AD3B7140B3822 /* UIDevice.swift in Sources */,
+				79281A6E2E69A1D200D86DD6 /* OnLandingScreen.swift in Sources */,
 				0EE5EBA18BA1FE10254BB489 /* UIFont+AttributedStringBuilder.m in Sources */,
 				E96005321849DBD7C72A28F2 /* UITestsAppCoordinator.swift in Sources */,
 				384D6B9A7DFD7260139D6852 /* UITestsNotificationCenter.swift in Sources */,
@@ -12988,7 +13024,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.19.5;
+				MARKETING_VERSION = 0.19.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13024,7 +13060,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.19.5;
+				MARKETING_VERSION = 0.19.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
