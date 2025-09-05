@@ -45,6 +45,14 @@ struct OnLandingScreen: View {
         ToolbarItem(placement: .principal) {
             Image(asset: Asset.Images.zeroWordmark)
         }
+        ToolbarItem(placement: .primaryAction) {
+            Button {
+//                context.send(viewAction: .searchUser)
+            } label: {
+                Text("Sign up")
+                    .foregroundStyle(.compound.textPrimary)
+            }
+        }
     }
     
     @ViewBuilder
@@ -55,11 +63,12 @@ struct OnLandingScreen: View {
         OnboardingLoginActionButton(icon: Asset.Images.logoWalletConnect, onClick: {
             context.send(viewAction: .openWalletConnectModal)
         })
-        OnboardingLoginActionButton(icon: Asset.Images.iconMore, onClick: {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                showExtendedLoginActions.toggle()
-            }
-        })
+        OnboardingLoginActionButton(icon: Asset.Images.logoEpic, onClick: {})
+//        OnboardingLoginActionButton(icon: Asset.Images.iconMore, onClick: {
+//            withAnimation(.easeInOut(duration: 0.3)) {
+//                showExtendedLoginActions.toggle()
+//            }
+//        })
     }
     
     @ViewBuilder
