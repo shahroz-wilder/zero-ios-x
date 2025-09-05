@@ -33,7 +33,12 @@ class OtpVerificationScreenViewModel: OtpVerificationScreenViewModelType, OtpVer
     }
 
     override func process(viewAction: OtpVerificationScreenViewAction) {
-        
+        switch viewAction {
+        case .verifyOtp:
+            verifyOtp()
+        case .resendOtp:
+            resendOtp()
+        }
     }
     
     // MARK: - Private
@@ -55,7 +60,7 @@ class OtpVerificationScreenViewModel: OtpVerificationScreenViewModelType, OtpVer
         }
     }
     
-    private func resentOtp() {
+    private func resendOtp() {
         Task {
             startLoading()
             defer { stopLoading() }
@@ -64,7 +69,6 @@ class OtpVerificationScreenViewModel: OtpVerificationScreenViewModelType, OtpVer
             switch result {
             case .success:
                 break
-                //actionsSubject.send(.verifyOtp(state.bindings.username))
             case .failure(let error):
                 displayError()
             }

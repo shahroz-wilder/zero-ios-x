@@ -1839,6 +1839,12 @@
 		790A47422E6A41A10033604D /* OtpVerificationScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47402E6A419E0033604D /* OtpVerificationScreenModel.swift */; };
 		790A47442E6A41A70033604D /* OtpVerificationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47432E6A41A30033604D /* OtpVerificationScreenCoordinator.swift */; };
 		790A47452E6A41A70033604D /* OtpVerificationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47432E6A41A30033604D /* OtpVerificationScreenCoordinator.swift */; };
+		790A47482E6ADBFE0033604D /* OtpFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47472E6ADBF50033604D /* OtpFormView.swift */; };
+		790A47492E6ADBFE0033604D /* OtpFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47472E6ADBF50033604D /* OtpFormView.swift */; };
+		790A474B2E6ADCE70033604D /* OtpModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474A2E6ADCE30033604D /* OtpModifier.swift */; };
+		790A474C2E6ADCE70033604D /* OtpModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474A2E6ADCE30033604D /* OtpModifier.swift */; };
+		790A474E2E6AE2F70033604D /* ResentOtpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474D2E6AE2F00033604D /* ResentOtpButton.swift */; };
+		790A474F2E6AE2F70033604D /* ResentOtpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474D2E6AE2F00033604D /* ResentOtpButton.swift */; };
 		790AB79B2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */; };
@@ -3811,6 +3817,9 @@
 		790A473D2E6A41980033604D /* OtpVerificationScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenViewModel.swift; sourceTree = "<group>"; };
 		790A47402E6A419E0033604D /* OtpVerificationScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenModel.swift; sourceTree = "<group>"; };
 		790A47432E6A41A30033604D /* OtpVerificationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenCoordinator.swift; sourceTree = "<group>"; };
+		790A47472E6ADBF50033604D /* OtpFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpFormView.swift; sourceTree = "<group>"; };
+		790A474A2E6ADCE30033604D /* OtpModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpModifier.swift; sourceTree = "<group>"; };
+		790A474D2E6AE2F00033604D /* ResentOtpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResentOtpButton.swift; sourceTree = "<group>"; };
 		790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModel.swift; sourceTree = "<group>"; };
 		790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenModels.swift; sourceTree = "<group>"; };
@@ -5379,6 +5388,7 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				790A47462E6ADBEE0033604D /* Otp */,
 				79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */,
 				790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */,
 				790AB7A92E1C516800555B1F /* StrikedLabel.swift */,
@@ -7170,6 +7180,16 @@
 				790A47372E6A41810033604D /* OtpVerificationView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		790A47462E6ADBEE0033604D /* Otp */ = {
+			isa = PBXGroup;
+			children = (
+				790A474D2E6AE2F00033604D /* ResentOtpButton.swift */,
+				790A474A2E6ADCE30033604D /* OtpModifier.swift */,
+				790A47472E6ADBF50033604D /* OtpFormView.swift */,
+			);
+			path = Otp;
 			sourceTree = "<group>";
 		};
 		790AB7982E1BDD9700555B1F /* ZeroProSubscription */ = {
@@ -10487,6 +10507,7 @@
 				18E9A4832C9829970082DDA4 /* BadgeView.swift in Sources */,
 				79343C892E5CAAD500ED9976 /* OIDCConfiguration.swift in Sources */,
 				18E9A4842C9829970082DDA4 /* BindableState.swift in Sources */,
+				790A47482E6ADBFE0033604D /* OtpFormView.swift in Sources */,
 				18B9B8BF2CE3F5F100DDD64D /* StackedAvatarsView.swift in Sources */,
 				18E9A4852C9829970082DDA4 /* BlankFormCoordinator.swift in Sources */,
 				18E9A4862C9829970082DDA4 /* BlockedUsersScreen.swift in Sources */,
@@ -11356,6 +11377,7 @@
 				18525CFE2CF5E7F20055C5E8 /* InviteFriendSettingsScreenModel.swift in Sources */,
 				18E9A6D02C9829970082DDA4 /* StartChatScreenCoordinator.swift in Sources */,
 				18E9A6D12C9829970082DDA4 /* StartChatScreenModels.swift in Sources */,
+				790A474B2E6ADCE70033604D /* OtpModifier.swift in Sources */,
 				18E9A6D22C9829970082DDA4 /* StartChatScreenViewModel.swift in Sources */,
 				79C6BB292D47B76900FC3CBF /* RoomPreviewProxyMock.swift in Sources */,
 				18E9A6D32C9829970082DDA4 /* StartChatScreenViewModelProtocol.swift in Sources */,
@@ -11551,6 +11573,7 @@
 				79C6F7322DF8277D003CEBB9 /* TombstonedAvatarImage.swift in Sources */,
 				79B2A79C2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */,
 				18E9A75C2C9829970082DDA4 /* WindowManagerProtocol.swift in Sources */,
+				790A474F2E6AE2F70033604D /* ResentOtpButton.swift in Sources */,
 				79C6F7342DF828F9003CEBB9 /* RoomFlowCoordinatorStateMachine.swift in Sources */,
 				79C6F72C2DF82753003CEBB9 /* AuthenticationStartScreenCoordinator.swift in Sources */,
 				188C87D12D37F93900A139EB /* EditRoomAddressScreenViewModel.swift in Sources */,
@@ -11879,6 +11902,7 @@
 				79B2A78D2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */,
 				B9CB30FED3E29D2036EA3FCC /* DeveloperOptionsScreenViewModelProtocol.swift in Sources */,
 				79C9BA8E2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */,
+				790A47492E6ADBFE0033604D /* OtpFormView.swift in Sources */,
 				037006FB6DF1374F94E4058D /* Dictionary.swift in Sources */,
 				EDF8919F15DE0FF00EF99E70 /* DocumentPicker.swift in Sources */,
 				792E92962E5CEBE700C88D7B /* SearchUserScreenViewModelProtocol.swift in Sources */,
@@ -12250,6 +12274,7 @@
 				FEC03105D1BDE0F49BD7F243 /* PinnedEventsTimelineScreenModels.swift in Sources */,
 				185454D72CFEFC7E003CA957 /* ValidationUtil.swift in Sources */,
 				5F0B5797D1BFF2A51084B4C3 /* PinnedEventsTimelineScreenViewModel.swift in Sources */,
+				790A474C2E6ADCE70033604D /* OtpModifier.swift in Sources */,
 				7B3A59786DB2F741A1743ED0 /* PinnedEventsTimelineScreenViewModelProtocol.swift in Sources */,
 				185454BE2CFDE64D003CA957 /* CreateAccountScreenCoordinator.swift in Sources */,
 				053B8BD2496207838878C6C9 /* PinnedItemsBannerView.swift in Sources */,
@@ -12505,6 +12530,7 @@
 				1795EA6A6C4942CAE0459DF0 /* SecureBackupKeyBackupScreenViewModel.swift in Sources */,
 				A4C29D373986AFE4559696D5 /* SecureBackupKeyBackupScreenViewModelProtocol.swift in Sources */,
 				B6064D82FCDCB829601C1F59 /* SecureBackupLogoutConfirmationScreen.swift in Sources */,
+				790A474E2E6AE2F70033604D /* ResentOtpButton.swift in Sources */,
 				5AE6404C4FD4848ACCFF9EDC /* SecureBackupLogoutConfirmationScreenCoordinator.swift in Sources */,
 				7944A7692D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */,
 				7968A4392D540A4700E9056A /* FeedDetailsScreenView.swift in Sources */,

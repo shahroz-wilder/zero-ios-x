@@ -20,6 +20,8 @@ enum OtpVerificationScreenViewModelAction {
 struct OtpVerificationScreenViewState: BindableState {
     var userEmail: String
     var bindings = OtpVerificationScreenViewStateBindings()
+    
+    var isOtpValid: Bool { !bindings.otp.isEmpty }
 }
 
 struct OtpVerificationScreenViewStateBindings {
@@ -32,4 +34,6 @@ enum OtpVerificationScreenAlertType {
 }
 
 enum OtpVerificationScreenViewAction {
+    case verifyOtp
+    case resendOtp
 }

@@ -37,6 +37,7 @@ struct OnLandingScreen: View {
         .toolbar { toolbar }
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
+        .alert(item: $context.alertInfo)
     }
     
     @ToolbarContentBuilder

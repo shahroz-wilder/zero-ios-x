@@ -63,6 +63,7 @@ struct OnLoginScreen: View {
         .padding(24)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
+        .alert(item: $context.alertInfo)
     }
     
     @ToolbarContentBuilder

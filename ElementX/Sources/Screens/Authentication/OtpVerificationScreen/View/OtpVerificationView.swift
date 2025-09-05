@@ -22,15 +22,25 @@ struct OtpVerificationView: View {
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textSecondary)
             
+            OtpFormFieldView(pin: $context.otp)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+            
             Spacer()
             
             loginButton
-                .padding(.vertical, 12)
+            
+            ResendOtpView(onResend: {
+                context.send(viewAction: .resendOtp)
+            })
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
         }
         .toolbar { toolbar }
         .padding(24)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
+        .alert(item: $context.alertInfo)
     }
     
     @ToolbarContentBuilder
@@ -41,7 +51,7 @@ struct OtpVerificationView: View {
     }
     
     var loginButton: some View {
-        Button(action: {  }) {
+        Button(action: { context.send(viewAction: .verifyOtp) }) {
             Text("Login")
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.black)
@@ -52,5 +62,6 @@ struct OtpVerificationView: View {
                         .fill(.zero.bgAccentRest)
                 )
         }
+        .disabled(!context.viewState.isOtpValid)
     }
 }
