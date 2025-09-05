@@ -9,23 +9,23 @@ import Alamofire
 
 protocol ZeroStakingApiProtocol {
     
-    func getTotalStaked(poolAddress: String) async throws -> Result<String, Error>
+    func getTotalStaked(poolAddress: String, chainId: UInt64) async throws -> Result<String, Error>
     
-    func getStakingConfig(poolAddress: String) async throws -> Result<ZStackingConfig, Error>
+    func getStakingConfig(poolAddress: String, chainId: UInt64) async throws -> Result<ZStackingConfig, Error>
     
-    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingStatus, Error>
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async throws -> Result<ZStakingStatus, Error>
     
-    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingUserRewardsInfo, Error>
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async throws -> Result<ZStakingUserRewardsInfo, Error>
     
-    func getStakingToken(poolAddress: String) async throws -> Result<ZWalletStakingToken, Error>
+    func getStakingToken(poolAddress: String, chainId: UInt64) async throws -> Result<ZWalletStakingToken, Error>
     
-    func getRewardsToken(poolAddress: String) async throws -> Result<ZWalletStakingRewardsToken, Error>
+    func getRewardsToken(poolAddress: String, chainId: UInt64) async throws -> Result<ZWalletStakingRewardsToken, Error>
     
-    func stakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    func stakeAmount(userWalletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async throws -> Result<ZWalletTransactionResponse, Error>
     
-    func unstakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    func unstakeAmount(userWalletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async throws -> Result<ZWalletTransactionResponse, Error>
     
-    func claimStakeRewards(userWalletAddress: String, poolAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    func claimStakeRewards(userWalletAddress: String, poolAddress: String, chainId: UInt64) async throws -> Result<ZWalletTransactionResponse, Error>
 }
 
 class ZeroStakingApi : ZeroStakingApiProtocol {
@@ -35,11 +35,14 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         self.appSettings = appSettings
     }
     
-    func getTotalStaked(poolAddress: String) async throws -> Result<String, any Error> {
+    func getTotalStaked(poolAddress: String, chainId: UInt64) async throws -> Result<String, any Error> {
+        let parameters: [String: Any] = ["chainId": chainId.description]
         let url = StakingEndPoints.totalStaked.replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<String, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                           method: .get,
-                                                                                          appSettings: appSettings)
+                                                                                          appSettings: appSettings,
+                                                                                          parameters: parameters,
+                                                                                          encoding: URLEncoding.queryString)
         switch result {
         case .success(let totalStaked):
             return .success(totalStaked)
@@ -48,11 +51,14 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getStakingConfig(poolAddress: String) async throws -> Result<ZStackingConfig, any Error> {
+    func getStakingConfig(poolAddress: String, chainId: UInt64) async throws -> Result<ZStackingConfig, any Error> {
+        let parameters: [String: Any] = ["chainId": chainId.description]
         let url = StakingEndPoints.config.replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZStackingConfig, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                    method: .get,
-                                                                                                   appSettings: appSettings)
+                                                                                                   appSettings: appSettings,
+                                                                                                   parameters: parameters,
+                                                                                                   encoding: URLEncoding.queryString)
         switch result {
         case .success(let config):
             return .success(config)
@@ -61,13 +67,16 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingStatus, any Error> {
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async throws -> Result<ZStakingStatus, any Error> {
+        let parameters: [String: Any] = ["chainId": chainId.description]
         let url = StakingEndPoints.stakers
             .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
             .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZStakingStatus, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                   method: .get,
-                                                                                                  appSettings: appSettings)
+                                                                                                  appSettings: appSettings,
+                                                                                                  parameters: parameters,
+                                                                                                  encoding: URLEncoding.queryString)
         switch result {
         case .success(let status):
             return .success(status)
@@ -76,13 +85,16 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingUserRewardsInfo, any Error> {
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async throws -> Result<ZStakingUserRewardsInfo, any Error> {
+        let parameters: [String: Any] = ["chainId": chainId.description]
         let url = StakingEndPoints.rewards
             .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
             .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZStakingUserRewardsInfo, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                            method: .get,
-                                                                                                           appSettings: appSettings)
+                                                                                                           appSettings: appSettings,
+                                                                                                           parameters: parameters,
+                                                                                                           encoding: URLEncoding.queryString)
         switch result {
         case .success(let info):
             return .success(info)
@@ -91,12 +103,15 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getStakingToken(poolAddress: String) async throws -> Result<ZWalletStakingToken, any Error> {
+    func getStakingToken(poolAddress: String, chainId: UInt64) async throws -> Result<ZWalletStakingToken, any Error> {
+        let parameters: [String: Any] = ["chainId": chainId.description]
         let url = StakingEndPoints.stakingToken
             .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZWalletStakingToken, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                            method: .get,
-                                                                                                           appSettings: appSettings)
+                                                                                                       appSettings: appSettings,
+                                                                                                       parameters: parameters,
+                                                                                                       encoding: URLEncoding.queryString)
         switch result {
         case .success(let token):
             return .success(token)
@@ -105,12 +120,15 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getRewardsToken(poolAddress: String) async throws -> Result<ZWalletStakingRewardsToken, any Error> {
+    func getRewardsToken(poolAddress: String, chainId: UInt64) async throws -> Result<ZWalletStakingRewardsToken, any Error> {
+        let parameters: [String: Any] = ["chainId": chainId.description]
         let url = StakingEndPoints.rewardsToken
             .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZWalletStakingRewardsToken, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                            method: .get,
-                                                                                                           appSettings: appSettings)
+                                                                                                              appSettings: appSettings,
+                                                                                                              parameters: parameters,
+                                                                                                              encoding: URLEncoding.queryString)
         switch result {
         case .success(let token):
             return .success(token)
@@ -119,12 +137,13 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func stakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+    func stakeAmount(userWalletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async throws -> Result<ZWalletTransactionResponse, any Error> {
         let url = StakingEndPoints.stakeAmount
             .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
         let parameters = [
             "amount": amount,
-            "poolAddress": poolAddress
+            "poolAddress": poolAddress,
+            "chainId": chainId.description,
         ]
         let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                                          method: .post,
@@ -138,12 +157,13 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func unstakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+    func unstakeAmount(userWalletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async throws -> Result<ZWalletTransactionResponse, any Error> {
         let url = StakingEndPoints.unstakeAmount
             .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
         let parameters = [
             "amount": amount,
-            "poolAddress": poolAddress
+            "poolAddress": poolAddress,
+            "chainId": chainId.description,
         ]
         let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                                          method: .post,
@@ -157,11 +177,12 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func claimStakeRewards(userWalletAddress: String, poolAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+    func claimStakeRewards(userWalletAddress: String, poolAddress: String, chainId: UInt64) async throws -> Result<ZWalletTransactionResponse, any Error> {
         let url = StakingEndPoints.claimStakeRewards
             .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
         let parameters = [
-            "poolAddress": poolAddress
+            "poolAddress": poolAddress,
+            "chainId": chainId.description
         ]
         let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                                          method: .post,

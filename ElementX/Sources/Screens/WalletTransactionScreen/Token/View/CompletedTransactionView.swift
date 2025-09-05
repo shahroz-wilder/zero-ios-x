@@ -128,7 +128,7 @@ struct CompletedTransactionView: View {
                             Button(action: {
                                 context.send(viewAction: .viewTransaction)
                             }) {
-                                Text("View on ZScan")
+                                Text("View")
                                     .font(.compound.bodyMDSemibold)
                                     .foregroundColor(.zero.bgAccentRest)
                                     .padding()
