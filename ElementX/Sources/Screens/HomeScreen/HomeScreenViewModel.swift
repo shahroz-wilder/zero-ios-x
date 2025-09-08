@@ -329,8 +329,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.startWalletTransaction(self, type, state.meowPrice))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
-        case .viewTransactionDetails(let walletTransactionId):
-            viewWalletTransactionDetails(walletTransactionId)
+        case .viewTransactionDetails(let walletTransactionId, let chainId):
+            viewWalletTransactionDetails(walletTransactionId, chainId: chainId)
         case .claimRewards(let trigger):
             if trigger {
                 claimUserRewards()
@@ -1057,7 +1057,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         state.walletBalance = ZeroWalletUtil.shared.meowPrice(tokenAmount: totalAmount.description, refPrice: state.meowPrice)
     }
     
-    private func viewWalletTransactionDetails(_ walletTransactionId: String) {
+    private func viewWalletTransactionDetails(_ walletTransactionId: String, chainId: UInt64?) {
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
@@ -1067,7 +1067,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: L10n.commonLoading,
                                                                   persistent: true))
-            if case .success(let receipt) = await userSession.clientProxy.getTransactionReceipt(transactionHash: walletTransactionId, chainId: nil),
+            if case .success(let receipt) = await userSession.clientProxy.getTransactionReceipt(transactionHash: walletTransactionId, chainId: chainId),
                let link = URL(string: receipt.blockExplorerUrl) {
                 await UIApplication.shared.open(link)
             }

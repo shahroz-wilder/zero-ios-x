@@ -61,7 +61,6 @@ struct UserWalletInfoView: View {
 //                            .font(.zero.bodySM)
 //                            .foregroundStyle(.compound.textSecondary)
 //                        
-//                        Image(asset: Asset.Images.iconZChain)
                     }
                     
                     Spacer()

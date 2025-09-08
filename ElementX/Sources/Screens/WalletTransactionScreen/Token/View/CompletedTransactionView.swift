@@ -29,9 +29,11 @@ struct CompletedTransactionView: View {
                         
                         WalletTokenImage(url: token.logo, size: 100)
                         
-                        Image(asset: Asset.Images.iconZChain)
-                            .resizable()
-                            .frame(width: 24, height: 24)
+                        if ZeroWalletChainsUtil.shared.isAvaxChain(token.chainId) {
+                            AvaxChainIcon(size: 16)
+                        } else {
+                            ZChainIcon(size: 24)
+                        }
                     }
                     .background(
                         Circle()
@@ -196,15 +198,11 @@ private struct UserInfoView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ZStack(alignment: .bottomTrailing) {
-                LoadableAvatarImage(url: URL(string: image ?? ""),
-                                    name: name,
-                                    contentID: nil,
-                                    avatarSize: .user(on: .roomDetails),
-                                    mediaProvider: mediaProvider)
-                
-                Image(asset: Asset.Images.iconZChain)
-            }
+            LoadableAvatarImage(url: URL(string: image ?? ""),
+                                name: name,
+                                contentID: nil,
+                                avatarSize: .user(on: .roomDetails),
+                                mediaProvider: mediaProvider)
             
             Text(name)
                 .font(.compound.bodyMDSemibold)

@@ -12,9 +12,9 @@ class ZeroWalletChainsUtil {
     
     private var chains: [WalletChain] = []
     
-    private let Z_CHAIN_ID: UInt64 = 9369
+    let Z_CHAIN_ID: UInt64 = 9369
     private let Z_CHAIN_ID_ZEPHYR: UInt64 = 9369
-    private let AVAX_CHAIN_ID: UInt64 = 43114
+    let AVAX_CHAIN_ID: UInt64 = 43114
     
     private init() {
         // ZChain
@@ -34,8 +34,13 @@ class ZeroWalletChainsUtil {
         chains.first { $0.id == AVAX_CHAIN_ID }!
     }
     
-    func chain(_ id: UInt64) -> WalletChain? {
-        chains.first { $0.id == id }
+    func isZChain(_ id: UInt64) -> Bool {
+        let zChainId = (ZeroContants.appServer is ProdServer) ? Z_CHAIN_ID : Z_CHAIN_ID_ZEPHYR
+        return id == zChainId
+    }
+    
+    func isAvaxChain(_ id: UInt64) -> Bool {
+        return id == AVAX_CHAIN_ID
     }
 }
 

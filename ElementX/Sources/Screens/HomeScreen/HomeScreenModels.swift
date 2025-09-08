@@ -82,7 +82,7 @@ enum HomeScreenViewAction {
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
     case startWalletTransaction(WalletTransactionType)
-    case viewTransactionDetails(transactionId: String)
+    case viewTransactionDetails(transactionId: String, chainId: UInt64?)
     case claimRewards(trigger: Bool)
     
     case onStakePoolSelected(HomeScreenWalletStakingContent)
@@ -558,6 +558,8 @@ struct HomeScreenWalletContent: Identifiable, Equatable {
     let actionText: String
     let actionPostText: String?
     
+    let chainId: UInt64
+    
     static func placeholder() -> HomeScreenWalletContent {
         .init(id: UUID().uuidString,
               icon: nil,
@@ -568,7 +570,8 @@ struct HomeScreenWalletContent: Identifiable, Equatable {
               description: "placeholder description",
               actionPreText: nil,
               actionText: "placeholder action text",
-              actionPostText: "placeholder action post text")
+              actionPostText: "placeholder action post text",
+              chainId: 0)
     }
 }
 
@@ -867,7 +870,8 @@ extension HomeScreenWalletContent {
                   description: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
                   actionPreText: nil,
                   actionText: walletToken.isClaimableToken ? "$\(walletToken.meowPriceFormatted(ref: meowPrice))" : "",
-                  actionPostText: walletToken.isClaimableToken ? priceDifference : nil
+                  actionPostText: walletToken.isClaimableToken ? priceDifference : nil,
+                  chainId: walletToken.chainId
         )
     }
     
@@ -881,7 +885,8 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "0",
-                  actionPostText: nil)
+                  actionPostText: nil,
+                  chainId: 0)
     }
     
     init(walletTransaction: WalletTransaction, meowPrice: ZeroCurrency?) {
@@ -896,7 +901,8 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
-                  actionPostText: walletTransaction.isClaimableTokenTransaction ? "$\(walletTransaction.meowPriceFormatted(ref: meowPrice))" : nil)
+                  actionPostText: walletTransaction.isClaimableTokenTransaction ? "$\(walletTransaction.meowPriceFormatted(ref: meowPrice))" : nil,
+                  chainId: walletTransaction.token.chainId ?? ZeroWalletChainsUtil.shared.Z_CHAIN_ID)
     }
 }
 

@@ -70,10 +70,10 @@ struct WalletStakingContentCell : View {
                         ZStack(alignment: .bottomTrailing) {
                             WalletTokenImage(url: item.poolIcon)
                             
-                            if let chain = ZeroWalletChainsUtil.shared.chain(item.chainId) {
-                                Image(asset: chain.logo)
-                                    .resizable()
-                                    .frame(width: 16, height: 16)
+                            if ZeroWalletChainsUtil.shared.isAvaxChain(item.chainId) {
+                                AvaxChainIcon(size: 16)
+                            } else {
+                                ZChainIcon(size: 16)
                             }
                         }
                         

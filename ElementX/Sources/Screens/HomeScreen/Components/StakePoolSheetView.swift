@@ -106,7 +106,11 @@ private struct StakePoolDetailsView : View {
                 ZStack(alignment: .bottomTrailing) {
                     WalletTokenImage(url: selectedPool.pool.poolIcon)
                     
-                    Image(asset: Asset.Images.iconZChain)
+                    if ZeroWalletChainsUtil.shared.isAvaxChain(selectedPool.pool.chainId) {
+                        AvaxChainIcon(size: 16)
+                    } else {
+                        ZChainIcon(size: 16)
+                    }
                 }
                 
                 VStack(alignment: .leading) {
@@ -276,7 +280,11 @@ private struct PoolStakeUnstakeView : View {
                 ZStack(alignment: .bottomTrailing) {
                     WalletTokenImage(url: selectedPool.pool.poolIcon)
                     
-                    Image(asset: Asset.Images.iconZChain)
+                    if ZeroWalletChainsUtil.shared.isAvaxChain(selectedPool.pool.chainId) {
+                        AvaxChainIcon(size: 16)
+                    } else {
+                        ZChainIcon(size: 16)
+                    }
                 }
                 
                 VStack(alignment: .leading) {
@@ -458,7 +466,11 @@ private struct TransactionSuccessOrFailureView : View {
                     ZStack(alignment: .bottomTrailing) {
                         WalletTokenImage(url: selectedPool.pool.poolIcon)
                         
-                        Image(asset: Asset.Images.iconZChain)
+                        if ZeroWalletChainsUtil.shared.isAvaxChain(selectedPool.pool.chainId) {
+                            AvaxChainIcon(size: 16)
+                        } else {
+                            ZChainIcon(size: 16)
+                        }
                     }
                     
                     VStack(alignment: .leading) {
