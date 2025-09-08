@@ -71,7 +71,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             roomProxy: parameters.roomProxy,
                                             initialSelectedPinnedEventID: selectedPinnedEventID,
                                             ongoingCallRoomIDPublisher: parameters.ongoingCallRoomIDPublisher,
-                                            appMediator: parameters.appMediator,
                                             appSettings: parameters.appSettings,
                                             appHooks: parameters.appHooks,
                                             analyticsService: parameters.analytics,
@@ -147,7 +146,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     roomViewModel.timelineHasScrolled(direction: direction)
                 case .displayRoom(let roomID, let via):
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
-                case .viewInRoomTimeline:
+                case .viewInRoomTimeline, .displayMediaDetails:
                     fatalError("The action: \(action) should not be sent to this coordinator")
                 }
             }

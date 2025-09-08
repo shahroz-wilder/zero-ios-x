@@ -404,7 +404,6 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appMediator: AppMediatorMock.default,
                      appSettings: ServiceLocator.shared.settings)
     }
     
@@ -434,7 +433,6 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appMediator: AppMediatorMock.default,
                      appSettings: ServiceLocator.shared.settings)
     }
     
@@ -473,7 +471,6 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                     appMediator: AppMediatorMock.default,
                      appSettings: ServiceLocator.shared.settings)
     }
 }
