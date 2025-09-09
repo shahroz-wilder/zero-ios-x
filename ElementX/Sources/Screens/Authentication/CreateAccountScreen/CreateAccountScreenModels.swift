@@ -20,9 +20,11 @@ enum CreateAccountScreenViewModelAction {
 }
 
 struct CreateAccountScreenViewState: BindableState {
-    let inviteCode: String
-    
     var bindings = CreateAccountScreenBindings()
+    
+    var hasValidInviteCode: Bool {
+        !bindings.inviteCode.isEmpty
+    }
     
     var isEmailValid: Bool {
         !bindings.emailAddress.isEmpty && ValidationUtil.shared.isValidEmail(bindings.emailAddress)
@@ -46,6 +48,7 @@ struct CreateAccountScreenViewState: BindableState {
 }
 
 struct CreateAccountScreenBindings {
+    var inviteCode = ""
     var emailAddress = ""
     var password = ""
     var confirmPassword = ""
@@ -66,4 +69,5 @@ enum CreateAccountScreenViewAction {
     case openLoginScreen
     case createAccount
     case openWalletConnectModal
+    case verifyInviteCode(String)
 }

@@ -28,11 +28,9 @@ struct OnLoginScreen: View {
                 .foregroundStyle(.zero.bgAccentRest)
                 .padding(.top, 12)
             
-            if selectedEmailAuthMethod == .otp {
-                Text("Enter Email ID to generate a one-time OTP to login.")
-                    .font(.compound.bodyLG)
-                    .foregroundStyle(.compound.textSecondary)
-            }
+            Text("\(selectedEmailAuthMethod == .otp ? "Enter Email ID to generate a one-time OTP to login." : "Enter your credentials.")")
+                .font(.compound.bodyLG)
+                .foregroundStyle(.compound.textSecondary)
             
             emailInputField
                 .padding(.vertical, 12)

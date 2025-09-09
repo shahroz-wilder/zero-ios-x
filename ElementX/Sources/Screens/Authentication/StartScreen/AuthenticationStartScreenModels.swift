@@ -21,6 +21,7 @@ enum AuthenticationStartScreenCoordinatorAction {
     
     /// Login was successful.
     case signedIn(UserSessionProtocol)
+    case createAccount
 }
 
 enum AuthenticationStartScreenViewModelAction {
@@ -35,6 +36,7 @@ enum AuthenticationStartScreenViewModelAction {
     
     /// Login was successful.
     case signedIn(UserSessionProtocol)
+    case createAccount
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
@@ -89,4 +91,5 @@ enum AuthenticationStartScreenViewAction {
     
     /// Open wallet connect modal
     case openWalletConnectModal
+    case createAccount
 }

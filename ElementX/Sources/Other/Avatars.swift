@@ -81,6 +81,7 @@ enum UserAvatarSizeOnScreen {
     case sendInviteConfirmation
     case sessionVerification
     case threadSummary
+    case completeProfile
 
     var value: CGFloat {
         switch self {
@@ -126,6 +127,8 @@ enum UserAvatarSizeOnScreen {
             return 52
         case .threadSummary:
             return 24
+        case .completeProfile:
+            return 104
         }
     }
 }

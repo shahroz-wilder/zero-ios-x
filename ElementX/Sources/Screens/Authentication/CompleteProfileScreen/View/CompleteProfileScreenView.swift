@@ -16,25 +16,30 @@ struct CompleteProfileScreen: View {
     
     var body: some View {
         VStack {
-            Text("Complete Profile")
-                .font(.compound.bodyMDSemibold)
+            Text("Enter your details")
+                .font(.compound.headingMDBold)
+                .foregroundStyle(.compound.textPrimary)
+                .padding(.top, 16)
             
-            VStack {
-                avatar
-                
-                nameSection
-                
-                submitButton
-            }
-            .padding(.horizontal, 32)
-            .padding(.vertical, 64)
+            Text("Complete your Profile")
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textSecondary)
+            
+            avatar
+                .padding(.vertical, 24)
+            
+            nameSection
             
             Spacer()
+            
+            submitButton
         }
+        .padding(24)
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
+        .navigationBarBackButtonHidden(true)
         .confirmationDialog("", isPresented: $context.showMediaSheet) {
             mediaActionSheet
         }
-        .navigationBarBackButtonHidden(true)
     }
     
     private var avatar: some View {
@@ -45,19 +50,23 @@ struct CompleteProfileScreen: View {
                                    url: context.viewState.selectedAvatarURL,
                                    name: nil,
                                    contentID: nil,
-                                   avatarSize: .user(on: .editUserDetails),
+                                   avatarSize: .user(on: .completeProfile),
                                    mediaProvider: context.mediaProvider,
                                    onTap: { context.send(viewAction: .presentMediaSource) })
-                .overlay(alignment: .bottomTrailing) {
-                    avatarOverlayIcon
-                }
+            .overlay(alignment: .bottomTrailing) {
+                avatarOverlayIcon
+            }
         }
     }
     
     private var nameSection: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            Text("Display Name")
+                .font(.zero.bodyMD)
+                .foregroundStyle(.compound.textSecondary)
+            
             TextField(text: $context.name) {
-                Text("DisplayName").foregroundColor(.compound.textSecondary)
+                Text("Enter your display name").foregroundColor(.compound.textSecondary)
             }
             .focused($isDisplayNameFocused)
             .textFieldStyle(.element(accessibilityIdentifier: "complete-profile_display_name"))
@@ -72,18 +81,22 @@ struct CompleteProfileScreen: View {
         }
         .frame(maxWidth: .infinity)
         .listRowBackground(Color.clear)
-        .padding(.top, 32)
+        .padding(.vertical, 24)
     }
     
     private var submitButton: some View {
-        Button {
-            submit()
-        } label: {
+        Button(action: { submit() }) {
             Text("Continue")
+                .font(.compound.bodyMDSemibold)
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.zero.bgAccentRest)
+                )
         }
-        .buttonStyle(.compound(.primary))
         .disabled(!context.viewState.canSubmit)
-        .padding(.vertical, 24)
     }
     
     private var avatarOverlayIcon: some View {

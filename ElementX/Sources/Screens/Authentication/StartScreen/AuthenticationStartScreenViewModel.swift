@@ -99,6 +99,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             actionsSubject.send(.verifyInviteCode(inviteCode: invite))
         case .openWalletConnectModal:
             presentWalletConnectModal()
+        case .createAccount:
+            actionsSubject.send(.createAccount)
         }
     }
     

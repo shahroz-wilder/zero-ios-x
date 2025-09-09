@@ -287,6 +287,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     verifyInviteCode(inviteCode: inviteCode)
                 case .signedIn(let userSession):
                     stateMachine.tryEvent(.signedIn, userInfo: userSession)
+                case .createAccount:
+                    showCreateAccountScreen("")
                 }
             }
             .store(in: &cancellables)

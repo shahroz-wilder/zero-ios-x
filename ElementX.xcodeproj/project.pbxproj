@@ -2099,6 +2099,12 @@
 		79AB3A912E252BE300E94E54 /* RefreshButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */; };
 		79AB3A962E252CF200E94E54 /* PostLinkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */; };
 		79AB3A972E252CF200E94E54 /* PostLinkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */; };
+		79ACACF12E70ADC600292618 /* CreateAccountOptionSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF02E70ADBA00292618 /* CreateAccountOptionSegmentControl.swift */; };
+		79ACACF22E70ADC600292618 /* CreateAccountOptionSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF02E70ADBA00292618 /* CreateAccountOptionSegmentControl.swift */; };
+		79ACACF42E70B5B300292618 /* CreateAccountFormsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF32E70B5AB00292618 /* CreateAccountFormsView.swift */; };
+		79ACACF52E70B5B300292618 /* CreateAccountFormsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF32E70B5AB00292618 /* CreateAccountFormsView.swift */; };
+		79ACACF72E70B68500292618 /* ValidateInviteCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */; };
+		79ACACF82E70B68500292618 /* ValidateInviteCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */; };
 		79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */; };
@@ -3912,6 +3918,9 @@
 		79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMediaPreview.swift; sourceTree = "<group>"; };
 		79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshButton.swift; sourceTree = "<group>"; };
 		79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLinkPreview.swift; sourceTree = "<group>"; };
+		79ACACF02E70ADBA00292618 /* CreateAccountOptionSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountOptionSegmentControl.swift; sourceTree = "<group>"; };
+		79ACACF32E70B5AB00292618 /* CreateAccountFormsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountFormsView.swift; sourceTree = "<group>"; };
+		79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateInviteCodeView.swift; sourceTree = "<group>"; };
 		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
 		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
 		79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedProfileFlowCoordinator.swift; sourceTree = "<group>"; };
@@ -5274,6 +5283,9 @@
 		185454C82CFDE6A5003CA957 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */,
+				79ACACF32E70B5AB00292618 /* CreateAccountFormsView.swift */,
+				79ACACF02E70ADBA00292618 /* CreateAccountOptionSegmentControl.swift */,
 				185454C92CFDE6AC003CA957 /* CreateAccountScreenView.swift */,
 			);
 			path = View;
@@ -10931,6 +10943,7 @@
 				79FCB1A82DA5BA3600669122 /* DeclineAndBlockScreenCoordinator.swift in Sources */,
 				18E9A5932C9829970082DDA4 /* MessageForwardingScreenModels.swift in Sources */,
 				18E9A5942C9829970082DDA4 /* MessageForwardingScreenViewModel.swift in Sources */,
+				79ACACF72E70B68500292618 /* ValidateInviteCodeView.swift in Sources */,
 				18E9A5952C9829970082DDA4 /* MessageForwardingScreenViewModelProtocol.swift in Sources */,
 				18E9A5962C9829970082DDA4 /* MessageText.swift in Sources */,
 				793899D32DF0ECB600980991 /* HorizontalDivider.swift in Sources */,
@@ -10946,6 +10959,7 @@
 				182258E62CCC3D9500BBEDC0 /* EmojiProviderProtocol.swift in Sources */,
 				185454E92CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */,
 				79ADA9652DC5120C00C895F1 /* StateStoreViewModelV2.swift in Sources */,
+				79ACACF22E70ADC600292618 /* CreateAccountOptionSegmentControl.swift in Sources */,
 				18E9A5A22C9829970082DDA4 /* NetworkMonitorMock.swift in Sources */,
 				18E9A5A32C9829970082DDA4 /* NetworkMonitorProtocol.swift in Sources */,
 				18E9A5A42C9829970082DDA4 /* NoticeRoomTimelineItem.swift in Sources */,
@@ -11182,6 +11196,7 @@
 				18E9A6412C9829970082DDA4 /* RoomMemberDetails.swift in Sources */,
 				18E9A6422C9829970082DDA4 /* RoomMemberDetailsScreen.swift in Sources */,
 				79C6F72E2DF8275C003CEBB9 /* AuthenticationStartScreenViewModelProtocol.swift in Sources */,
+				79ACACF42E70B5B300292618 /* CreateAccountFormsView.swift in Sources */,
 				18525CF52CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */,
 				79281A802E6A33A700D86DD6 /* ForgotPasswordScreenViewModel.swift in Sources */,
 				18E9A6432C9829970082DDA4 /* RoomMemberDetailsScreenCoordinator.swift in Sources */,
@@ -11931,6 +11946,7 @@
 				340D39DB87F3800D53A6A621 /* EmojiPickerScreen.swift in Sources */,
 				C1910A16BDF131FECA77BE22 /* EmojiPickerScreenCoordinator.swift in Sources */,
 				EEB9C1555C63B93CA9C372C2 /* EmojiPickerScreenHeaderView.swift in Sources */,
+				79ACACF52E70B5B300292618 /* CreateAccountFormsView.swift in Sources */,
 				185454DC2CFF0DDD003CA957 /* CompleteProfileScreenCoordinator.swift in Sources */,
 				748F482FEF4E04D61C39AAD7 /* EmojiPickerScreenModels.swift in Sources */,
 				2C5E832434EE94E21AB3B238 /* EmojiPickerScreenViewModel.swift in Sources */,
@@ -12101,6 +12117,7 @@
 				6E47D126DD7585E8F8237CE7 /* LoadableAvatarImage.swift in Sources */,
 				D9F80CE61BF8FF627FDB0543 /* LoadableImage.swift in Sources */,
 				7944A76D2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */,
+				79ACACF82E70B68500292618 /* ValidateInviteCodeView.swift in Sources */,
 				18525D012CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */,
 				256D76972BA3254F7CB7F88B /* LocationAnnotation.swift in Sources */,
 				B5479997ECC516C121E6625E /* LocationMarkerView.swift in Sources */,
@@ -12570,6 +12587,7 @@
 				6530865EB9A8C0F0AF0216DA /* ServerSelectionScreenModels.swift in Sources */,
 				85F89F3F320F4FADCFFFE68B /* ServerSelectionScreenViewModel.swift in Sources */,
 				0C47AE2CA7929CB3B0E2D793 /* ServerSelectionScreenViewModelProtocol.swift in Sources */,
+				79ACACF12E70ADC600292618 /* CreateAccountOptionSegmentControl.swift in Sources */,
 				BD782053BE4C3D2F0BDE5699 /* ServiceLocator.swift in Sources */,
 				914BDF61447C723F104BCE33 /* SessionDirectories.swift in Sources */,
 				237FC70AA257B935F53316BA /* SessionVerificationControllerProxy.swift in Sources */,

@@ -47,7 +47,7 @@ struct OnLandingScreen: View {
         }
         ToolbarItem(placement: .primaryAction) {
             Button {
-//                context.send(viewAction: .searchUser)
+                context.send(viewAction: .createAccount)
             } label: {
                 Text("Sign up")
                     .foregroundStyle(.compound.textPrimary)

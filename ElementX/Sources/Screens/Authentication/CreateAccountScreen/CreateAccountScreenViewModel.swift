@@ -27,7 +27,7 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
         self.authenticationService = authenticationService
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: CreateAccountScreenViewState(inviteCode: inviteCode))
+        super.init(initialViewState: .init())
         
         AppKit.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
@@ -51,21 +51,45 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
             createUserAccount()
         case .openWalletConnectModal:
             presentWalletConnectModal()
+        case .verifyInviteCode(let inviteCode):
+            verifyInviteCode(inviteCode: inviteCode)
         }
     }
     
     private func createUserAccount() {
+        guard !state.bindings.inviteCode.isEmpty else {
+            return
+        }
+        
         startLoading()
         Task {
             switch await authenticationService.createUserAccount(email: state.bindings.emailAddress,
                                                                  password: state.bindings.password,
-                                                                 inviteCode: state.inviteCode) {
+                                                                 inviteCode: state.bindings.inviteCode) {
             case .success(let userSession):
                 stopLoading()
                 actionsSubject.send(.accountCreated(userSession: userSession))
             case .failure(let error):
                 stopLoading()
                 handleError(error: error)
+            }
+        }
+    }
+    
+    private func verifyInviteCode(inviteCode: String) {
+        Task {
+            startLoading()
+            switch await authenticationService.verifyCreateAccountInviteCode(inviteCode: inviteCode) {
+            case .success:
+                stopLoading()
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    state.bindings.inviteCode = inviteCode
+                }
+            case .failure:
+                stopLoading()
+                userIndicatorController.alertInfo = AlertInfo(id: UUID(),
+                                                              title: L10n.commonError,
+                                                              message: "Invite code is not valid.")
             }
         }
     }
@@ -92,9 +116,13 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
     }
     
     private func createUserAccountWithWallet(token: String) {
+        guard !state.bindings.inviteCode.isEmpty else {
+            return
+        }
+        
         startLoading()
         Task {
-            switch await authenticationService.createUserAccountWithWeb3(web3Token: token, inviteCode: state.inviteCode) {
+            switch await authenticationService.createUserAccountWithWeb3(web3Token: token, inviteCode: state.bindings.inviteCode) {
             case .success(let userSession):
                 stopLoading()
                 actionsSubject.send(.accountCreated(userSession: userSession))
