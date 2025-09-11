@@ -92,4 +92,7 @@ enum AuthenticationStartScreenViewAction {
     /// Open wallet connect modal
     case openWalletConnectModal
     case createAccount
+    
+    case loginWithX
+    case loginWithEpicGames
 }

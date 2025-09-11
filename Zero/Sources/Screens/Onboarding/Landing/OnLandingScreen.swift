@@ -63,7 +63,9 @@ struct OnLandingScreen: View {
         OnboardingLoginActionButton(icon: Asset.Images.logoWalletConnect, onClick: {
             context.send(viewAction: .openWalletConnectModal)
         })
-        OnboardingLoginActionButton(icon: Asset.Images.logoEpic, onClick: {})
+        OnboardingLoginActionButton(icon: Asset.Images.logoEpic, onClick: {
+            context.send(viewAction: .loginWithEpicGames)
+        })
 //        OnboardingLoginActionButton(icon: Asset.Images.iconMore, onClick: {
 //            withAnimation(.easeInOut(duration: 0.3)) {
 //                showExtendedLoginActions.toggle()
@@ -84,7 +86,7 @@ struct OnLandingScreen: View {
     }
     
     var loginWithXButton: some View {
-        Button(action: {  }) {
+        Button(action: { context.send(viewAction: .loginWithX) }) {
             HStack(spacing: 0) {
                 Text("Continue with")
                     .font(.compound.bodyMDSemibold)

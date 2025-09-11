@@ -89,6 +89,11 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             actionsSubject.send(.loginWithQR)
         case .login:
             Task { await login() }
+        case .loginWithX:
+            loginWithX()
+        case .loginWithEpicGames:
+            //loginWithEpicGames()
+            break
         case .register:
             actionsSubject.send(.register)
         case .reportProblem:
@@ -154,6 +159,39 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             switch await authenticationService.loginWithWeb3(web3Token: token,
                                                              initialDeviceName: UIDevice.current.initialDeviceName,
                                                              deviceID: nil) {
+            case .success(let userSession):
+                actionsSubject.send(.signedIn(userSession))
+            case .failure(let error):
+                displayError()
+            }
+        }
+    }
+    
+    private func loginWithX() {
+        startLoading()
+        Task {
+            defer { stopLoading() }
+            
+            switch await authenticationService.loginWithX(
+                initialDeviceName: UIDevice.current.initialDeviceName,
+                deviceID: nil
+            ) {
+            case .success(let userSession):
+                actionsSubject.send(.signedIn(userSession))
+            case .failure(let error):
+                displayError()
+            }
+        }
+    }
+    
+    private func loginWithEpicGames() {
+        startLoading()
+        Task {
+            defer { stopLoading() }
+            switch await authenticationService.loginWithEpicGames(
+                initialDeviceName: UIDevice.current.initialDeviceName,
+                deviceID: nil
+            ) {
             case .success(let userSession):
                 actionsSubject.send(.signedIn(userSession))
             case .failure(let error):

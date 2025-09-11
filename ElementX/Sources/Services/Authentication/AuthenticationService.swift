@@ -8,6 +8,8 @@
 import Combine
 import Foundation
 import MatrixRustSDK
+import FirebaseAuth
+import UIKit
 
 class AuthenticationService: AuthenticationServiceProtocol {
     private var client: ClientProtocol?
@@ -20,6 +22,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let appHooks: AppHooks
     
     private let zeroAuthApiProxy: ZeroAuthApiProxyProtocol
+    private let firebaseAuthService: FirebaseAuthServiceProtocol
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
@@ -43,6 +46,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appHooks = appHooks
         
         zeroAuthApiProxy = ZeroAuthApiProxy(appSettings: appSettings)
+        firebaseAuthService = FirebaseAuthenticationService()
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
@@ -128,77 +132,39 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        guard let client else { return .failure(.failedLoggingIn) }
+        return await proceedPostSSOLoginFlow(ssoBlock: {
+            try await self.zeroAuthApiProxy.authApi.loginSSO(email: username, password: password)
+        },
+                                             initialDeviceName: initialDeviceName,
+                                             deviceID: deviceID)
+    }
+    
+    func loginWithWeb3(web3Token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        return await proceedPostSSOLoginFlow(ssoBlock: {
+            try await self.zeroAuthApiProxy.authApi.loginWithWeb3(web3Token: web3Token)
+        },
+                                             initialDeviceName: initialDeviceName,
+                                             deviceID: deviceID)
+    }
+    
+    func loginWithX(initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
-            let zeroMatrixSSOResult = try await zeroAuthApiProxy.authApi.loginSSO(email: username, password: password)
-            switch zeroMatrixSSOResult {
-            case .success(let zeroSSOToken):
-                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
-                
-                try await checkAndLinkMatrixUser(client.userId())
-            
-                let refreshToken = try? client.session().refreshToken
-                if refreshToken != nil {
-                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
-                    _ = try? await client.logout()
-                    return .failure(.sessionTokenRefreshNotSupported)
-                }
-                StateBus.shared.onUserAuthStateChanged(.authorised)
-                return await userSession(for: client)
-            case .failure:
-                return .failure(.failedLoggingIn)
-            }
-        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
-            MXLog.error("Failed logging in with error kind: \(errorKind)")
-            switch errorKind {
-            case .forbidden:
-                return .failure(.invalidCredentials)
-            case .userDeactivated:
-                return .failure(.accountDeactivated)
-            default:
-                return .failure(.failedLoggingIn)
-            }
+            let socialAuthToken = try await firebaseAuthService.loginWithX()
+            return await proceedPostSSOLoginFlow(
+                ssoBlock: {
+                    try await self.zeroAuthApiProxy.authApi.zeroSocialLogin(token: socialAuthToken)
+                },
+                initialDeviceName: initialDeviceName,
+                deviceID: deviceID
+            )
         } catch {
             MXLog.error("Failed logging in with error: \(error)")
             return .failure(.failedLoggingIn)
         }
     }
     
-    func loginWithWeb3(web3Token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        guard let client else { return .failure(.failedLoggingIn) }
-        do {
-            let zeroMatrixSSOResult = try await zeroAuthApiProxy.authApi.loginWithWeb3(web3Token: web3Token)
-            switch zeroMatrixSSOResult {
-            case .success(let zeroSSOToken):
-                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
-                
-                try await checkAndLinkMatrixUser(client.userId())
-                
-                let refreshToken = try? client.session().refreshToken
-                if refreshToken != nil {
-                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
-                    _ = try? await client.logout()
-                    return .failure(.sessionTokenRefreshNotSupported)
-                }
-                StateBus.shared.onUserAuthStateChanged(.authorised)
-                return await userSession(for: client)
-            case .failure(_):
-                return .failure(.failedLoggingIn)
-            }
-        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
-            MXLog.error("Failed logging in with error kind: \(errorKind)")
-            switch errorKind {
-            case .forbidden:
-                return .failure(.invalidCredentials)
-            case .userDeactivated:
-                return .failure(.accountDeactivated)
-            default:
-                return .failure(.failedLoggingIn)
-            }
-        } catch {
-            MXLog.error("Failed logging in with error: \(error)")
-            return .failure(.failedLoggingIn)
-        }
+    func loginWithEpicGames(initialDeviceName: String?, deviceID: String?) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
+        return .failure(.failedLoggingIn)
     }
     
     func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
@@ -294,39 +260,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     func verifyOtp(email: String, code: String, initialDeviceName: String?) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedVerifyOtp) }
-        do {
-            let result = try await zeroAuthApiProxy.authApi.verifyOtp(email: email, otp: code)
-            switch result {
-            case .success(let zeroSSOToken):
-                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: nil)
-                
-                try await checkAndLinkMatrixUser(client.userId())
-                
-                let refreshToken = try? client.session().refreshToken
-                if refreshToken != nil {
-                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
-                    _ = try? await client.logout()
-                    return .failure(.sessionTokenRefreshNotSupported)
-                }
-                StateBus.shared.onUserAuthStateChanged(.authorised)
-                return await userSession(for: client)
-            case .failure(_):
-                return .failure(.failedLoggingIn)
-            }
-        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
-            MXLog.error("Failed logging in with error kind: \(errorKind)")
-            switch errorKind {
-            case .forbidden:
-                return .failure(.invalidCredentials)
-            case .userDeactivated:
-                return .failure(.accountDeactivated)
-            default:
-                return .failure(.failedLoggingIn)
-            }
-        } catch {
-            MXLog.error("Failed to verify OTP: \(error)")
-            return .failure(.failedVerifyOtp)
-        }
+        return await proceedPostSSOLoginFlow(ssoBlock: {
+            try await self.zeroAuthApiProxy.authApi.verifyOtp(email: email, otp: code)
+        },
+                                             initialDeviceName: initialDeviceName,
+                                             deviceID: nil)
     }
     
     func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
@@ -453,6 +391,49 @@ class AuthenticationService: AuthenticationServiceProtocol {
             }
         case .failure(let failure):
             MXLog.failure("Failed to fetch current zero user. Error: \(failure)")
+        }
+    }
+    
+    
+    private func proceedPostSSOLoginFlow(
+        ssoBlock: @escaping () async throws -> Result<ZSSOToken, Error>,
+        initialDeviceName: String?,
+        deviceID: String?
+    ) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
+        guard let client else { return .failure(.failedLoggingIn) }
+        
+        do {
+            let result = try await ssoBlock()
+            switch result {
+            case .success(let zeroSSOToken):
+                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: nil)
+                
+                try await checkAndLinkMatrixUser(client.userId())
+                
+                let refreshToken = try? client.session().refreshToken
+                if refreshToken != nil {
+                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
+                    _ = try? await client.logout()
+                    return .failure(.sessionTokenRefreshNotSupported)
+                }
+                StateBus.shared.onUserAuthStateChanged(.authorised)
+                return await userSession(for: client)
+            case .failure(_):
+                return .failure(.failedLoggingIn)
+            }
+        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
+            MXLog.error("Failed logging in with error kind: \(errorKind)")
+            switch errorKind {
+            case .forbidden:
+                return .failure(.invalidCredentials)
+            case .userDeactivated:
+                return .failure(.accountDeactivated)
+            default:
+                return .failure(.failedLoggingIn)
+            }
+        } catch {
+            MXLog.error("Failed to verify OTP: \(error)")
+            return .failure(.failedVerifyOtp)
         }
     }
 }

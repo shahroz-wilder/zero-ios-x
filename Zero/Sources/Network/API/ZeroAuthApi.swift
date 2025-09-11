@@ -17,6 +17,8 @@ protocol ZeroAuthApiProtocol {
     func requestOtp(email: String) async throws -> Result<Void, Error>
     
     func verifyOtp(email: String, otp: String) async throws -> Result<ZSSOToken, Error>
+    
+    func zeroSocialLogin(token: String) async throws -> Result<ZSSOToken, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -122,6 +124,30 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         return result
     }
     
+    func zeroSocialLogin(token: String) async throws -> Result<ZSSOToken, any Error> {
+        let headers: HTTPHeaders = [
+            AuthConstants.web3AuthHeaderKey : "\(AuthConstants.socialAuthTokenPrefix) \(token)"
+        ]
+        // login user
+        let authResult: Result<ZSessionDataResponse, Error> = try await APIManager.shared.request(AuthEndPoints.zeroSocialLogin, method: .post, headers: headers)
+        switch authResult {
+        case .success(let sessionData):
+            // save Access Token
+            appSettings.zeroAccessToken = sessionData.accessToken
+            // fetch SSO Token
+            let ssoResult: Result<ZSSOToken, Error> = try await fetchSSOToken()
+            switch ssoResult {
+            case .success(let ssoToken):
+                return .success(ssoToken)
+            case .failure(let error):
+                return .failure(error)
+            }
+            
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Private
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
@@ -211,6 +237,8 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let requestResetPasswordEndPoint = "\(hostURL)api/v2/accounts/request-password-reset"
         static let requestOtpEndPoint = "\(hostURL)api/otp/request"
         static let verifyOtpEndPoint = "\(hostURL)api/otp/verify"
+        
+        static let zeroSocialLogin = "\(hostURL)api/oauth/establish-session"
     }
     
     private enum AuthConstants {
@@ -219,5 +247,6 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         
         static let web3AuthHeaderKey = "Authorization"
         static let web3AuthTokenPrefix = "Web3"
+        static let socialAuthTokenPrefix = "Bearer"
     }
 }
