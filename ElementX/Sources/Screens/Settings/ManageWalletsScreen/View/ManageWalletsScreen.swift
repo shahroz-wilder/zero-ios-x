@@ -16,7 +16,8 @@ struct ManageWalletsScreen: View {
     
     var body: some View {
         Form {
-            Section("1 Self-Custody Wallet".uppercased()) {
+            let custodyWalletsCountHeader = context.viewState.selfCustodyWallets.count > 0 ? context.viewState.selfCustodyWallets.count.description : "No"
+            Section("\(custodyWalletsCountHeader) Self-Custody Wallet".uppercased()) {
                 ZeroListRow(kind: .custom({
                     selfCustodyWallets
                 }))

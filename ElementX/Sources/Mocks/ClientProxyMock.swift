@@ -14,6 +14,7 @@ struct ClientProxyMockConfiguration {
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
+    var joinedSpaceRooms: [SpaceRoomProxyProtocol] = []
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
     
     var recoveryState: SecureBackupRecoveryState = .enabled
@@ -47,14 +48,14 @@ extension ClientProxyMock {
         roomDirectorySearchProxyReturnValue = configuration.roomDirectorySearchProxy
         
         actionsPublisher = PassthroughSubject<ClientProxyAction, Never>().eraseToAnyPublisher()
-        loadingStatePublisher = CurrentValuePublisher<ClientProxyLoadingState, Never>(.notLoading)
-        verificationStatePublisher = CurrentValuePublisher<SessionVerificationState, Never>(.unknown)
+        loadingStatePublisher = .init(.notLoading)
+        verificationStatePublisher = .init(.unknown)
+        homeserverReachabilityPublisher = .init(.reachable)
         
-        userAvatarURLPublisher = CurrentValueSubject<URL?, Never>(nil).asCurrentValuePublisher()
+        userAvatarURLPublisher = .init(nil)
+        userDisplayNamePublisher = .init("User display name")
         
-        userDisplayNamePublisher = CurrentValueSubject<String?, Never>("User display name").asCurrentValuePublisher()
-        
-        ignoredUsersPublisher = CurrentValueSubject<[String]?, Never>([RoomMemberProxyMock].allMembers.map(\.userID)).asCurrentValuePublisher()
+        ignoredUsersPublisher = .init([RoomMemberProxyMock].allMembers.map(\.userID))
         
         notificationSettings = configuration.notificationSettings
         
@@ -80,9 +81,11 @@ extension ClientProxyMock {
         recentlyVisitedRoomsReturnValue = .success([])
         recentConversationCounterpartsReturnValue = []
         
-        loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
-        loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
-        loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        let mediaLoader = MediaLoaderMock()
+        mediaLoader.loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        mediaLoader.loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        mediaLoader.loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        self.mediaLoader = mediaLoader
         
         secureBackupController = SecureBackupControllerMock(.init(recoveryState: configuration.recoveryState))
         resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
@@ -90,11 +93,13 @@ extension ClientProxyMock {
         spaceService = SpaceServiceProxyMock(.init())
         
         roomForIdentifierClosure = { [weak self] identifier in
-            guard let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) else {
-                return nil
+            if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
+                await .joined(JoinedRoomProxyMock(.init(id: room.id, name: room.name)))
+            } else if let spaceRoom = configuration.joinedSpaceRooms.first(where: { $0.id == identifier }) {
+                await .joined(JoinedRoomProxyMock(.init(id: spaceRoom.id, name: spaceRoom.name)))
+            } else {
+                nil
             }
-            
-            return await .joined(JoinedRoomProxyMock(.init(id: room.id, name: room.name)))
         }
         
         userIdentityForReturnValue = .success(UserIdentityProxyMock(configuration: .init()))

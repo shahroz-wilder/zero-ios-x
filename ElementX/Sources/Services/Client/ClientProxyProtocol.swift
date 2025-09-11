@@ -78,12 +78,14 @@ enum TimelineMediaVisibility: Decodable {
 }
 
 // sourcery: AutoMockable
-protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
+protocol ClientProxyProtocol: AnyObject {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
     
     var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> { get }
     
     var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> { get }
+    
+    var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
     
     var userID: String { get }
 
@@ -107,6 +109,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var hideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never> { get }
     
     var pusherNotificationClientIdentifier: String? { get }
+    
+    var mediaLoader: MediaLoaderProtocol { get }
     
     var roomSummaryProvider: RoomSummaryProviderProtocol { get }
     
@@ -326,39 +330,39 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
     
-    func getWalletTokenBalances(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>
+    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>
     
-    func getWalletNFTs(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>
+    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>
     
-    func getWalletTransactions(walletAddress: String, chainId: UInt64, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>
+    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>
     
     func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionResponse, ClientProxyError>
     
     func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError>
     
-    func getTransactionReceipt(transactionHash: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    func getTransactionReceipt(transactionHash: String, chainId: UInt64?) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     
     func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError>
     
     func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError>
     
-    func getTokenInfo(tokenAddress: String) async -> Result<ZWalletTokenInfo, ClientProxyError>
+    func getTokenInfo(tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenInfo, ClientProxyError>
     
-    func getTokenBalance(userWalletAddress: String, tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError>
+    func getTokenBalance(userWalletAddress: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenBalance, ClientProxyError>
     
     // MARK: - ZERO STAKING
     
-    func getTotalStaked(poolAddress: String) async -> Result<String, ClientProxyError>
+    func getTotalStaked(poolAddress: String, chainId: UInt64) async -> Result<String, ClientProxyError>
     
-    func getStakingConfig(poolAddress: String) async -> Result<ZStackingConfig, ClientProxyError>
+    func getStakingConfig(poolAddress: String, chainId: UInt64) async -> Result<ZStackingConfig, ClientProxyError>
     
-    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingStatus, ClientProxyError>
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingStatus, ClientProxyError>
     
-    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>
     
-    func getStakingToken(poolAddress: String) async -> Result<ZWalletStakingToken, ClientProxyError>
+    func getStakingToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingToken, ClientProxyError>
     
-    func getRewardsToken(poolAddress: String) async -> Result<ZWalletStakingRewardsToken, ClientProxyError>
+    func getRewardsToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingRewardsToken, ClientProxyError>
     
     func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     

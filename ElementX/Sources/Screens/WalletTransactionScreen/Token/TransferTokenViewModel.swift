@@ -111,7 +111,6 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         if let walletAddress = state.currentUser?.publicWalletAddress {
             Task {
                 let result = await clientProxy.getWalletTokenBalances(walletAddress: walletAddress,
-                                                                      chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID,
                                                                       nextPage: state.walletTokenNextPageParams)
                 if case .success(let walletTokenBalances) = result {
                     _walletTokenAssets = walletTokenBalances.tokens
@@ -145,7 +144,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                 case .success(let transaction):
                     setFlowState(.completed)
                     actionsSubject.send(.transactionCompleted)
-                    getTransactionReceipt(transaction.transactionHash)
+                    getTransactionReceipt(transaction.transactionHash, chainId: token.chainId)
                 case .failure(let failure):
                     MXLog.error("Failed to transfer token: \(failure)")
                     setFlowState(.failure)
@@ -160,10 +159,9 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                                                       message: error)
     }
     
-    private func getTransactionReceipt(_ transactionHash: String) {
+    private func getTransactionReceipt(_ transactionHash: String, chainId: UInt64) {
         Task.detached {
-            if case .success(let receipt) = await self.clientProxy.getTransactionReceipt(transactionHash: transactionHash,
-                                                                                         chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID) {
+            if case .success(let receipt) = await self.clientProxy.getTransactionReceipt(transactionHash: transactionHash, chainId: chainId) {
                 await MainActor.run {
                     self.completedTransactionReceipt = receipt
                 }

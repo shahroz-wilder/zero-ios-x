@@ -49,7 +49,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         appMediator: AppMediatorProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
         self.userSession = userSession
@@ -80,7 +79,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
         }
         
-        appMediator.networkMonitor.reachabilityPublisher
+        userSession.clientProxy.homeserverReachabilityPublisher
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -247,8 +246,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
         
         roomProxy.membersPublisher.combineLatest(roomProxy.identityStatusChangesPublisher)
-            .sink { _ in
-                Task { await self.updateMemberIdentityVerificationStates() }
+            .sink { [weak self] _ in
+                Task { await self?.updateMemberIdentityVerificationStates() }
             }
             .store(in: &cancellables)
     }

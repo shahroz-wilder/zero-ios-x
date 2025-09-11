@@ -15,10 +15,10 @@ struct ManageWalletsViewState: BindableState {
     var connectedWalletAddress: String?
     
     var selfCustodyWallets: [ZeroWallet]  {
-        wallets.filter { $0.canAuthenticate }
+        wallets.filter { !$0.isThirdWeb }
     }
     var zeroWallets: [ZeroWallet]  {
-        wallets.filter { ($0.isThirdWeb) }
+        wallets.filter { $0.isThirdWeb }
     }
     var firstSelfCustodyWallet: ZeroWallet? {
         selfCustodyWallets.first

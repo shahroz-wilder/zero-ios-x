@@ -151,7 +151,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         setupStateMachine()
 
         observeApplicationState()
-        observeNetworkState()
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
@@ -830,24 +829,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
     }
     
-    private func observeNetworkState() {
-        let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
-        appMediator.networkMonitor
-            .reachabilityPublisher
-            .sink { reachability in
-                MXLog.info("Reachability changed to \(reachability)")
-                
-                if reachability == .reachable {
-                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
-                } else {
-                    ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
-                                                                                        title: L10n.commonOffline,
-                                                                                        persistent: true))
-                }
-            }
-            .store(in: &cancellables)
-    }
-    
     private func observeAppLockChanges() {
         appLockFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -1050,7 +1031,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
                 switch state {
                 case .loading:
-                    if self?.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
+                    if self?.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable {
                         ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
                     }
                 case .notLoading:

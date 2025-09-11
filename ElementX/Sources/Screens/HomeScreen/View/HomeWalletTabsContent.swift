@@ -57,7 +57,7 @@ struct HomeWalletTabsContentView : View {
                     selectedTab: selectedWalletTab,
                     mediaProvider: context.mediaProvider,
                     onTap: { content in
-                        context.send(viewAction: .viewTransactionDetails(transactionId: content.id))
+                        context.send(viewAction: .viewTransactionDetails(transactionId: content.id, chainId: content.chainId))
                     }
                 )
                 
@@ -141,7 +141,11 @@ struct HomeWalletTabContentCell : View {
                 HStack {
                     ZStack(alignment: .bottomTrailing) {
                         WalletTokenImage(url: content.icon)
-                        Image(asset: Asset.Images.iconZChain)
+                        if ZeroWalletChainsUtil.shared.isAvaxChain(content.chainId) {
+                            AvaxChainIcon(size: 16)
+                        } else {
+                            ZChainIcon(size: 16)
+                        }
                     }
                     
                     VStack(alignment: .leading) {
@@ -152,9 +156,7 @@ struct HomeWalletTabContentCell : View {
                                     .foregroundColor(.compound.textSecondary)
                                     .lineLimit(1)
                                     .layoutPriority(1)
-                                
-//                                Image(asset: Asset.Images.iconZChain)
-                                
+                                                                
                                 Text(content.transactionAddress ?? "")
                                     .font(.zero.bodySM)
                                     .foregroundColor(.compound.textSecondary)

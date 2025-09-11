@@ -42,7 +42,7 @@ struct HomeWalletStakingContent : View {
                 HomeContentEmptyView(message: "No data")
             } else {
                 // Staking Listing
-                ForEach(stakingItems) { item in
+                ForEach(stakingItems.uniqued(on: \.id)) { item in
                     WalletStakingContentCell(item: item, mediaProvider: mediaProvider, onTap: {
                         onTap(item)
                     })
@@ -70,7 +70,11 @@ struct WalletStakingContentCell : View {
                         ZStack(alignment: .bottomTrailing) {
                             WalletTokenImage(url: item.poolIcon)
                             
-                            Image(asset: Asset.Images.iconZChain)
+                            if ZeroWalletChainsUtil.shared.isAvaxChain(item.chainId) {
+                                AvaxChainIcon(size: 16)
+                            } else {
+                                ZChainIcon(size: 16)
+                            }
                         }
                         
                         Text(item.poolName)

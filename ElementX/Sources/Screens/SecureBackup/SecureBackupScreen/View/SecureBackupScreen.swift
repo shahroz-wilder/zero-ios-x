@@ -81,7 +81,6 @@ struct SecureBackupScreen: View {
             case .enabled:
                 ZeroListRow(kind: .custom({
                     HStack {
-                        Spacer()
                         CompoundIcon(\.checkCircleSolid)
                             .foregroundStyle(.zero.bgAccentRest)
                         Text("Your backup key is verified.")
@@ -89,6 +88,10 @@ struct SecureBackupScreen: View {
                     }
                 }))
                 
+                ZeroListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionChange,
+                                          description: L10n.screenChatBackupRecoveryActionChangeDescription),
+                            kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
 //                ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
 //                                            description: L10n.screenChatBackupRecoveryActionChangeDescription,
 //                                            icon: \.key,

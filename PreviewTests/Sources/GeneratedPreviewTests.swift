@@ -881,6 +881,12 @@ extension PreviewTests {
         }
     }
 
+    func testSpaceHeaderTopicSheetView() async throws {
+        for (index, preview) in SpaceHeaderTopicSheetView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testSpaceHeaderView() async throws {
         for (index, preview) in SpaceHeaderView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

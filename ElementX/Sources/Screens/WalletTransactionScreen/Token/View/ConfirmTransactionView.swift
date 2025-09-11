@@ -114,7 +114,11 @@ private struct AssetInfoView: View {
                 ZStack(alignment: .bottomTrailing) {
                     WalletTokenImage(url: iconUrl, size: 52)
                     
-                    Image(asset: Asset.Images.iconZChain)
+                    if ZeroWalletChainsUtil.shared.isAvaxChain(tokenAsset.chainId) {
+                        AvaxChainIcon(size: 16)
+                    } else {
+                        ZChainIcon(size: 16)
+                    }
                 }
                 .background(
                     Circle().stroke(.compound.bgCanvasDefaultLevel1, lineWidth: 1)
@@ -125,7 +129,7 @@ private struct AssetInfoView: View {
                         .font(.zero.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
                     
-                    Text("Z Chain") //default chain for now
+                    Text(tokenAsset.symbol)
                         .font(.zero.bodySM)
                         .foregroundStyle(.compound.textSecondary)
                         .padding(.vertical, 1)

@@ -55,7 +55,8 @@ struct TransactionToken: Codable {
     let symbol: String
     let name: String
     let logo: String?
-    let decimals: Int
+    let decimals: Int?
+    let chainId: UInt64?
 }
 
 struct TransactionNextPageParams: Codable {

@@ -75,6 +75,7 @@ internal enum Asset {
     internal static let homeTabNotificationsIcon = ImageAsset(name: "images/home-tab-notifications-icon")
     internal static let homeTabProfileIcon = ImageAsset(name: "images/home-tab-profile-icon")
     internal static let homeTabWalletIcon = ImageAsset(name: "images/home-tab-wallet-icon")
+    internal static let iconAvaxChain = ImageAsset(name: "images/icon-avax-chain")
     internal static let iconBack = ImageAsset(name: "images/icon-back")
     internal static let iconClaimRewards = ImageAsset(name: "images/icon-claim-rewards")
     internal static let iconCopy = ImageAsset(name: "images/icon-copy")

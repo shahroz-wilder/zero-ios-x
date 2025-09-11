@@ -202,8 +202,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { state.timelineState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             actionsSubject.send(.hasScrolled(direction: direction))
-        case .setOpenURLAction(let action):
-            state.openURL = action
         case .displayPredecessorRoom:
             guard let predecessorID = roomProxy.predecessorRoom?.roomId else {
                 fatalError("Predecessor room should exist if this action is triggered.")
@@ -481,7 +479,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .displayMediaUploadPreviewScreen(let mediaURLs):
                     actionsSubject.send(.displayMediaUploadPreviewScreen(mediaURLs: mediaURLs))
                 case .showActionMenu(let actionMenuInfo):
-                    self.state.bindings.actionMenuInfo = actionMenuInfo
+                    if case .media(.mediaFilesScreen) = timelineController.timelineKind,
+                       let item = actionMenuInfo.item as? EventBasedMessageTimelineItemProtocol {
+                        actionsSubject.send(.displayMediaDetails(item: item))
+                    } else {
+                        self.state.bindings.actionMenuInfo = actionMenuInfo
+                    }
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
                 case .viewInRoomTimeline(let eventID):
@@ -659,15 +662,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         return nil
     }
 
-    private func handleJoinCommand(message: String) {
+    private func handleJoinCommand(message: String) async {
         guard let alias = String(message.dropFirst(SlashCommand.join.rawValue.count))
             .components(separatedBy: .whitespacesAndNewlines)
             .first,
-            let urlString = try? matrixToRoomAliasPermalink(roomAlias: alias),
-            let url = URL(string: urlString) else {
+            case let .success(resolvedAlias) = await userSession.clientProxy.resolveRoomAlias(alias) else {
             return
         }
-        state.openURL?(url)
+        
+        actionsSubject.send(.displayRoom(roomID: resolvedAlias.roomId, via: resolvedAlias.servers))
     }
     
     private func sendCurrentMessage(_ message: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions) async {
@@ -697,7 +700,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .default:
             switch slashCommand(message: message) {
             case .join:
-                handleJoinCommand(message: message)
+                await handleJoinCommand(message: message)
             case .none:
                 await timelineController.sendMessage(message,
                                                      html: html,
