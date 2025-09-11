@@ -61,8 +61,7 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a web3 login using the current homeserver.
     func loginWithWeb3(web3Token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
-    func loginWithX(initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
-    func loginWithEpicGames(initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    func loginWithSocialAuth(token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     
     func verifyCreateAccountInviteCode(inviteCode: String) async -> Result<Void, AuthenticationServiceError>
     

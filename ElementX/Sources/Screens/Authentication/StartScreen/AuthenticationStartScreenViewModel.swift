@@ -17,6 +17,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private let socialAuthService: SocialAuthServiceProtocol
+    
     private let canReportProblem: Bool
     
     private var actionsSubject: PassthroughSubject<AuthenticationStartScreenViewModelAction, Never> = .init()
@@ -35,6 +37,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         canReportProblem = isBugReportServiceEnabled
+        
+        socialAuthService = SocialAuthService()
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
         
@@ -92,8 +96,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .loginWithX:
             loginWithX()
         case .loginWithEpicGames:
-            //loginWithEpicGames()
-            break
+            loginWithEpicGames()
         case .register:
             actionsSubject.send(.register)
         case .reportProblem:
@@ -168,34 +171,51 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     }
     
     private func loginWithX() {
-        startLoading()
-        Task {
-            defer { stopLoading() }
-            
-            switch await authenticationService.loginWithX(
-                initialDeviceName: UIDevice.current.initialDeviceName,
-                deviceID: nil
-            ) {
-            case .success(let userSession):
-                actionsSubject.send(.signedIn(userSession))
-            case .failure(let error):
-                displayError()
+        socialAuthService.loginWithX { result in
+            switch result {
+            case .success(let token):
+                self.startLoading()
+                Task {
+                    switch await self.authenticationService.loginWithSocialAuth(
+                        token: token,
+                        initialDeviceName: UIDevice.current.initialDeviceName,
+                        deviceID: nil
+                    ) {
+                    case .success(let userSession):
+                        self.stopLoading()
+                        self.actionsSubject.send(.signedIn(userSession))
+                    case .failure(let error):
+                        self.stopLoading()
+                        self.displayError()
+                    }
+                }
+            case .failure(let failure):
+                self.displayError()
             }
         }
     }
     
     private func loginWithEpicGames() {
-        startLoading()
-        Task {
-            defer { stopLoading() }
-            switch await authenticationService.loginWithEpicGames(
-                initialDeviceName: UIDevice.current.initialDeviceName,
-                deviceID: nil
-            ) {
-            case .success(let userSession):
-                actionsSubject.send(.signedIn(userSession))
-            case .failure(let error):
-                displayError()
+        socialAuthService.loginWithEpicGames { result in
+            switch result {
+            case .success(let token):
+                self.startLoading()
+                Task {
+                    switch await self.authenticationService.loginWithSocialAuth(
+                        token: token,
+                        initialDeviceName: UIDevice.current.initialDeviceName,
+                        deviceID: nil
+                    ) {
+                    case .success(let userSession):
+                        self.stopLoading()
+                        self.actionsSubject.send(.signedIn(userSession))
+                    case .failure(let error):
+                        self.stopLoading()
+                        self.displayError()
+                    }
+                }
+            case .failure(let failure):
+                self.displayError()
             }
         }
     }

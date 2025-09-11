@@ -2010,6 +2010,10 @@
 		796CD43E2E53612C000D6078 /* SpaceScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8349149254469E24483FB0 /* SpaceScreenViewModel.swift */; };
 		796CD43F2E53612F000D6078 /* SpaceScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11397904D19CFF0E3689F0E /* SpaceScreenModels.swift */; };
 		796CD4402E536133000D6078 /* SpaceScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094F6B21835890B470DF540C /* SpaceScreenCoordinator.swift */; };
+		7973F8092E735986001C4439 /* SocialAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7973F8082E735974001C4439 /* SocialAuthService.swift */; };
+		7973F80A2E735986001C4439 /* SocialAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7973F8082E735974001C4439 /* SocialAuthService.swift */; };
+		7973F80C2E735FAE001C4439 /* SocialAuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7973F80B2E735FA7001C4439 /* SocialAuthServiceProtocol.swift */; };
+		7973F80D2E735FAE001C4439 /* SocialAuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7973F80B2E735FA7001C4439 /* SocialAuthServiceProtocol.swift */; };
 		79741C1953269FF1A211D246 /* RoomPollsHistoryScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E14FF533D25A0692F7CEB0 /* RoomPollsHistoryScreenViewModel.swift */; };
 		7975DBDB2D561EC900D5EB12 /* BannedRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD7E851E2BA8C5A8D284B2A /* BannedRoomProxyMock.swift */; };
 		7975DBDC2D561F2400D5EB12 /* BannedRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30F45308428A4D9FFDB2FB8 /* BannedRoomProxy.swift */; };
@@ -2105,7 +2109,6 @@
 		79ACACF52E70B5B300292618 /* CreateAccountFormsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF32E70B5AB00292618 /* CreateAccountFormsView.swift */; };
 		79ACACF72E70B68500292618 /* ValidateInviteCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */; };
 		79ACACF82E70B68500292618 /* ValidateInviteCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */; };
-		79ACACFA2E70C28C00292618 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 79ACACF92E70C28C00292618 /* FirebaseAuth */; };
 		79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */; };
@@ -2212,10 +2215,6 @@
 		79F31B322E02F5F80043E100 /* AppForceUpdateScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B302E02F5EF0043E100 /* AppForceUpdateScreen.swift */; };
 		79F31B342E02F6060043E100 /* AppMaintenanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B332E02F5FD0043E100 /* AppMaintenanceScreen.swift */; };
 		79F31B352E02F6060043E100 /* AppMaintenanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B332E02F5FD0043E100 /* AppMaintenanceScreen.swift */; };
-		79F6BFD92E72CECA0085FA7A /* FirebaseAuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F6BFD82E72CEC20085FA7A /* FirebaseAuthServiceProtocol.swift */; };
-		79F6BFDA2E72CECA0085FA7A /* FirebaseAuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F6BFD82E72CEC20085FA7A /* FirebaseAuthServiceProtocol.swift */; };
-		79F6BFDC2E72CF010085FA7A /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F6BFDB2E72CEFB0085FA7A /* FirebaseAuthService.swift */; };
-		79F6BFDD2E72CF010085FA7A /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F6BFDB2E72CEFB0085FA7A /* FirebaseAuthService.swift */; };
 		79FC2A462DCA8F7C00D14182 /* ZPostMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */; };
 		79FC2A472DCA8F7C00D14182 /* ZPostMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */; };
 		79FC2A492DCAA7AE00D14182 /* LinkPreviewUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */; };
@@ -3889,6 +3888,8 @@
 		7968A4382D540A4000E9056A /* FeedDetailsScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenView.swift; sourceTree = "<group>"; };
 		7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsContent.swift; sourceTree = "<group>"; };
 		796CBD0C56FA0D3AEDAB255B /* SessionVerificationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationScreenCoordinator.swift; sourceTree = "<group>"; };
+		7973F8082E735974001C4439 /* SocialAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialAuthService.swift; sourceTree = "<group>"; };
+		7973F80B2E735FA7001C4439 /* SocialAuthServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialAuthServiceProtocol.swift; sourceTree = "<group>"; };
 		797751712DD9F879006CF62D /* FeedUserProfileScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUserProfileScreenCoordinator.swift; sourceTree = "<group>"; };
 		797751742DD9F886006CF62D /* FeedUserProfileScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUserProfileScreenModels.swift; sourceTree = "<group>"; };
 		797751772DD9F88C006CF62D /* FeedUserProfileScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUserProfileScreenViewModel.swift; sourceTree = "<group>"; };
@@ -3952,8 +3953,6 @@
 		79F31B2C2E02EDCE0043E100 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		79F31B302E02F5EF0043E100 /* AppForceUpdateScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppForceUpdateScreen.swift; sourceTree = "<group>"; };
 		79F31B332E02F5FD0043E100 /* AppMaintenanceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMaintenanceScreen.swift; sourceTree = "<group>"; };
-		79F6BFD82E72CEC20085FA7A /* FirebaseAuthServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthServiceProtocol.swift; sourceTree = "<group>"; };
-		79F6BFDB2E72CEFB0085FA7A /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPostMedia.swift; sourceTree = "<group>"; };
 		79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewUtil.swift; sourceTree = "<group>"; };
 		7A03E073077D92AA19C43DCF /* IdentityConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -4684,7 +4683,6 @@
 				18D467B82D10A57900861AA6 /* ReownAppKit in Frameworks */,
 				18E9A77C2C9829970082DDA4 /* PostHog in Frameworks */,
 				18E9A77D2C9829970082DDA4 /* SwiftState in Frameworks */,
-				79ACACFA2E70C28C00292618 /* FirebaseAuth in Frameworks */,
 				18E9A77E2C9829970082DDA4 /* GZIP in Frameworks */,
 				18E9A77F2C9829970082DDA4 /* TaggedTime in Frameworks */,
 				18E9A7802C9829970082DDA4 /* Sentry in Frameworks */,
@@ -8227,8 +8225,8 @@
 		AAFDD509929A0CCF8BCE51EB /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				79F6BFDB2E72CEFB0085FA7A /* FirebaseAuthService.swift */,
-				79F6BFD82E72CEC20085FA7A /* FirebaseAuthServiceProtocol.swift */,
+				7973F8082E735974001C4439 /* SocialAuthService.swift */,
+				7973F80B2E735FA7001C4439 /* SocialAuthServiceProtocol.swift */,
 				EBD19057FDB154A44335CE62 /* AuthenticationClientFactory.swift */,
 				F3A1AB5A84D843B6AC8D5F1E /* AuthenticationService.swift */,
 				5E75948AA1FE1D1A7809931F /* AuthenticationServiceProtocol.swift */,
@@ -9421,7 +9419,6 @@
 				790AB7B02E1D316300555B1F /* StoreKitPlus */,
 				796146CE2E2E63AA00ECDE0A /* FirebaseFirestore */,
 				79EF67162E2FB46500D86B0F /* Mutex */,
-				79ACACF92E70C28C00292618 /* FirebaseAuth */,
 			);
 			productName = ElementX;
 			productReference = 18E9A7922C9829970082DDA4 /* Zero.app */;
@@ -10426,7 +10423,6 @@
 				790393862D53A12D0022E293 /* TimelineController.swift in Sources */,
 				18E9A42F2C9829970082DDA4 /* AnalyticsPromptScreenModels.swift in Sources */,
 				18E9A4302C9829970082DDA4 /* AnalyticsPromptScreenViewModel.swift in Sources */,
-				79F6BFDA2E72CECA0085FA7A /* FirebaseAuthServiceProtocol.swift in Sources */,
 				18E9A4312C9829970082DDA4 /* AnalyticsPromptScreenViewModelProtocol.swift in Sources */,
 				7909224D2E1DCC1700833940 /* TransferTokenViewModel.swift in Sources */,
 				18E9A4322C9829970082DDA4 /* AnalyticsService.swift in Sources */,
@@ -10482,12 +10478,14 @@
 				790AB7A52E1BE16700555B1F /* ZeroProSubcriptionScreenCoordinator.swift in Sources */,
 				18E9A4542C9829970082DDA4 /* AppLockSetupSettingsScreenCoordinator.swift in Sources */,
 				18D5D9AB2CEB5A9600107940 /* ZeroRewards.swift in Sources */,
+				7973F80D2E735FAE001C4439 /* SocialAuthServiceProtocol.swift in Sources */,
 				18E9A4552C9829970082DDA4 /* AppLockSetupSettingsScreenModels.swift in Sources */,
 				794E2AEC2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */,
 				79EF67112E2FB16E00D86B0F /* AccessibilityTestsAppCoordinator.swift in Sources */,
 				18FFCED22CEC8EB9002F2647 /* ShareExtensionModels.swift in Sources */,
 				79B2A7962E2A856800A76430 /* UserRewardsProtocol.swift in Sources */,
 				18E9A4562C9829970082DDA4 /* AppLockSetupSettingsScreenViewModel.swift in Sources */,
+				7973F8092E735986001C4439 /* SocialAuthService.swift in Sources */,
 				18E9A4572C9829970082DDA4 /* AppLockSetupSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A4582C9829970082DDA4 /* AppLockTimer.swift in Sources */,
 				18E9A4592C9829970082DDA4 /* RoomInfo+Extensions.swift in Sources */,
@@ -10886,7 +10884,6 @@
 				18E9A5622C9829970082DDA4 /* LogViewerScreenModels.swift in Sources */,
 				18E9A5632C9829970082DDA4 /* LogViewerScreenViewModel.swift in Sources */,
 				18E9A5642C9829970082DDA4 /* LogViewerScreenViewModelProtocol.swift in Sources */,
-				79F6BFDC2E72CF010085FA7A /* FirebaseAuthService.swift in Sources */,
 				18E9A5652C9829970082DDA4 /* LoginHomeserver.swift in Sources */,
 				18E9A5662C9829970082DDA4 /* LoginMode.swift in Sources */,
 				7909357E2E42531E003423D7 /* ZStackingConfig.swift in Sources */,
@@ -11764,7 +11761,6 @@
 				8DCD9CC5361FF22A5B2C20F1 /* AppLockSetupSettingsScreenCoordinator.swift in Sources */,
 				6E4E401BE97AC241DA7C7716 /* AppLockSetupSettingsScreenModels.swift in Sources */,
 				4807E8F51DB54F56B25E1C7E /* AppLockSetupSettingsScreenViewModel.swift in Sources */,
-				79F6BFDD2E72CF010085FA7A /* FirebaseAuthService.swift in Sources */,
 				C85C7A201E4CFDA477ACEBEB /* AppLockSetupSettingsScreenViewModelProtocol.swift in Sources */,
 				EF890DEF0479E66548F2BA23 /* AppLockTimer.swift in Sources */,
 				1882EB8E2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift in Sources */,
@@ -11849,7 +11845,6 @@
 				6BAD956B909A6E29F6CC6E7C /* ButtonStyle.swift in Sources */,
 				01B63F1A04A276B39AC17014 /* CallInviteRoomTimelineItem.swift in Sources */,
 				3D72F5F9109AAA257542456B /* CallInviteRoomTimelineView.swift in Sources */,
-				79F6BFD92E72CECA0085FA7A /* FirebaseAuthServiceProtocol.swift in Sources */,
 				E5AB28123E2488F97E953AC0 /* CallNotificationRoomTimelineItem.swift in Sources */,
 				8A5064CAC8E5F3B18645621D /* CallNotificationRoomTimelineView.swift in Sources */,
 				D19A748E95E2FAB2940570F0 /* CallScreen.swift in Sources */,
@@ -11909,6 +11904,7 @@
 				C4F69156C31A447FEFF2A47C /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				9905C1B1C6EFE38F3A6533F3 /* Data.swift in Sources */,
 				C6C06DDA8881260303FBA3A0 /* Date.swift in Sources */,
+				7973F80C2E735FAE001C4439 /* SocialAuthServiceProtocol.swift in Sources */,
 				18E99FF02C9447740082DDA4 /* MessageContent.swift in Sources */,
 				99C463F12F89C99C77D02077 /* DeactivateAccountScreen.swift in Sources */,
 				3E3CC3D17908A3BB9F224CC5 /* DeactivateAccountScreenCoordinator.swift in Sources */,
@@ -11950,6 +11946,7 @@
 				18D5D9C12CEBB70E00107940 /* ZeroRewardFAQs.swift in Sources */,
 				3118D9ABFD4BE5A3492FF88A /* ElementCallConfiguration.swift in Sources */,
 				5732395A4F71F51F9C754C5A /* ElementCallService.swift in Sources */,
+				7973F80A2E735986001C4439 /* SocialAuthService.swift in Sources */,
 				3895969759E68FAB90C63EF7 /* ElementCallServiceConstants.swift in Sources */,
 				8E7A902CA16E24928F83646C /* ElementCallServiceMock.swift in Sources */,
 				48416BBEB8DDF3E4DED0EDB6 /* ElementCallServiceProtocol.swift in Sources */,
@@ -13181,7 +13178,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.19.6;
+				MARKETING_VERSION = 0.20.1;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13217,7 +13214,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.19.6;
+				MARKETING_VERSION = 0.20.1;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -14718,11 +14715,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
-		};
-		79ACACF92E70C28C00292618 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
 		};
 		79EF670B2E2FA99300D86B0F /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;

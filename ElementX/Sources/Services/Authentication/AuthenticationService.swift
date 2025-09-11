@@ -8,7 +8,6 @@
 import Combine
 import Foundation
 import MatrixRustSDK
-import FirebaseAuth
 import UIKit
 
 class AuthenticationService: AuthenticationServiceProtocol {
@@ -22,7 +21,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let appHooks: AppHooks
     
     private let zeroAuthApiProxy: ZeroAuthApiProxyProtocol
-    private let firebaseAuthService: FirebaseAuthServiceProtocol
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
@@ -46,7 +44,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appHooks = appHooks
         
         zeroAuthApiProxy = ZeroAuthApiProxy(appSettings: appSettings)
-        firebaseAuthService = FirebaseAuthenticationService()
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
@@ -140,6 +137,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     func loginWithWeb3(web3Token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        await _ = configure(for: ZeroContants.appServer.matrixHomeServerUrl, flow: .login)
         return await proceedPostSSOLoginFlow(ssoBlock: {
             try await self.zeroAuthApiProxy.authApi.loginWithWeb3(web3Token: web3Token)
         },
@@ -147,24 +145,15 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                              deviceID: deviceID)
     }
     
-    func loginWithX(initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        do {
-            let socialAuthToken = try await firebaseAuthService.loginWithX()
-            return await proceedPostSSOLoginFlow(
-                ssoBlock: {
-                    try await self.zeroAuthApiProxy.authApi.zeroSocialLogin(token: socialAuthToken)
-                },
-                initialDeviceName: initialDeviceName,
-                deviceID: deviceID
-            )
-        } catch {
-            MXLog.error("Failed logging in with error: \(error)")
-            return .failure(.failedLoggingIn)
-        }
-    }
-    
-    func loginWithEpicGames(initialDeviceName: String?, deviceID: String?) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
-        return .failure(.failedLoggingIn)
+    func loginWithSocialAuth(token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        await _ = configure(for: ZeroContants.appServer.matrixHomeServerUrl, flow: .login)
+        return await proceedPostSSOLoginFlow(
+            ssoBlock: {
+                try await self.zeroAuthApiProxy.authApi.zeroSocialLogin(token: token)
+            },
+            initialDeviceName: initialDeviceName,
+            deviceID: deviceID
+        )
     }
     
     func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
