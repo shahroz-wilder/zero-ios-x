@@ -1629,6 +1629,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func getAvaxTokenPrice(tokenAddress: String) async -> Result<ZAvaxTokenPrice, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getAvaxTokenPrice(tokenAddress: tokenAddress)
+            switch result {
+            case .success(let price):
+                return .success(price)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to fetch avax token price, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func getStakingToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingToken, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.stakingApi.getStakingToken(poolAddress: poolAddress, chainId: chainId)

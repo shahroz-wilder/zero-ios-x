@@ -7917,6 +7917,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return getTokenBalanceUserWalletAddressTokenAddressChainIdReturnValue
         }
     }
+    //MARK: - getAvaxTokenPrice
+
+    var getAvaxTokenPriceTokenAddressUnderlyingCallsCount = 0
+    var getAvaxTokenPriceTokenAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getAvaxTokenPriceTokenAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getAvaxTokenPriceTokenAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getAvaxTokenPriceTokenAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getAvaxTokenPriceTokenAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getAvaxTokenPriceTokenAddressCalled: Bool {
+        return getAvaxTokenPriceTokenAddressCallsCount > 0
+    }
+    var getAvaxTokenPriceTokenAddressReceivedTokenAddress: String?
+    var getAvaxTokenPriceTokenAddressReceivedInvocations: [String] = []
+
+    var getAvaxTokenPriceTokenAddressUnderlyingReturnValue: Result<ZAvaxTokenPrice, ClientProxyError>!
+    var getAvaxTokenPriceTokenAddressReturnValue: Result<ZAvaxTokenPrice, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getAvaxTokenPriceTokenAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZAvaxTokenPrice, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getAvaxTokenPriceTokenAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getAvaxTokenPriceTokenAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getAvaxTokenPriceTokenAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getAvaxTokenPriceTokenAddressClosure: ((String) async -> Result<ZAvaxTokenPrice, ClientProxyError>)?
+
+    func getAvaxTokenPrice(tokenAddress: String) async -> Result<ZAvaxTokenPrice, ClientProxyError> {
+        getAvaxTokenPriceTokenAddressCallsCount += 1
+        getAvaxTokenPriceTokenAddressReceivedTokenAddress = tokenAddress
+        DispatchQueue.main.async {
+            self.getAvaxTokenPriceTokenAddressReceivedInvocations.append(tokenAddress)
+        }
+        if let getAvaxTokenPriceTokenAddressClosure = getAvaxTokenPriceTokenAddressClosure {
+            return await getAvaxTokenPriceTokenAddressClosure(tokenAddress)
+        } else {
+            return getAvaxTokenPriceTokenAddressReturnValue
+        }
+    }
     //MARK: - getTotalStaked
 
     var getTotalStakedPoolAddressChainIdUnderlyingCallsCount = 0

@@ -33,6 +33,8 @@ protocol ZeroWalletApiProtocol {
     func approveERC20(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64) async throws -> Result<ZWalletTransactionResponse, Error>
     
     func verifyERC20Approval(walletAddress: String, poolAddress: String, tokenAddress: String, chainId: UInt64) async throws -> Result<Void, Error>
+    
+    func getAvaxTokenPrice(tokenAddress: String) async throws -> Result<ZAvaxTokenPrice, Error>
 }
 
 class ZeroWalletApi: ZeroWalletApiProtocol {
@@ -276,6 +278,20 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
+    func getAvaxTokenPrice(tokenAddress: String) async throws -> Result<ZAvaxTokenPrice, any Error> {
+        let url = WalletEndPoints.avaxTokenPriceEndPoint
+            .replacingOccurrences(of: WalletApiConstants.token_address_path_parameter, with: tokenAddress)
+        let result: Result<ZAvaxTokenPrice, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                   method: .get,
+                                                                                                   appSettings: appSettings)
+        switch result {
+        case .success(let price):
+            return .success(price)
+        case .failure(let failure):
+            return .failure(failure)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum WalletEndPoints {
@@ -299,6 +315,8 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         
         static let approveERC20 = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/approve-erc20"
         static let verifyERC20Approval = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/token/\(WalletApiConstants.token_address_path_parameter)/approval/\(WalletApiConstants.pool_address_path_parameter)"
+        
+        static let avaxTokenPriceEndPoint = "\(hostURL)api/tokens/avalanche/\(WalletApiConstants.token_address_path_parameter)/price"
     }
     
     private enum WalletApiConstants {

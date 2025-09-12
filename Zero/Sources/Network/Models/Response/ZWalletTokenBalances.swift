@@ -20,6 +20,8 @@ struct ZWalletToken: Codable {
     let logo: String?
     let decimals: Int
     let chainId: UInt64
+    let percentChange: String?
+    let price: Double?
 }
 
 extension ZWalletToken {
@@ -34,6 +36,10 @@ extension ZWalletToken {
     
     func meowPriceFormatted(ref: ZeroCurrency?) -> String {
         return ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: amount, refPrice: ref)
+    }
+    
+    func tokenPriceFormatted() -> String {
+        return ZeroWalletUtil.shared.tokenPriceFormatted(tokenAmount: amount, tPrice: price)
     }
     
     var isMeowToken: Bool {

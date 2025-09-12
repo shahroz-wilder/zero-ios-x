@@ -13,16 +13,23 @@ class ZeroWalletUtil {
     private init() { }
     
     func meowPrice(tokenAmount: String?, refPrice: ZeroCurrency?) -> Double {
-        if let amount = Double(tokenAmount ?? "0"), amount > 0,
-           let currency = refPrice, let price = currency.price {
-            return amount * price
+        meowPrice(tokenAmount: Double(tokenAmount ?? "0") ?? 0, refPrice: refPrice)
+    }
+    
+    func meowPrice(tokenAmount: Double, refPrice: ZeroCurrency?) -> Double {
+        if let currency = refPrice, let price = currency.price, tokenAmount > 0 {
+            return tokenAmount * price
         } else {
             return 0
         }
     }
     
-    func meowPrice(tokenAmount: Double, refPrice: ZeroCurrency?) -> Double {
-        if let currency = refPrice, let price = currency.price {
+    func tokenPrice(tokenAmount: String?, price: Double?) -> Double {
+        tokenPrice(tokenAmount: Double(tokenAmount ?? "0") ?? 0, tokenPrice: price)
+    }
+    
+    func tokenPrice(tokenAmount: Double, tokenPrice: Double?) -> Double {
+        if let price = tokenPrice, tokenAmount > 0 {
             return tokenAmount * price
         } else {
             return 0
@@ -31,5 +38,9 @@ class ZeroWalletUtil {
     
     func meowPriceFormatted(tokenAmount: String?, refPrice: ZeroCurrency?) -> String {
         return meowPrice(tokenAmount: tokenAmount, refPrice: refPrice).formatToThousandSeparatedString()
+    }
+    
+    func tokenPriceFormatted(tokenAmount: String?, tPrice: Double?) -> String {
+        return tokenPrice(tokenAmount: tokenAmount, price: tPrice).formatToThousandSeparatedString()
     }
 }
