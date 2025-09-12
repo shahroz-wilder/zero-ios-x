@@ -52,6 +52,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Public
     
+    
+    func isHomeServerConfigured() -> Bool {
+        client != nil
+    }
+    
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError> {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)

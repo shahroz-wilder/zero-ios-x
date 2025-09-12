@@ -115,7 +115,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     // MARK: - Private
     
     private func login() async {
-        if let serverName = state.serverName {
+        if let serverName = state.serverName, !authenticationService.isHomeServerConfigured() {
             await configureAccountProvider(serverName, loginHint: provisioningParameters?.loginHint)
         } else {
             actionsSubject.send(.login) // No need to configure anything here, continue the flow.

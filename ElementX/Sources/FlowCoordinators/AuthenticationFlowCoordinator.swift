@@ -365,14 +365,19 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startAuthentication(flow: AuthenticationFlow, loginHint: String?) {
         Task {
-            startLoading()
-            switch await authenticationService.configure(for: appSettings.accountProviders[0], flow: .login) {
-            case .success:
-                stopLoading()
+            if authenticationService.isHomeServerConfigured() {
                 stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
-            case .failure:
-                stopLoading()
-                showServerSelectionScreen(authenticationFlow: flow)
+            } else {
+                startLoading()
+                
+                switch await authenticationService.configure(for: appSettings.accountProviders[0], flow: .login) {
+                case .success:
+                    stopLoading()
+                    stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
+                case .failure:
+                    stopLoading()
+                    showServerSelectionScreen(authenticationFlow: flow)
+                }
             }
         }
     }

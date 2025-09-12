@@ -49,6 +49,7 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     /// The type of flow the service is currently configured with.
     var flow: AuthenticationFlow { get }
         
+    func isHomeServerConfigured() -> Bool
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
