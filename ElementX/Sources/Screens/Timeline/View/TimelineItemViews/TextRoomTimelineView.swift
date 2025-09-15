@@ -91,7 +91,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     private static func itemWith(html: String, timestamp: Date, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
         let builder = AttributedStringBuilder(cacheKey: "preview", mentionBuilder: MentionBuilder())
-        let attributedString = builder.fromHTML(html)
+        let attributedString = builder.fromHTML(html, isClickable: false)
         
         return TextRoomTimelineItem(id: .randomEvent,
                                     timestamp: timestamp,

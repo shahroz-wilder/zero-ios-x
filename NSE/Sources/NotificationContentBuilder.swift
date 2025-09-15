@@ -144,7 +144,7 @@ struct NotificationContentBuilder {
                                     messageType: MessageType,
                                     mediaProvider: MediaProviderProtocol) async {
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        notificationContent.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, isOutgoing: false).characters)
+        notificationContent.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, isOutgoing: false, isClickable: false).characters)
         
         let timelineMediaVisibility = await userSession.mediaPreviewVisibility
         guard timelineMediaVisibility == .on ||

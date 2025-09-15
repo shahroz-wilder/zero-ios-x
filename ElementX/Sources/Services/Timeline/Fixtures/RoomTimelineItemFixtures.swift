@@ -89,7 +89,7 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "",
                                             formattedBody: AttributedStringBuilder(mentionBuilder: MentionBuilder())
-                                                .fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳")))
+                                .fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳", isClickable: true)))
     ]
     
     /// A small chunk of events, containing 2 text items.

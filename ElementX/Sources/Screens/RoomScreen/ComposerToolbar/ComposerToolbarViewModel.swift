@@ -500,7 +500,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])
             }
             
-            attributedStringBuilder.addMatrixEntityPermalinkAttributesTo(attributedString)
+            attributedStringBuilder.addMatrixEntityPermalinkAttributesTo(attributedString, isClickable: false)
             
             // In RTE mentions don't need to be handled as links
             attributedString.removeAttribute(.link, range: NSRange(location: 0, length: attributedString.length))
@@ -623,7 +623,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             }
             
-            attributedStringBuilder.addMatrixEntityPermalinkAttributesTo(attributedString)
+            attributedStringBuilder.addMatrixEntityPermalinkAttributesTo(attributedString, isClickable: false)
             
             state.bindings.plainComposerText = attributedString
         }

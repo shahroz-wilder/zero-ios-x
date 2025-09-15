@@ -14,9 +14,9 @@ struct AttributedStringBuilderComponent: Hashable, Identifiable {
 }
 
 protocol AttributedStringBuilderProtocol {
-    func fromPlain(_ string: String?) -> AttributedString?
+    func fromPlain(_ string: String?, isClickable: Bool) -> AttributedString?
     
-    func fromHTML(_ htmlString: String?) -> AttributedString?
+    func fromHTML(_ htmlString: String?, isClickable: Bool) -> AttributedString?
     
-    func addMatrixEntityPermalinkAttributesTo(_ attributedString: NSMutableAttributedString)
+    func addMatrixEntityPermalinkAttributesTo(_ attributedString: NSMutableAttributedString, isClickable: Bool)
 }

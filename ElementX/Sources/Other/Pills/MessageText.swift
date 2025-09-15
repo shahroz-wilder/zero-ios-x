@@ -211,12 +211,12 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("SwiftUI Default Text")
         attachmentPreview
             .previewDisplayName("Custom Attachment")
-        if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote) {
+        if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithQuote, isClickable: false) {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With block quote")
         }
-        if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithList) {
+        if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithList, isClickable: false) {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With list")

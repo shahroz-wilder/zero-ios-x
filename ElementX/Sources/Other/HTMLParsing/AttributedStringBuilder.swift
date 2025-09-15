@@ -12,7 +12,7 @@ import LRUCache
 import MatrixRustSDK
 
 protocol MentionBuilderProtocol {
-    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?)
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?, isClickable: Bool)
     func handleRoomIDMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomID: String)
     func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String, roomDisplayName: String?)
     func handleEventOnRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, eventID: String, roomAlias: String)
@@ -54,15 +54,15 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    func fromPlain(_ string: String?) -> AttributedString? {
-        builder.fromPlain(string)
+    func fromPlain(_ string: String?, isClickable: Bool) -> AttributedString? {
+        builder.fromPlain(string, isClickable: isClickable)
     }
     
-    func fromHTML(_ htmlString: String?) -> AttributedString? {
-        builder.fromHTML(htmlString)
+    func fromHTML(_ htmlString: String?, isClickable: Bool) -> AttributedString? {
+        builder.fromHTML(htmlString, isClickable: isClickable)
     }
     
-    func addMatrixEntityPermalinkAttributesTo(_ attributedString: NSMutableAttributedString) {
-        builder.addMatrixEntityPermalinkAttributesTo(attributedString)
+    func addMatrixEntityPermalinkAttributesTo(_ attributedString: NSMutableAttributedString, isClickable: Bool) {
+        builder.addMatrixEntityPermalinkAttributesTo(attributedString, isClickable: isClickable)
     }
 }

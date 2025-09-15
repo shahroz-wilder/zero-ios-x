@@ -24,12 +24,12 @@ struct RoomMessageEventStringBuilder {
     let attributedStringBuilder: AttributedStringBuilderProtocol
     let destination: Destination
     
-    func buildAttributedString(for messageType: MessageType, senderDisplayName: String, isOutgoing: Bool) -> AttributedString {
+    func buildAttributedString(for messageType: MessageType, senderDisplayName: String, isOutgoing: Bool, isClickable: Bool) -> AttributedString {
         let message: AttributedString
         switch messageType {
         case .emote(let content):
             if let attributedMessage = attributedMessageFrom(
-                formattedBody: content.formatted) {
+                formattedBody: content.formatted, isClickable: isClickable) {
                 return AttributedString(
                     L10n.commonEmote(senderDisplayName, String(attributedMessage.characters))
                 )
@@ -62,10 +62,10 @@ struct RoomMessageEventStringBuilder {
             message = content
         case .notice(let content):
             if let attributedMessage = attributedMessageFrom(
-                formattedBody: content.formatted) {
+                formattedBody: content.formatted, isClickable: isClickable) {
                 message = attributedMessage
             } else if let attributedMessage = attributedStringBuilder.fromPlain(
-                content.body) {
+                content.body, isClickable: isClickable) {
                 message = attributedMessage
             } else {
                 message = AttributedString(content.body)
@@ -73,10 +73,10 @@ struct RoomMessageEventStringBuilder {
         case .text(let content):
             let simplifiedPlainText = simplifyPlainText(plainText: content.body)
             if let attributedMessage = attributedMessageFrom(
-                formattedBody: content.formatted) {
+                formattedBody: content.formatted, isClickable: isClickable) {
                 message = attributedMessage
             } else if let attributedMessage = attributedStringBuilder.fromPlain(
-                simplifiedPlainText) {
+                simplifiedPlainText, isClickable: isClickable) {
                 message = attributedMessage
             } else {
                 message = AttributedString(content.body)
@@ -130,8 +130,8 @@ struct RoomMessageEventStringBuilder {
         return attributedPrefix + " " + attributedEventSummary
     }
 
-    private func attributedMessageFrom(formattedBody: FormattedBody?)
+    private func attributedMessageFrom(formattedBody: FormattedBody?, isClickable: Bool)
         -> AttributedString? {
-        formattedBody.flatMap { attributedStringBuilder.fromHTML($0.body) }
+        formattedBody.flatMap { attributedStringBuilder.fromHTML($0.body, isClickable: isClickable) }
     }
 }

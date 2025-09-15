@@ -547,7 +547,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildTextTimelineItemContent(_ messageContent: TextMessageContent) -> TextRoomTimelineItemContent {
         let htmlBody = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
-        let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody) : attributedStringBuilder.fromPlain(messageContent.body))
+        let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody, isClickable: true) : attributedStringBuilder.fromPlain(messageContent.body, isClickable: true))
         
         return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
     }
@@ -557,7 +557,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         if messageContent.formatted?.format == .html {
             htmlBody = convertTextToHTML(text: messageContent.body, htmlBody: htmlBody)
         }
-        let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody) : attributedStringBuilder.fromPlain(messageContent.body))
+        let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody, isClickable: true) : attributedStringBuilder.fromPlain(messageContent.body, isClickable: true))
         
         return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
     }
@@ -609,7 +609,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
-        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption, isClickable: true) : attributedStringBuilder.fromPlain(messageContent.caption, isClickable: true)
         
         var waveform: EstimatedWaveform?
         if let audioWaveform = messageContent.audio?.waveform {
@@ -652,7 +652,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
 
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
-        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption, isClickable: true) : attributedStringBuilder.fromPlain(messageContent.caption, isClickable: true)
         
         let thumbnailInfo = ImageInfoProxy(source: messageContent.info?.thumbnailSource,
                                            width: messageContent.info?.thumbnailInfo?.width,
@@ -678,7 +678,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildVideoTimelineItemContent(_ messageContent: VideoMessageContent) -> VideoRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
-        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption, isClickable: true) : attributedStringBuilder.fromPlain(messageContent.caption, isClickable: true)
         
         let thumbnailInfo = ImageInfoProxy(source: messageContent.info?.thumbnailSource,
                                            width: messageContent.info?.thumbnailInfo?.width,
@@ -711,7 +711,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
 
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
-        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption, isClickable: true) : attributedStringBuilder.fromPlain(messageContent.caption, isClickable: true)
         
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         
@@ -727,7 +727,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildNoticeTimelineItemContent(_ messageContent: NoticeMessageContent) -> NoticeRoomTimelineItemContent {
         let htmlBody = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
-        let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody) : attributedStringBuilder.fromPlain(messageContent.body))
+        let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody, isClickable: true) : attributedStringBuilder.fromPlain(messageContent.body, isClickable: true))
         
         return .init(body: messageContent.body, formattedBody: formattedBody)
     }
@@ -741,7 +741,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         if let htmlBody {
             formattedBody = buildEmoteFormattedBodyFromHTML(html: htmlBody, name: name)
         } else {
-            formattedBody = attributedStringBuilder.fromPlain(L10n.commonEmote(name, messageContent.body))
+            formattedBody = attributedStringBuilder.fromPlain(L10n.commonEmote(name, messageContent.body), isClickable: false)
         }
         
         return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
@@ -751,7 +751,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildEmoteFormattedBodyFromHTML(html: String, name: String) -> AttributedString? {
         let htmlBodyPlaceholder = "{htmlBodyPlaceholder}"
         var finalString = AttributedString(L10n.commonEmote(name, htmlBodyPlaceholder))
-        guard let htmlBodyString = attributedStringBuilder.fromHTML(html) else {
+        guard let htmlBodyString = attributedStringBuilder.fromHTML(html, isClickable: false) else {
             return nil
         }
         finalString.replace(htmlBodyPlaceholder, with: htmlBodyString)

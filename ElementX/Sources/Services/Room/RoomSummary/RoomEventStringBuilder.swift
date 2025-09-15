@@ -32,7 +32,7 @@ struct RoomEventStringBuilder {
         case .msgLike(let messageLikeContent):
             switch messageLikeContent.kind {
             case .message(let messageContent):
-                return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName, isOutgoing: isOutgoing)
+                return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName, isOutgoing: isOutgoing, isClickable: true)
             case .sticker:
                 if messageEventStringBuilder.destination == .pinnedEvent {
                     var string = AttributedString(L10n.commonSticker)

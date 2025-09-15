@@ -158,7 +158,7 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
                         Divider()
                             .background(.black)
                         
-                        if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
+                        if let attributedString = attributedStringBuilder.fromHTML(htmlString, isClickable: false) {
                             FormattedBodyText(attributedString: attributedString)
                                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 .bubbleBackground()
