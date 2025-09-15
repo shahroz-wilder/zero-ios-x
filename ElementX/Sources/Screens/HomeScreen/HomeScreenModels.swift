@@ -856,11 +856,13 @@ extension HomeScreenPostMediaInfo {
 
 extension HomeScreenWalletContent {
     init (walletToken: ZWalletToken, meowPrice: ZeroCurrency?) {
-        let priceDifference: String? = if let diff = meowPrice?.diff {
-            diff > 0 ? "+\(diff)%" : "-\(abs(diff))%"
-        } else {
-            nil
-        }
+        let priceDiff = walletToken.percentChange.map(Double.init) ?? meowPrice?.diff
+        let priceDiffFormatted = priceDiff.map { $0 > 0 ? "+\($0)%" : "-\(abs($0))%" }
+
+        let isZChainToken = ZeroWalletChainsUtil.shared.isZChain(walletToken.chainId)
+        let tokenPriceFormatted = walletToken.isClaimableToken
+            ? (isZChainToken ? walletToken.meowPriceFormatted(ref: meowPrice) : walletToken.tokenPriceFormatted()) : ""
+        
         self.init(id: walletToken.tokenAddress,
                   icon: walletToken.logo,
                   header: nil,
@@ -869,8 +871,8 @@ extension HomeScreenWalletContent {
                   title: walletToken.name,
                   description: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
                   actionPreText: nil,
-                  actionText: walletToken.isClaimableToken ? "$\(walletToken.meowPriceFormatted(ref: meowPrice))" : "",
-                  actionPostText: walletToken.isClaimableToken ? priceDifference : nil,
+                  actionText: tokenPriceFormatted,
+                  actionPostText: walletToken.isClaimableToken ? priceDiffFormatted : nil,
                   chainId: walletToken.chainId
         )
     }
@@ -891,7 +893,7 @@ extension HomeScreenWalletContent {
     
     init(walletTransaction: WalletTransaction, meowPrice: ZeroCurrency?) {
         let isTransactionReceived = walletTransaction.action.lowercased() == "receive"
-        let tokenSymbol = walletTransaction.token.symbol.uppercased()
+        
         self.init(id: walletTransaction.hash,
                   icon: walletTransaction.token.logo,
                   header: nil, //walletTransaction.timestamp
@@ -900,23 +902,23 @@ extension HomeScreenWalletContent {
                   title: walletTransaction.token.name,
                   description: nil,
                   actionPreText: nil,
-                  actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
-                  actionPostText: walletTransaction.isClaimableTokenTransaction ? "$\(walletTransaction.meowPriceFormatted(ref: meowPrice))" : nil,
+                  actionText: walletTransaction.formattedAmount,
+                  actionPostText: "--",
                   chainId: walletTransaction.token.chainId ?? ZeroWalletChainsUtil.shared.Z_CHAIN_ID)
     }
 }
 
 extension HomeScreenWalletStakingContent {
-    init(meowPrice: ZeroCurrency?, userWalletAddress: String,
+    init(tokenPrice: Double?, userWalletAddress: String,
          pool: WalletStakePool, totalStaked: String, stakingConfig: ZStackingConfig,
          stakerStatus: ZStakingStatus, stakeRewards: ZStakingUserRewardsInfo) {
         
-        let totalStakedAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: totalStaked,
+        let totalStakedAmount = ZeroWalletUtil.shared.tokenPrice(tokenAmount: ZeroRewards.parseCredits(credits: totalStaked,
                                                                                                       decimals: 18),
-                                                                refPrice: meowPrice)
-        let myStakeAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: stakerStatus.amountStaked,
+                                                                tokenPrice: tokenPrice)
+        let myStakeAmount = ZeroWalletUtil.shared.tokenPrice(tokenAmount: ZeroRewards.parseCredits(credits: stakerStatus.amountStaked,
                                                                                                   decimals: 18),
-                                                            refPrice: meowPrice)
+                                                             tokenPrice: tokenPrice)
         let pendingRewards = ZeroRewards.parseCredits(credits: stakeRewards.pendingRewards, decimals: 18)
         self.init(id: pool.address,
                   userWalletAddress: userWalletAddress,

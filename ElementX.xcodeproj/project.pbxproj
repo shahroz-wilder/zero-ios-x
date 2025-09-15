@@ -1829,14 +1829,6 @@
 		790935842E425399003423D7 /* ZStakingUserRewardsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790935822E425390003423D7 /* ZStakingUserRewardsInfo.swift */; };
 		79096A332E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */; };
 		79096A342E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */; };
-		790A47512E6B061E0033604D /* ZeroWalletChainsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */; };
-		790A47522E6B061E0033604D /* ZeroWalletChainsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */; };
-		790A47572E6B09510033604D /* ZChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47562E6B094E0033604D /* ZChainIcon.swift */; };
-		790A47582E6B09510033604D /* ZChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47562E6B094E0033604D /* ZChainIcon.swift */; };
-		790A475A2E6B09980033604D /* AvaxChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47592E6B098E0033604D /* AvaxChainIcon.swift */; };
-		790A475B2E6B09980033604D /* AvaxChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47592E6B098E0033604D /* AvaxChainIcon.swift */; };
-		790A475D2E6B1A070033604D /* ZeroWalletStakingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */; };
-		790A475E2E6B1A070033604D /* ZeroWalletStakingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */; };
 		790A47382E6A41840033604D /* OtpVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47372E6A41810033604D /* OtpVerificationView.swift */; };
 		790A47392E6A41840033604D /* OtpVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47372E6A41810033604D /* OtpVerificationView.swift */; };
 		790A473B2E6A41950033604D /* OtpVerificationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A473A2E6A418F0033604D /* OtpVerificationScreenViewModelProtocol.swift */; };
@@ -1853,6 +1845,14 @@
 		790A474C2E6ADCE70033604D /* OtpModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474A2E6ADCE30033604D /* OtpModifier.swift */; };
 		790A474E2E6AE2F70033604D /* ResentOtpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474D2E6AE2F00033604D /* ResentOtpButton.swift */; };
 		790A474F2E6AE2F70033604D /* ResentOtpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474D2E6AE2F00033604D /* ResentOtpButton.swift */; };
+		790A47512E6B061E0033604D /* ZeroWalletChainsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */; };
+		790A47522E6B061E0033604D /* ZeroWalletChainsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */; };
+		790A47572E6B09510033604D /* ZChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47562E6B094E0033604D /* ZChainIcon.swift */; };
+		790A47582E6B09510033604D /* ZChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47562E6B094E0033604D /* ZChainIcon.swift */; };
+		790A475A2E6B09980033604D /* AvaxChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47592E6B098E0033604D /* AvaxChainIcon.swift */; };
+		790A475B2E6B09980033604D /* AvaxChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47592E6B098E0033604D /* AvaxChainIcon.swift */; };
+		790A475D2E6B1A070033604D /* ZeroWalletStakingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */; };
+		790A475E2E6B1A070033604D /* ZeroWalletStakingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */; };
 		790AB79B2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */; };
@@ -1973,6 +1973,8 @@
 		7944A7692D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */; };
 		7944A76C2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
 		7944A76D2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
+		794A75522E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */; };
+		794A75532E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */; };
 		794E2AEB2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */; };
 		794E2AEC2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */; };
 		794F08A92D6CFF5B008B575F /* ZChannelRoomId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */; };
@@ -3836,10 +3838,6 @@
 		7909357F2E425353003423D7 /* ZStakingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZStakingStatus.swift; sourceTree = "<group>"; };
 		790935822E425390003423D7 /* ZStakingUserRewardsInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZStakingUserRewardsInfo.swift; sourceTree = "<group>"; };
 		79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInProgressView.swift; sourceTree = "<group>"; };
-		790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletChainsUtil.swift; sourceTree = "<group>"; };
-		790A47562E6B094E0033604D /* ZChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZChainIcon.swift; sourceTree = "<group>"; };
-		790A47592E6B098E0033604D /* AvaxChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaxChainIcon.swift; sourceTree = "<group>"; };
-		790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletStakingUtil.swift; sourceTree = "<group>"; };
 		790A47372E6A41810033604D /* OtpVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationView.swift; sourceTree = "<group>"; };
 		790A473A2E6A418F0033604D /* OtpVerificationScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		790A473D2E6A41980033604D /* OtpVerificationScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpVerificationScreenViewModel.swift; sourceTree = "<group>"; };
@@ -3848,6 +3846,10 @@
 		790A47472E6ADBF50033604D /* OtpFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpFormView.swift; sourceTree = "<group>"; };
 		790A474A2E6ADCE30033604D /* OtpModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpModifier.swift; sourceTree = "<group>"; };
 		790A474D2E6AE2F00033604D /* ResentOtpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResentOtpButton.swift; sourceTree = "<group>"; };
+		790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletChainsUtil.swift; sourceTree = "<group>"; };
+		790A47562E6B094E0033604D /* ZChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZChainIcon.swift; sourceTree = "<group>"; };
+		790A47592E6B098E0033604D /* AvaxChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaxChainIcon.swift; sourceTree = "<group>"; };
+		790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletStakingUtil.swift; sourceTree = "<group>"; };
 		790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModel.swift; sourceTree = "<group>"; };
 		790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenModels.swift; sourceTree = "<group>"; };
@@ -3893,6 +3895,7 @@
 		7944A7642D589F3F00B75DAC /* CreateFeedScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModel.swift; sourceTree = "<group>"; };
 		7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenView.swift; sourceTree = "<group>"; };
+		794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAvaxTokenPrice.swift; sourceTree = "<group>"; };
 		794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletApi.swift; sourceTree = "<group>"; };
 		794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZChannelRoomId.swift; sourceTree = "<group>"; };
 		795A0C852D77EB94000928B7 /* ZeroApiProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroApiProxy.swift; sourceTree = "<group>"; };
@@ -5261,6 +5264,7 @@
 				7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */,
 				7909225A2E1E673E00833940 /* ZWalletRecipients.swift */,
 				798D991B2E4C9A4C00164028 /* ZWalletStakingApprovalResponse.swift */,
+				794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */,
 				79DB42A92E4BF0CC00F6E809 /* ZWalletStakingRewardsToken.swift */,
 				79DB42A62E4BF0A500F6E809 /* ZWalletStakingToken.swift */,
 				79DB42AF2E4BF19900F6E809 /* ZWalletTokenBalance.swift */,
@@ -10979,6 +10983,7 @@
 				18E9A5922C9829970082DDA4 /* MessageForwardingScreenCoordinator.swift in Sources */,
 				189334A22D071BEE00CC87B9 /* MediaEventsTimelineFlowCoordinator.swift in Sources */,
 				79281A6F2E69A1D200D86DD6 /* OnLandingScreen.swift in Sources */,
+				794A75522E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */,
 				79281A682E6723EB00D86DD6 /* SpaceRoomListProxy.swift in Sources */,
 				790922642E1FB1F900833940 /* SwipeToConfirmButton.swift in Sources */,
 				79FCB1A82DA5BA3600669122 /* DeclineAndBlockScreenCoordinator.swift in Sources */,
@@ -11784,6 +11789,7 @@
 				21813AF91CFC6F3E3896DB53 /* AppLockSetupBiometricsScreenModels.swift in Sources */,
 				37906355E207DB5703754675 /* AppLockSetupBiometricsScreenViewModel.swift in Sources */,
 				9FB41B0E8B2AA9B404E52C8B /* AppLockSetupBiometricsScreenViewModelProtocol.swift in Sources */,
+				794A75532E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */,
 				B188D0907A4D38AAAF6FEFA8 /* AppLockSetupFlowCoordinator.swift in Sources */,
 				185454C72CFDE698003CA957 /* CreateAccountScreenViewModelProtocol.swift in Sources */,
 				733E2B19AB1FDA3B93293A28 /* AppLockSetupPINScreen.swift in Sources */,
@@ -13218,7 +13224,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.20.1;
+				MARKETING_VERSION = 0.20.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13254,7 +13260,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.20.1;
+				MARKETING_VERSION = 0.20.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

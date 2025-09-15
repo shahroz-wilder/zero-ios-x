@@ -350,6 +350,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     func getTokenBalance(userWalletAddress: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenBalance, ClientProxyError>
     
+    func getAvaxTokenPrice(tokenAddress: String) async -> Result<ZAvaxTokenPrice, ClientProxyError>
+    
     // MARK: - ZERO STAKING
     
     func getTotalStaked(poolAddress: String, chainId: UInt64) async -> Result<String, ClientProxyError>

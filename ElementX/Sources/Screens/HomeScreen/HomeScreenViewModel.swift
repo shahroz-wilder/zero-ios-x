@@ -1079,6 +1079,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         for pool in stakePools {
             let poolAddress = pool.address
             let chainId = pool.chainId
+            let isAvaxChain = ZeroWalletChainsUtil.shared.isAvaxChain(chainId)
             
             Task(priority: .background) { [weak self] in
                 guard let self else { return }
@@ -1101,6 +1102,20 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     stakerStatusResult,
                     stakeRewardsResult
                 )
+                
+                let avaxTokenPrice: ZAvaxTokenPrice?
+                if isAvaxChain {
+                    let tokenAddressResult = await userSession.clientProxy.getStakingToken(poolAddress: poolAddress, chainId: chainId)
+                    guard case .success(let result) = tokenAddressResult else {
+                        avaxTokenPrice = nil
+                        return
+                    }
+                    avaxTokenPrice = try? await userSession.clientProxy.getAvaxTokenPrice(tokenAddress: result.stakingTokenAddress).get()
+                } else {
+                    avaxTokenPrice = nil
+                }
+                let tokenPrice = isAvaxChain ? avaxTokenPrice?.usd : self.state.meowPrice?.price
+                
                 await MainActor.run {
                     guard case .success(let totalStaked) = totalStaked,
                           case .success(let stakingConfig) = config,
@@ -1110,7 +1125,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     }
                     
                     let stakingContent = HomeScreenWalletStakingContent(
-                        meowPrice: self.state.meowPrice,
+                        tokenPrice: tokenPrice,
                         userWalletAddress: userWalletAddress,
                         pool: pool,
                         totalStaked: totalStaked,

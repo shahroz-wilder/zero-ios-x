@@ -30,6 +30,7 @@ struct OtpFormFieldView: View {
                     TextField("", text: $pins[index])
                         .modifier(OtpModifier(pin: $pins[index]))
                         .focused($pinFocusState, equals: FocusPin(rawValue: index))
+                        .textContentType(.oneTimeCode) // 👈 enables OTP suggestion above keyboard
                         .onChange(of: pins[index]) { _, newVal in
                             handleInputChange(at: index, value: newVal)
                         }
@@ -51,7 +52,16 @@ struct OtpFormFieldView: View {
     }
     
     private func handleInputChange(at index: Int, value: String) {
-        if value.count == 1 {
+        if value.count > 1 {
+            // Handle paste case
+            let characters = Array(value.prefix(6)) // Only take first 6
+            for i in characters.indices {
+                pins[i] = String(characters[i])
+            }
+            // Update binding
+            pin = pins.joined()
+            pinFocusState = characters.count == 6 ? nil : FocusPin(rawValue: characters.count)
+        } else if value.count == 1 {
             // Move to next field if available
             if index < 5 {
                 pinFocusState = FocusPin(rawValue: index + 1)
@@ -63,9 +73,6 @@ struct OtpFormFieldView: View {
             if index > 0 {
                 pinFocusState = FocusPin(rawValue: index - 1)
             }
-        } else if value.count > 1 {
-            // If user pastes or types multiple digits, take only first
-            pins[index] = String(value.prefix(1))
         }
     }
 }

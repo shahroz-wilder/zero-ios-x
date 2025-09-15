@@ -50,11 +50,13 @@ struct LandingScreenTabPager : View {
             
             VStack(alignment: .leading) {
                 Text(title)
-                    .font(.compound.headingLG)
+                    .font(.compound.headingMD)
                     .foregroundStyle(.zero.bgAccentRest)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(2)
                 
                 Text(subTitle)
-                    .font(.compound.bodyLG)
+                    .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
             }
             .padding(16)
@@ -68,7 +70,7 @@ struct LandingScreenTabPager : View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: 350)
+            .frame(height: 325)
             .padding(.vertical, 8)
             
             // Custom Indicator
@@ -80,6 +82,9 @@ struct LandingScreenTabPager : View {
                         .fill(currentIndex == index ? .zero.bgAccentRest : .compound.bgCanvasDefaultLevel1)
                         .frame(width: 40, height: 4)
                         .animation(.easeInOut, value: currentIndex)
+                        .onTapGesture {
+                            currentIndex = index
+                        }
                 }
                 
                 Spacer()

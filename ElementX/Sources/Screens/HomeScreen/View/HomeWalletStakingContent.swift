@@ -97,7 +97,7 @@ struct WalletStakingContentCell : View {
                     
                     Text(item.myStateAmountFormatted)
                         .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
+                        .foregroundColor(item.myStakeAmount > 0 ? .compound.textPrimary : .compound.textSecondary)
                         .lineLimit(1)
                         .layoutPriority(1)
                 }
