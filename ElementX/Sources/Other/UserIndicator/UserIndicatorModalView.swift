@@ -27,8 +27,15 @@ struct UserIndicatorModalView: View {
                             .font(.zero.bodyLG)
                             .foregroundColor(.compound.iconPrimary)
                     }
+                    
                     Text(indicator.title)
                         .font(.zero.bodyLG)
+                        .foregroundColor(.compound.textPrimary)
+                }
+                
+                if let message = indicator.message {
+                    Text(message)
+                        .font(.compound.bodyMD)
                         .foregroundColor(.compound.textPrimary)
                 }
             }
@@ -53,16 +60,23 @@ struct UserIndicatorModalView: View {
         .ignoresSafeArea()
         .interactiveDismissDisabled(indicator.interactiveDismissDisabled)
     }
+    
+    private var titleFont: Font {
+        if indicator.message != nil {
+            .compound.headingMDBold
+        } else {
+            .compound.bodyLG
+        }
+    }
 }
 
 struct UserIndicatorModalView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        Group {
+        VStack(spacing: 0) {
             UserIndicatorModalView(indicator: UserIndicator(type: .modal,
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark")
             )
-            .previewDisplayName("Spinner")
             
             UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .published(CurrentValueSubject<Double, Never>(0.5).asCurrentValuePublisher()),
                                                                          interactiveDismissDisabled: false,
@@ -70,7 +84,6 @@ struct UserIndicatorModalView_Previews: PreviewProvider, TestablePreview {
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark")
             )
-            .previewDisplayName("Progress Bar")
             
             UserIndicatorModalView(indicator: UserIndicator(type: .modal(progress: .none,
                                                                          interactiveDismissDisabled: false,
@@ -78,7 +91,12 @@ struct UserIndicatorModalView_Previews: PreviewProvider, TestablePreview {
                                                             title: "Successfully logged in",
                                                             iconName: "checkmark")
             )
-            .previewDisplayName("No progress")
+            
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal,
+                                                            title: "Successfully logged in",
+                                                            message: "You can now be happy.",
+                                                            iconName: "checkmark")
+            )
         }
     }
 }

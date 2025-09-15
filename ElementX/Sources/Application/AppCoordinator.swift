@@ -30,6 +30,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
     
+    private var userSessionMigrationsOldVersion: Version?
     private var userSession: UserSessionProtocol? {
         didSet {
             userSessionObserver?.cancel()
@@ -38,7 +39,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 configureNotificationManager()
                 observeUserSessionChanges()
                 startSync()
-                performSettingsToAccountDataMigration(userSession: userSession)
                 Task { await appHooks.configure(with: userSession) }
             }
         }
@@ -159,6 +159,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .dropFirst() // Called above before configuring the ServiceLocator
             .sink { [bugReportService] _ in
                 Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)
+            }
+            .store(in: &cancellables)
+        
+        appSettings.$nextGenHTMLParserEnabled
+            .sink { value in
+                AttributedStringBuilder.useNextGenHTMLParser = value
             }
             .store(in: &cancellables)
         
@@ -411,6 +417,27 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             Tracing.migrateLogFiles()
             MXLog.info("Migrating to version 25.07.4, log files have been moved.")
         }
+        
+        // Store the old version to run additional migrations on the user session once it has been set up.
+        userSessionMigrationsOldVersion = oldVersion
+    }
+    
+    private func performUserSessionMigrations(_ userSession: UserSessionProtocol) async {
+        guard let oldVersion = userSessionMigrationsOldVersion else { return }
+        
+        MXLog.info("Migrating user session from \(oldVersion)")
+        
+        if oldVersion < Version(25, 6, 0) {
+            MXLog.info("Migrating to version 25.06.0, migrating timeline media settings to account data.")
+            performSettingsToAccountDataMigration(userSession: userSession)
+        }
+        
+        if oldVersion < Version(25, 9, 2) {
+            MXLog.info("Migrating to version 25.09.2, triggering sync to ensure m.space state is up to date.")
+            await userSession.clientProxy.expireSyncSessions()
+        }
+        
+        userSessionMigrationsOldVersion = nil
     }
     
     // This could be removed once the adoption of 25.06.x is widespread.
@@ -541,6 +568,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         Task {
             switch await userSessionStore.restoreUserSession() {
             case .success(let userSession):
+                await self.performUserSessionMigrations(userSession)
                 self.userSession = userSession
                 StateBus.shared.onUserAuthStateChanged(.authorised)
                 stateMachine.processEvent(.createdUserSession)

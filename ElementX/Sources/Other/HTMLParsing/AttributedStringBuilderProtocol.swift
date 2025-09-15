@@ -18,5 +18,5 @@ protocol AttributedStringBuilderProtocol {
     
     func fromHTML(_ htmlString: String?) -> AttributedString?
     
-    func detectPermalinks(_ attributedString: NSMutableAttributedString, isClickable: Bool)
+    func addMatrixEntityPermalinkAttributesTo(_ attributedString: NSMutableAttributedString)
 }

@@ -1,3 +1,79 @@
+## Changes in 25.09.4 (2025-09-12)
+
+### What's Changed
+
+🐛 Bugfixes
+* Revert "Add intent system to widget URL creation. (#4427)" by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4504
+
+🚧 In development 🚧
+* Add support for joining rooms from a space. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4501
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.09.3...release/25.09.4
+
+## Changes in 25.09.3 (2025-09-11)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix stripping location data away from raw images when processing them for upload by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4497
+* Await user session migrations rather than launching a task. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4502
+
+🚧 In development 🚧
+* Tweak attributed string formatting by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4496
+
+Others
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4495
+* Add intent system to widget url creation. by @Copilot in https://github.com/element-hq/element-x-ios/pull/4427
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.09.2...release/25.09.3
+
+## Changes in 25.09.2 (2025-09-09)
+
+### What's Changed
+
+✨ Features
+* MediaTimelinePreviewDetails can now be opened by long pressing in the media timeline by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4474
+
+🙌 Improvements
+* Increase line limit for name in FileRoomTimelineView by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4470
+
+🐛 Bugfixes
+* Fix some retain cycles that could keep the Client(Proxy) alive when clearing the cache. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4462
+* Address the real lifetime issue of the SDK's `Client` by making `Context.mediaProvider` weak. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4466
+* Use the SDK's offline detection everywhere (except for restarting the sync loop). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4472
+
+⚠️ API Changes
+* Introduce flow parameters to simplify dependencies for child flows. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4448
+* Dependency Refactor by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4450
+* Use the Emoji/Map/Poll view models. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4458
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4454
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4479
+
+🦻 Accessibility
+* A11y audit improvements and fixes by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4457
+* A11y timeout announcement for verification request, hardcoded to 1 minute by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4467
+
+🚧 In development 🚧
+* Hide the tab bar when pushing screens on iPhone as requested by the designs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4444
+* Use the SDK's SpaceService, SpaceRoom and SpaceRoomList. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4455
+* Fix a bug where invites would be hidden when the Low Priority feature is enabled. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4461
+* Allow joined rooms to be pushed within a space. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4460
+* Add a migration to expire sync sessions so that m.space.* state is up to date. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4482
+
+Others
+* Tweaks discovered when using Compound overrides. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4456
+* Move call presentation from the chats flow into the user session flow. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4459
+* Update actions/github-script action to v8 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4471
+* Fix proxies by reverting the change that introduced schemes. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4481
+* Revert weak media provider by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4483
+* Add a new way of parsing HTML data and generating AttributedStrings by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4449
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.09.0...release/25.09.2
+
 ## Changes in 25.09.0 (2025-08-27)
 
 ### What's Changed

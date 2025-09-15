@@ -55,6 +55,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var fuzzyRoomListSearchEnabled: Bool { get set }
     var lowPriorityFilterEnabled: Bool { get set }
     var knockingEnabled: Bool { get set }
+    
+    var nextGenHTMLParserEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

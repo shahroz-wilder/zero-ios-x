@@ -457,6 +457,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func expireSyncSessions() async {
+        await syncService.expireSessions()
+    }
+    
     func accountURL(action: AccountManagementAction) async -> URL? {
         try? await client.accountUrl(action: action).flatMap(URL.init(string:))
     }
@@ -586,6 +590,17 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed knocking roomAlias: \(roomAlias) with error: \(error)")
             return .failure(.sdkError(error))
         }
+    }
+    
+    func canJoinRoom(with rules: [AllowRule]) -> Bool {
+        for rule in rules {
+            if case let .roomMembership(roomID) = rule,
+               let room = try? client.getRoom(roomId: roomID),
+               room.membership() == .joined {
+                return true
+            }
+        }
+        return false
     }
     
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
