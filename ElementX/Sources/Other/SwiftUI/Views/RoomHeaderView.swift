@@ -79,11 +79,15 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
             makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified)
             makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified)
             makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verificationViolation)
+            makeHeader(avatarURL: .mockMXCAvatar,
+                       roomSubtitle: "Subtitle",
+                       verificationState: .verified)
         }
         .previewLayout(.sizeThatFits)
     }
     
     static func makeHeader(avatarURL: URL?,
+                           roomSubtitle: String? = nil,
                            verificationState: UserIdentityVerificationState) -> some View {
         RoomHeaderView(roomName: "Some Room name",
                        roomSubtitle: nil,
