@@ -40,8 +40,8 @@ public struct ZeroRewards: Codable, Equatable {
     static func parseCredits(credits: String, decimals: Int) -> Double {
         // Pad with leading zeros if length < 18
         let mCredits: String
-        if credits.count < 18 {
-            let zeros = String(repeating: "0", count: 18 - credits.count)
+        if credits.count < decimals {
+            let zeros = String(repeating: "0", count: decimals - credits.count)
             mCredits = zeros + credits
         } else {
             mCredits = credits

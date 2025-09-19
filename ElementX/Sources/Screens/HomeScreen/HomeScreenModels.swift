@@ -871,7 +871,7 @@ extension HomeScreenWalletContent {
                   title: walletToken.name,
                   description: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
                   actionPreText: nil,
-                  actionText: tokenPriceFormatted,
+                  actionText: tokenPriceFormatted.isEmpty ? "" : "$\(tokenPriceFormatted)",
                   actionPostText: walletToken.isClaimableToken ? priceDiffFormatted : nil,
                   chainId: walletToken.chainId
         )

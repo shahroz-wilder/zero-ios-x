@@ -62,6 +62,7 @@ struct ThreadTimelineScreen: View {
             RoomHeaderView(roomName: L10n.commonThread,
                            roomSubtitle: context.viewState.roomTitle,
                            roomAvatar: context.viewState.roomAvatar,
+                           showProSubscriptionBadge: false,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
                            mediaProvider: context.mediaProvider)
                 // Using a button stops it from getting truncated in the navigation bar

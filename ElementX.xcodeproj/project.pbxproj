@@ -2004,6 +2004,7 @@
 		795CF4462D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
 		795CF4472D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
 		795EAA0D2D4AD83D0015DAD8 /* TimelineMediaPreviewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18A454132A5A5247802821E /* TimelineMediaPreviewDataSource.swift */; };
+		795F104C2E7D04A7001B8AFE /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78C13EF5035879B6131030F /* Room.swift */; };
 		796146CF2E2E63AA00ECDE0A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 796146CE2E2E63AA00ECDE0A /* FirebaseFirestore */; };
 		7961D6432E128DCA00AF5113 /* RoomInfoProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14517E5597594956FCE1950D /* RoomInfoProxyProtocol.swift */; };
 		79621A4C2DA78E040006C391 /* ManageRoomMemberSheetModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787E84119E626E2F0E0BFBE8 /* ManageRoomMemberSheetModels.swift */; };
@@ -10537,6 +10538,7 @@
 				18E9A4562C9829970082DDA4 /* AppLockSetupSettingsScreenViewModel.swift in Sources */,
 				7973F8092E735986001C4439 /* SocialAuthService.swift in Sources */,
 				18E9A4572C9829970082DDA4 /* AppLockSetupSettingsScreenViewModelProtocol.swift in Sources */,
+				795F104C2E7D04A7001B8AFE /* Room.swift in Sources */,
 				18E9A4582C9829970082DDA4 /* AppLockTimer.swift in Sources */,
 				18E9A4592C9829970082DDA4 /* RoomInfo+Extensions.swift in Sources */,
 				18E9A45A2C9829970082DDA4 /* AppMediator.swift in Sources */,
@@ -13252,7 +13254,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.20.3;
+				MARKETING_VERSION = 0.20.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13288,7 +13290,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.20.3;
+				MARKETING_VERSION = 0.20.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -14199,7 +14201,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.09.15;
+				version = 25.09.18;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
@@ -14231,7 +14233,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.15.0;
+				version = "0.16.0-rc.2";
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
