@@ -1047,14 +1047,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func setUserWalletBalance(_ tokens: [ZWalletToken]) {
-        let totalAmount = tokens.filter { $0.isClaimableToken }
-            .reduce(Decimal(0)) { partialResult, token in
-                guard let amountDecimal = Decimal(string: token.amount) else {
-                    return partialResult
-                }
-                return partialResult + amountDecimal
+        let totalWalletAmount = tokens
+            .filter { $0.isClaimableToken }
+            .reduce(0.0) { total, token in
+                let isZChainToken = ZeroWalletChainsUtil.shared.isZChain(token.chainId)
+                let tokenAmount = isZChainToken
+                    ? ZeroWalletUtil.shared.meowPrice(tokenAmount: token.amount.description, refPrice: state.meowPrice)
+                    : token.tokenPrice()
+                return total + tokenAmount
             }
-        state.walletBalance = ZeroWalletUtil.shared.meowPrice(tokenAmount: totalAmount.description, refPrice: state.meowPrice)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+            self.state.walletBalance = totalWalletAmount
+        })
     }
     
     private func viewWalletTransactionDetails(_ walletTransactionId: String, chainId: UInt64?) {

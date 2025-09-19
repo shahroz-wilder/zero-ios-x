@@ -42,6 +42,10 @@ extension ZWalletToken {
         return ZeroWalletUtil.shared.tokenPriceFormatted(tokenAmount: amount, tPrice: price)
     }
     
+    func tokenPrice() -> Double {
+        return ZeroWalletUtil.shared.tokenPrice(tokenAmount: amount, price: price)
+    }
+    
     var isMeowToken: Bool {
         return symbol.lowercased() == "MEOW".lowercased()
     }

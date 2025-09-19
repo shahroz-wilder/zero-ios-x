@@ -52,10 +52,10 @@ struct CompletedTransactionView: View {
                     }
                     .padding(.top, 12)
                     
-                    Text(ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: context.transferAmount, refPrice: context.viewState.meowPrice))
-                        .font(.compound.bodyLGSemibold)
-                        .foregroundStyle(.compound.textSecondary)
-                        .padding(.top, 4)
+//                    Text(ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: context.transferAmount, refPrice: context.viewState.meowPrice))
+//                        .font(.compound.bodyLGSemibold)
+//                        .foregroundStyle(.compound.textSecondary)
+//                        .padding(.top, 4)
                 }
                 
                 Spacer()
