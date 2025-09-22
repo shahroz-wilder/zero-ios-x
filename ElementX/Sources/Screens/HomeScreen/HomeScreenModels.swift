@@ -444,6 +444,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
         name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
     }
     
+    let isPublic: Bool
+    
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
                        roomID: nil,
@@ -458,7 +460,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        avatar: .room(id: "", name: "", avatarURL: nil),
                        canonicalAlias: nil,
                        isTombstoned: false,
-                       unreadNotificationsCount: 0)
+                       unreadNotificationsCount: 0,
+                       isPublic: false)
     }
 }
 
@@ -678,7 +681,8 @@ extension HomeScreenRoom {
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias,
                   isTombstoned: summary.isTombstoned,
-                  unreadNotificationsCount: summary.unreadMessagesCount // settings to unread messages count to show new messages count only
+                  unreadNotificationsCount: summary.unreadMessagesCount, // settings to unread messages count to show new messages count only
+                  isPublic: summary.room.encryptionState() == .notEncrypted
         )
     }
 }

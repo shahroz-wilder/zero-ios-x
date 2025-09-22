@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeScreenChannelCell: View {
     let channel: HomeScreenChannel
     let onChannelSelected: (HomeScreenChannel) -> Void
+    let mediaProvider: MediaProviderProtocol?
     
     var attributedDisplayName: AttributedString {
         var channelAttributedName = AttributedString(channel.displayName)
@@ -23,6 +24,12 @@ struct HomeScreenChannelCell: View {
     
     var body: some View {
         HStack {
+            LoadableAvatarImage(url: nil,
+                                name: channel.displayName,
+                                contentID: channel.id,
+                                avatarSize: .room(on: .chats),
+                                mediaProvider: mediaProvider)
+                        
             Text(attributedDisplayName)
                 .font(.zero.bodyLG)
                 .foregroundStyle(channel.notificationsCount > 0 ? .compound.textPrimary : .compound.textSecondary)
@@ -41,6 +48,6 @@ struct HomeScreenChannelCell: View {
             onChannelSelected(channel)
         }
         .padding(.vertical, 12)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, 16)
     }
 }
