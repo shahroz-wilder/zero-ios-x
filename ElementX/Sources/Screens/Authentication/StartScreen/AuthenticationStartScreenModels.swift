@@ -49,6 +49,8 @@ struct AuthenticationStartScreenViewState: BindableState {
     let showCreateAccountButton: Bool
     let showQRCodeLoginButton: Bool
     
+    let hideBrandChrome: Bool
+    
     var bindings = AuthenticationStartScreenViewStateBindings()
     
     var loginButtonTitle: String {

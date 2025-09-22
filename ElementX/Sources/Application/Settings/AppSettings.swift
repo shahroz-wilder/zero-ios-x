@@ -62,6 +62,8 @@ final class AppSettings {
         case spacesEnabled
         case developerOptionsEnabled
         case nextGenHTMLParserEnabled
+        case linkPreviewsEnabled
+        case latestEventSorterEnabled
         
         case zeroAccessToken
         case zeroRewardsCredit
@@ -113,6 +115,7 @@ final class AppSettings {
     // swiftlint:disable:next function_parameter_count
     func override(accountProviders: [String],
                   allowOtherAccountProviders: Bool,
+                  hideBrandChrome: Bool,
                   pushGatewayBaseURL: URL,
                   oidcRedirectURL: URL,
                   websiteURL: URL,
@@ -131,6 +134,7 @@ final class AppSettings {
                   mapTilerConfiguration: MapTilerConfiguration) {
         self.accountProviders = accountProviders
         self.allowOtherAccountProviders = allowOtherAccountProviders
+        self.hideBrandChrome = hideBrandChrome
         self.pushGatewayBaseURL = pushGatewayBaseURL
         self.oidcRedirectURL = oidcRedirectURL
         self.websiteURL = websiteURL
@@ -169,6 +173,8 @@ final class AppSettings {
     private(set) var accountProviders = [ZeroContants.accountProvider]
     /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
     private(set) var allowOtherAccountProviders = true
+    /// Whether the components surrounding the app brand/logo should be hidden or not
+    private(set) var hideBrandChrome = false
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
@@ -386,6 +392,12 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.nextGenHTMLParserEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var nextGenHTMLParserEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var linkPreviewsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.latestEventSorterEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var latestEventSorterEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
