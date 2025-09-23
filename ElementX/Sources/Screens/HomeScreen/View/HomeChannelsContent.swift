@@ -8,13 +8,9 @@
 import SwiftUI
 
 enum HomeChannelsTab: CaseIterable {
-    case channels
-    case rooms
-}
-
-enum HomeChannelsRoomTab: CaseIterable {
+    case all
+    case gated
     case muted
-    case unencrypted
 }
 
 struct HomeChannelsContent: View {
@@ -23,14 +19,13 @@ struct HomeChannelsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    @State private var selectedTab: HomeChannelsTab = .channels
-    @State private var selectedChannelRoomTab: HomeChannelsRoomTab = .muted
+    @State private var selectedTab: HomeChannelsTab = .all
     
     var body: some View {
         VStack(spacing: 0) {
             topSection
             
-            if selectedTab == .channels {
+            if selectedTab == .gated {
                 channelList
             } else {
                 roomList
@@ -103,8 +98,7 @@ struct HomeChannelsContent: View {
                     }
                 case .rooms:
                     LazyVStack(spacing: 0) {
-                        channelRoomTabSection
-                        HomeScreenRoomList(context: context, fromChannelsTabs: true, channelMutedCategory: selectedChannelRoomTab == .muted)
+                        HomeScreenRoomList(context: context, fromChannelsTabs: true, channelMutedCategory: selectedTab == .muted)
                         
                         HomeTabBottomSpace()
                     }
@@ -163,39 +157,14 @@ struct HomeChannelsContent: View {
                              selectedTab: selectedTab,
                              tabTitle: { tab in
             switch tab {
-            case .channels: return "Channels"
-            case .rooms: return "Rooms"
+            case .all: return "All"
+            case .gated: return "Gated"
+            case .muted: return "Muted"
             }
         },
                              onTabSelected: { tab in
             selectedTab = tab
         })
-    }
-    
-    @ViewBuilder
-    private var channelRoomTabSection: some View {
-        HStack {
-            ForEach(HomeChannelsRoomTab.allCases, id: \.self) { tab in
-                let title = tab == .muted ? "Muted" : "Un-Encrypted"
-                Button(action: {
-                    selectedChannelRoomTab = tab
-                }) {
-                    VStack(spacing: 0) {
-                        Text(title)
-                            .font(.compound.bodyMDSemibold)
-                            .foregroundStyle(tab == selectedChannelRoomTab ? .compound.textPrimary : .compound.textSecondary)
-                            .frame(maxWidth: .infinity)
-                        
-                        Rectangle()
-                            .fill(tab == selectedChannelRoomTab ? Color.zero.bgAccentRest : .clear)
-                            .frame(maxWidth: .infinity, maxHeight: 2)
-                            .cornerRadius(1.5)
-                            .padding(.top, 8)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-            }
-        }
     }
     
     /// FOR ROOMS LIST
