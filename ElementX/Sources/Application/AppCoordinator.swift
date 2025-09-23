@@ -691,6 +691,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                   elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactory(),
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
+                                                  linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
                                                   appSettings: appSettings,
                                                   appHooks: appHooks,
