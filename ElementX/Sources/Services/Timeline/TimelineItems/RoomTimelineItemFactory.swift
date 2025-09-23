@@ -602,7 +602,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             options: [],
             range: nsRange,
             withTemplate: "<a href=\"\(baseUrl)$2\(domain)\">@$2\(domain)</a>"
-        )
+        ).replacingOccurrences(of: "\n", with: "<br />")
         
         return "<p>\(modifiedText)</p>"
     }
