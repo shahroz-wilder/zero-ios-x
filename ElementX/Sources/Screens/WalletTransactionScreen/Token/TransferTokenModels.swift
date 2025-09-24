@@ -73,6 +73,7 @@ enum TransferTokenViewAction {
     case onRecipientSelected(WalletRecipient)
     case loadMoreTokenAssets
     case onTokenAssetSelected(HomeScreenWalletContent)
+    case onConfirmTransaction
     case onTransactionConfirmed
     case viewTransaction
     
@@ -116,6 +117,7 @@ enum TokenAssetsListMode: CustomStringConvertible {
 enum TransferTokenFlowState {
     case recipient
     case asset
+    case amount
     case confirmation
     case inProgress
     case completed

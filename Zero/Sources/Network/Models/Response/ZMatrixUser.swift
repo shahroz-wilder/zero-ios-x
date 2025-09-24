@@ -12,6 +12,7 @@ public struct ZMatrixUser: Codable, Identifiable {
     public let profileSummary: ZMatrixUserProfile?
     public let primaryZID: String?
     public let primaryWalletAddress: String?
+    public let zeroWalletAddress: String?
     public let wallets: [ZWallet]?
     public let subscriptions: ZeroSubscription?
     
@@ -52,8 +53,7 @@ extension ZMatrixUser {
     }
     
     var publicWalletAddress: String? {
-//        primaryWalletAddress ?? thirdWebWalletAddress
-        thirdWebWalletAddress
+        zeroWalletAddress
     }
     
     var thirdWebWalletAddress: String? {

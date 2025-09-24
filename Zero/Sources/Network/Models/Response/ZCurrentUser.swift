@@ -11,6 +11,7 @@ public struct ZCurrentUser: Codable, Identifiable {
     public let totalRewards: String?
     public let wallets: [ZWallet]?
     public let primaryWalletAddress: String?
+    public let zeroWalletAddress: String?
     public let followersCount: String?
     public let followingCount: String?
     public let subscriptions: ZeroSubscription
@@ -39,6 +40,7 @@ public struct ZCurrentUser: Codable, Identifiable {
         totalRewards: nil,
         wallets: nil,
         primaryWalletAddress: nil,
+        zeroWalletAddress: nil,
         followersCount: "0",
         followingCount: "0",
         subscriptions: .init(wilderPro: false, zeroPro: false)
@@ -72,8 +74,7 @@ extension ZCurrentUser {
     }
     
     var publicWalletAddress: String? {
-//        primaryWalletAddress ?? thirdWebWalletAddress
-        thirdWebWalletAddress
+        zeroWalletAddress
     }
     
     var thirdWebWalletAddress: String? {

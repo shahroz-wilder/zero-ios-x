@@ -71,6 +71,8 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
             loadWalletTokenBalances()
         case .onTokenAssetSelected(let asset):
             state.tokenAsset = _walletTokenAssets.first { $0.tokenAddress == asset.id }
+            setFlowState(.amount)
+        case .onConfirmTransaction:
             setFlowState(.confirmation)
         case .onTransactionConfirmed:
             performTokenTransaction()

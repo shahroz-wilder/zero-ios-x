@@ -1828,8 +1828,8 @@
 		7909225C2E1E674300833940 /* ZWalletRecipients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7909225A2E1E673E00833940 /* ZWalletRecipients.swift */; };
 		7909225E2E1F13BB00833940 /* SelectTokenAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7909225D2E1F13B300833940 /* SelectTokenAssetView.swift */; };
 		7909225F2E1F13BB00833940 /* SelectTokenAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7909225D2E1F13B300833940 /* SelectTokenAssetView.swift */; };
-		790922612E1F264C00833940 /* ConfirmTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922602E1F264300833940 /* ConfirmTransactionView.swift */; };
-		790922622E1F264C00833940 /* ConfirmTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922602E1F264300833940 /* ConfirmTransactionView.swift */; };
+		790922612E1F264C00833940 /* ConfirmAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922602E1F264300833940 /* ConfirmAmountView.swift */; };
+		790922622E1F264C00833940 /* ConfirmAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922602E1F264300833940 /* ConfirmAmountView.swift */; };
 		790922642E1FB1F900833940 /* SwipeToConfirmButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922632E1FB1EE00833940 /* SwipeToConfirmButton.swift */; };
 		790922652E1FB1F900833940 /* SwipeToConfirmButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922632E1FB1EE00833940 /* SwipeToConfirmButton.swift */; };
 		790922672E1FBC0600833940 /* CompletedTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922662E1FBBFB00833940 /* CompletedTransactionView.swift */; };
@@ -2126,6 +2126,8 @@
 		799E1D1D2DBBA8BB00E3D512 /* ZLinkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */; };
 		799E1D202DBF7DDA00E3D512 /* TimelineLinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */; };
 		799E1D212DBF7DDA00E3D512 /* TimelineLinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */; };
+		799FE30E2E839B2E00CA6ACE /* ConfirmTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799FE30D2E839B2E00CA6ACE /* ConfirmTransactionView.swift */; };
+		799FE30F2E839B2E00CA6ACE /* ConfirmTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799FE30D2E839B2E00CA6ACE /* ConfirmTransactionView.swift */; };
 		79A49F702D917196005D365D /* TraceLogPack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7149BDDE47F8AD104E644E2 /* TraceLogPack.swift */; };
 		79AB3A892E252A4900E94E54 /* PostActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A882E252A3600E94E54 /* PostActions.swift */; };
 		79AB3A8A2E252A4900E94E54 /* PostActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A882E252A3600E94E54 /* PostActions.swift */; };
@@ -3857,7 +3859,7 @@
 		790922572E1E572200833940 /* SearchRecipientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecipientView.swift; sourceTree = "<group>"; };
 		7909225A2E1E673E00833940 /* ZWalletRecipients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletRecipients.swift; sourceTree = "<group>"; };
 		7909225D2E1F13B300833940 /* SelectTokenAssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTokenAssetView.swift; sourceTree = "<group>"; };
-		790922602E1F264300833940 /* ConfirmTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransactionView.swift; sourceTree = "<group>"; };
+		790922602E1F264300833940 /* ConfirmAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmAmountView.swift; sourceTree = "<group>"; };
 		790922632E1FB1EE00833940 /* SwipeToConfirmButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToConfirmButton.swift; sourceTree = "<group>"; };
 		790922662E1FBBFB00833940 /* CompletedTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedTransactionView.swift; sourceTree = "<group>"; };
 		790922692E1FC01200833940 /* WalletTransactionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletTransactionProtocol.swift; sourceTree = "<group>"; };
@@ -3968,6 +3970,7 @@
 		799E1D182DBBA85400E3D512 /* ZeroMetaDataApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMetaDataApi.swift; sourceTree = "<group>"; };
 		799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLinkPreview.swift; sourceTree = "<group>"; };
 		799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineLinkPreviewView.swift; sourceTree = "<group>"; };
+		799FE30D2E839B2E00CA6ACE /* ConfirmTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransactionView.swift; sourceTree = "<group>"; };
 		79A106D76741914F82664959 /* StateStoreViewModelV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStoreViewModelV2.swift; sourceTree = "<group>"; };
 		79AB3A882E252A3600E94E54 /* PostActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostActions.swift; sourceTree = "<group>"; };
 		79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMediaPreview.swift; sourceTree = "<group>"; };
@@ -7220,8 +7223,9 @@
 		790922472E1DCBDE00833940 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				799FE30D2E839B2E00CA6ACE /* ConfirmTransactionView.swift */,
 				790922662E1FBBFB00833940 /* CompletedTransactionView.swift */,
-				790922602E1F264300833940 /* ConfirmTransactionView.swift */,
+				790922602E1F264300833940 /* ConfirmAmountView.swift */,
 				790922572E1E572200833940 /* SearchRecipientView.swift */,
 				7909225D2E1F13B300833940 /* SelectTokenAssetView.swift */,
 				790922632E1FB1EE00833940 /* SwipeToConfirmButton.swift */,
@@ -11022,6 +11026,7 @@
 				799E1D1A2DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */,
 				18E9A58F2C9829970082DDA4 /* MessageComposer.swift in Sources */,
 				790181672E453C1C0083B4BB /* StateMachineFactory.swift in Sources */,
+				799FE30F2E839B2E00CA6ACE /* ConfirmTransactionView.swift in Sources */,
 				18E9A5902C9829970082DDA4 /* MessageComposerTextField.swift in Sources */,
 				18E9A5912C9829970082DDA4 /* MessageForwardingScreen.swift in Sources */,
 				79F31B222E02BB140043E100 /* RemoteConfigManager.swift in Sources */,
@@ -11199,7 +11204,7 @@
 				18E9A6032C9829970082DDA4 /* ReadMarkerRoomTimelineView.swift in Sources */,
 				18E9A6042C9829970082DDA4 /* ReadReceipt.swift in Sources */,
 				18E9A6052C9829970082DDA4 /* ReadReceiptCell.swift in Sources */,
-				790922612E1F264C00833940 /* ConfirmTransactionView.swift in Sources */,
+				790922612E1F264C00833940 /* ConfirmAmountView.swift in Sources */,
 				790181662E453BE80083B4BB /* SpaceExplorerFlowCoordinator.swift in Sources */,
 				18E9A6062C9829970082DDA4 /* ReadReceiptsSummaryView.swift in Sources */,
 				79C6F7222DF82440003CEBB9 /* AdvancedSettingsScreenCoordinator.swift in Sources */,
@@ -11957,7 +11962,7 @@
 				1950A80CD198BED283DFC2CE /* ClientProxy.swift in Sources */,
 				DDFBDEE1DC32BDD5488F898C /* ClientProxyMock.swift in Sources */,
 				24BDDD09A90B8BFE3793F3AA /* ClientProxyProtocol.swift in Sources */,
-				790922622E1F264C00833940 /* ConfirmTransactionView.swift in Sources */,
+				790922622E1F264C00833940 /* ConfirmAmountView.swift in Sources */,
 				41C5DA0C06F30311A221E85B /* ClientSDKMock.swift in Sources */,
 				0C797CD650DFD2876BEC5173 /* CollapsibleReactionLayout.swift in Sources */,
 				78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */,
@@ -12832,6 +12837,7 @@
 				A808DC3F72D15C6C5A52317E /* TimelineItemDebugView.swift in Sources */,
 				877D3CE8680536DB430DE6A2 /* TimelineItemIdentifier.swift in Sources */,
 				C0B97FFEC0083F3A36609E61 /* TimelineItemMacContextMenu.swift in Sources */,
+				799FE30E2E839B2E00CA6ACE /* ConfirmTransactionView.swift in Sources */,
 				6C98153D60FF9B648C166C27 /* TimelineItemMenu.swift in Sources */,
 				AE07F215EBC2B9CBF17AA54B /* TimelineItemMenuAction.swift in Sources */,
 				7903937B2D4D62C70022E293 /* HomePostsContent.swift in Sources */,

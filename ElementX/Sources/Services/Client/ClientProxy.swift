@@ -1148,7 +1148,7 @@ class ClientProxy: ClientProxyProtocol {
             if currentUser.matrixId == nil {
                 _ = try await zeroApiProxy.createAccountApi.linkMatrixUserToZero(matrixUserId: userID)
             }
-            let thirdWebWalletAddress = currentUser.wallets?.first(where: { $0.isThirdWeb })
+            let thirdWebWalletAddress = currentUser.thirdWebWalletAddress
             if thirdWebWalletAddress == nil {
                 _ = try await zeroApiProxy.walletsApi.initializeThirdWebWallet()
                 _ = try await fetchZeroCurrentUser()

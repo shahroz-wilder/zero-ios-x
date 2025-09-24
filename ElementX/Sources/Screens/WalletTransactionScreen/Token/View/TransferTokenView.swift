@@ -15,6 +15,7 @@ struct TransferTokenView: View {
     var navigationTitle: String {
         switch context.viewState.transferTokenFlowState {
         case .asset: "Select Asset"
+        case .confirmation: "Review"
         case .completed: "Sent"
         case .failure: "Failed"
         default: "Send"
@@ -32,6 +33,16 @@ struct TransferTokenView: View {
             
             if flowState == .asset {
                 SelectTokenAssetView(context: context, scrollViewAdapter: scrollViewAdapter)
+                    .transition(
+                        .asymmetric(
+                            insertion: isNavigatingForward ? .move(edge: .trailing) : .identity,
+                            removal: isNavigatingForward ? .identity : .move(edge: .trailing)
+                        )
+                    )
+            }
+            
+            if flowState == .amount {
+                ConfirmAmountView(context: context)
                     .transition(
                         .asymmetric(
                             insertion: isNavigatingForward ? .move(edge: .trailing) : .identity,
@@ -90,8 +101,11 @@ struct TransferTokenView: View {
                         if flowState == .asset {
                             context.send(viewAction: .goToFlowState(.recipient))
                         }
-                        if flowState == .confirmation {
+                        if flowState == .amount {
                             context.send(viewAction: .goToFlowState(.asset))
+                        }
+                        if flowState == .confirmation {
+                            context.send(viewAction: .goToFlowState(.amount))
                         }
                     }
             }
