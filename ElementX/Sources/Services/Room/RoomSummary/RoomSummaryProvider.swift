@@ -111,8 +111,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             stateUpdatesTaskHandle = stateUpdatesSubscriptionResult.stateStream
             
             stateSubject.send(RoomSummaryProviderState(roomListState: stateUpdatesSubscriptionResult.state))
+            ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                "execution": "RoomSummaryProvider",
+                "call": "setRoomList",
+                "message": "set up rooms list successful"
+            ])
         } catch {
             MXLog.error("Failed setting up room list entry listener with error: \(error)")
+            ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                "execution": "RoomSummaryProvider",
+                "call": "setRoomList",
+                "message": "set up rooms list failed with error: \(error)"
+            ])
         }
     }
     
@@ -190,8 +200,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 Task { [weak self] in
                     do {
                         try await self?.roomListService.subscribeToRooms(roomIds: roomIDs)
+                        ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                            "execution": "RoomSummaryProvider",
+                            "call": "setupVisibleRangeObservers",
+                            "state": "Subscribed to rooms"
+                        ])
                     } catch {
                         MXLog.error("Failed subscribing to rooms with error: \(error)")
+                        ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                            "execution": "RoomSummaryProvider",
+                            "call": "setupVisibleRangeObservers",
+                            "state": "Failed subscribing to rooms with error: \(error)"
+                        ])
                     }
                 }
             }
@@ -208,16 +228,30 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         rooms = diffs.reduce(rooms) { currentItems, diff in
             processDiff(diff, on: currentItems)
         }
+        ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+            "execution": "RoomSummaryProvider",
+            "call": "updateRoomsWithDiffs",
+        ])
     }
     
     private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary]) -> [RoomSummary] {
         guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
             MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
+            ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                "execution": "RoomSummaryProvider",
+                "call": "processDiff",
+                "state": "Failed building CollectionDifference from \(diff)"
+            ])
             return currentItems
         }
         
         guard let updatedItems = currentItems.applying(collectionDiff) else {
             MXLog.error("\(name): Failed applying diff: \(collectionDiff)")
+            ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                "execution": "RoomSummaryProvider",
+                "call": "processDiff",
+                "state": "\(name): Failed applying diff: \(collectionDiff)"
+            ])
             return currentItems
         }
         

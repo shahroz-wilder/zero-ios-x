@@ -22,41 +22,40 @@ struct HomeChannelsContent: View {
     @State private var selectedTab: HomeChannelsTab = .all
     
     var body: some View {
-        VStack(spacing: 0) {
-            topSection
-            
-            if selectedTab == .gated {
-                channelList
-            } else {
-                roomList
-            }
+        if selectedTab == .gated {
+            channelList
+        } else {
+            roomList
         }
     }
     
     private var channelList: some View {
         GeometryReader { geometry in
             ScrollView {
-                switch context.viewState.channelsListMode {
-                case .skeletons:
-                    LazyVStack(alignment: .leading, spacing: 0) {
-                        ForEach(context.viewState.visibleChannels) { channel in
-                            HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
-                                .redacted(reason: .placeholder)
-                                .shimmer()
+                LazyVStack(spacing: 0) {
+                    topSection
+                    switch context.viewState.channelsListMode {
+                    case .skeletons:
+                        LazyVStack(alignment: .leading, spacing: 0) {
+                            ForEach(context.viewState.visibleChannels) { channel in
+                                HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
+                                    .redacted(reason: .placeholder)
+                                    .shimmer()
+                            }
                         }
-                    }
-                    .disabled(true)
-                case .empty:
-                    HomeContentEmptyView(message: "No channels")
-                case .channels:
-                    LazyVStack(alignment: .leading, spacing: 0) {
-                        ForEach(context.viewState.visibleChannels, id: \.id) { channel in
-                            HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
-                                context.send(viewAction: .channelTapped(channel))
-                            }, mediaProvider: context.mediaProvider)
+                        .disabled(true)
+                    case .empty:
+                        HomeContentEmptyView(message: "No channels")
+                    case .channels:
+                        LazyVStack(alignment: .leading, spacing: 0) {
+                            ForEach(context.viewState.visibleChannels, id: \.id) { channel in
+                                HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
+                                    context.send(viewAction: .channelTapped(channel))
+                                }, mediaProvider: context.mediaProvider)
+                            }
+                            
+                            HomeTabBottomSpace()
                         }
-                        
-                        HomeTabBottomSpace()
                     }
                 }
             }
@@ -78,29 +77,32 @@ struct HomeChannelsContent: View {
     private var roomList: some View {
         GeometryReader { geometry in
             ScrollView {
-                switch context.viewState.roomListMode {
-                case .skeletons:
-                    LazyVStack(spacing: 0) {
-                        ForEach(context.viewState.visibleRooms) { room in
-                            HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
-                                .redacted(reason: .placeholder)
-                                .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
+                LazyVStack(spacing: 0) {
+                    topSection
+                    switch context.viewState.roomListMode {
+                    case .skeletons:
+                        LazyVStack(spacing: 0) {
+                            ForEach(context.viewState.visibleRooms) { room in
+                                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
+                                    .redacted(reason: .placeholder)
+                                    .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
+                            }
                         }
-                    }
-                    .disabled(true)
-                    .accessibilityRepresentation {
-                        Text(L10n.commonLoading)
-                    }
-                case .empty:
-                    HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
-                        HomeScreenEmptyStateView(context: context)
-                            .layoutPriority(1)
-                    }
-                case .rooms:
-                    LazyVStack(spacing: 0) {
-                        HomeScreenRoomList(context: context, fromChannelsTabs: true, channelMutedCategory: selectedTab == .muted)
-                        
-                        HomeTabBottomSpace()
+                        .disabled(true)
+                        .accessibilityRepresentation {
+                            Text(L10n.commonLoading)
+                        }
+                    case .empty:
+                        HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
+                            HomeScreenEmptyStateView(context: context)
+                                .layoutPriority(1)
+                        }
+                    case .rooms:
+                        LazyVStack(spacing: 0) {
+                            HomeScreenRoomList(context: context, fromChannelsTabs: true, channelMutedCategory: selectedTab == .muted)
+                            
+                            HomeTabBottomSpace()
+                        }
                     }
                 }
             }
@@ -157,7 +159,7 @@ struct HomeChannelsContent: View {
                              selectedTab: selectedTab,
                              tabTitle: { tab in
             switch tab {
-            case .all: return "All"
+            case .all: return "Channels"
             case .gated: return "Gated"
             case .muted: return "Muted"
             }
