@@ -125,9 +125,9 @@ private struct ReactionSummarySenderView: View {
                         .font(.zero.bodyXS)
                         .foregroundColor(.compound.textSecondary)
                 }
-                Text(sender.id)
-                    .font(.zero.bodySM)
-                    .foregroundColor(.compound.textSecondary)
+//                Text(sender.id)
+//                    .font(.zero.bodySM)
+//                    .foregroundColor(.compound.textSecondary)
             }
         }
         
