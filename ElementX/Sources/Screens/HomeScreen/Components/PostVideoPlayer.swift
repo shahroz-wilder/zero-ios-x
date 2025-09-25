@@ -50,12 +50,6 @@ private final class VideoPlayerViewModel: ObservableObject {
         playerItemObservation = item.observe(\.status, options: [.new, .initial]) { [weak self] item, _ in
             if item.status == .failed {
                 self?.setFailedToLoad(failed: true)
-                ZeroCustomEventService.shared.feedScreenEvent(parameters: [
-                    "type": "Feed Media Preview Video",
-                    "status": "Failure",
-                    "mediaUrl": url.absoluteString,
-                    "error": item.error?.localizedDescription ?? "Unknown error"
-                ])
             }
             
             if item.status == .readyToPlay {

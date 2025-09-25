@@ -17,6 +17,13 @@ struct HomeScreenRoomList: View {
         // Hide the room list when the search bar is focused but the query is empty
         // This works hand in hand with the room list service layer filtering and
         // avoids glitches when focusing the search bar
+        let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+            "execution": "HomeScreenRoomList",
+            "view": "showing rooms list",
+            "shouldHideRoomList": context.viewState.shouldHideRoomList.description,
+            "fromChannelsTab": fromChannelsTabs.description,
+            "channelMutedCategory": channelMutedCategory.description
+        ])
         if !context.viewState.shouldHideRoomList {
             content
         }
@@ -27,7 +34,14 @@ struct HomeScreenRoomList: View {
         let roomsList = context.viewState.visibleRooms.filter { !$0.name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) }
         let subRoomsList = fromChannelsTabs
         ? roomsList.filter { channelMutedCategory ? $0.badges.isMuteShown : !$0.isEncrypted }
-        : roomsList.filter { !$0.badges.isMuteShown && $0.isEncrypted }
+        : roomsList.filter { $0.isPriority }
+        
+        let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+            "execution": "HomeScreenRoomList",
+            "view": "showing rooms list",
+            "roomsListCount": "\(roomsList.count)",
+            "subRoomsListCount": "\(subRoomsList.count)",
+        ])
         
         ForEach(subRoomsList) { room in
             switch room.type {

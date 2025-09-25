@@ -20,6 +20,10 @@ struct HomeScreenContent: View {
             roomList
                 .sentryTrace("\(Self.self)")
                 .task {
+                    ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                        "execution": "HomeScreenContent",
+                        "view": "preparing to show rooms list",
+                    ])
                     context.send(viewAction: .loadRewards)
                 }
             
@@ -43,6 +47,10 @@ struct HomeScreenContent: View {
             ScrollView {
                 switch context.viewState.roomListMode {
                 case .skeletons:
+                    let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                        "execution": "HomeScreenContent",
+                        "view": "showing skeletons",
+                    ])
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleRooms) { room in
                             HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
@@ -55,6 +63,10 @@ struct HomeScreenContent: View {
                         Text(L10n.commonLoading)
                     }
                 case .empty:
+                    let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                        "execution": "HomeScreenContent",
+                        "view": "showing empty state",
+                    ])
                     HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
                         topSection
                         
@@ -63,8 +75,13 @@ struct HomeScreenContent: View {
                     }
                 case .rooms:
                     LazyVStack(spacing: 0) {
+                        let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
+                            "execution": "HomeScreenContent",
+                            "view": "showing rooms",
+                            "shouldShowEmptyFilterState": context.viewState.shouldShowEmptyFilterState.description
+                        ])
                         if !context.viewState.shouldShowEmptyFilterState {
-                            HomeScreenRoomList(context: context)
+                            HomeScreenRoomList(context: context, fromChannelsTabs: false)
                                 .isSearching($context.isSearchFieldFocused)
                                 .searchable(text: $context.searchQuery)
                                 .compoundSearchField()

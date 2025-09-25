@@ -27,13 +27,6 @@ struct PostImageViewer: View {
             KFAnimatedImage(mediaUrl)
                 .placeholder { ProgressView() }
                 .onFailure { error in
-                    ZeroCustomEventService.shared.feedScreenEvent(parameters: [
-                        "type": "Feed Media Preview Image",
-                        "status": "Failure",
-                        "mediaId" : mediaInfo.id,
-                        "mediaUrl": mediaUrl.absoluteString,
-                        "error": error.localizedDescription
-                    ])
                     didFail = true
                 }
                 .onSuccess { _ in

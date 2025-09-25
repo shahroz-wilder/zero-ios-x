@@ -444,6 +444,10 @@ struct HomeScreenRoom: Identifiable, Equatable {
         name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
     }
     
+    var isPriority: Bool {
+        badges.isMuteShown == false && isEncrypted
+    }
+    
     let isEncrypted: Bool
     
     static func placeholder() -> HomeScreenRoom {
