@@ -93,7 +93,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         do {
             listUpdatesSubscriptionResult = try roomList.entriesWithDynamicAdaptersWith(pageSize: UInt32(roomListPageSize),
-                                                                                    enableLatestEventSorter: appSettings.lowPriorityFilterEnabled,
+                                                                                    enableLatestEventSorter: appSettings.latestEventSorterEnabled,
                                                                                     listener: SDKListener { [weak self] updates in
                                                                                         guard let self else { return }
                                                                                         diffsPublisher.send(updates)
@@ -308,7 +308,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            hasOngoingCall: roomInfo.hasRoomCall,
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite,
-                           isTombstoned: roomInfo.successorRoom != nil)
+                           isTombstoned: roomInfo.successorRoom != nil,
+                           isEncrypted: roomInfo.encryptionState == .encrypted)
     }
     
     private func getDisplayNameFromRoomInfo(_ roomInfo: RoomInfo, isDirectRoom: Bool) -> String? {

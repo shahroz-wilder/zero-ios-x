@@ -26,8 +26,8 @@ struct HomeScreenRoomList: View {
     private var content: some View {
         let roomsList = context.viewState.visibleRooms.filter { !$0.name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) }
         let subRoomsList = fromChannelsTabs
-        ? roomsList.filter { channelMutedCategory ? $0.badges.isMuteShown : $0.isPublic }
-        : roomsList.filter { !$0.badges.isMuteShown && !$0.isPublic }
+        ? roomsList.filter { channelMutedCategory ? $0.badges.isMuteShown : !$0.isEncrypted }
+        : roomsList.filter { !$0.badges.isMuteShown && $0.isEncrypted }
         
         ForEach(subRoomsList) { room in
             switch room.type {

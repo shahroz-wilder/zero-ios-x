@@ -219,7 +219,8 @@ private extension HomeScreenRoom {
                                   hasOngoingCall: false,
                                   isMarkedUnread: false,
                                   isFavourite: false,
-                                  isTombstoned: false)
+                                  isTombstoned: false,
+                                  isEncrypted: false)
         
         return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
@@ -249,7 +250,8 @@ private extension HomeScreenRoom {
                                   hasOngoingCall: false,
                                   isMarkedUnread: false,
                                   isFavourite: false,
-                                  isTombstoned: false)
+                                  isTombstoned: false,
+                                  isEncrypted: false)
         
         return .init(summary: summary, hideUnreadMessagesBadge: false)
     }

@@ -56,6 +56,7 @@ struct RoomSummary {
     let isMarkedUnread: Bool
     let isFavourite: Bool
     let isTombstoned: Bool
+    let isEncrypted: Bool
     
     var hasUnreadMessages: Bool { unreadMessagesCount > 0 }
     var hasUnreadMentions: Bool { unreadMentionsCount > 0 }
@@ -132,6 +133,7 @@ extension RoomSummary {
         isMarkedUnread = false
         isFavourite = false
         isTombstoned = false
+        isEncrypted = room.encryptionState() == .encrypted
     }
     
     // This doesn't have to work properly for DM invites, the heroes are always empty
