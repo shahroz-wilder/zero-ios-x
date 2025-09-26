@@ -31,19 +31,17 @@ struct HomeScreenRoomList: View {
     
     @ViewBuilder
     private var content: some View {
-        let roomsList = context.viewState.visibleRooms.filter { !$0.name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) }
-        let subRoomsList = fromChannelsTabs
-        ? roomsList.filter { channelMutedCategory ? $0.badges.isMuteShown : !$0.isEncrypted }
-        : roomsList.filter { $0.isPriority }
+        let roomsList = fromChannelsTabs
+        ? context.viewState.visibleRooms.filter { channelMutedCategory ? $0.isMuted : $0.isSecondary }
+        : context.viewState.visibleRooms.filter { $0.isPrimary }
         
         let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
             "execution": "HomeScreenRoomList",
             "view": "showing rooms list",
-            "roomsListCount": "\(roomsList.count)",
-            "subRoomsListCount": "\(subRoomsList.count)",
+            "roomsListCount": "\(roomsList.count)"
         ])
         
-        ForEach(subRoomsList) { room in
+        ForEach(roomsList) { room in
             switch room.type {
             case .placeholder:
                 HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)

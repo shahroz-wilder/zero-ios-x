@@ -43,4 +43,8 @@ public extension String {
     func trim() -> String {
         return self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
+    
+    func containsIgnoringCase(_ other: String) -> Bool {
+        return self.range(of: other, options: .caseInsensitive) != nil
+    }
 }

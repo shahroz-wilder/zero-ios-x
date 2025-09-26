@@ -11,6 +11,13 @@ import Foundation
 import MatrixRustSDK
 import OrderedCollections
 
+enum ZeroRoomListFilter: CaseIterable {
+    case primaryRooms
+    case secondaryRooms
+    case mutedRooms
+    case channels
+}
+
 enum RoomListFilter: Int, CaseIterable, Identifiable {
     var id: Int {
         rawValue
@@ -92,10 +99,12 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
+    private(set) var activeZeroFilter: ZeroRoomListFilter
     private let appSettings: AppSettings
     
-    init(activeFilters: OrderedSet<RoomListFilter> = [], appSettings: AppSettings) {
+    init(activeFilters: OrderedSet<RoomListFilter> = [], activeZeroFilter: ZeroRoomListFilter = .primaryRooms, appSettings: AppSettings) {
         self.activeFilters = .init(activeFilters)
+        self.activeZeroFilter = activeZeroFilter
         self.appSettings = appSettings
     }
     
@@ -129,12 +138,18 @@ struct RoomListFiltersState {
         activeFilters.append(filter)
     }
     
+    mutating func activateZeroFilter(_ filter: ZeroRoomListFilter) {
+        activeZeroFilter = filter
+    }
+    
     mutating func deactivateFilter(_ filter: RoomListFilter) {
         activeFilters.remove(filter)
     }
     
     mutating func clearFilters() {
         activeFilters.removeAll()
+        // Set the zero filter to default value
+        activeZeroFilter = .primaryRooms
     }
     
     func isFilterActive(_ filter: RoomListFilter) -> Bool {

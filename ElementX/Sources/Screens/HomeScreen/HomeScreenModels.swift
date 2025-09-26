@@ -444,8 +444,16 @@ struct HomeScreenRoom: Identifiable, Equatable {
         name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
     }
     
-    var isPriority: Bool {
-        badges.isMuteShown == false && isEncrypted
+    var isPrimary: Bool {
+        !isAChannel && !badges.isMuteShown && isEncrypted
+    }
+    
+    var isSecondary: Bool {
+        !isAChannel && !badges.isMuteShown && !isEncrypted
+    }
+    
+    var isMuted: Bool {
+        !isAChannel && badges.isMuteShown
     }
     
     let isEncrypted: Bool

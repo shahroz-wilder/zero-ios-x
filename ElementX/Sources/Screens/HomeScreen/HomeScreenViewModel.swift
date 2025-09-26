@@ -496,10 +496,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             rooms.append(room)
         }
         
-        // In case the list is updated through filters and there is `.room` filter applied, we need to filter out channels
-        let activeFilters = state.bindings.filtersState.activeFilters
-        if activeFilters.contains(.rooms) {
-            rooms = rooms.filter { !$0.isAChannel }
+        // In case custom(zero) filters are applied, as per UI view, WHILE SEARCHING ONLY, we need to filter listing
+        if context.isSearchFieldFocused, !context.searchQuery.isEmpty {
+            switch context.filtersState.activeZeroFilter {
+            case .primaryRooms:
+                rooms = rooms.filter { $0.isPrimary }
+            case .secondaryRooms:
+                rooms = rooms.filter { $0.isSecondary }
+            case .mutedRooms:
+                rooms = rooms.filter { $0.isMuted }
+            case .channels:
+                rooms = rooms.filter { $0.isAChannel }
+            }
         }
         
         state.rooms = rooms.uniqued(on: { $0.id })

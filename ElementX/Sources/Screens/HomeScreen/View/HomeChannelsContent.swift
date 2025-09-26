@@ -22,10 +22,32 @@ struct HomeChannelsContent: View {
     @State private var selectedTab: HomeChannelsTab = .all
     
     var body: some View {
-        if selectedTab == .gated {
-            channelList
-        } else {
-            roomList
+        Group {
+            if selectedTab == .gated {
+                channelList
+            } else {
+                roomList
+            }
+        }
+        .isSearching($context.isSearchFieldFocused)
+        .searchable(text: $context.searchQuery)
+        .compoundSearchField()
+        .disableAutocorrection(true)
+        .onAppear {
+            context.filtersState.activateZeroFilter(.secondaryRooms)
+        }
+        .onDisappear {
+            context.filtersState.clearFilters()
+        }
+        .onChange(of: selectedTab) { _, newTab in
+            switch newTab {
+            case .all:
+                context.filtersState.activateZeroFilter(.secondaryRooms)
+            case .gated:
+                context.filtersState.activateZeroFilter(.channels)
+            case .muted:
+                context.filtersState.activateZeroFilter(.mutedRooms)
+            }
         }
     }
     
@@ -33,7 +55,9 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    topSection
+                    if !context.isSearchFieldFocused {
+                        topSection
+                    }
                     switch context.viewState.channelsListMode {
                     case .skeletons:
                         LazyVStack(alignment: .leading, spacing: 0) {
@@ -48,7 +72,12 @@ struct HomeChannelsContent: View {
                         HomeContentEmptyView(message: "No channels")
                     case .channels:
                         LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach(context.viewState.visibleChannels, id: \.id) { channel in
+                            let channelsList = if context.isSearchFieldFocused {
+                                context.viewState.visibleChannels.filter { $0.displayName.containsIgnoringCase(context.searchQuery) }
+                            } else {
+                                context.viewState.visibleChannels
+                            }
+                            ForEach(channelsList, id: \.id) { channel in
                                 HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
                                     context.send(viewAction: .channelTapped(channel))
                                 }, mediaProvider: context.mediaProvider)
@@ -78,7 +107,9 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    topSection
+                    if !context.isSearchFieldFocused {
+                        topSection
+                    }
                     switch context.viewState.roomListMode {
                     case .skeletons:
                         LazyVStack(spacing: 0) {

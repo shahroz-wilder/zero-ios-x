@@ -40,6 +40,9 @@ struct HomeScreenContent: View {
                 EmptyView()
             }
         }
+        .onAppear {
+            context.filtersState.activateZeroFilter(.primaryRooms)
+        }
     }
     
     private var roomList: some View {
