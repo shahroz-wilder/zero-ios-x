@@ -43,3 +43,15 @@ extension WalletRecipient {
         }
     }
 }
+
+extension WalletRecipient {
+    init(walletAddress: String) {
+        let customId = UUID().uuidString
+        self.init(userId: customId,
+                  matrixId: customId,
+                  publicAddress: walletAddress,
+                  name: "External Wallet",
+                  profileImage: nil,
+                  primaryZid: nil)
+    }
+}

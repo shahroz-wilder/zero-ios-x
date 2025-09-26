@@ -98,7 +98,14 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                 switch result {
                 case .success(let recipients):
                     if recipients.isEmpty {
-                        state.recipientsListMode = .empty
+                        let isQueryWalletAddress = ZeroWalletUtil.shared.isValidEthereumAddress(query)
+                        if isQueryWalletAddress {
+                            //Add the address as an external wallet in the list
+                            let externalWallet = WalletRecipient.init(walletAddress: query)
+                            state.recipientsListMode = .recipients([externalWallet])
+                        } else {
+                            state.recipientsListMode = .empty
+                        }
                     } else {
                         state.recipientsListMode = .recipients(recipients)
                     }
