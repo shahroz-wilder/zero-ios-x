@@ -11,6 +11,8 @@ import UIKit
 struct ManageWalletsViewState: BindableState {
     var bindings: ManageWalletsViewStateBindings
     
+    var userZeroWalletAddress: String?
+    
     var wallets: [ZeroWallet] = []
     var connectedWalletAddress: String?
     
@@ -18,7 +20,7 @@ struct ManageWalletsViewState: BindableState {
         wallets.filter { !$0.isThirdWeb }
     }
     var zeroWallets: [ZeroWallet]  {
-        wallets.filter { $0.isThirdWeb }
+        wallets.filter { $0.isThirdWeb && $0.address == userZeroWalletAddress }
     }
     var firstSelfCustodyWallet: ZeroWallet? {
         selfCustodyWallets.first

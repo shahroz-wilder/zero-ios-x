@@ -27,6 +27,13 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
         super.init(initialViewState: .init(bindings: .init()))
         
         fetchUserWallets()
+        
+        userSession.clientProxy.zeroCurrentUserPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] currentUser in
+                self?.state.userZeroWalletAddress = currentUser.publicWalletAddress
+            }
+            .store(in: &cancellables)
                 
         AppKit.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
