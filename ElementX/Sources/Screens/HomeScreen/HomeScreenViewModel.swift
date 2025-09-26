@@ -350,6 +350,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             fetchWalletData()
         case .searchUser:
             actionsSubject.send(.searchUser)
+        case .forceRefreshChannelSearchResults:
+            updateFilter()
         }
     }
     

@@ -74,6 +74,7 @@ enum HomeScreenViewAction {
     case reloadFeedMedia(_ post: HomeScreenPost)
     
     case forceRefreshChannels
+    case forceRefreshChannelSearchResults
     case channelTapped(_ channel: HomeScreenChannel)
     case setNotificationFilter(_ tab: HomeNotificationsTab)
     

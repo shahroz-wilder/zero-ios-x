@@ -40,6 +40,7 @@ struct HomeChannelsContent: View {
             context.filtersState.clearFilters()
         }
         .onChange(of: selectedTab) { _, newTab in
+            context.send(viewAction: .forceRefreshChannelSearchResults)
             switch newTab {
             case .all:
                 context.filtersState.activateZeroFilter(.secondaryRooms)
@@ -55,9 +56,7 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    if !context.isSearchFieldFocused {
-                        topSection
-                    }
+                    topSection
                     switch context.viewState.channelsListMode {
                     case .skeletons:
                         LazyVStack(alignment: .leading, spacing: 0) {
@@ -107,9 +106,7 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    if !context.isSearchFieldFocused {
-                        topSection
-                    }
+                    topSection
                     switch context.viewState.roomListMode {
                     case .skeletons:
                         LazyVStack(spacing: 0) {
