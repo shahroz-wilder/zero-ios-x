@@ -874,7 +874,6 @@ extension HomeScreenPostMediaInfo {
 extension HomeScreenWalletContent {
     init (walletToken: ZWalletToken, meowPrice: ZeroCurrency?) {
         let priceDiff = walletToken.percentChange.map(Double.init) ?? meowPrice?.diff
-        let priceDiffFormatted = priceDiff.map { $0 > 0 ? "+\($0)%" : "-\(abs($0))%" }
 
         let isZChainToken = ZeroWalletChainsUtil.shared.isZChain(walletToken.chainId)
         let tokenPriceFormatted = walletToken.isClaimableToken
@@ -889,7 +888,7 @@ extension HomeScreenWalletContent {
                   description: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
                   actionPreText: nil,
                   actionText: tokenPriceFormatted.isEmpty ? "" : "$\(tokenPriceFormatted)",
-                  actionPostText: walletToken.isClaimableToken ? priceDiffFormatted : nil,
+                  actionPostText: walletToken.isClaimableToken ? priceDiff?.description : nil,
                   chainId: walletToken.chainId
         )
     }

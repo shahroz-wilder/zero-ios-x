@@ -15,7 +15,7 @@ public extension String {
         return stringMatchesUserIdFormatRegex()
     }
     
-    internal func stringMatchesUserIdFormatRegex() -> Bool {
+    private func stringMatchesUserIdFormatRegex() -> Bool {
         let regex = #"^[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+$"#
         let isMatch = range(of: regex, options: .regularExpression) != nil
         return isMatch

@@ -36,27 +36,17 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] userAvatarURL in
-                guard userAvatarURL != nil else { return }
-                self?.state.userAvatarURL = userAvatarURL
-            })
+            .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.userDisplayNamePublisher
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] userDisplayName in
-                guard userDisplayName?.isStringMatrixHexId() == false else {
-                    return
-                }
-                self?.state.userDisplayName = userDisplayName
-            })
+            .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
-                self?.state.userDisplayName = currentUser.displayName
-                self?.state.userAvatarURL = currentUser.profileImageURL
                 self?.state.primaryZeroId = currentUser.zIdOrPublicAddressDisplayText
                 self?.state.isZeroProSubscriber = currentUser.subscriptions.zeroPro
             }

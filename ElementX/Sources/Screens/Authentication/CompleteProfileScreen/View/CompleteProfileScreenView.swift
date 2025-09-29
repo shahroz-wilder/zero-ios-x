@@ -74,7 +74,7 @@ struct CompleteProfileScreen: View {
             .submitLabel(.done)
             .onSubmit(submit)
             
-            InfoBox(text: "Name must be atleast 3 characters or more upto 2o4 characters", type: .general)
+            InfoBox(text: "Name must be atleast 3 characters or more upto 24 characters", type: .general)
         }
         .frame(maxWidth: .infinity)
         .listRowBackground(Color.clear)

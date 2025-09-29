@@ -84,6 +84,8 @@ struct HomeScreenContent: View {
                             "shouldShowEmptyFilterState": context.viewState.shouldShowEmptyFilterState.description
                         ])
                         if !context.viewState.shouldShowEmptyFilterState {
+                            topSection
+                            
                             HomeScreenRoomList(context: context, fromChannelsTabs: false)
                                 .isSearching($context.isSearchFieldFocused)
                                 .searchable(text: $context.searchQuery)
@@ -160,11 +162,12 @@ struct HomeScreenContent: View {
         // An empty VStack causes glitches within the room list
         if context.viewState.shouldShowFilters || context.viewState.securityBannerMode.isShown {
             VStack(spacing: 0) {
-                if context.viewState.shouldShowFilters {
-                    RoomListFiltersView(state: $context.filtersState)
-                }
-            
-                if case let .show(state) = context.viewState.securityBannerMode {
+//                if context.viewState.shouldShowFilters {
+//                    RoomListFiltersView(state: $context.filtersState)
+//                }
+//
+                // Only showing banner in case user needs to setup recovery key for the first time
+                if case let .show(state) = context.viewState.securityBannerMode, state == .setUpRecovery {
                     HomeScreenRecoveryKeyConfirmationBanner(state: state, context: context)
                 }
             }

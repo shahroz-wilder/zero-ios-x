@@ -497,11 +497,31 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Logout
     
     private func runLogoutFlow() async {
-        // By-passing all logout checks and simply logging out the user after a confirmation
-        logout()
+       let secureBackupController = userSession.clientProxy.secureBackupController
         
-//        let secureBackupController = userSession.clientProxy.secureBackupController
-//        
+        guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
+            flowParameters.userIndicatorController.alertInfo = .init(id: .init())
+            return
+        }
+        
+        guard isLastDevice else {
+            logout()
+            return
+        }
+        
+        if secureBackupController.recoveryState.value == .disabled {
+            flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                     title: L10n.screenSignoutRecoveryDisabledTitle,
+                                                                     message: "You have not setup a recovery key yet. Please generate your recovery key before you log out.",
+                                                                     primaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                self?.handleAppRoute(.chatBackupSettings, animated: true)
+            })
+            return
+        }
+        
+        // By-passing all other logout checks and simply logging out the user after a confirmation
+        logout()
+//
 //        guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
 //            flowParameters.userIndicatorController.alertInfo = .init(id: .init())
 //            return

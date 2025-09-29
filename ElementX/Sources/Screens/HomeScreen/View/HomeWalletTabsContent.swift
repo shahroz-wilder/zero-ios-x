@@ -105,13 +105,17 @@ struct HomeWalletTabsContentView : View {
                 }
                 
                 if tabContent.nextPageParams != nil {
-                    ProgressView()
-                        .padding()
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                tabContent.loadMoreAction()
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .padding()
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    tabContent.loadMoreAction()
+                                }
                             }
-                        }
+                        Spacer()
+                    }
                 } else {
                     HomeTabBottomSpace()
                 }
@@ -202,11 +206,26 @@ struct HomeWalletTabContentCell : View {
                             .padding(.vertical, 1)
                         
                         if let actionPostText = content.actionPostText {
-                            Text(actionPostText)
-                                .font(.zero.bodySM)
-                                .foregroundColor(.zero.bgAccentRest)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
+                            switch selectedWalletTab {
+                            case .token:
+                                let tokenPriceDiff = Double(actionPostText) ?? 0
+                                let formattedDiff = String(format: "%.2f", abs(tokenPriceDiff))
+                                let sign = tokenPriceDiff > 0 ? "+" : "-"
+                                let color: Color = tokenPriceDiff > 0 ? .zero.bgAccentRest : .compound.textCriticalPrimary
+
+                                Text("\(sign)\(formattedDiff)%")
+                                    .foregroundColor(color)
+                                    .font(.zero.bodySM)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+
+                            default:
+                                Text(actionPostText)
+                                    .foregroundColor(.compound.textPrimary)
+                                    .font(.zero.bodySM)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                            }
                         }
                     }
                     

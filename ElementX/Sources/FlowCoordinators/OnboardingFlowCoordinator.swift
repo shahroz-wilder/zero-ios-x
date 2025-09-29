@@ -209,7 +209,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             
             switch (context.fromState, context.event, context.toState) {
             case (_, _, .identityConfirmation):
-                presentIdentityConfirmationScreen()
+//                presentIdentityConfirmationScreen()
+                stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case (_, _, .identityConfirmed):
                 presentIdentityConfirmedScreen()
             case (_, _, .appLockSetup):

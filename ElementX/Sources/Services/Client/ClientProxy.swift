@@ -1082,12 +1082,15 @@ class ClientProxy: ClientProxyProtocol {
     
     func isProfileCompletionRequired() async -> Bool {
         do {
-            let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
-            if let user = currentUser {
-                return user.displayName.isEmpty || user.displayName.stringMatchesUserIdFormatRegex()
-            } else {
+            guard let user = try await zeroApiProxy.matrixUsersService.fetchCurrentUser() else {
                 return false
             }
+            let name = user.displayName
+            if name.isEmpty || name.isStringMatrixHexId() {
+                return true
+            }
+            try? await client.setDisplayName(name: name)
+            return false
         } catch {
             MXLog.error(error)
             return false

@@ -141,6 +141,18 @@ struct HomeScreen: View {
                 EmptyView()
             }
         }
+        .onChange(of: context.viewState.securityBannerMode) { _, newValue in
+            switch newValue {
+            case .show(let state):
+                if state == .recoveryOutOfSync {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                        context.send(viewAction: .setupRecovery)
+                    })
+                }
+            default:
+                break
+            }
+        }
     }
     
     // MARK: - Private

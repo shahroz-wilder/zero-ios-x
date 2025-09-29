@@ -45,6 +45,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                 switch await secureBackupController.generateRecoveryKey() {
                 case .success(let key):
                     state.recoveryKey = key
+                    UIPasteboard.general.string = state.recoveryKey
+                    userIndicatorController.submitIndicator(.init(title: "Copied recovery key on your clipboard."))
                 case .failure(let error):
                     MXLog.error("Failed generating recovery key with error: \(error)")
                     state.bindings.alertInfo = .init(id: .init())
