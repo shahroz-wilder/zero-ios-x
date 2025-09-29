@@ -15,27 +15,26 @@ struct CompleteProfileScreen: View {
     @FocusState private var isDisplayNameFocused: Bool
     
     var body: some View {
-        VStack {
-            Text("Enter your details")
-                .font(.compound.headingMDBold)
-                .foregroundStyle(.compound.textPrimary)
-                .padding(.top, 16)
-            
-            Text("Complete your Profile")
-                .font(.compound.bodyMD)
-                .foregroundStyle(.compound.textSecondary)
-            
-            avatar
-                .padding(.vertical, 24)
-            
-            nameSection
-            
-            Spacer()
-            
+        OnboardingContainer {
+            VStack {
+                Text("Enter your details")
+                    .font(.compound.headingMDBold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .padding(.top, 16)
+                
+                Text("Complete your Profile")
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+                
+                avatar
+                    .padding(.vertical, 24)
+                
+                nameSection
+                    .padding(.bottom, 24)
+            }.frame(maxWidth: .infinity)
+        } footer: {
             submitButton
         }
-        .padding(24)
-        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
         .confirmationDialog("", isPresented: $context.showMediaSheet) {
             mediaActionSheet
@@ -76,7 +75,7 @@ struct CompleteProfileScreen: View {
             .onSubmit(submit)
             
             if !context.name.isEmpty, !context.viewState.hasValidInput {
-                InfoBox(text: "Name must be atleast 3 characters or more upto 24 characters", type: .error)
+                InfoBox(text: "Name must be atleast 3 characters or more upto 24 characters", type: .general)
             }
         }
         .frame(maxWidth: .infinity)
@@ -85,18 +84,9 @@ struct CompleteProfileScreen: View {
     }
     
     private var submitButton: some View {
-        Button(action: { submit() }) {
-            Text("Continue")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
-        .disabled(!context.viewState.canSubmit)
+        ZeroPrimaryButton(title: "Continue",
+                          onClick: { submit() },
+                          enabled: context.viewState.canSubmit)
     }
     
     private var avatarOverlayIcon: some View {

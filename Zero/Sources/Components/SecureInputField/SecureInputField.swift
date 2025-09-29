@@ -26,7 +26,7 @@ public struct SecureInputField: View {
                         Text(placeHolder).foregroundColor(.compound.textSecondary)
                     }
                     .focused(isFocused)
-                    .textFieldStyle(.element(accessibilityIdentifier: accessibilityIdentifier))
+                    .textFieldStyle(.element(accessibilityIdentifier: accessibilityIdentifier, showClearButton: false))
                     .textContentType(.password)
                     .submitLabel(submitLabel)
                     .onSubmit(onSubmit)
@@ -35,7 +35,7 @@ public struct SecureInputField: View {
                         Text(placeHolder).foregroundColor(.compound.textSecondary)
                     }
                     .focused(isFocused)
-                    .textFieldStyle(.element(accessibilityIdentifier: accessibilityIdentifier))
+                    .textFieldStyle(.element(accessibilityIdentifier: accessibilityIdentifier, showClearButton: false))
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
                     .submitLabel(submitLabel)
@@ -47,7 +47,7 @@ public struct SecureInputField: View {
                         isSecured.toggle()
                     }, label: {
                         Image(systemName: isSecured ? "eye.fill" : "eye.slash.fill")
-                            .font(.system(size: 16, weight: .regular))
+                            .font(.system(size: 14, weight: .regular))
                             .padding()
                     })
                 }

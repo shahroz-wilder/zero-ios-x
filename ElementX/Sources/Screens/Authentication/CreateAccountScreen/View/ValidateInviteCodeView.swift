@@ -19,7 +19,7 @@ struct ValidateInviteCodeView : View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        OnboardingContainer {
             Text("Enter your invite code")
                 .font(.compound.headingLG)
                 .foregroundStyle(.zero.bgAccentRest)
@@ -42,31 +42,16 @@ struct ValidateInviteCodeView : View {
             .textFieldStyle(.element(accessibilityIdentifier: "create-account_invite_code"))
             .disableAutocorrection(true)
             .autocapitalization(.none)
-            .submitLabel(.next)
+            .submitLabel(.done)
             .onSubmit {
                 if isInviteCodeValid {
                     context.send(viewAction: .verifyInviteCode(inviteCode))
                 }
             }
-            
-            Spacer()
-            
-            Button(action: {
-                if isInviteCodeValid {
-                    context.send(viewAction: .verifyInviteCode(inviteCode))
-                }
-            }) {
-                Text("Continue")
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.zero.bgAccentRest)
-                    )
-            }
-            .disabled(!isInviteCodeValid)            
+        } footer: {
+            ZeroPrimaryButton(title: "Continue",
+                              onClick: { context.send(viewAction: .verifyInviteCode(inviteCode)) },
+                              enabled: isInviteCodeValid)
         }
     }
 }

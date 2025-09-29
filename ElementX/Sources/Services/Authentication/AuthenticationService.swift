@@ -213,8 +213,17 @@ class AuthenticationService: AuthenticationServiceProtocol {
             switch result {
             case .success:
                 return .success(())
-            case .failure:
-                return .failure(.invalidInviteCode)
+            case .failure(let error):
+                if let apiError = (error as? APIErrorResponse) {
+                    switch apiError.code {
+                    case "INVITE_CODE_NOT_FOUND":
+                        return .failure(.invalidInviteCode)
+                    default:
+                        return .failure(.failedCreatingUserAccount)
+                    }
+                } else {
+                    return .failure(.failedCreatingUserAccount)
+                }
             }
         } catch {
             MXLog.error(error)
@@ -277,8 +286,17 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 case .failure:
                     return .failure(.failedCreatingUserAccount)
                 }
-            case .failure:
-                return .failure(.failedCreatingUserAccount)
+            case .failure(let error):
+                if let apiError = (error as? APIErrorResponse) {
+                    switch apiError.code {
+                    case "PROFILE_PRIMARY_EMAIL_ALREADY_EXISTS":
+                        return .failure(.userAlreadyExists)
+                    default:
+                        return .failure(.failedCreatingUserAccount)
+                    }
+                } else {
+                    return .failure(.failedCreatingUserAccount)
+                }
             }
         } catch {
             MXLog.error(error)

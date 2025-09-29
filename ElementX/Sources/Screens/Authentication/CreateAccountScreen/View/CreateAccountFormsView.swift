@@ -18,21 +18,21 @@ struct CreateAccountFormsView : View {
     @FocusState private var isConfirmPasswordFocused: Bool
     
     var body: some View {
-        CreateAccountOptionSegmentControl(
-            onSegmentSelected: { segment in self.selectedSegment = segment }
-        )
-        .padding(.top, 12)
-        
-        Text("Continue with \(selectedSegment == .email ? "Email" : "Web3")")
-            .font(.compound.headingLG)
-            .foregroundStyle(.zero.bgAccentRest)
+        OnboardingContainer {
+            CreateAccountOptionSegmentControl(
+                onSegmentSelected: { segment in self.selectedSegment = segment }
+            )
             .padding(.top, 12)
-        
-        Text("\(selectedSegment == .email ? "Enter your credentials to continue signing up." : "Connect your web3 wallet to continue signing up.")")
-            .font(.compound.bodyLG)
-            .foregroundStyle(.compound.textSecondary)
-        
-        ScrollView {
+            
+            Text("Continue with \(selectedSegment == .email ? "Email" : "Web3")")
+                .font(.compound.headingLG)
+                .foregroundStyle(.zero.bgAccentRest)
+                .padding(.top, 12)
+            
+            Text("\(selectedSegment == .email ? "Enter your credentials to continue signing up." : "Connect your web3 wallet to continue signing up.")")
+                .font(.compound.bodyLG)
+                .foregroundStyle(.compound.textSecondary)
+            
             Group {
                 switch selectedSegment {
                 case .web3:
@@ -41,24 +41,13 @@ struct CreateAccountFormsView : View {
                     createAccountForm
                 }
             }
-        }
-        .padding(.vertical, 24)
-        
-        Spacer()
-        
-        if selectedSegment == .email {
-            Button(action: { submit() }) {
-                Text("Create account")
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.zero.bgAccentRest)
-                    )
+            .padding(.vertical, 12)
+        } footer: {
+            if selectedSegment == .email {
+                ZeroPrimaryButton(title: "Create Account",
+                                  onClick: { submit() },
+                                  enabled: context.viewState.canSubmit)
             }
-            .disabled(!context.viewState.canSubmit)
         }
     }
     
@@ -116,8 +105,8 @@ struct CreateAccountFormsView : View {
                              accessibilityIdentifier: "create-account_password",
                              submitLabel: .next,
                              onSubmit: {
-                                 isConfirmPasswordFocused = true
-                             })
+                isConfirmPasswordFocused = true
+            })
             
             if !context.password.isEmpty {
                 let infoBoxType: InfoBoxType = context.viewState.isValidPassword ? .success : (isPasswordFocused ? .general : .error)

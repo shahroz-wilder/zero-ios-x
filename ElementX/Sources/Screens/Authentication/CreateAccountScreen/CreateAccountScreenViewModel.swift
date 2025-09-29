@@ -85,11 +85,17 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
                 withAnimation(.easeInOut(duration: 0.5)) {
                     state.bindings.inviteCode = inviteCode
                 }
-            case .failure:
+            case .failure(let error):
                 stopLoading()
+                let message = switch error {
+                case .invalidInviteCode:
+                    "Invite code not found. Please check your invite message."
+                default:
+                    L10n.errorUnknown
+                }
                 userIndicatorController.alertInfo = AlertInfo(id: UUID(),
                                                               title: L10n.commonError,
-                                                              message: "Invite code is not valid.")
+                                                              message: message)
             }
         }
     }
@@ -108,7 +114,12 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
     }
     
     private func handleError(error: AuthenticationServiceError) {
-        state.bindings.alertInfo = AlertInfo(id: .unknown)
+        switch error {
+        case .userAlreadyExists:
+            state.bindings.alertInfo = AlertInfo(id: .unknown, title: L10n.commonError, message: "This email is already associated with a ZERO account")
+        default:
+            state.bindings.alertInfo = AlertInfo(id: .unknown)
+        }
     }
     
     private func presentWalletConnectModal() {

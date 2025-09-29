@@ -26,7 +26,7 @@ struct ForgotPasswordScreenViewState: BindableState {
     var bindings = ForgotPasswordScreenViewStateBindings()
     
     var hasValidEmail: Bool {
-        !bindings.email.isEmpty && bindings.email.isValidEmail
+        !bindings.email.isEmpty && ValidationUtil.shared.isValidEmail(bindings.email)
     }
 }
 

@@ -11,7 +11,7 @@ struct CreateAccountScreen: View {
     @ObservedObject var context: CreateAccountScreenViewModel.Context
     
     var body: some View {
-        VStack(alignment: .leading) {
+        Group {
             if context.viewState.hasValidInviteCode {
                 CreateAccountFormsView(context: context)
             } else {
@@ -19,9 +19,6 @@ struct CreateAccountScreen: View {
             }
         }
         .toolbar { toolbar }
-        .padding(24)
-        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
-        .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
     

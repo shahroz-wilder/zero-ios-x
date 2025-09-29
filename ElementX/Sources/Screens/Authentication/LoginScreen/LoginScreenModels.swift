@@ -35,7 +35,7 @@ struct LoginScreenViewState: BindableState {
     var loginMode: LoginMode { homeserver.loginMode }
     
     var hasValidEmail: Bool {
-        !bindings.username.isEmpty && bindings.username.isValidEmail
+        !bindings.username.isEmpty && ValidationUtil.shared.isValidEmail(bindings.username)
     }
     
     /// `true` if the username and password are ready to be submitted.

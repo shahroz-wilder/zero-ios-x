@@ -13,11 +13,13 @@ extension TextFieldStyle where Self == ElementTextFieldStyle {
     static func element(labelText: String? = nil,
                         footerText: String? = nil,
                         state: ElementTextFieldStyle.State = .default,
-                        accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
+                        accessibilityIdentifier: String? = nil,
+                        showClearButton: Bool = true) -> ElementTextFieldStyle {
         ElementTextFieldStyle(labelText: labelText.map(Text.init),
                               footerText: footerText.map(Text.init),
                               state: state,
-                              accessibilityIdentifier: accessibilityIdentifier)
+                              accessibilityIdentifier: accessibilityIdentifier,
+                              showClearButton: showClearButton)
     }
     
     @_disfavoredOverload
@@ -47,6 +49,7 @@ struct ElementTextFieldStyle: TextFieldStyle {
     let footerText: Text?
     let state: State
     let accessibilityIdentifier: String?
+    let showClearButton: Bool
     
     private var isError: Bool {
         state == .error
@@ -116,11 +119,12 @@ struct ElementTextFieldStyle: TextFieldStyle {
     ///   - labelText: The text shown in the label above the field.
     ///   - footerText: The text shown in the footer label below the field.
     ///   - isError: Whether or not the text field is currently in the error state.
-    init(labelText: Text? = nil, footerText: Text? = nil, state: State = .default, accessibilityIdentifier: String? = nil) {
+    init(labelText: Text? = nil, footerText: Text? = nil, state: State = .default, accessibilityIdentifier: String? = nil, showClearButton: Bool = true) {
         self.labelText = labelText
         self.footerText = footerText
         self.state = state
         self.accessibilityIdentifier = accessibilityIdentifier
+        self.showClearButton = showClearButton
     }
     
     @MainActor
@@ -150,7 +154,7 @@ struct ElementTextFieldStyle: TextFieldStyle {
                     .onTapGesture { isFocused = true } // Set focus with taps outside of the text field
                 }
                 .introspect(.textField, on: .supportedVersions) { textField in
-                    textField.clearButtonMode = .whileEditing
+                    textField.clearButtonMode = showClearButton ? .whileEditing : .never
                     textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
                                                                          attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
                     textField.accessibilityIdentifier = accessibilityIdentifier
