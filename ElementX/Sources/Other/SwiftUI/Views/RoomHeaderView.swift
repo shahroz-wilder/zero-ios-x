@@ -36,7 +36,7 @@ struct RoomHeaderView: View {
             avatarImage
                 .accessibilityHidden(true)
             HStack(spacing: 4) {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     Text(roomName)
                         .lineLimit(1)
@@ -48,13 +48,13 @@ struct RoomHeaderView: View {
                             .foregroundStyle(.zero.bgAccentRest)
                     }
                 }
-                if let subtitle = roomSubtitle {
-                    Text(subtitle)
-                        .lineLimit(1)
-                        .padding(.vertical, 1)
-                        .font(.zero.bodySMSemibold)
-                        .foregroundStyle(.compound.textSecondary)
-                }
+                Text(roomSubtitle ?? "")
+                    .lineLimit(1)
+                    .padding(.vertical, 1)
+                    .font(.zero.bodySMSemibold)
+                    .foregroundStyle(.compound.textSecondary)
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.5), value: roomSubtitle)
             }
                 if let dmRecipientVerificationState {
                     VerificationBadge(verificationState: dmRecipientVerificationState)

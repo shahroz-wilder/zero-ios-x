@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct VerifyLoginScreen: View {
@@ -101,10 +102,11 @@ struct VerifyLoginScreen: View {
                 
                 HStack(alignment: .top) {
                     Image(asset: Asset.Images.alertCircleIcon)
-                        .foregroundStyle(Asset.Colors.textWarning.swiftUIColor)
+                        .renderingMode(.template)
+                        .foregroundStyle(.compound.iconCriticalPrimary)
                     
                     Text("Your current login is not verified, some message history may be hidden.")
-                        .foregroundStyle(Asset.Colors.textWarning.swiftUIColor)
+                        .foregroundStyle(.compound.textCriticalPrimary)
                         .font(.zero.bodySM)
                 }
             }

@@ -783,6 +783,7 @@ class ClientProxy: ClientProxyProtocol {
 
     func logout() async {
         do {
+            appSettings.zeroLoggedInUser = ZCurrentUser.placeholder
             try await client.logout()
         } catch {
             MXLog.error("Failed logging out with error: \(error)")

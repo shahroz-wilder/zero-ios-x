@@ -41,23 +41,26 @@ struct HomeScreenRoomList: View {
             "roomsListCount": "\(roomsList.count)"
         ])
         
-        ForEach(roomsList) { room in
-            switch room.type {
-            case .placeholder:
-                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
-                    .redacted(reason: .placeholder)
-            case .invite:
-                HomeScreenInviteCell(room: room, context: context, hideInviteAvatars: context.viewState.hideInviteAvatars)
-            case .knock:
-                HomeScreenKnockedCell(room: room, context: context)
-            case .room:
-                let isSelected = context.viewState.selectedRoomID == room.id
-                
-                HomeScreenRoomCell(room: room,
-                                   isSelected: isSelected,
-                                   mediaProvider: context.mediaProvider,
-                                   action: context.send,
-                                   showProBadge: context.viewState.directRoomsUserStatusMap[room.id] == true)
+        if fromChannelsTabs, roomsList.isEmpty {
+            HomeContentEmptyView(message: "No channels")
+        } else {
+            ForEach(roomsList) { room in
+                switch room.type {
+                case .placeholder:
+                    HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
+                        .redacted(reason: .placeholder)
+                case .invite:
+                    HomeScreenInviteCell(room: room, context: context, hideInviteAvatars: context.viewState.hideInviteAvatars)
+                case .knock:
+                    HomeScreenKnockedCell(room: room, context: context)
+                case .room:
+                    let isSelected = context.viewState.selectedRoomID == room.id
+                    
+                    HomeScreenRoomCell(room: room,
+                                       isSelected: isSelected,
+                                       mediaProvider: context.mediaProvider,
+                                       action: context.send,
+                                       showProBadge: context.viewState.directRoomsUserStatusMap[room.id] == true)
                     .contextMenu {
                         if room.badges.isDotShown {
                             Button {
@@ -101,12 +104,13 @@ struct HomeScreenRoomList: View {
                             }
                         }
                         
-//                        Button(role: .destructive) {
-//                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-//                        } label: {
-//                            Label(L10n.actionLeaveRoom, icon: \.leave)
-//                        }
+                        //                        Button(role: .destructive) {
+                        //                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
+                        //                        } label: {
+                        //                            Label(L10n.actionLeaveRoom, icon: \.leave)
+                        //                        }
                     }
+                }
             }
         }
     }

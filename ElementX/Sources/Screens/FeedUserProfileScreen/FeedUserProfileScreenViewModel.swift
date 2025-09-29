@@ -173,10 +173,10 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         }
     }
         
-    private func displayError() {
+    private func displayError(message: String? = nil) {
         state.bindings.alertInfo = .init(id: UUID(),
                                          title: L10n.commonError,
-                                         message: L10n.errorUnknown)
+                                         message: message ?? L10n.errorUnknown)
     }
     
     private func openArweaveLink(_ post: HomeScreenPost) {
@@ -245,15 +245,17 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     
     private func toggleFollowUser() {
         Task {
-            let userIndicatorID = UUID().uuidString
-            defer {
-                userIndicatorController.retractIndicatorWithId(userIndicatorID)
-            }
+//            let userIndicatorID = UUID().uuidString
+//            defer {
+//                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+//            }
             let isFollowed = state.userFollowStatus?.isFollowing ?? false
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: isFollowed ? "Unfollowing..." : "Following...",
-                                                                  persistent: true))
+//            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+//                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+//                                                                  title: isFollowed ? "Unfollowing..." : "Following...",
+//                                                                  persistent: true))
+            // update state locally
+            state.userFollowStatus = .init(isFollowing: !isFollowed)
             let result = if isFollowed {
                 await clientProxy.unFollowFeedUser(userId: state.userID)
             } else {
@@ -264,7 +266,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 fetchUserProfileData()
             case .failure(let error):
                 MXLog.error("Failed to toggle user following state: \(state.userID), with error: \(error)")
-                displayError()
+                displayError(message: isFollowed ? "Failed to unfollow user" : "Failed to follow user")
             }
         }
     }

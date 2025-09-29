@@ -48,7 +48,7 @@ public struct ZeroListRowAccessory: View {
                 .flipsForRightToLeftLayoutDirection(true)
         case .selected:
             CompoundIcon(\.check)
-                .foregroundColor(isEnabled ? .compound.iconAccentPrimary : .compound.iconDisabled)
+                .foregroundColor(isEnabled ? .zero.bgAccentRest : .compound.iconDisabled)
                 .accessibilityAddTraits(.isSelected)
                 .padding(.vertical, verticalPaddingFix)
         case .unselected:
@@ -57,7 +57,7 @@ public struct ZeroListRowAccessory: View {
                 .padding(.vertical, verticalPaddingFix)
         case .multiSelected:
             CompoundIcon(\.checkCircleSolid)
-                .foregroundColor(isEnabled ? .compound.iconSuccessPrimary : .compound.iconDisabled)
+                .foregroundColor(isEnabled ? .zero.bgAccentRest : .compound.iconDisabled)
                 .accessibilityAddTraits(.isSelected)
                 .padding(.vertical, verticalPaddingFix)
         case .multiUnselected:

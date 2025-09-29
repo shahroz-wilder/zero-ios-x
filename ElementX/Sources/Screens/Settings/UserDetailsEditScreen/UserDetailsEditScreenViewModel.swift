@@ -49,6 +49,9 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             .receive(on: DispatchQueue.main)
             .sink { [weak self] displayName in
                 guard let self else { return }
+                guard displayName?.isStringMatrixHexId() == false else {
+                    return
+                }
                 
                 state.bindings.name = displayName ?? ""
             }

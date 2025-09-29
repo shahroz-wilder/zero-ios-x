@@ -128,14 +128,14 @@ private struct StakePoolDetailsView : View {
                 }
             }
         }
-        .padding(.vertical, 24)
+        .padding(.vertical, 16)
         
         Text("Stake your \(stakeTokenName) to earn \(rewardTokenName) rewards.")
-            .font(.zero.bodyLG)
+            .font(.zero.bodyMD)
             .foregroundColor(.compound.textSecondary)
         
         HStack {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     Text("Claimable Rewards \(rewardTokenName)")
                         .font(.zero.bodyMD)
@@ -162,7 +162,7 @@ private struct StakePoolDetailsView : View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(.compound.bgCanvasDefaultLevel1, lineWidth: 1)
         )
-        .padding(.vertical, 16)
+        .padding(.vertical, 8)
         
         HStack {
             HStack {
@@ -211,7 +211,7 @@ private struct StakePoolDetailsView : View {
                 unstakeButton
             }
         }
-        .padding(.vertical, 24)
+        .padding(.vertical, 16)
     }
     
     @ViewBuilder

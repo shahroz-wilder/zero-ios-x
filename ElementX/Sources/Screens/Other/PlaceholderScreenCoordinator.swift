@@ -27,17 +27,28 @@ struct PlaceholderScreen: View {
     let hideGradientBackground: Bool
     
     var body: some View {
-        AuthenticationStartLogo(hideBrandChrome: hideBrandChrome)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background {
-                if !hideGradientBackground {
-                    AuthenticationStartScreenBackgroundImage()
-                }
-            }
-            .background()
-            .backgroundStyle(.zero.bgCanvasDefault)
-            .ignoresSafeArea(edges: .top) // Remain vertically centred even if there's a navigation bar.
-            .ignoresSafeArea(.keyboard) // Specifically for the lock screen, but make sense everywhere.
+        ZStack {
+            Image(asset: Asset.Images.zeroLogoMark)
+                .renderingMode(.template)
+                .resizable()
+                .frame(width: 125, height: 125)
+                .foregroundStyle(.zero.bgAccentRest)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .backgroundStyle(.zero.bgCanvasDefault)
+        .ignoresSafeArea(edges: .top) // Remain vertically centred even if there's a navigation bar.
+        .ignoresSafeArea(.keyboard) // Specifically for the lock screen, but make sense everywhere.
+//        AuthenticationStartLogo(hideBrandChrome: hideBrandChrome)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            .background {
+//                if !hideGradientBackground {
+//                    AuthenticationStartScreenBackgroundImage()
+//                }
+//            }
+//            .background()
+//            .backgroundStyle(.zero.bgCanvasDefault)
+//            .ignoresSafeArea(edges: .top) // Remain vertically centred even if there's a navigation bar.
+//            .ignoresSafeArea(.keyboard) // Specifically for the lock screen, but make sense everywhere.
     }
 }
 

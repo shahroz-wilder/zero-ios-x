@@ -744,8 +744,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .success(let posts):
             let hasNoPosts = posts.isEmpty
             if hasNoPosts {
-                state.postListMode = state.posts.isEmpty ? .empty : .posts
+                state.postListMode = isForceRefresh ? .empty : state.posts.isEmpty ? .empty : .posts
                 state.canLoadMorePosts = false
+                isFetchPostsInProgress = false
             } else {
                 var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.posts
                 for post in posts {
@@ -1022,11 +1023,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             await MainActor.run {
                 if let price = newMeowPrice {
                     state.meowPrice = price
+                    fetchStakingData(userWalletAddress: walletAddress, refreshAllData: silentRefresh)
                 }
                 if !walletTokens.0.isEmpty {
                     state.walletTokens = walletTokens.0
                     state.walletTokenNextPageParams = walletTokens.1
-                    fetchStakingData(userWalletAddress: walletAddress, refreshAllData: silentRefresh)
                 }
                 if !walletTransactions.0.isEmpty {
                     state.walletTransactions = walletTransactions.0
@@ -1104,7 +1105,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     : token.tokenPrice()
                 return total + tokenAmount
             }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
             self.state.walletBalance = totalWalletAmount
         })
     }
@@ -1128,65 +1129,79 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     private func fetchStakingData(userWalletAddress: String, refreshAllData: Bool = false) {
         let stakePools = ZeroWalletStakingUtil.shared.stakePools
-        for pool in stakePools {
-            let poolAddress = pool.address
-            let chainId = pool.chainId
-            let isAvaxChain = ZeroWalletChainsUtil.shared.isAvaxChain(chainId)
+        
+        Task(priority: .background) { [weak self] in
+            guard let self else { return }
             
-            Task(priority: .background) { [weak self] in
-                guard let self else { return }
-                
-                async let totalStakedResult = userSession.clientProxy.getTotalStaked(poolAddress: poolAddress, chainId: chainId)
-                async let configResult = userSession.clientProxy.getStakingConfig(poolAddress: poolAddress, chainId: chainId)
-                async let stakerStatusResult = userSession.clientProxy.getStakerStatusInfo(
-                    userWalletAddress: userWalletAddress,
-                    poolAddress: poolAddress,
-                    chainId: chainId
-                )
-                async let stakeRewardsResult = userSession.clientProxy.getStakeRewardsInfo(
-                    userWalletAddress: userWalletAddress,
-                    poolAddress: poolAddress,
-                    chainId: chainId
-                )
-                let (totalStaked, config, stakerStatus, stakeRewards) = await (
-                    totalStakedResult,
-                    configResult,
-                    stakerStatusResult,
-                    stakeRewardsResult
-                )
-                
-                let avaxTokenPrice: ZAvaxTokenPrice?
-                if isAvaxChain {
-                    let tokenAddressResult = await userSession.clientProxy.getStakingToken(poolAddress: poolAddress, chainId: chainId)
-                    guard case .success(let result) = tokenAddressResult else {
-                        avaxTokenPrice = nil
-                        return
+            var stakingContents: [HomeScreenWalletStakingContent] = []
+            let meowPrice = self.state.meowPrice
+            
+            await withTaskGroup(of: HomeScreenWalletStakingContent?.self) { group in
+                for pool in stakePools {
+                    group.addTask {
+                        let poolAddress = pool.address
+                        let chainId = pool.chainId
+                        let isAvaxChain = ZeroWalletChainsUtil.shared.isAvaxChain(chainId)
+                        
+                        async let totalStakedResult = self.userSession.clientProxy.getTotalStaked(poolAddress: poolAddress, chainId: chainId)
+                        async let configResult = self.userSession.clientProxy.getStakingConfig(poolAddress: poolAddress, chainId: chainId)
+                        async let stakerStatusResult = self.userSession.clientProxy.getStakerStatusInfo(
+                            userWalletAddress: userWalletAddress,
+                            poolAddress: poolAddress,
+                            chainId: chainId
+                        )
+                        async let stakeRewardsResult = self.userSession.clientProxy.getStakeRewardsInfo(
+                            userWalletAddress: userWalletAddress,
+                            poolAddress: poolAddress,
+                            chainId: chainId
+                        )
+                        
+                        let (totalStaked, config, stakerStatus, stakeRewards) =
+                        await (totalStakedResult, configResult, stakerStatusResult, stakeRewardsResult)
+                        
+                        guard case .success(let totalStaked) = totalStaked,
+                              case .success(let stakingConfig) = config,
+                              case .success(let stakerStatus) = stakerStatus,
+                              case .success(let stakeRewards) = stakeRewards else {
+                            return nil
+                        }
+                        
+                        var tokenPrice: Double?
+                        if isAvaxChain {
+                            let tokenAddressResult = await self.userSession.clientProxy.getStakingToken(poolAddress: poolAddress, chainId: chainId)
+                            if case .success(let result) = tokenAddressResult {
+                                if case .success(let price) = await self.userSession.clientProxy.getAvaxTokenPrice(tokenAddress: result.stakingTokenAddress) {
+                                    tokenPrice = price.usd
+                                }
+                            }
+                        } else {
+                            tokenPrice = meowPrice?.price
+                        }
+                        
+                        return HomeScreenWalletStakingContent(
+                            tokenPrice: tokenPrice,
+                            userWalletAddress: userWalletAddress,
+                            pool: pool,
+                            totalStaked: totalStaked,
+                            stakingConfig: stakingConfig,
+                            stakerStatus: stakerStatus,
+                            stakeRewards: stakeRewards
+                        )
                     }
-                    avaxTokenPrice = try? await userSession.clientProxy.getAvaxTokenPrice(tokenAddress: result.stakingTokenAddress).get()
-                } else {
-                    avaxTokenPrice = nil
                 }
-                let tokenPrice = isAvaxChain ? avaxTokenPrice?.usd : self.state.meowPrice?.price
                 
-                await MainActor.run {
-                    guard case .success(let totalStaked) = totalStaked,
-                          case .success(let stakingConfig) = config,
-                          case .success(let stakerStatus) = stakerStatus,
-                          case .success(let stakeRewards) = stakeRewards else {
-                        return
+                for await stakingContent in group {
+                    if let stakingContent {
+                        stakingContents.append(stakingContent)
                     }
-                    
-                    let stakingContent = HomeScreenWalletStakingContent(
-                        tokenPrice: tokenPrice,
-                        userWalletAddress: userWalletAddress,
-                        pool: pool,
-                        totalStaked: totalStaked,
-                        stakingConfig: stakingConfig,
-                        stakerStatus: stakerStatus,
-                        stakeRewards: stakeRewards
-                    )
-                    self.state.walletStakings.append(stakingContent)
-                    if refreshAllData {
+                }
+            }
+            
+            // Update state once on main actor
+            await MainActor.run {
+                self.state.walletStakings = stakingContents
+                if refreshAllData {
+                    for stakingContent in stakingContents {
                         self.fetchStakeDataOfPool(stakingContent, silentRefresh: refreshAllData)
                     }
                 }
