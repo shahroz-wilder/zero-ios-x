@@ -14,7 +14,7 @@ struct ForgotPasswordView: View {
     @FocusState private var isEmailFocused: Bool
     
     var body: some View {
-        VStack(alignment: .leading) {
+        OnboardingContainer {
             if context.state == .notCompleted {
                 Text("Password Reset")
                     .font(.compound.headingLG)
@@ -27,15 +27,10 @@ struct ForgotPasswordView: View {
                 
                 emailInputField
                     .padding(.vertical, 12)
-                
-                Spacer()
-                
-                sendResetLinkButton
-                    .padding(.vertical, 12)
             } else {
-                Spacer()
+                Spacer().frame(height: 200)
                 
-                VStack {
+                VStack(spacing: 0) {
                     Text("A reset link has been sent to")
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textSecondary)
@@ -46,17 +41,15 @@ struct ForgotPasswordView: View {
                         .padding(.vertical, 8)
                 }
                 .frame(maxWidth: .infinity)
-                
-                Spacer()
-                
+            }
+        } footer: {
+            if context.state == .notCompleted {
+                sendResetLinkButton
+            } else {
                 backButton
-                    .padding(.vertical, 12)
             }
         }
         .toolbar { toolbar }
-        .padding(24)
-        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
-        .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
     
@@ -96,31 +89,15 @@ struct ForgotPasswordView: View {
     }
     
     var sendResetLinkButton: some View {
-        Button(action: { context.send(viewAction: .resetPassword) }) {
-            Text("Send Reset Link")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
-        .disabled(!context.viewState.hasValidEmail)
+        ZeroPrimaryButton(
+            title: "Send Reset Link",
+            onClick: { context.send(viewAction: .resetPassword) },
+            enabled: context.viewState.hasValidEmail)
     }
     
     var backButton: some View {
-        Button(action: { context.send(viewAction: .login) }) {
-            Text("Go back")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
+        ZeroPrimaryButton(
+            title: "Go back",
+            onClick: { context.send(viewAction: .login) })
     }
 }

@@ -412,8 +412,21 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 }
                 StateBus.shared.onUserAuthStateChanged(.authorised)
                 return await userSession(for: client)
-            case .failure(_):
-                return .failure(.failedLoggingIn)
+            case .failure(let error):
+                if let apiError = (error as? APIErrorResponse) {
+                    switch apiError.code {
+                    case "INVALID_EMAIL_PASSWORD":
+                        return .failure(.invalidCredentials)
+                    case "INVALID_OTP":
+                        return .failure(.invalidOtp)
+                    case "USER_NOT_FOUND":
+                        return .failure(.userNotFound)
+                    default:
+                        return .failure(.failedLoggingIn)
+                    }
+                } else {
+                    return .failure(.failedLoggingIn)
+                }
             }
         } catch let ClientError.MatrixApi(errorKind, _, _, _) {
             MXLog.error("Failed logging in with error kind: \(errorKind)")
@@ -426,8 +439,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 return .failure(.failedLoggingIn)
             }
         } catch {
-            MXLog.error("Failed to verify OTP: \(error)")
-            return .failure(.failedVerifyOtp)
+            return .failure(.failedLoggingIn)
         }
     }
 }

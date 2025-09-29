@@ -12,7 +12,7 @@ struct OtpVerificationView: View {
     @Bindable var context: OtpVerificationScreenViewModel.Context
     
     var body: some View {
-        VStack(alignment: .leading) {
+        OnboardingContainer {
             Text("Continue with Email")
                 .font(.compound.headingLG)
                 .foregroundStyle(.compound.textPrimary)
@@ -25,21 +25,16 @@ struct OtpVerificationView: View {
             OtpFormFieldView(pin: $context.otp)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
-            
-            Spacer()
-            
+        } footer: {
             loginButton
             
             ResendOtpView(onResend: {
                 context.send(viewAction: .resendOtp)
             })
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
+            .padding(.top, 12)
         }
         .toolbar { toolbar }
-        .padding(24)
-        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
-        .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
     
@@ -51,17 +46,8 @@ struct OtpVerificationView: View {
     }
     
     var loginButton: some View {
-        Button(action: { context.send(viewAction: .verifyOtp) }) {
-            Text("Login")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
-        .disabled(!context.viewState.isOtpValid)
+        ZeroPrimaryButton(title: "Login",
+                          onClick: { context.send(viewAction: .verifyOtp) },
+                          enabled: context.viewState.isOtpValid)
     }
 }

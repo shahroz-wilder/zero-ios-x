@@ -24,7 +24,12 @@ class APIManager {
                     case .success(let data):
                         continuation.resume(returning: .success(data))
                     case .failure(let error):
-                        continuation.resume(returning: .failure(error))
+                        if let data = response.data,
+                           let apiError = try? JSONDecoder().decode(APIErrorResponse.self, from: data) {
+                            continuation.resume(returning: .failure(apiError))
+                        } else {
+                            continuation.resume(returning: .failure(error))
+                        }
                     }
                 }
         }
@@ -43,7 +48,12 @@ class APIManager {
                     case .success:
                         continuation.resume(returning: .success(()))
                     case .failure(let error):
-                        continuation.resume(returning: .failure(error))
+                        if let data = response.data,
+                           let apiError = try? JSONDecoder().decode(APIErrorResponse.self, from: data) {
+                            continuation.resume(returning: .failure(apiError))
+                        } else {
+                            continuation.resume(returning: .failure(error))
+                        }
                     }
                 }
         }

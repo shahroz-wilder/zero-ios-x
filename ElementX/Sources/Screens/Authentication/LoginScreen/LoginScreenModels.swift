@@ -35,12 +35,12 @@ struct LoginScreenViewState: BindableState {
     var loginMode: LoginMode { homeserver.loginMode }
     
     var hasValidEmail: Bool {
-        !bindings.username.isEmpty
+        !bindings.username.isEmpty && bindings.username.isValidEmail
     }
     
     /// `true` if the username and password are ready to be submitted.
     var hasValidCredentials: Bool {
-        !bindings.username.isEmpty && !bindings.password.isEmpty
+        hasValidEmail && !bindings.password.isEmpty
     }
     
     /// `true` when valid credentials have been entered and a homeserver has been loaded.

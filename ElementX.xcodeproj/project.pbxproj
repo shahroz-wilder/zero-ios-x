@@ -2205,6 +2205,12 @@
 		79C9BA8D2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79C9BA8E2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79D57E9AE03A2DC689D14EA2 /* UserSessionStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */; };
+		79D5985C2E8A3F29008F54E0 /* OnboardingContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */; };
+		79D5985D2E8A3F29008F54E0 /* OnboardingContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */; };
+		79D5985F2E8A43E6008F54E0 /* ZeroPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D5985E2E8A43E0008F54E0 /* ZeroPrimaryButton.swift */; };
+		79D598602E8A43E6008F54E0 /* ZeroPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D5985E2E8A43E0008F54E0 /* ZeroPrimaryButton.swift */; };
+		79D598622E8A44EB008F54E0 /* ZeroSimpleTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D598612E8A44E1008F54E0 /* ZeroSimpleTextButton.swift */; };
+		79D598632E8A44EB008F54E0 /* ZeroSimpleTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D598612E8A44E1008F54E0 /* ZeroSimpleTextButton.swift */; };
 		79D67B422E5DF59C00079555 /* ConfirmLinkWalletSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D67B412E5DF58A00079555 /* ConfirmLinkWalletSheet.swift */; };
 		79D67B432E5DF59C00079555 /* ConfirmLinkWalletSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D67B412E5DF58A00079555 /* ConfirmLinkWalletSheet.swift */; };
 		79DB42A42E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */; };
@@ -3992,6 +3998,9 @@
 		79C25B582E25AACE00936A5D /* PostImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageViewer.swift; sourceTree = "<group>"; };
 		79C25B5B2E25AB2500936A5D /* PostVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVideoPlayer.swift; sourceTree = "<group>"; };
 		79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWalletQRCode.swift; sourceTree = "<group>"; };
+		79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainer.swift; sourceTree = "<group>"; };
+		79D5985E2E8A43E0008F54E0 /* ZeroPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPrimaryButton.swift; sourceTree = "<group>"; };
+		79D598612E8A44E1008F54E0 /* ZeroSimpleTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSimpleTextButton.swift; sourceTree = "<group>"; };
 		79D67B412E5DF58A00079555 /* ConfirmLinkWalletSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmLinkWalletSheet.swift; sourceTree = "<group>"; };
 		79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletStakingContent.swift; sourceTree = "<group>"; };
 		79DB42A62E4BF0A500F6E809 /* ZWalletStakingToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletStakingToken.swift; sourceTree = "<group>"; };
@@ -5344,6 +5353,8 @@
 		185454D22CFEF7D4003CA957 /* Button */ = {
 			isa = PBXGroup;
 			children = (
+				79D598612E8A44E1008F54E0 /* ZeroSimpleTextButton.swift */,
+				79D5985E2E8A43E0008F54E0 /* ZeroPrimaryButton.swift */,
 				793899D52DF0F2A400980991 /* FloatingActionButton.swift */,
 				185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */,
 			);
@@ -7296,6 +7307,7 @@
 		79281A6A2E69A10200D86DD6 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				79D5985A2E8A3F00008F54E0 /* Component */,
 				79281A6B2E69A18400D86DD6 /* Landing */,
 				79281A6C2E69A19000D86DD6 /* Login */,
 			);
@@ -7539,6 +7551,14 @@
 				35FA991289149D31F4286747 /* UserPreference.swift */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		79D5985A2E8A3F00008F54E0 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */,
+			);
+			path = Component;
 			sourceTree = "<group>";
 		};
 		79E560F5113ED25D172E550C /* Media */ = {
@@ -10951,6 +10971,7 @@
 				18E9A5562C9829970082DDA4 /* LegalInformationScreenViewModel.swift in Sources */,
 				7944A7622D589F3B00B75DAC /* CreateFeedScreenModels.swift in Sources */,
 				18E9A5572C9829970082DDA4 /* LegalInformationScreenViewModelProtocol.swift in Sources */,
+				79D5985D2E8A3F29008F54E0 /* OnboardingContainer.swift in Sources */,
 				792206C02E81128600AA4286 /* LinkPreviewView.swift in Sources */,
 				18E9A5582C9829970082DDA4 /* LoadableAvatarImage.swift in Sources */,
 				18E9A5592C9829970082DDA4 /* LoadableImage.swift in Sources */,
@@ -11192,6 +11213,7 @@
 				18D467AB2D109BD200861AA6 /* VoiceMessageRoomTimelineView.swift in Sources */,
 				795A0C8A2D78453B000928B7 /* ZeroAuthApiProxy.swift in Sources */,
 				18E9A5FC2C9829970082DDA4 /* QRCodeLoginScreenViewModel.swift in Sources */,
+				79D598622E8A44EB008F54E0 /* ZeroSimpleTextButton.swift in Sources */,
 				79281A722E69A3B700D86DD6 /* LandingScreenTabPager.swift in Sources */,
 				7995C3BB2D89650100E4D98E /* CharacterSet.swift in Sources */,
 				18E9A5FD2C9829970082DDA4 /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
@@ -11204,6 +11226,7 @@
 				18E9A6032C9829970082DDA4 /* ReadMarkerRoomTimelineView.swift in Sources */,
 				18E9A6042C9829970082DDA4 /* ReadReceipt.swift in Sources */,
 				18E9A6052C9829970082DDA4 /* ReadReceiptCell.swift in Sources */,
+				79D598602E8A43E6008F54E0 /* ZeroPrimaryButton.swift in Sources */,
 				790922612E1F264C00833940 /* ConfirmAmountView.swift in Sources */,
 				790181662E453BE80083B4BB /* SpaceExplorerFlowCoordinator.swift in Sources */,
 				18E9A6062C9829970082DDA4 /* ReadReceiptsSummaryView.swift in Sources */,
@@ -11816,6 +11839,7 @@
 				8C1A5ECAF895D4CAF8C4D461 /* AppActivityView.swift in Sources */,
 				23E23736B53946785431A74F /* AppAppearance.swift in Sources */,
 				095C0ACFC234E0550A6404C5 /* AppCoordinator.swift in Sources */,
+				79D5985C2E8A3F29008F54E0 /* OnboardingContainer.swift in Sources */,
 				A021827B528F1EDC9101CA58 /* AppCoordinatorProtocol.swift in Sources */,
 				4FF90E2242DBD596E1ED2E27 /* AppCoordinatorStateMachine.swift in Sources */,
 				9D9690D2FD4CD26FF670620F /* AppDelegate.swift in Sources */,
@@ -11892,6 +11916,7 @@
 				9278EC51D24E57445B290521 /* AudioSessionProtocol.swift in Sources */,
 				79DB42B42E4BF85C00F6E809 /* StakePoolSheetView.swift in Sources */,
 				A51C65E5A3C9F2464A91A380 /* AuthenticationClientBuilderFactoryMock.swift in Sources */,
+				79D5985F2E8A43E6008F54E0 /* ZeroPrimaryButton.swift in Sources */,
 				AE066FC93E7B707C826B335A /* AuthenticationClientFactory.swift in Sources */,
 				67E9926C4572C54F59FCA91A /* AuthenticationFlowCoordinator.swift in Sources */,
 				9847B056C1A216C314D21E68 /* AuthenticationService.swift in Sources */,
@@ -11996,6 +12021,7 @@
 				4799A852132F1744E2825994 /* CreateRoomViewModelProtocol.swift in Sources */,
 				565868808A1DA565707394ED /* CurrentValuePublisher.swift in Sources */,
 				A722F426FD81FC67706BB1E0 /* CustomLayoutLabelStyle.swift in Sources */,
+				79D598632E8A44EB008F54E0 /* ZeroSimpleTextButton.swift in Sources */,
 				12C867E85E6D12EEDFD0B127 /* CustomStringConvertible.swift in Sources */,
 				180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */,
 				C4F69156C31A447FEFF2A47C /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,

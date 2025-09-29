@@ -39,8 +39,10 @@ final class SocialAuthService: NSObject, SocialAuthServiceProtocol {
             callbackURLScheme: URL(string: redirectURI)?.scheme
         ) { callbackURL, sessionError in
             if let sessionError = sessionError {
-                DispatchQueue.main.async {
-                    completion(.failure(sessionError))
+                if (sessionError as? ASWebAuthenticationSessionError)?.code != .canceledLogin {
+                    DispatchQueue.main.async {
+                        completion(.failure(sessionError))
+                    }
                 }
                 return
             }

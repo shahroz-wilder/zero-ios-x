@@ -24,11 +24,11 @@ struct LandingScreenTabPager : View {
         case 0:
             return "Make internet money."
         case 1:
-            return "Securely chat with friends and family."
+            return "Stay close, chat securely."
         case 2:
-            return "Buy, sell, and swap millions of coins."
+            return "Buy, sell & swap instantly."
         default:
-            return "Work for yourself and own your future."
+            return "Work for yourself."
         }
     }
     

@@ -41,6 +41,8 @@ enum AuthenticationServiceError: Error, Equatable {
     case failedRequestResetPassword
     case failedRequestOtp
     case failedVerifyOtp
+    case invalidOtp
+    case userNotFound
 }
 
 protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {

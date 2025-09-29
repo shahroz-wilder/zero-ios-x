@@ -22,7 +22,7 @@ struct OnLoginScreen: View {
     @Bindable var context: LoginScreenViewModel.Context
     
     var body: some View {
-        VStack(alignment: .leading) {
+        OnboardingContainer {
             Text("Continue with Email")
                 .font(.compound.headingLG)
                 .foregroundStyle(.zero.bgAccentRest)
@@ -40,27 +40,23 @@ struct OnLoginScreen: View {
                 
                 forgotPasswordButton
                     .padding(.vertical, 12)
+                
+                Spacer().frame(height: 20)
             }
-            
-            Spacer()
-            
+        } footer: {
             if selectedEmailAuthMethod == .otp {
                 generateLinkButton
                 
                 loginWithPasswordButton
-                    .padding(.vertical, 12)
+                    .padding(.top, 12)
             } else {
                 loginButton
                 
                 loginWithOTPButton
-                    .padding(.vertical, 12)
+                    .padding(.top, 12)
             }
-            
         }
         .toolbar { toolbar }
-        .padding(24)
-        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
-        .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
     
@@ -123,78 +119,49 @@ struct OnLoginScreen: View {
     }
     
     var generateLinkButton: some View {
-        Button(action: { context.send(viewAction: .sendVerificationOtp) }) {
-            Text("Generate Link")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
-        .disabled(!context.viewState.hasValidEmail)
+        ZeroPrimaryButton(title: "Generate Link",
+                          onClick: { context.send(viewAction: .sendVerificationOtp) },
+                          enabled: context.viewState.hasValidEmail)
     }
     
     var loginButton: some View {
-        Button(action: { submit() }) {
-            Text("Login")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
-        .disabled(!context.viewState.hasValidCredentials)
+        ZeroPrimaryButton(title: "Login",
+                          onClick: { submit() },
+                          enabled: context.viewState.hasValidCredentials)
     }
     
     var loginWithPasswordButton: some View {
-        Button(action: {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                selectedEmailAuthMethod = .password
-            }
-        }) {
-            HStack {
-                Spacer()
-                Text("Login with Password?")
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.zero.bgAccentRest)
-                Spacer()
-            }
+        HStack {
+            Spacer()
+            ZeroSimpleTextButton(title: "Login with Password?",
+                                 onClick: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    selectedEmailAuthMethod = .password
+                }
+            })
+            Spacer()
         }
     }
     
     var loginWithOTPButton: some View {
-        Button(action: {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                selectedEmailAuthMethod = .otp
-            }
-        }) {
-            HStack {
-                Spacer()
-                Text("Use OTP instead?")
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.zero.bgAccentRest)
-                Spacer()
-            }
+        HStack {
+            Spacer()
+            ZeroSimpleTextButton(title: "Use OTP instead?",
+                                 onClick: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    selectedEmailAuthMethod = .otp
+                }
+            })
+            Spacer()
         }
     }
     
     var forgotPasswordButton: some View {
-        Button(action: {
-            context.send(viewAction: .forgotPassword)
-        }) {
-            HStack {
-                Spacer()
-                Text("Forgot Password?")
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.zero.bgAccentRest)
-                Spacer()
-            }
+        HStack {
+            Spacer()
+            ZeroSimpleTextButton(title: "Forgot Password?",
+                                 onClick: { context.send(viewAction: .forgotPassword) })
+            Spacer()
         }
     }
     

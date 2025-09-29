@@ -55,7 +55,14 @@ class OtpVerificationScreenViewModel: OtpVerificationScreenViewModelType, OtpVer
             case .success(let userSession):
                 actionsSubject.send(.signedIn(userSession))
             case .failure(let error):
-                displayError()
+                switch error {
+                case .invalidOtp:
+                    displayError(message: "Invalid or expired OTP")
+                case .userNotFound:
+                    displayError(message: "User not found")
+                default:
+                    displayError()
+                }
             }
         }
     }
@@ -69,8 +76,8 @@ class OtpVerificationScreenViewModel: OtpVerificationScreenViewModelType, OtpVer
             switch result {
             case .success:
                 break
-            case .failure(let error):
-                displayError()
+            case .failure(_):
+                displayError(message: "Failed to resend OTP.")
             }
         }
     }
@@ -88,7 +95,7 @@ class OtpVerificationScreenViewModel: OtpVerificationScreenViewModelType, OtpVer
         userIndicatorController.retractIndicatorWithId(loadingIndicatorID)
     }
     
-    private func displayError() {
-        state.bindings.alertInfo = AlertInfo(id: .genericError)
+    private func displayError(message: String? = nil) {
+        state.bindings.alertInfo = AlertInfo(id: .genericError, title: L10n.commonError, message: message ?? L10n.errorUnknown)
     }
 }

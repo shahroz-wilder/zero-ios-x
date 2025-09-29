@@ -118,7 +118,6 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     
     /// Requests the authentication coordinator to log in using the specified credentials.
     private func login() {
-        MXLog.info("Starting login with password.")
         startLoading(isInteractionBlocking: true)
         
         Task {
@@ -175,7 +174,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
         case .invalidCredentials:
             state.bindings.alertInfo = AlertInfo(id: .credentialsAlert,
                                                  title: L10n.commonError,
-                                                 message: L10n.screenLoginErrorInvalidCredentials)
+                                                 message: "Incorrect email or password")
         case .accountDeactivated:
             state.bindings.alertInfo = AlertInfo(id: .deactivatedAlert,
                                                  title: L10n.commonError,
