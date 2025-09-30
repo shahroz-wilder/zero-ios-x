@@ -131,19 +131,26 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
+        let baseFilter: [RoomListEntriesDynamicFilterKind] = if appSettings.spacesEnabled {
+            [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
+                            .all(filters: [.space, .invite])]),
+             .deduplicateVersions]
+        } else {
+            [.nonLeft, .nonSpace, .deduplicateVersions]
+        }
+        
         switch filter {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .none)
         case let .search(query):
-            let filters: [RoomListEntriesDynamicFilterKind] = if appSettings.fuzzyRoomListSearchEnabled {
-                [.fuzzyMatchRoomName(pattern: query), .nonLeft, .nonSpace, .deduplicateVersions]
+            let filters = if appSettings.fuzzyRoomListSearchEnabled {
+                [.fuzzyMatchRoomName(pattern: query)] + baseFilter
             } else {
-                [.normalizedMatchRoomName(pattern: query), .nonLeft, .nonSpace, .deduplicateVersions]
+                [.normalizedMatchRoomName(pattern: query)] + baseFilter
             }
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         case let .all(filters):
-            var rustFilters = filters.map(\.rustFilter)
-            rustFilters.append(contentsOf: [.nonLeft, .nonSpace, .deduplicateVersions])
+            var rustFilters = filters.map(\.rustFilter) + baseFilter
             
             if !filters.contains(.lowPriority), appSettings.lowPriorityFilterEnabled {
                 rustFilters.append(.nonLowPriority)
@@ -328,6 +335,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            joinRequestType: joinRequestType,
                            name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
+                           isSpace: roomInfo.isSpace,
                            avatarURL: roomAvatar.flatMap(URL.init(string:)),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
                            activeMembersCount: UInt(roomInfo.activeMembersCount),

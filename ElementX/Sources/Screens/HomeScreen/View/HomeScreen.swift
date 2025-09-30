@@ -19,18 +19,6 @@ struct HomeScreen: View {
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
     
-    //    init(context: HomeScreenViewModel.Context) {
-    //        self.context = context
-    //
-    //        let appearance = UINavigationBarAppearance()
-    //        appearance.configureWithTransparentBackground()
-    //        appearance.backgroundEffect = UIBlurEffect(style: .regular)
-    //        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.15)
-    //
-    //        UINavigationBar.appearance().standardAppearance = appearance
-    //        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-    //    }
-    
     var body: some View {
         ZStack(alignment: .top) {
             HomeTabView(
@@ -92,15 +80,18 @@ struct HomeScreen: View {
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
-        //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-        .toolbar { toolbar }
+        .toolbar {
+            if #available(iOS 26, *) {
+                toolbar
+                    .sharedBackgroundVisibility(.hidden)
+            } else {
+                toolbar
+            }
+        }
         .navigationBarHidden(hideNavigationBar)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .track(screen: .Home)
-        //            .bloom(context: context,
-        //                   scrollViewAdapter: scrollViewAdapter,
-        //                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
         .sheet(isPresented: $context.showEarningsClaimedSheet) {
@@ -160,43 +151,7 @@ struct HomeScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
-            Button {
-                context.send(viewAction: .showSettings)
-            } label: {
-                ZStack {
-                    if context.viewState.showNewUserRewardsIntimation {
-                        ZStack(alignment: .center) {
-                            Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
-                                .frame(width: 38, height: 38)
-                            Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
-                                .frame(width: 35, height: 35)
-                        }
-                        .task {
-                            context.send(viewAction: .rewardsIntimated)
-                        }
-                    }
-                    
-                    LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                        name: context.viewState.userDisplayName,
-                                        contentID: context.viewState.userID,
-                                        avatarSize: .user(on: .chats),
-                                        mediaProvider: context.mediaProvider,
-                                        onTap: { _ in
-                        context.send(viewAction: .showSettings)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-                    .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
-                    .compositingGroup()
-                    .overlay {
-                        if context.viewState.showNewUserRewardsIntimation {
-                            userRewardsToolTip
-                                .offset(x: 85, y: 45)
-                                .allowsHitTesting(false)
-                        }
-                    }
-                }
-            }
-            .accessibilityLabel(L10n.commonSettings)
+            settingsButton
         }
         
         ToolbarItem(placement: .principal) {
@@ -217,6 +172,46 @@ struct HomeScreen: View {
         ToolbarItem(placement: .primaryAction) {
             userProfileButton
         }
+    }
+    
+    private var settingsButton: some View {
+        Button {
+            context.send(viewAction: .showSettings)
+        } label: {
+            ZStack {
+                if context.viewState.showNewUserRewardsIntimation {
+                    ZStack(alignment: .center) {
+                        Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
+                            .frame(width: 38, height: 38)
+                        Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
+                            .frame(width: 35, height: 35)
+                    }
+                    .task {
+                        context.send(viewAction: .rewardsIntimated)
+                    }
+                }
+                
+                LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                    name: context.viewState.userDisplayName,
+                                    contentID: context.viewState.userID,
+                                    avatarSize: .user(on: .chats),
+                                    mediaProvider: context.mediaProvider,
+                                    onTap: { _ in
+                    context.send(viewAction: .showSettings)
+                })
+                .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+                .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
+                .compositingGroup()
+                .overlay {
+                    if context.viewState.showNewUserRewardsIntimation {
+                        userRewardsToolTip
+                            .offset(x: 85, y: 45)
+                            .allowsHitTesting(false)
+                    }
+                }
+            }
+        }
+        .accessibilityLabel(L10n.commonSettings)
     }
     
     @ViewBuilder

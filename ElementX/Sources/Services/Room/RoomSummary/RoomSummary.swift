@@ -37,6 +37,7 @@ struct RoomSummary {
     
     let name: String
     let isDirect: Bool
+    let isSpace: Bool
     let avatarURL: URL?
     
     let heroes: [UserProfileProxy]
@@ -114,6 +115,7 @@ extension RoomSummary {
         let string = "\(settingsMode) - messages: \(hasUnreadMessages) - mentions: \(hasUnreadMentions) - notifications: \(hasUnreadNotifications)"
         name = string
         isDirect = true
+        isSpace = false
         avatarURL = nil
         
         heroes = []

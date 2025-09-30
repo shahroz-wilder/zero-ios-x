@@ -57,6 +57,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildRedactedTimelineItem(eventItemProxy, messageLikeContent, isOutgoing, repliedToEvent)
             case .unableToDecrypt(let encryptedMessage):
                 return buildEncryptedTimelineItem(eventItemProxy, messageLikeContent, encryptedMessage, isOutgoing, repliedToEvent)
+            case .other(eventType: let eventType):
+                return nil // We shouldn't receive these without asking for custom event types.
             }
         case .failedToParseMessageLike(let eventType, let error):
             /// If message content parsing is failed (GIPHY case in this), we need to handle the content ourself rather than returning unsupportedTimelineItem
