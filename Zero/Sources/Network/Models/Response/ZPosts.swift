@@ -35,7 +35,7 @@ struct ZPostReplies: Codable {
 struct ZPost: Codable, Identifiable {
     let id: Tagged<Self, String>
     let userId: String
-    let zid: String
+    let zid: String?
     let createdAt: String
     let updatedAt: String
     let signedMessage: String

@@ -6706,15 +6706,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - postNewFeed
 
-    var postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount = 0
-    var postNewFeedChannelZIdContentReplyToPostMediaFileCallsCount: Int {
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = 0
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount
+                return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount
+                    returnValue = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6722,29 +6722,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount = newValue
+                postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount = newValue
+                    postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var postNewFeedChannelZIdContentReplyToPostMediaFileCalled: Bool {
-        return postNewFeedChannelZIdContentReplyToPostMediaFileCallsCount > 0
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCalled: Bool {
+        return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount > 0
     }
-    var postNewFeedChannelZIdContentReplyToPostMediaFileReceivedArguments: (channelZId: String, content: String, replyToPost: String?, mediaFile: URL?)?
-    var postNewFeedChannelZIdContentReplyToPostMediaFileReceivedInvocations: [(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?)] = []
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedArguments: (channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?)?
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedInvocations: [(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?)] = []
 
-    var postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var postNewFeedChannelZIdContentReplyToPostMediaFileReturnValue: Result<Void, ClientProxyError>! {
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReturnValue: Result<Void, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue
+                return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue
+                    returnValue = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -6752,26 +6752,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue = newValue
+                postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue = newValue
+                    postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var postNewFeedChannelZIdContentReplyToPostMediaFileClosure: ((String, String, String?, URL?) async -> Result<Void, ClientProxyError>)?
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure: ((String?, String, String, String?, URL?) async -> Result<Void, ClientProxyError>)?
 
-    func postNewFeed(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError> {
-        postNewFeedChannelZIdContentReplyToPostMediaFileCallsCount += 1
-        postNewFeedChannelZIdContentReplyToPostMediaFileReceivedArguments = (channelZId: channelZId, content: content, replyToPost: replyToPost, mediaFile: mediaFile)
+    func postNewFeed(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError> {
+        postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount += 1
+        postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedArguments = (channelZId: channelZId, walletAddress: walletAddress, content: content, replyToPost: replyToPost, mediaFile: mediaFile)
         DispatchQueue.main.async {
-            self.postNewFeedChannelZIdContentReplyToPostMediaFileReceivedInvocations.append((channelZId: channelZId, content: content, replyToPost: replyToPost, mediaFile: mediaFile))
+            self.postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedInvocations.append((channelZId: channelZId, walletAddress: walletAddress, content: content, replyToPost: replyToPost, mediaFile: mediaFile))
         }
-        if let postNewFeedChannelZIdContentReplyToPostMediaFileClosure = postNewFeedChannelZIdContentReplyToPostMediaFileClosure {
-            return await postNewFeedChannelZIdContentReplyToPostMediaFileClosure(channelZId, content, replyToPost, mediaFile)
+        if let postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure {
+            return await postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure(channelZId, walletAddress, content, replyToPost, mediaFile)
         } else {
-            return postNewFeedChannelZIdContentReplyToPostMediaFileReturnValue
+            return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReturnValue
         }
     }
     //MARK: - fetchFeedUserProfile

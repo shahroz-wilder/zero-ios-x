@@ -287,7 +287,7 @@ struct FeedDetailsSection: View {
                         }
                     }
                     if post.senderPrimaryZId != nil {
-                        Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.senderPrimaryZId!)")
+                        Text(post.senderPrimaryZId!)
                             .font(.zero.bodyMD)
                             .foregroundStyle(.compound.textSecondary)
                             .lineLimit(1)

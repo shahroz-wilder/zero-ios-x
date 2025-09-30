@@ -65,19 +65,9 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     }
     
     private func createNewPost() {
-//        guard let userWalletAddress = currentUserWalletAddress else {
-//            state.bindings.alertInfo = .init(id: UUID(),
-//                                             title: L10n.commonError,
-//                                             message: "User default wallet is not initialized.")
-//            return
-//        }
-        guard let defaultChannelZId = defaultChannelZId else {
-            state.bindings.alertInfo = .init(id: UUID(),
-                                             title: L10n.commonError,
-                                             message: "Please set user primaryZId in profile settings.")
+        guard let userWalletAddress = currentUserWalletAddress else {
             return
         }
-        
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
@@ -89,6 +79,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
                                                                   persistent: true))
             
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
+                                                               walletAddress: userWalletAddress,
                                                                content: state.bindings.feedText,
                                                                replyToPost: nil,
                                                                mediaFile: state.bindings.selectedFeedMediaUrl)

@@ -730,7 +730,7 @@ extension HomeScreenPost {
             senderInfo: UserProfileProxy(userID: userProfile.id,
                                          displayName: userProfile.fullName,
                                          avatarURL: URL(string: userProfile.profileImage ?? "")),
-            senderPrimaryZId: post.zid,
+            senderPrimaryZId: post.userProfileView?.zIdOrPublicAddressDisplayText,
             postText: post.text,
             attributedSenderHeaderText: attributedSenderHeaderText,
             attributedPostText: attributedPostText,

@@ -1224,7 +1224,7 @@ class ClientProxy: ClientProxyProtocol {
             case .success(let posts):
                 return .success(posts)
             case .failure(let error):
-                return .failure(checkPostFetchError(error))
+                return .failure(.zeroError(error))
             }
         } catch {
             MXLog.error(error)
@@ -1254,7 +1254,7 @@ class ClientProxy: ClientProxyProtocol {
             case .success(let replies):
                 return .success(replies)
             case .failure(let error):
-                return .failure(checkPostFetchError(error))
+                return .failure(.zeroError(error))
             }
         } catch {
             MXLog.error(error)
@@ -1277,7 +1277,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func postNewFeed(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError> {
+    func postNewFeed(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError> {
         do {
             var mediaId: String? = nil
             if let mediaFile = mediaFile {
@@ -1290,6 +1290,7 @@ class ClientProxy: ClientProxyProtocol {
                 }
             }
             let postFeedResult = try await zeroApiProxy.postsApi.createNewPost(channelZId: channelZId,
+                                                                               walletAddress: walletAddress,
                                                                                content: content,
                                                                                replyToPost: replyToPost,
                                                                                mediaId: mediaId)
@@ -1328,7 +1329,7 @@ class ClientProxy: ClientProxyProtocol {
             case .success(let feeds):
                 return .success(feeds)
             case .failure(let error):
-                return .failure(checkPostFetchError(error))
+                return .failure(.zeroError(error))
             }
         } catch {
             MXLog.error(error)
@@ -2038,15 +2039,6 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 MXLog.error("Failed fetching ignored users with error: \(error)")
             }
-        }
-    }
-    
-    private func checkPostFetchError(_ error: Error) -> ClientProxyError {
-        let postLimitReachedError = "The data couldn’t be read because it is missing."
-        if error.asAFError?.underlyingError?.localizedDescription.contains(postLimitReachedError) == true {
-            return .postsLimitReached
-        } else {
-            return .zeroError(error)
         }
     }
     

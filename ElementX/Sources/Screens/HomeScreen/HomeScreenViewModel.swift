@@ -768,12 +768,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .failure(let error):
             MXLog.error("Failed to fetch zero posts: \(error)")
             state.postListMode = state.posts.isEmpty ? .empty : .posts
-            switch error {
-            case .postsLimitReached:
-                state.canLoadMorePosts = false
-            default:
-                displayError()
-            }
             isFetchPostsInProgress = false
         }
     }
@@ -808,7 +802,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.posts[postIndex] = homePost
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
-//                displayError()
             }
         }
     }
@@ -829,7 +822,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .failure(let error):
             state.channelsListMode = .empty
             MXLog.error("Failed to fetch channels: \(error)")
-            displayError()
         }
     }
     
@@ -864,8 +856,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     markChannelRead(channel)
                     getRoomInfoFromAlias(channel.id)
                 case .failure(let failure):
-                    MXLog.error("Failed to join channel: \(failure)")
-                    displayError()
+//                    MXLog.error("Failed to join channel: \(failure)")
+                    displayError(message: "Failed to join channel. Please try again later.")
                 }
             }
         }

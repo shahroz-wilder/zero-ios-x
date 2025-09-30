@@ -149,20 +149,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 MXLog.error("Failed to fetch zero post replies: \(error)")
                 state.repliesListMode = state.feedReplies.isEmpty ? .empty : .replies
                 isFetchRepliesInProgress = false
-                switch error {
-                case .postsLimitReached:
-                    state.canLoadMoreReplies = false
-                default:
-                    displayError()
-                }
             }
         }
-    }
-        
-    private func displayError() {
-        state.bindings.alertInfo = .init(id: UUID(),
-                                         title: L10n.commonError,
-                                         message: L10n.errorUnknown)
     }
     
     private func openArweaveLink(_ post: HomeScreenPost) {
@@ -209,22 +197,12 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 mainFeedProtocol?.onFeedUpdated(homePost)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
-//                displayError()
             }
         }
     }
     
     private func postFeedReply() {
-//        guard let userWalletAddress = currentUserWalletAddress else {
-//            state.bindings.alertInfo = .init(id: UUID(),
-//                                             title: L10n.commonError,
-//                                             message: "User default wallet is not initialized.")
-//            return
-//        }
-        guard let defaultChannelZId = defaultChannelZId else {
-            state.bindings.alertInfo = .init(id: UUID(),
-                                             title: L10n.commonError,
-                                             message: "Please set user primaryZId in profile settings.")
+        guard let userWalletAddress = currentUserWalletAddress else {
             return
         }
         
@@ -238,6 +216,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                                   title: "Posting...",
                                                                   persistent: true))
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
+                                                               walletAddress: userWalletAddress,
                                                                content: state.bindings.myPostReply,
                                                                replyToPost: state.bindings.feed.id,
                                                                mediaFile: state.bindings.feedMedia)
@@ -249,7 +228,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             case .failure(_):
                 state.bindings.alertInfo = .init(id: UUID(),
                                                  title: L10n.commonError,
-                                                 message: L10n.errorUnknown)
+                                                 message: "Failed to post reply. Please try again.")
             }
         }
     }
