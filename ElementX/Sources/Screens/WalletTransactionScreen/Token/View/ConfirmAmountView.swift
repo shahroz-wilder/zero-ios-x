@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ConfirmAmountView: View {
     @ObservedObject var context: TransferTokenViewModel.Context
+    
+    @FocusState private var isAmountFieldFocused: Bool
         
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -21,9 +23,14 @@ struct ConfirmAmountView: View {
                     VStack(alignment: .leading) {
                         UserInfoView(preText: "From:",
                                      userName: currentUser.displayName,
-                                     userAddress: displayFormattedAddress(currentUser.publicWalletAddress))
+                                     userAddress: displayFormattedAddress(currentUser.publicWalletAddress),
+                                     onTap: { isAmountFieldFocused = false })
                         
-                        AssetInfoView(tokenAsset: token, amount: $context.transferAmount, isSenderSideInfo: true, iconUrl: token.logo)
+                        AssetInfoView(tokenAsset: token,
+                                      amount: $context.transferAmount,
+                                      isSenderSideInfo: true,
+                                      iconUrl: token.logo,
+                                      isFocused: $isAmountFieldFocused)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -33,9 +40,14 @@ struct ConfirmAmountView: View {
                     VStack(alignment: .leading) {
                         UserInfoView(preText: "Sending To:",
                                      userName: recipient.displayName,
-                                     userAddress: displayFormattedAddress(recipient.publicAddress))
+                                     userAddress: displayFormattedAddress(recipient.publicAddress),
+                                     onTap: { isAmountFieldFocused = false })
                         
-                        AssetInfoView(tokenAsset: token, amount: $context.transferAmount, isSenderSideInfo: false, iconUrl: token.logo)
+                        AssetInfoView(tokenAsset: token,
+                                      amount: $context.transferAmount,
+                                      isSenderSideInfo: false,
+                                      iconUrl: token.logo,
+                                      isFocused: $isAmountFieldFocused)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -68,17 +80,9 @@ struct ConfirmAmountView: View {
     }
     
     var continueButton: some View {
-        Button(action: { context.send(viewAction: .onConfirmTransaction) }) {
-            Text("Continue")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
+        ZeroPrimaryButton(title: "Continue",
+                          onClick: { context.send(viewAction: .onConfirmTransaction) })
+        .padding(16)
     }
 }
 
@@ -86,6 +90,7 @@ private struct UserInfoView: View {
     let preText: String
     let userName: String
     let userAddress: String?
+    let onTap: () -> Void
     
     var body: some View {
         HStack {
@@ -111,6 +116,8 @@ private struct UserInfoView: View {
         .background(
             RoundedRectangle(cornerRadius: 12).fill(.compound.bgCanvasDefaultLevel1)
         )
+        .contentShape(Rectangle())
+        .onTapGesture { onTap() }
     }
 }
 
@@ -119,8 +126,8 @@ private struct AssetInfoView: View {
     @Binding var amount: String
     let isSenderSideInfo: Bool
     let iconUrl: String?
+    var isFocused: FocusState<Bool>.Binding
     
-    @FocusState private var isFocused: Bool
     @State private var balance: String = ""
     
     var body: some View {
@@ -149,36 +156,43 @@ private struct AssetInfoView: View {
                         .foregroundStyle(.compound.textSecondary)
                         .padding(.vertical, 1)
                 }
+                
+                Spacer()
             }
             
             if isSenderSideInfo {
                 HStack {
-                    TextField("0", text: $amount)
-                        .keyboardType(.decimalPad)
-                        .textFieldStyle(.plain)
-                        .submitLabel(.done)
-                        .font(.zero.headingSMSemibold)
-                        .focused($isFocused)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                self.isFocused = true
-                            }
-                        }
-                        .onChange(of: amount) { _, newValue in
-                            let enteredAmount = Double(newValue) ?? 0
-                            let maxAccount = Double(tokenAsset.amount) ?? 0
-                            if enteredAmount > maxAccount {
-                                amount = tokenAsset.amount
-                            }
-                        }
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    isFocused = false
+                    VStack {
+                        TextField("0", text: $amount)
+                            .keyboardType(.decimalPad)
+                            .textFieldStyle(.plain)
+                            .submitLabel(.done)
+                            .font(.zero.headingSMSemibold)
+                            .focused(isFocused)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    self.isFocused.wrappedValue = true
                                 }
                             }
+                            .onChange(of: amount) { _, newValue in
+                                let enteredAmount = Double(newValue) ?? 0
+                                let maxAccount = Double(tokenAsset.amount) ?? 0
+                                if enteredAmount > maxAccount {
+                                    amount = tokenAsset.amount
+                                }
+                            }
+                    }
+                    .toolbar {
+                        if isFocused.wrappedValue {
+                            ToolbarItemGroup(placement: .primaryAction) {
+                                Spacer()
+                                Button("Done") {
+                                    isFocused.wrappedValue = false
+                                }
+                                .foregroundStyle(.compound.textPrimary)
+                            }
                         }
+                    }
                     
                     Spacer()
                     
@@ -208,10 +222,14 @@ private struct AssetInfoView: View {
                         .foregroundStyle(.compound.textSecondary)
                 }
             } else {
-                Text(amount.isEmpty ? "0" : amount)
-                    .font(.zero.headingSMSemibold)
-                    .foregroundStyle(.compound.textPrimary)
-                    .padding(.vertical, 12)
+                HStack {
+                    Text(amount.isEmpty ? "0" : amount)
+                        .font(.zero.headingSMSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                        .padding(.vertical, 12)
+                    
+                    Spacer()
+                }
             }
         }
         .onChange(of: amount, { _, newValue in
@@ -227,6 +245,11 @@ private struct AssetInfoView: View {
                 balance = tokenAsset.formattedAmount
             }
         })
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isFocused.wrappedValue = false
+        }
         .padding(8)
     }
 }
