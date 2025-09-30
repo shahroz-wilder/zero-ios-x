@@ -90,7 +90,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             case .failure(_):
                 state.bindings.alertInfo = .init(id: UUID(),
                                                  title: L10n.commonError,
-                                                 message: L10n.errorUnknown)
+                                                 message: "Failed to create post. Please try again later.")
             }
         }
     }

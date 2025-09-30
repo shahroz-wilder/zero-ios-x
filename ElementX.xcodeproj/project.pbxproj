@@ -2168,6 +2168,8 @@
 		79B8E34D2D660CEC000304AE /* VerificationBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D97BAF04AA150C0EF03021 /* VerificationBadge.swift */; };
 		79B8FEBF2DE729EB00FF871D /* TimelineItemProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829D3CE4F6C4DF6CC02D33C3 /* TimelineItemProviderProtocol.swift */; };
 		79B8FEC02DE72A0800FF871D /* TimelineItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8520AFD6680CBAD388F6D927 /* TimelineItemProvider.swift */; };
+		79BBCD852E8C06A90043CB6A /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBCD842E8C06A60043CB6A /* BadgeManager.swift */; };
+		79BBCD862E8C06A90043CB6A /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BBCD842E8C06A60043CB6A /* BadgeManager.swift */; };
 		79C25B532E25A1FB00936A5D /* FeedMediaPreFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C25B522E25A1EE00936A5D /* FeedMediaPreFetchService.swift */; };
 		79C25B542E25A1FB00936A5D /* FeedMediaPreFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C25B522E25A1EE00936A5D /* FeedMediaPreFetchService.swift */; };
 		79C25B562E25A21E00936A5D /* FeedMediaPreFetchProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C25B552E25A21600936A5D /* FeedMediaPreFetchProtocol.swift */; };
@@ -3993,6 +3995,7 @@
 		79B2A7942E2A856200A76430 /* UserRewardsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRewardsProtocol.swift; sourceTree = "<group>"; };
 		79B2A7982E2A885700A76430 /* FeedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProtocol.swift; sourceTree = "<group>"; };
 		79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCustomEventService.swift; sourceTree = "<group>"; };
+		79BBCD842E8C06A60043CB6A /* BadgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
 		79C25B522E25A1EE00936A5D /* FeedMediaPreFetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreFetchService.swift; sourceTree = "<group>"; };
 		79C25B552E25A21600936A5D /* FeedMediaPreFetchProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreFetchProtocol.swift; sourceTree = "<group>"; };
 		79C25B582E25AACE00936A5D /* PostImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageViewer.swift; sourceTree = "<group>"; };
@@ -5448,6 +5451,7 @@
 		1882EB982C91B9F6001DA2A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				79BBCD842E8C06A60043CB6A /* BadgeManager.swift */,
 				795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */,
 				7903937C2D50DA8E0022E293 /* DateUtil.swift */,
 				185454D62CFEFC79003CA957 /* ValidationUtil.swift */,
@@ -11250,6 +11254,7 @@
 				18E9A6112C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
 				18E9A6122C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
 				18E9A6132C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */,
+				79BBCD862E8C06A90043CB6A /* BadgeManager.swift in Sources */,
 				185454E02CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */,
 				18E9A6142C9829970082DDA4 /* RestorationToken.swift in Sources */,
 				18E9A6152C9829970082DDA4 /* RoomAttachmentPicker.swift in Sources */,
@@ -12200,6 +12205,7 @@
 				C26DB49C06C00B5DF1A991A5 /* InviteUsersScreenModels.swift in Sources */,
 				61941DEE5F3834765770BE01 /* InviteUsersScreenSelectedItem.swift in Sources */,
 				F519DE17A3A0F760307B2E6D /* InviteUsersScreenViewModel.swift in Sources */,
+				79BBCD852E8C06A90043CB6A /* BadgeManager.swift in Sources */,
 				A17FAD2EBC53E17B5FD384DB /* InviteUsersScreenViewModelProtocol.swift in Sources */,
 				89B909AC66B96FA054EF3C14 /* InvitedRoomProxy.swift in Sources */,
 				07376A5274822EB45CC320C7 /* InvitedRoomProxyMock.swift in Sources */,

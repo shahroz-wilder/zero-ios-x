@@ -758,6 +758,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.posts = homePosts.uniqued(on: \.id)
                 state.postListMode = .posts
                 isFetchPostsInProgress = false
+                state.canLoadMorePosts = posts.count >= HOME_SCREEN_POST_PAGE_COUNT
                 
                 if isForceRefresh {
                     self.feedMediaPreFetchService?.forceRefreshHomeFeedMedia(following: followingOnly)

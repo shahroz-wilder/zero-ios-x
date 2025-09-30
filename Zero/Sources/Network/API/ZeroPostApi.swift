@@ -125,7 +125,8 @@ class ZeroPostApi: ZeroPostApiProtocol {
     
     func createNewPost(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, any Error> {
         var parameters: [String: String] = [
-            "text": content
+            "text": content,
+            "walletAddress": walletAddress
         ]
         if let replyToPostId = replyToPost {
             parameters["replyTo"] = replyToPostId
