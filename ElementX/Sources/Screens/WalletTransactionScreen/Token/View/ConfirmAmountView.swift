@@ -58,22 +58,21 @@ struct ConfirmAmountView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding()
-            
-            if context.viewState.canMakeTransaction {
-                continueButton
-//                VStack {
-//                    Text("Review the above before confirming.\nOnce made, your transaction is irreversible.")
-//                        .font(.zero.bodySM)
-//                        .foregroundStyle(.compound.textSecondary)
-//                        .multilineTextAlignment(.center)
-//                    
-//                    SwipeToConfirmButton(onConfirm: {
-//                        context.send(viewAction: .onTransactionConfirmed)
-//                    })
-//                    .padding(.vertical, 12)
-//                }
-//                .padding()
+            .toolbar {
+                if context.viewState.canMakeTransaction {
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        Button("Next") {
+                            context.send(viewAction: .onConfirmTransaction)
+                        }
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                    }
+                }
             }
+            
+//            if context.viewState.canMakeTransaction {
+//                continueButton
+//            }
         }
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .ignoresSafeArea(.keyboard)
@@ -162,37 +161,24 @@ private struct AssetInfoView: View {
             
             if isSenderSideInfo {
                 HStack {
-                    VStack {
-                        TextField("0", text: $amount)
-                            .keyboardType(.decimalPad)
-                            .textFieldStyle(.plain)
-                            .submitLabel(.done)
-                            .font(.zero.headingSMSemibold)
-                            .focused(isFocused)
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    self.isFocused.wrappedValue = true
-                                }
-                            }
-                            .onChange(of: amount) { _, newValue in
-                                let enteredAmount = Double(newValue) ?? 0
-                                let maxAccount = Double(tokenAsset.amount) ?? 0
-                                if enteredAmount > maxAccount {
-                                    amount = tokenAsset.amount
-                                }
-                            }
-                    }
-                    .toolbar {
-                        if isFocused.wrappedValue {
-                            ToolbarItemGroup(placement: .primaryAction) {
-                                Spacer()
-                                Button("Done") {
-                                    isFocused.wrappedValue = false
-                                }
-                                .foregroundStyle(.compound.textPrimary)
+                    TextField("0", text: $amount)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(.plain)
+                        .submitLabel(.done)
+                        .font(.zero.headingSMSemibold)
+                        .focused(isFocused)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                self.isFocused.wrappedValue = true
                             }
                         }
-                    }
+                        .onChange(of: amount) { _, newValue in
+                            let enteredAmount = Double(newValue) ?? 0
+                            let maxAccount = Double(tokenAsset.amount) ?? 0
+                            if enteredAmount > maxAccount {
+                                amount = tokenAsset.amount
+                            }
+                        }
                     
                     Spacer()
                     

@@ -857,7 +857,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     markChannelRead(channel)
                     getRoomInfoFromAlias(channel.id)
                 case .failure(let failure):
-//                    MXLog.error("Failed to join channel: \(failure)")
+                    MXLog.error("Failed to join channel: \(failure)")
                     displayError(message: "Failed to join channel. Please try again later.")
                 }
             }

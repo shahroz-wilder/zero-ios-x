@@ -738,7 +738,7 @@ extension HomeScreenPost {
             postCreatedAt: post.createdAt,
             postTimestamp: postTimeStamp,
             postImageURL: (post.imageUrl != nil) ? URL(string: post.imageUrl!) : nil,
-            worldPrimaryZId: post.worldZid,
+            worldPrimaryZId: post.worldZIdDisplayText,
             repliesCount: repliesCount,
             isPostInOwnFeed: isPostInOwnFeed,
             arweaveId: post.arweaveId,

@@ -279,7 +279,7 @@ struct FeedDetailsSection: View {
                         
                         if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                             Spacer()
-                            Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.worldPrimaryZId!)")
+                            Text(post.worldPrimaryZId!)
                                 .font(.zero.bodyMD)
                                 .foregroundStyle(.compound.textSecondary)
                                 .lineLimit(1)

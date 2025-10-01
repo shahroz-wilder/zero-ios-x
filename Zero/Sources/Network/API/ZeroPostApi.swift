@@ -125,8 +125,7 @@ class ZeroPostApi: ZeroPostApiProtocol {
     
     func createNewPost(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, any Error> {
         var parameters: [String: String] = [
-            "text": content,
-            "walletAddress": walletAddress
+            "text": content
         ]
         if let replyToPostId = replyToPost {
             parameters["replyTo"] = replyToPostId
@@ -135,9 +134,11 @@ class ZeroPostApi: ZeroPostApiProtocol {
             parameters["mediaId"] = mediaId
         }
         
-        let requestChannelZId = channelZId?.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
-        let requestUrl = FeedEndPoints.newPostEndPoint
-            .replacingOccurrences(of: FeedConstants.channel_path_param, with: requestChannelZId ?? walletAddress)
+        let requestUrl = if let requestChannelZId = channelZId?.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") {
+            FeedEndPoints.newPostEndPoint.appending("/\(requestChannelZId)")
+        } else {
+            FeedEndPoints.newPostEndPoint
+        }
         
         let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(requestUrl, method: .post, appSettings: appSettings, parameters: parameters)
         switch result {
@@ -179,11 +180,10 @@ class ZeroPostApi: ZeroPostApiProtocol {
         static let postDetailsEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)"
         static let postRepliesEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)/replies"
         static let meowPostEndPoint = "\(hostUrl)api/v2/posts/post/\(FeedConstants.feed_id_path_param)/meow"
-        static let newPostEndPoint = "\(hostUrl)api/v2/posts/channel/raw/\(FeedConstants.channel_path_param)"
+        static let newPostEndPoint = "\(hostUrl)api/v2/posts/channel/raw"
     }
     
     private enum FeedConstants {
         static let feed_id_path_param = "{feed_id}"
-        static let channel_path_param = "{channel_zid}"
     }
 }

@@ -376,7 +376,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
                 case .failure:
                     stopLoading()
-                    showServerSelectionScreen(authenticationFlow: flow)
+                    userIndicatorController.alertInfo = .init(id: UUID(),
+                                                              title: L10n.commonError,
+                                                              message: "We’re having trouble right now. Please check your connection and try again.")
+                    //showServerSelectionScreen(authenticationFlow: flow)
                 }
             }
         }
