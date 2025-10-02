@@ -133,4 +133,18 @@ extension Double {
             return "\(self)"
         }
     }
+    
+    /// Converts a Double into a localized string with given fraction digits
+    func toLocalizedString(
+        locale: Locale = .current,
+        minFractionDigits: Int = 0,
+        maxFractionDigits: Int = 2
+    ) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = minFractionDigits
+        formatter.maximumFractionDigits = maxFractionDigits
+        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+    }
 }

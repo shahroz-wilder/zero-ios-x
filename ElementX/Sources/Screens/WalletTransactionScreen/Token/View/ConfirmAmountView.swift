@@ -170,19 +170,12 @@ private struct AssetInfoView: View {
                                 self.isFocused.wrappedValue = true
                             }
                         }
-                        .onChange(of: amount) { _, newValue in
-                            let enteredAmount = parseInputValue(newValue)
-                            let maxAccount = parseInputValue(tokenAsset.amount)
-                            if enteredAmount > maxAccount {
-                                amount = tokenAsset.amount
-                            }
-                        }
                     
                     Spacer()
                     
                     if amount != tokenAsset.amount {
                         Button {
-                            amount = formatBalance(parseInputValue(tokenAsset.amount))
+                            amount = tokenAsset.amount.toLocalizedFormattedString() ?? tokenAsset.amount
                         } label: {
                             Text("Use Max")
                                 .font(.zero.bodySMSemibold)
@@ -217,17 +210,17 @@ private struct AssetInfoView: View {
             }
         }
         .onChange(of: amount, { _, newValue in
-            let tokenMaxAmmount = parseInputValue(tokenAsset.amount)
-            let userAmount = parseInputValue(newValue)
-            if tokenMaxAmmount > 0 && userAmount > 0 {
+            if let tokenMaxAmmount = tokenAsset.amount.toLocalizedFormattedString()?.toLocalizedDouble(),
+               let userAmount = newValue.toLocalizedDouble() {
                 if userAmount > tokenMaxAmmount {
-                    amount = tokenAsset.amount
+                    amount = tokenAsset.formattedAmount.toLocalizedFormattedString() ?? tokenAsset.formattedAmount
+                    balance = "0"
                 } else {
                     let diff = tokenMaxAmmount - userAmount
-                    balance = formatBalance(diff)
+                    balance = diff.toLocalizedString()
                 }
             } else {
-                balance = tokenAsset.formattedAmount
+                balance = tokenAsset.formattedAmount.toLocalizedFormattedString() ?? tokenAsset.formattedAmount
             }
         })
         .frame(maxWidth: .infinity)
@@ -237,28 +230,4 @@ private struct AssetInfoView: View {
         }
         .padding(8)
     }
-}
-
-private func formatBalance(_ value: Double) -> String {
-    let formatter = NumberFormatter()
-    formatter.locale = .current
-    formatter.numberStyle = .decimal
-    formatter.minimumFractionDigits = 2
-    formatter.maximumFractionDigits = 2
-    
-    return formatter.string(from: NSNumber(value: value)) ?? "0"
-}
-
-private func parseInputValue(_ input: String) -> Double {
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .decimal
-    formatter.locale = .current
-    
-    // Try with current locale first
-    if let number = formatter.number(from: input) {
-        return number.doubleValue
-    }
-    // Fallback: replace comma with dot, or dot with comma
-    let normalized = input.replacingOccurrences(of: ",", with: ".")
-    return Double(normalized) ?? 0
 }
