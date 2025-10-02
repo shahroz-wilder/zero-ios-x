@@ -1133,7 +1133,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 for pool in stakePools {
                     group.addTask {
                         let poolAddress = pool.address
-                        let chainId = pool.chainId
+                        let chainId = pool.chainId.rawValue
                         let isAvaxChain = ZeroWalletChainsUtil.shared.isAvaxChain(chainId)
                         
                         async let totalStakedResult = self.userSession.clientProxy.getTotalStaked(poolAddress: poolAddress, chainId: chainId)

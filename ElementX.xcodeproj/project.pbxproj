@@ -1864,10 +1864,6 @@
 		790A474F2E6AE2F70033604D /* ResentOtpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A474D2E6AE2F00033604D /* ResentOtpButton.swift */; };
 		790A47512E6B061E0033604D /* ZeroWalletChainsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */; };
 		790A47522E6B061E0033604D /* ZeroWalletChainsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */; };
-		790A47572E6B09510033604D /* ZChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47562E6B094E0033604D /* ZChainIcon.swift */; };
-		790A47582E6B09510033604D /* ZChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47562E6B094E0033604D /* ZChainIcon.swift */; };
-		790A475A2E6B09980033604D /* AvaxChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47592E6B098E0033604D /* AvaxChainIcon.swift */; };
-		790A475B2E6B09980033604D /* AvaxChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A47592E6B098E0033604D /* AvaxChainIcon.swift */; };
 		790A475D2E6B1A070033604D /* ZeroWalletStakingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */; };
 		790A475E2E6B1A070033604D /* ZeroWalletStakingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */; };
 		790AB79B2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
@@ -1992,6 +1988,8 @@
 		7944A7692D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */; };
 		7944A76C2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
 		7944A76D2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
+		794A325F2E8E9BC900688144 /* WalletChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A325E2E8E9BC100688144 /* WalletChainIcon.swift */; };
+		794A32602E8E9BC900688144 /* WalletChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A325E2E8E9BC100688144 /* WalletChainIcon.swift */; };
 		794A75522E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */; };
 		794A75532E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */; };
 		794E2AEB2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */; };
@@ -3885,8 +3883,6 @@
 		790A474A2E6ADCE30033604D /* OtpModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpModifier.swift; sourceTree = "<group>"; };
 		790A474D2E6AE2F00033604D /* ResentOtpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResentOtpButton.swift; sourceTree = "<group>"; };
 		790A47502E6B06160033604D /* ZeroWalletChainsUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletChainsUtil.swift; sourceTree = "<group>"; };
-		790A47562E6B094E0033604D /* ZChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZChainIcon.swift; sourceTree = "<group>"; };
-		790A47592E6B098E0033604D /* AvaxChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaxChainIcon.swift; sourceTree = "<group>"; };
 		790A475C2E6B1A010033604D /* ZeroWalletStakingUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletStakingUtil.swift; sourceTree = "<group>"; };
 		790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModel.swift; sourceTree = "<group>"; };
@@ -3933,6 +3929,7 @@
 		7944A7642D589F3F00B75DAC /* CreateFeedScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModel.swift; sourceTree = "<group>"; };
 		7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenView.swift; sourceTree = "<group>"; };
+		794A325E2E8E9BC100688144 /* WalletChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletChainIcon.swift; sourceTree = "<group>"; };
 		794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAvaxTokenPrice.swift; sourceTree = "<group>"; };
 		794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletApi.swift; sourceTree = "<group>"; };
 		794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZChannelRoomId.swift; sourceTree = "<group>"; };
@@ -5467,8 +5464,7 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				790A47592E6B098E0033604D /* AvaxChainIcon.swift */,
-				790A47562E6B094E0033604D /* ZChainIcon.swift */,
+				794A325E2E8E9BC100688144 /* WalletChainIcon.swift */,
 				790A47462E6ADBEE0033604D /* Otp */,
 				79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */,
 				790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */,
@@ -10841,7 +10837,6 @@
 				18E9A5052C9829970082DDA4 /* ExpiringTaskRunner.swift in Sources */,
 				18AF615D2CF85E3200921644 /* ZeroListRowButtonStyle.swift in Sources */,
 				79C524162DA3820900B61378 /* CompoundHook.swift in Sources */,
-				790A475B2E6B09980033604D /* AvaxChainIcon.swift in Sources */,
 				18E9A5062C9829970082DDA4 /* FileManager.swift in Sources */,
 				18E9A5072C9829970082DDA4 /* LandingScreen.swift in Sources */,
 				18E9A5082C9829970082DDA4 /* FileRoomTimelineItem.swift in Sources */,
@@ -11249,7 +11244,6 @@
 				18E9A60E2C9829970082DDA4 /* ReportContentScreenViewModelProtocol.swift in Sources */,
 				18E9A60F2C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreen.swift in Sources */,
 				79C6F72A2DF8246A003CEBB9 /* DeactivateAccountScreen.swift in Sources */,
-				790A47572E6B09510033604D /* ZChainIcon.swift in Sources */,
 				18E9A6102C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenCoordinator.swift in Sources */,
 				18E9A6112C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
 				18E9A6122C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
@@ -11365,6 +11359,7 @@
 				184EC9982CA5AF2A000F405E /* UserSessionStoreMock.swift in Sources */,
 				18E9A6602C9829970082DDA4 /* RoomPollsHistoryScreenCoordinator.swift in Sources */,
 				18E9A6612C9829970082DDA4 /* RoomPollsHistoryScreenModels.swift in Sources */,
+				794A325F2E8E9BC900688144 /* WalletChainIcon.swift in Sources */,
 				18E9A6622C9829970082DDA4 /* RoomPollsHistoryScreenViewModel.swift in Sources */,
 				79B716492DA843F200A68055 /* EventTimelineItem.swift in Sources */,
 				79EC88BC2DDDBEFF006629EE /* ThreadTimelineScreenCoordinator.swift in Sources */,
@@ -12509,7 +12504,6 @@
 				797751752DD9F889006CF62D /* FeedUserProfileScreenModels.swift in Sources */,
 				108D3C0707A90B0F848CDBB9 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
 				7909357B2E42519F003423D7 /* ZeroStakingApi.swift in Sources */,
-				790A47582E6B09510033604D /* ZChainIcon.swift in Sources */,
 				790A47382E6A41840033604D /* OtpVerificationView.swift in Sources */,
 				9A0326D2375075871D2AB537 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
 				ED3E91E6166E4923791ACA84 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */,
@@ -12611,6 +12605,7 @@
 				6E63704717F17593A475D152 /* RoomNotificationSettingsScreenModels.swift in Sources */,
 				E9347F56CF0683208F4D9249 /* RoomNotificationSettingsScreenViewModel.swift in Sources */,
 				79281A852E6A33BA00D86DD6 /* ForgotPasswordScreenCoordinator.swift in Sources */,
+				794A32602E8E9BC900688144 /* WalletChainIcon.swift in Sources */,
 				BA4C9049BC96DED3A2F3B82E /* RoomNotificationSettingsScreenViewModelProtocol.swift in Sources */,
 				491D62ACD19E6F134B1766AF /* RoomNotificationSettingsUserDefinedScreen.swift in Sources */,
 				DBC8D1DBFE9F9CA7662BC8AA /* RoomPermissions.swift in Sources */,
@@ -12975,7 +12970,6 @@
 				79DB42A52E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */,
 				E3291AD16D7A5CB14781819C /* UserNotificationCenterProtocol.swift in Sources */,
 				2932570AA418974979D16DED /* UserPreference.swift in Sources */,
-				790A475A2E6B09980033604D /* AvaxChainIcon.swift in Sources */,
 				80DEA2A4B20F9E279EAE6B2B /* UserProfile+Mock.swift in Sources */,
 				790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */,
 				ED90A59F068FD0CA27E602ED /* UserProfileListRow.swift in Sources */,
@@ -13323,7 +13317,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.6;
+				MARKETING_VERSION = 0.21.7;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13359,7 +13353,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.6;
+				MARKETING_VERSION = 0.21.7;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

@@ -920,7 +920,7 @@ extension HomeScreenWalletContent {
                   actionPreText: nil,
                   actionText: walletTransaction.formattedAmount,
                   actionPostText: "--",
-                  chainId: walletTransaction.token.chainId ?? ZeroWalletChainsUtil.shared.Z_CHAIN_ID)
+                  chainId: walletTransaction.token.chainId ?? ZeroWalletChainsUtil.shared.zChainId)
     }
 }
 
@@ -948,6 +948,6 @@ extension HomeScreenWalletStakingContent {
                   myStakeAmount: myStakeAmount,
                   myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())",
                   pendingRewards: pendingRewards,
-                  chainId: pool.chainId)
+                  chainId: pool.chainId.rawValue)
     }
 }

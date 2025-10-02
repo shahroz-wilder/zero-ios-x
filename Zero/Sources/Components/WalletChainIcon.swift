@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-struct AvaxChainIcon: View {
-    var size: CGFloat = 24
+struct WalletChainIcon: View {
+    let chainIcon: ImageAsset
+    var size: CGFloat = 16
     
     var body: some View {
-        Image(asset: Asset.Images.iconAvaxChain)
+        Image(asset: chainIcon)
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)

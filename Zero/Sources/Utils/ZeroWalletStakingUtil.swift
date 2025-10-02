@@ -16,7 +16,7 @@ class ZeroWalletStakingUtil {
               address: "0xfbDC0647F0652dB9eC56c7f09B7dD3192324AD6a",
               name: "MEOW Pool",
               image: "https://zos.zero.tech/tokens/meow.png",
-              chainId: ZeroWalletChainsUtil.shared.zChain.id)
+              chainId: .z)
     }
     
     // Meow Avax Pool
@@ -25,7 +25,7 @@ class ZeroWalletStakingUtil {
               address: "0xD7A1583286cEB8ce8F3C1a6d50C5eBDB1Cd83358",
               name: "MEOW Pool",
               image: "https://zos.zero.tech/tokens/meow-avax.png",
-              chainId: ZeroWalletChainsUtil.shared.avaxChain.id)
+              chainId: .avax)
     }
     
     var stakePools: [WalletStakePool] = []
@@ -40,5 +40,5 @@ struct WalletStakePool: Identifiable {
     let address: String
     let name: String
     let image: String?
-    let chainId: UInt64
+    let chainId: ZeroChainId
 }

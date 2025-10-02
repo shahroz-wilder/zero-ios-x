@@ -135,10 +135,8 @@ private struct AssetInfoView: View {
                 ZStack(alignment: .bottomTrailing) {
                     WalletTokenImage(url: iconUrl, size: 52)
                     
-                    if ZeroWalletChainsUtil.shared.isAvaxChain(tokenAsset.chainId) {
-                        AvaxChainIcon(size: 16)
-                    } else {
-                        ZChainIcon(size: 16)
+                    if let chain = ZeroWalletChainsUtil.shared.getChain(tokenAsset.chainId) {
+                        WalletChainIcon(chainIcon: chain.logo)
                     }
                 }
                 .background(
@@ -173,8 +171,8 @@ private struct AssetInfoView: View {
                             }
                         }
                         .onChange(of: amount) { _, newValue in
-                            let enteredAmount = Double(newValue) ?? 0
-                            let maxAccount = Double(tokenAsset.amount) ?? 0
+                            let enteredAmount = parseInputValue(newValue)
+                            let maxAccount = parseInputValue(tokenAsset.amount)
                             if enteredAmount > maxAccount {
                                 amount = tokenAsset.amount
                             }
@@ -184,7 +182,7 @@ private struct AssetInfoView: View {
                     
                     if amount != tokenAsset.amount {
                         Button {
-                            amount = tokenAsset.amount
+                            amount = formatBalance(parseInputValue(tokenAsset.amount))
                         } label: {
                             Text("Use Max")
                                 .font(.zero.bodySMSemibold)
@@ -219,13 +217,14 @@ private struct AssetInfoView: View {
             }
         }
         .onChange(of: amount, { _, newValue in
-            if let tokenMaxAmmount = Double(tokenAsset.amount),
-               let userAmount = Double(newValue) {
+            let tokenMaxAmmount = parseInputValue(tokenAsset.amount)
+            let userAmount = parseInputValue(newValue)
+            if tokenMaxAmmount > 0 && userAmount > 0 {
                 if userAmount > tokenMaxAmmount {
                     amount = tokenAsset.amount
                 } else {
                     let diff = tokenMaxAmmount - userAmount
-                    balance = String(format: "%.2f", diff)
+                    balance = formatBalance(diff)
                 }
             } else {
                 balance = tokenAsset.formattedAmount
@@ -238,4 +237,28 @@ private struct AssetInfoView: View {
         }
         .padding(8)
     }
+}
+
+private func formatBalance(_ value: Double) -> String {
+    let formatter = NumberFormatter()
+    formatter.locale = .current
+    formatter.numberStyle = .decimal
+    formatter.minimumFractionDigits = 2
+    formatter.maximumFractionDigits = 2
+    
+    return formatter.string(from: NSNumber(value: value)) ?? "0"
+}
+
+private func parseInputValue(_ input: String) -> Double {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    formatter.locale = .current
+    
+    // Try with current locale first
+    if let number = formatter.number(from: input) {
+        return number.doubleValue
+    }
+    // Fallback: replace comma with dot, or dot with comma
+    let normalized = input.replacingOccurrences(of: ",", with: ".")
+    return Double(normalized) ?? 0
 }

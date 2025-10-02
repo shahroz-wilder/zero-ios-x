@@ -29,10 +29,8 @@ struct CompletedTransactionView: View {
                         
                         WalletTokenImage(url: token.logo, size: 100)
                         
-                        if ZeroWalletChainsUtil.shared.isAvaxChain(token.chainId) {
-                            AvaxChainIcon(size: 16)
-                        } else {
-                            ZChainIcon(size: 24)
+                        if let chain = ZeroWalletChainsUtil.shared.getChain(token.chainId) {
+                            WalletChainIcon(chainIcon: chain.logo)
                         }
                     }
                     .background(
