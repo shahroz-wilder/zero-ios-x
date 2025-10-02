@@ -85,6 +85,12 @@ extension AlertInfo {
         title = L10n.commonError
         message = L10n.errorUnknown
     }
+    
+    init(id: T, message: String?) {
+        self.id = id
+        title = L10n.commonError
+        self.message = message ?? L10n.errorUnknown
+    }
 
     // periphery: ignore - might be useful in the future
     /// Initialises the type with the title from an `Error`'s localised description along with the default Ok button.

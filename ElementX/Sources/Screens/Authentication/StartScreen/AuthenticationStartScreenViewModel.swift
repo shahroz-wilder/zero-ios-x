@@ -26,6 +26,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    private var shouldListenToWalletConnectListeners: Bool = false
 
     init(authenticationService: AuthenticationServiceProtocol,
          provisioningParameters: AccountProvisioningParameters?,
@@ -65,23 +67,30 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         
         super.init(initialViewState: initialViewState)
         
+        shouldListenToWalletConnectListeners = true
+        
         AppKit.instance.sessionSettlePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.startLoading()
+                if self?.shouldListenToWalletConnectListeners == true {
+                    self?.startLoading()
+                }
             }
             .store(in: &cancellables)
         
         AppKit.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] response in
-                self?.stopLoading()
-                switch response.result {
-                case let .response(value):
-                    self?.loginWithWallet(token: value.stringRepresentation.replacingOccurrences(of: "\"", with: ""))
-                case let .error(error):
-                    MXLog.error("Session error: \(error)")
-                    self?.state.bindings.alertInfo = AlertInfo(id: .genericError)
+                if self?.shouldListenToWalletConnectListeners == true {
+                    self?.stopLoading()
+                    switch response.result {
+                    case let .response(value):
+                        self?.loginWithWallet(token: value.stringRepresentation.replacingOccurrences(of: "\"", with: ""))
+                    case let .error(error):
+                        MXLog.error("Session error: \(error)")
+                        self?.state.bindings.alertInfo = AlertInfo(id: .genericError)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -111,6 +120,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .openWalletConnectModal:
             presentWalletConnectModal()
         case .createAccount:
+            shouldListenToWalletConnectListeners = false
             actionsSubject.send(.createAccount)
         }
     }
@@ -168,7 +178,13 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             case .success(let userSession):
                 actionsSubject.send(.signedIn(userSession))
             case .failure(let error):
-                displayError()
+                switch error {
+                case .userNotFound:
+                    state.bindings.alertInfo = AlertInfo(id: .userNotFound,
+                                                         message: "This wallet is not associated with any account. Please try logging in with a different wallet.")
+                default:
+                    displayError()
+                }
             }
         }
     }
@@ -187,12 +203,12 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
                     case .success(let userSession):
                         self.stopLoading()
                         self.actionsSubject.send(.signedIn(userSession))
-                    case .failure(let error):
+                    case .failure(_):
                         self.stopLoading()
                         self.displayError()
                     }
                 }
-            case .failure(let failure):
+            case .failure(_):
                 self.displayError()
             }
         }
@@ -212,12 +228,12 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
                     case .success(let userSession):
                         self.stopLoading()
                         self.actionsSubject.send(.signedIn(userSession))
-                    case .failure(let error):
+                    case .failure(_):
                         self.stopLoading()
                         self.displayError()
                     }
                 }
-            case .failure(let failure):
+            case .failure(_):
                 self.displayError()
             }
         }
