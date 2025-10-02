@@ -200,6 +200,7 @@ struct HomeScreen: View {
                     context.send(viewAction: .showSettings)
                 })
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+                .clipShape(.circle)
                 .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                 .compositingGroup()
                 .overlay {
