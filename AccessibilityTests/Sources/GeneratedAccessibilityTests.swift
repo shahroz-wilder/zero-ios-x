@@ -251,6 +251,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "KnockRequestsListScreen_Previews")
     }
 
+    func testLabsScreen() async throws {
+        try await performAccessibilityAudit(named: "LabsScreen_Previews")
+    }
+
     func testLeaveSpaceView() async throws {
         try await performAccessibilityAudit(named: "LeaveSpaceView_Previews")
     }
