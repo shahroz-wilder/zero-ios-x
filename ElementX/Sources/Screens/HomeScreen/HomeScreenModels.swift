@@ -195,7 +195,7 @@ enum StakePoolViewState {
     case unstaking
     case inProgress
     case success
-    case failure
+    case failure(String?)
 }
 
 struct HomeScreenViewState: BindableState {

@@ -40,6 +40,10 @@ struct HomeScreenContent: View {
                 EmptyView()
             }
         }
+        .isSearching($context.isSearchFieldFocused)
+        .searchable(text: $context.searchQuery)
+        .compoundSearchField()
+        .disableAutocorrection(true)
         .onAppear {
             context.filtersState.activateZeroFilter(.primaryRooms)
         }
@@ -87,10 +91,6 @@ struct HomeScreenContent: View {
                             topSection
                             
                             HomeScreenRoomList(context: context, fromChannelsTabs: false)
-                                .isSearching($context.isSearchFieldFocused)
-                                .searchable(text: $context.searchQuery)
-                                .compoundSearchField()
-                                .disableAutocorrection(true)
                             
                             HomeTabBottomSpace()
                         }

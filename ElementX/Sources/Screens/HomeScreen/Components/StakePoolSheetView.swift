@@ -43,7 +43,8 @@ struct StakePoolSheetView : View {
                 },
                                      onStakeAmount: { amount in
                     transactionAmount = amount
-                    if state == .unstaking {
+                    
+                    if case .unstaking = state {
                         onUnstakeAmount(amount)
                         isUserStakingAmount = false
                     } else {
@@ -61,7 +62,14 @@ struct StakePoolSheetView : View {
                     backgroundColor: Color.compound.bgCanvasDefault
                 )
             case .success, .failure:
-                TransactionSuccessOrFailureView(isSuccessful: state == .success,
+                let isSuccess: Bool = if case .success = state {
+                    true
+                } else { false }
+                let errorMessage: String? = if case .failure(let error) = state {
+                    error
+                } else { nil }
+                TransactionSuccessOrFailureView(isSuccessful: isSuccess,
+                                                error: errorMessage,
                                                 selectedPool: selectedPool,
                                                 hasUserStaked: isUserStakingAmount,
                                                 transactionAmount: transactionAmount,
@@ -255,7 +263,7 @@ private struct PoolStakeUnstakeView : View {
     @FocusState private var isInputFocused: Bool
     
     var refAmount: Double {
-        if state == .unstaking {
+        if case .unstaking = state {
             selectedPool.myStakedTokens
         } else {
             selectedPool.totalAvailableTokenBalance
@@ -433,6 +441,7 @@ private struct PoolStakeUnstakeView : View {
 
 private struct TransactionSuccessOrFailureView : View {
     let isSuccessful: Bool
+    let error: String?
     let selectedPool: SelectedHomeWalletStakePool
     let hasUserStaked: Bool
     let transactionAmount: String
@@ -490,10 +499,14 @@ private struct TransactionSuccessOrFailureView : View {
                             "You have successfully unstaked \(transactionAmount) \(stakeTokenName), and claimed your pool rewards.".trim()
                         }
                     } else {
-                        if hasUserStaked {
-                            "Failed to stake \(transactionAmount) \(stakeTokenName) without lock.".trim()
+                        if let error = error {
+                            error
                         } else {
-                            "Failed to unstake \(transactionAmount) \(stakeTokenName), and claimed your pool rewards.".trim()
+                            if hasUserStaked {
+                                "Failed to stake \(transactionAmount) \(stakeTokenName) without lock.".trim()
+                            } else {
+                                "Failed to unstake \(transactionAmount) \(stakeTokenName), and claimed your pool rewards.".trim()
+                            }
                         }
                     }
                 }

@@ -39,9 +39,9 @@ struct HomeScreen: View {
                     }
                 },
                 onTabSelected: { tab in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                        showBackToTop = false
-//                        hideNavigationBar = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        showBackToTop = false
+                        hideNavigationBar = false
                         scrollViewAdapter.scrollToTop()
                         context.send(viewAction: .onHomeTabChanged)
                     }
@@ -146,7 +146,7 @@ struct HomeScreen: View {
             }
         }
         .task {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 scrollViewAdapter.scrollToTop()
             }
         }

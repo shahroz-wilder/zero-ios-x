@@ -1739,7 +1739,7 @@ class ClientProxy: ClientProxyProtocol {
             return .success(finalReceipt)
         } catch {
             MXLog.error("Failed to stake amount, with error: \(error)")
-            return .failure(.zeroError(error))
+            return handleZeroError(error, fallbackError: .zeroError(error))
         }
     }
     
@@ -1759,11 +1759,11 @@ class ClientProxy: ClientProxyProtocol {
                     return .failure(.zeroError(error))
                 }
             case .failure(let error):
-                return .failure(.zeroError(error))
+                return handleZeroError(error, fallbackError: .zeroError(error))
             }
         } catch {
             MXLog.error("Failed to unstake amount, with error: \(error)")
-            return .failure(.zeroError(error))
+            return handleZeroError(error, fallbackError: .zeroError(error))
         }
     }
     
@@ -1856,6 +1856,22 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: - Private
+    
+    private func handleZeroError<T>(
+        _ error: Error,
+        fallbackError: ClientProxyError
+    ) -> Result<T, ClientProxyError> {
+        if let apiError = error as? APIErrorResponse {
+            switch apiError.code {
+            case "INSUFFICIENT_BALANCE":
+                return .failure(.insufficientGasBalance)
+            default:
+                return .failure(fallbackError)
+            }
+        } else {
+            return .failure(fallbackError)
+        }
+    }
     
     private func cacheAccountURL() async {
         // Calling this function for the first time will cache the account URL in volatile memory for 24 hrs on the SDK.

@@ -1334,7 +1334,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 fetchWalletData(silentRefresh: true)
                 fetchStakeDataOfPool(selectedPool.pool, silentRefresh: true)
             case .failure(let error):
-                state.bindings.stakePoolViewState = .failure
+                let message: String? = switch error {
+                case .insufficientGasBalance:
+                    "Gas balance is not enough for this transaction"
+                default:
+                    nil
+                }
+                state.bindings.stakePoolViewState = .failure(message)
             }
         }
     }
@@ -1358,7 +1364,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.bindings.stakePoolViewState = .success
                 fetchWalletData(silentRefresh: true)
             case .failure(let error):
-                state.bindings.stakePoolViewState = .failure
+                let message: String? = switch error {
+                case .insufficientGasBalance:
+                    "Gas balance is not enough for this transaction"
+                default:
+                    nil
+                }
+                state.bindings.stakePoolViewState = .failure(message)
             }
         }
     }
