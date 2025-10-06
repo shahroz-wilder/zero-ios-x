@@ -44,7 +44,7 @@ struct HomePostsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    SimpleTabButtonsView(tabs: HomePostsTab.allCases,
+                    SimpleFixedTabButtonsView(tabs: HomePostsTab.allCases,
                                          selectedTab: selectedTab,
                                          tabTitle: { tab in
                         switch tab {

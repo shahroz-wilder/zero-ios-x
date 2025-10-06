@@ -14,6 +14,7 @@ struct RoomHeaderView: View {
     let roomSubtitle: String?
     let roomAvatar: RoomAvatar
     let showProSubscriptionBadge: Bool
+    let isRoomDirect: Bool
     var dmRecipientVerificationState: UserIdentityVerificationState?
     
     let mediaProvider: MediaProviderProtocol?
@@ -37,7 +38,7 @@ struct RoomHeaderView: View {
                 .accessibilityHidden(true)
             HStack(spacing: 4) {
             VStack(alignment: .leading, spacing: 0) {
-                HStack {
+                HStack(spacing: 0) {
                     Text(roomName)
                         .lineLimit(1)
                         .font(.zero.bodyMDSemibold)
@@ -46,15 +47,18 @@ struct RoomHeaderView: View {
                     if showProSubscriptionBadge {
                         CompoundIcon(\.verified, size: .xSmall, relativeTo: .zero.bodyMDSemibold)
                             .foregroundStyle(.zero.bgAccentRest)
+                            .padding(.horizontal, 4)
                     }
                 }
-                Text(roomSubtitle ?? "")
-                    .lineLimit(1)
-                    .padding(.vertical, 1)
-                    .font(.zero.bodySMSemibold)
-                    .foregroundStyle(.compound.textSecondary)
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.5), value: roomSubtitle)
+                if isRoomDirect {
+                    Text(roomSubtitle ?? "")
+                        .lineLimit(1)
+                        .padding(.vertical, 1)
+                        .font(.zero.bodySMSemibold)
+                        .foregroundStyle(.compound.textSecondary)
+                        .transition(.opacity)
+                        .animation(.easeInOut(duration: 0.5), value: roomSubtitle)
+                }
             }
                 if let dmRecipientVerificationState {
                     VerificationBadge(verificationState: dmRecipientVerificationState)
@@ -95,6 +99,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                                          name: "Some Room Name",
                                          avatarURL: avatarURL),
                        showProSubscriptionBadge: false,
+                       isRoomDirect: false,
                        dmRecipientVerificationState: verificationState,
                        mediaProvider: MediaProviderMock(configuration: .init()))
             .padding()

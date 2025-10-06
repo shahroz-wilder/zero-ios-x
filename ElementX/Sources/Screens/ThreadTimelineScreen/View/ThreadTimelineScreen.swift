@@ -63,6 +63,7 @@ struct ThreadTimelineScreen: View {
                            roomSubtitle: context.viewState.roomTitle,
                            roomAvatar: context.viewState.roomAvatar,
                            showProSubscriptionBadge: false,
+                           isRoomDirect: false,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
                            mediaProvider: context.mediaProvider)
                 // Using a button stops it from getting truncated in the navigation bar

@@ -120,7 +120,7 @@ struct HomeNotificationsContent: View {
 //            }
 //            .background(Color.zero.bgCanvasDefault)
 //        }
-        SimpleTabButtonsView(tabs: HomeNotificationsTab.allCases,
+        SimpleFixedTabButtonsView(tabs: HomeNotificationsTab.allCases,
                              selectedTab: selectedTab,
                              tabTitle: { tab in
             switch tab {

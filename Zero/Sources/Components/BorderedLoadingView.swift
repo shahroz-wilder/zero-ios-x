@@ -13,7 +13,7 @@ struct BorderLoadingView: View {
     
     var lineWidth: CGFloat = 2
     var animationSpeed: Double = 2.5
-    var borderColor: Color = .zero.bgAccentRest
+    var borderColor: Color = .zero.bgAccentRest.opacity(0.7)
     
     // Automatically detect device corner radius
     private var deviceCornerRadius: CGFloat {

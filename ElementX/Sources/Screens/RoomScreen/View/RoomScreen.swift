@@ -192,6 +192,7 @@ struct RoomScreen: View {
                            roomSubtitle: context.viewState.roomSubtitle,
                            roomAvatar: context.viewState.roomAvatar,
                            showProSubscriptionBadge: context.viewState.showProSubscriptionBadge,
+                           isRoomDirect: context.viewState.isRoomDirect,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
                            mediaProvider: context.mediaProvider)
                 // Using a button stops it from getting truncated in the navigation bar

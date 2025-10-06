@@ -54,6 +54,7 @@ struct SpaceScreen: View {
                            roomSubtitle: nil,
                            roomAvatar: context.viewState.space.avatar,
                            showProSubscriptionBadge: false,
+                           isRoomDirect: false,
                            mediaProvider: context.mediaProvider)
         }
         

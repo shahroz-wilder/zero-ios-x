@@ -415,6 +415,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func fetchZeroUserProfile() {
         guard roomProxy.isDirectOneToOneRoom else { return }
         
+        state.isRoomDirect = true
         Task {
             let roomMembers = await roomProxy.members()
             guard let otherMemberId = (roomMembers?.first(where: { $0.userID != roomProxy.ownUserID })?.userID) else {

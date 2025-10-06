@@ -1890,6 +1890,11 @@
 		790AB7C02E1DB66400555B1F /* ZWalletTransactionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7BE2E1DB65800555B1F /* ZWalletTransactionResponse.swift */; };
 		790AB7C22E1DB6B600555B1F /* ZWalletTransactionReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7C12E1DB6A700555B1F /* ZWalletTransactionReceipt.swift */; };
 		790AB7C32E1DB6B600555B1F /* ZWalletTransactionReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7C12E1DB6A700555B1F /* ZWalletTransactionReceipt.swift */; };
+		790B08CF2E93C2E600947ACD /* LabsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF17EFB2833B4CE5C06E7F8 /* LabsScreenCoordinator.swift */; };
+		790B08D02E93C2E900947ACD /* LabsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E43D8784B0054C048060FEB /* LabsScreenModels.swift */; };
+		790B08D12E93C2ED00947ACD /* LabsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D9DF4F2DF3507F99B5B97B /* LabsScreenViewModel.swift */; };
+		790B08D22E93C2F100947ACD /* LabsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF847A34FC4C8C937CD39E08 /* LabsScreenViewModelProtocol.swift */; };
+		790B08D32E93C2F500947ACD /* LabsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C5AA3EF7EC67C01C75CEDD /* LabsScreen.swift */; };
 		790E42BC2D88ABE700FEAEF7 /* TargetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D829FD8958376614504B18 /* TargetConfiguration.swift */; };
 		791341542D6F58E1000E497F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3557ACB95D0F666EF5AF0CE /* Secrets.swift */; };
 		791DEF872D9381000057E6C5 /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 791DEF862D9381000057E6C5 /* EmbeddedElementCall */; };
@@ -4506,7 +4511,7 @@
 		CDB3227C7A74B734924942E9 /* RoomSummaryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryProvider.swift; sourceTree = "<group>"; };
 		CDE3F3911FF7CC639BDE5844 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CEE20623EB4A9B88FB29F2BA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SAS.strings; sourceTree = "<group>"; };
-		CEE41494C837AA403A06A5D9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; path = UnitTests.xctestplan; sourceTree = "<group>"; };
+		CEE41494C837AA403A06A5D9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		CF847A34FC4C8C937CD39E08 /* LabsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		CFFA5E881D281810AB428EA3 /* RoomPowerLevelsProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPowerLevelsProxy.swift; sourceTree = "<group>"; };
 		D01FD1171FF40E34D707FD00 /* BigIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigIcon.swift; sourceTree = "<group>"; };
@@ -5505,8 +5510,6 @@
 			children = (
 				794A325E2E8E9BC100688144 /* WalletChainIcon.swift */,
 				79AD2F782E937BCB00B38AF3 /* BorderedLoadingView.swift */,
-				790A47592E6B098E0033604D /* AvaxChainIcon.swift */,
-				790A47562E6B094E0033604D /* ZChainIcon.swift */,
 				790A47462E6ADBEE0033604D /* Otp */,
 				79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */,
 				790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */,
@@ -10695,6 +10698,7 @@
 				18E9A4822C9829970082DDA4 /* BadgeLabel.swift in Sources */,
 				18E9A4832C9829970082DDA4 /* BadgeView.swift in Sources */,
 				79343C892E5CAAD500ED9976 /* OIDCConfiguration.swift in Sources */,
+				790B08D32E93C2F500947ACD /* LabsScreen.swift in Sources */,
 				18E9A4842C9829970082DDA4 /* BindableState.swift in Sources */,
 				790A47482E6ADBFE0033604D /* OtpFormView.swift in Sources */,
 				18B9B8BF2CE3F5F100DDD64D /* StackedAvatarsView.swift in Sources */,
@@ -10737,6 +10741,7 @@
 				79C6F7232DF82445003CEBB9 /* AdvancedSettingsScreenModels.swift in Sources */,
 				18E9A4962C9829970082DDA4 /* BugReportServiceProtocol.swift in Sources */,
 				18E9A4972C9829970082DDA4 /* Bundle.swift in Sources */,
+				790B08D02E93C2E900947ACD /* LabsScreenModels.swift in Sources */,
 				18FFCED62CEC8F77002F2647 /* RoomSelectionScreenViewModelProtocol.swift in Sources */,
 				18E9A4982C9829970082DDA4 /* ButtonStyle.swift in Sources */,
 				18E9A4992C9829970082DDA4 /* CallInviteRoomTimelineItem.swift in Sources */,
@@ -11155,6 +11160,7 @@
 				18E9A5A72C9829970082DDA4 /* VerifyLoginScreen.swift in Sources */,
 				18E9A5A82C9829970082DDA4 /* NotificationConstants.swift in Sources */,
 				18E9A5A92C9829970082DDA4 /* NotificationItemProxy.swift in Sources */,
+				790B08D12E93C2ED00947ACD /* LabsScreenViewModel.swift in Sources */,
 				79F31B342E02F6060043E100 /* AppMaintenanceScreen.swift in Sources */,
 				18E9A5AA2C9829970082DDA4 /* NotificationItemProxyProtocol.swift in Sources */,
 				790393822D53A0FE0022E293 /* TimelineControllerProtocol.swift in Sources */,
@@ -11336,6 +11342,7 @@
 				18E9A61E2C9829970082DDA4 /* RoomChangeRolesScreenModels.swift in Sources */,
 				18E9A61F2C9829970082DDA4 /* RoomChangeRolesScreenRow.swift in Sources */,
 				18E9A6202C9829970082DDA4 /* RoomChangeRolesScreenSection.swift in Sources */,
+				790B08D22E93C2F100947ACD /* LabsScreenViewModelProtocol.swift in Sources */,
 				18E9A6212C9829970082DDA4 /* RoomChangeRolesScreenSelectedItem.swift in Sources */,
 				18E9A6222C9829970082DDA4 /* RoomChangeRolesScreenViewModel.swift in Sources */,
 				790393742D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */,
@@ -11614,6 +11621,7 @@
 				18E9A6E12C9829970082DDA4 /* SwipeRightAction.swift in Sources */,
 				793899D12DEF995E00980991 /* ReferAFriendSettingsScreen.swift in Sources */,
 				18E9A6E22C9829970082DDA4 /* SwipeToReplyView.swift in Sources */,
+				790B08CF2E93C2E600947ACD /* LabsScreenCoordinator.swift in Sources */,
 				7909357A2E42519F003423D7 /* ZeroStakingApi.swift in Sources */,
 				18E9A6E32C9829970082DDA4 /* Task.swift in Sources */,
 				18E9A6E42C9829970082DDA4 /* TemplateScreen.swift in Sources */,
@@ -13401,7 +13409,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.8;
+				MARKETING_VERSION = 0.21.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13437,7 +13445,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.8;
+				MARKETING_VERSION = 0.21.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
