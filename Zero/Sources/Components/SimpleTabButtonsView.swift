@@ -48,3 +48,43 @@ struct SimpleTabButtonsView<Tab: Hashable>: View {
         }
     }
 }
+
+struct SimpleFixedTabButtonsView<Tab: Hashable>: View {
+    let tabs: [Tab]
+    let selectedTab: Tab
+    let tabTitle: (Tab) -> String
+    let onTabSelected: (Tab) -> Void
+    
+    var showDivider: Bool = false
+    
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            HStack {
+                ForEach(tabs, id: \.self) { tab in
+                    Button(action: {
+                        onTabSelected(tab)
+                    }) {
+                        VStack(spacing: 0) {
+                            Text(tabTitle(tab))
+                                .font(.compound.bodyMDSemibold)
+                                .foregroundStyle(tab == selectedTab ? .compound.textPrimary : .compound.textSecondary)
+                            
+                            Rectangle()
+                                .fill(tab == selectedTab ? Color.zero.bgAccentRest : .clear)
+                                .frame(maxWidth: .infinity, minHeight: 2, maxHeight: 2)
+                                .cornerRadius(1.5)
+                                .padding(.top, 8)
+                        }
+                        .padding(.all, showDivider ? 0 : 8)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            
+            if showDivider {
+                HorizontalDivider()
+            }
+        }
+    }
+}

@@ -105,9 +105,7 @@ struct ClaimedEarningsSheetView: View {
                                 .frame(width: 75, height: 75)
                                 .foregroundStyle(.zero.bgAccentRest)
                             
-                            Image(asset: Asset.Images.iconZChain)
-                                .resizable()
-                                .frame(width: 16, height: 16)
+                            WalletChainIcon(chainIcon: Asset.Images.iconChainZ)
                         }
                         .background(
                             Circle()

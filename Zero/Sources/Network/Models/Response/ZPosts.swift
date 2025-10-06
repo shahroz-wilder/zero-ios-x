@@ -35,7 +35,7 @@ struct ZPostReplies: Codable {
 struct ZPost: Codable, Identifiable {
     let id: Tagged<Self, String>
     let userId: String
-    let zid: String
+    let zid: String?
     let createdAt: String
     let updatedAt: String
     let signedMessage: String
@@ -58,6 +58,19 @@ struct ZPost: Codable, Identifiable {
     
     enum CodingKeys: String, CodingKey {
         case id, userId, zid, createdAt, updatedAt, signedMessage, unsignedMessage, text, walletAddress, worldZid, imageUrl, arweaveId, replyTo, conversationId, user, postsMeowsSummary, meows, replies, replyToPost, mediaId, media, userProfileView
+    }
+}
+
+extension ZPost {
+    var worldZIdDisplayText: String? {
+        if let zid = worldZid {
+            if zid.starts(with: ZeroContants.ZERO_WALLET_ADDRESS_PREFIX) {
+                return displayFormattedAddress(zid)
+            } else {
+                return "\(ZeroContants.ZERO_CHANNEL_PREFIX)\(zid)"
+            }
+        }
+        return nil
     }
 }
 

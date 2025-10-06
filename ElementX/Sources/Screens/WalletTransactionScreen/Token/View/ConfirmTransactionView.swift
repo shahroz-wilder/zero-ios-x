@@ -119,10 +119,8 @@ private struct AssetInfoView: View {
             ZStack(alignment: .bottomTrailing) {
                 WalletTokenImage(url: tokenAsset.logo, size: 52)
                 
-                if ZeroWalletChainsUtil.shared.isAvaxChain(tokenAsset.chainId) {
-                    AvaxChainIcon(size: 16)
-                } else {
-                    ZChainIcon(size: 16)
+                if let chain = ZeroWalletChainsUtil.shared.getChain(tokenAsset.chainId) {
+                    WalletChainIcon(chainIcon: chain.logo)
                 }
             }
             .background(

@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ConfirmAmountView: View {
     @ObservedObject var context: TransferTokenViewModel.Context
+    
+    @FocusState private var isAmountFieldFocused: Bool
         
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -21,9 +23,14 @@ struct ConfirmAmountView: View {
                     VStack(alignment: .leading) {
                         UserInfoView(preText: "From:",
                                      userName: currentUser.displayName,
-                                     userAddress: displayFormattedAddress(currentUser.publicWalletAddress))
+                                     userAddress: displayFormattedAddress(currentUser.publicWalletAddress),
+                                     onTap: { isAmountFieldFocused = false })
                         
-                        AssetInfoView(tokenAsset: token, amount: $context.transferAmount, isSenderSideInfo: true, iconUrl: token.logo)
+                        AssetInfoView(tokenAsset: token,
+                                      amount: $context.transferAmount,
+                                      isSenderSideInfo: true,
+                                      iconUrl: token.logo,
+                                      isFocused: $isAmountFieldFocused)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -33,9 +40,14 @@ struct ConfirmAmountView: View {
                     VStack(alignment: .leading) {
                         UserInfoView(preText: "Sending To:",
                                      userName: recipient.displayName,
-                                     userAddress: displayFormattedAddress(recipient.publicAddress))
+                                     userAddress: displayFormattedAddress(recipient.publicAddress),
+                                     onTap: { isAmountFieldFocused = false })
                         
-                        AssetInfoView(tokenAsset: token, amount: $context.transferAmount, isSenderSideInfo: false, iconUrl: token.logo)
+                        AssetInfoView(tokenAsset: token,
+                                      amount: $context.transferAmount,
+                                      isSenderSideInfo: false,
+                                      iconUrl: token.logo,
+                                      isFocused: $isAmountFieldFocused)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -46,39 +58,30 @@ struct ConfirmAmountView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding()
-            
-            if context.viewState.canMakeTransaction {
-                continueButton
-//                VStack {
-//                    Text("Review the above before confirming.\nOnce made, your transaction is irreversible.")
-//                        .font(.zero.bodySM)
-//                        .foregroundStyle(.compound.textSecondary)
-//                        .multilineTextAlignment(.center)
-//                    
-//                    SwipeToConfirmButton(onConfirm: {
-//                        context.send(viewAction: .onTransactionConfirmed)
-//                    })
-//                    .padding(.vertical, 12)
-//                }
-//                .padding()
+            .toolbar {
+                if context.viewState.canMakeTransaction {
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        Button("Next") {
+                            context.send(viewAction: .onConfirmTransaction)
+                        }
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                    }
+                }
             }
+            
+//            if context.viewState.canMakeTransaction {
+//                continueButton
+//            }
         }
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .ignoresSafeArea(.keyboard)
     }
     
     var continueButton: some View {
-        Button(action: { context.send(viewAction: .onConfirmTransaction) }) {
-            Text("Continue")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
-        }
+        ZeroPrimaryButton(title: "Continue",
+                          onClick: { context.send(viewAction: .onConfirmTransaction) })
+        .padding(16)
     }
 }
 
@@ -86,6 +89,7 @@ private struct UserInfoView: View {
     let preText: String
     let userName: String
     let userAddress: String?
+    let onTap: () -> Void
     
     var body: some View {
         HStack {
@@ -111,6 +115,8 @@ private struct UserInfoView: View {
         .background(
             RoundedRectangle(cornerRadius: 12).fill(.compound.bgCanvasDefaultLevel1)
         )
+        .contentShape(Rectangle())
+        .onTapGesture { onTap() }
     }
 }
 
@@ -119,8 +125,8 @@ private struct AssetInfoView: View {
     @Binding var amount: String
     let isSenderSideInfo: Bool
     let iconUrl: String?
+    var isFocused: FocusState<Bool>.Binding
     
-    @FocusState private var isFocused: Bool
     @State private var balance: String = ""
     
     var body: some View {
@@ -129,10 +135,8 @@ private struct AssetInfoView: View {
                 ZStack(alignment: .bottomTrailing) {
                     WalletTokenImage(url: iconUrl, size: 52)
                     
-                    if ZeroWalletChainsUtil.shared.isAvaxChain(tokenAsset.chainId) {
-                        AvaxChainIcon(size: 16)
-                    } else {
-                        ZChainIcon(size: 16)
+                    if let chain = ZeroWalletChainsUtil.shared.getChain(tokenAsset.chainId) {
+                        WalletChainIcon(chainIcon: chain.logo)
                     }
                 }
                 .background(
@@ -149,6 +153,8 @@ private struct AssetInfoView: View {
                         .foregroundStyle(.compound.textSecondary)
                         .padding(.vertical, 1)
                 }
+                
+                Spacer()
             }
             
             if isSenderSideInfo {
@@ -158,25 +164,10 @@ private struct AssetInfoView: View {
                         .textFieldStyle(.plain)
                         .submitLabel(.done)
                         .font(.zero.headingSMSemibold)
-                        .focused($isFocused)
+                        .focused(isFocused)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                self.isFocused = true
-                            }
-                        }
-                        .onChange(of: amount) { _, newValue in
-                            let enteredAmount = Double(newValue) ?? 0
-                            let maxAccount = Double(tokenAsset.amount) ?? 0
-                            if enteredAmount > maxAccount {
-                                amount = tokenAsset.amount
-                            }
-                        }
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    isFocused = false
-                                }
+                                self.isFocused.wrappedValue = true
                             }
                         }
                     
@@ -184,7 +175,7 @@ private struct AssetInfoView: View {
                     
                     if amount != tokenAsset.amount {
                         Button {
-                            amount = tokenAsset.amount
+                            amount = tokenAsset.amount.toLocalizedFormattedString() ?? tokenAsset.amount
                         } label: {
                             Text("Use Max")
                                 .font(.zero.bodySMSemibold)
@@ -208,25 +199,35 @@ private struct AssetInfoView: View {
                         .foregroundStyle(.compound.textSecondary)
                 }
             } else {
-                Text(amount.isEmpty ? "0" : amount)
-                    .font(.zero.headingSMSemibold)
-                    .foregroundStyle(.compound.textPrimary)
-                    .padding(.vertical, 12)
+                HStack {
+                    Text(amount.isEmpty ? "0" : amount)
+                        .font(.zero.headingSMSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                        .padding(.vertical, 12)
+                    
+                    Spacer()
+                }
             }
         }
         .onChange(of: amount, { _, newValue in
-            if let tokenMaxAmmount = Double(tokenAsset.amount),
-               let userAmount = Double(newValue) {
+            if let tokenMaxAmmount = tokenAsset.amount.toLocalizedFormattedString()?.toLocalizedDouble(),
+               let userAmount = newValue.toLocalizedDouble() {
                 if userAmount > tokenMaxAmmount {
-                    amount = tokenAsset.amount
+                    amount = tokenAsset.formattedAmount.toLocalizedFormattedString() ?? tokenAsset.formattedAmount
+                    balance = "0"
                 } else {
                     let diff = tokenMaxAmmount - userAmount
-                    balance = String(format: "%.2f", diff)
+                    balance = diff.toLocalizedString()
                 }
             } else {
-                balance = tokenAsset.formattedAmount
+                balance = tokenAsset.formattedAmount.toLocalizedFormattedString() ?? tokenAsset.formattedAmount
             }
         })
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isFocused.wrappedValue = false
+        }
         .padding(8)
     }
 }

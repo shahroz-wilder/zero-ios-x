@@ -93,11 +93,11 @@ struct HomeScreenPostCell: View {
                             .foregroundStyle(.compound.textSecondary)
                             .layoutPriority(1)
                             .padding(.horizontal, isZeroProSubscriber ? 0 : 4)
-                    }
+                    }.layoutPriority(1)
                     
                     if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                         Spacer()
-                        Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.worldPrimaryZId!)")
+                        Text(post.worldPrimaryZId!)
                             .font(.zero.bodyMD)
                             .foregroundStyle(.compound.textSecondary)
                             .lineLimit(1)
@@ -105,7 +105,7 @@ struct HomeScreenPostCell: View {
                     }
                 }
                 if post.senderPrimaryZId != nil {
-                    Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.senderPrimaryZId!)")
+                    Text(post.senderPrimaryZId!)
                         .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                         .lineLimit(1)

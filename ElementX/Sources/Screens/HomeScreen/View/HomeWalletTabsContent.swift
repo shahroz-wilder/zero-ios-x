@@ -145,10 +145,8 @@ struct HomeWalletTabContentCell : View {
                 HStack {
                     ZStack(alignment: .bottomTrailing) {
                         WalletTokenImage(url: content.icon)
-                        if ZeroWalletChainsUtil.shared.isAvaxChain(content.chainId) {
-                            AvaxChainIcon(size: 16)
-                        } else {
-                            ZChainIcon(size: 16)
+                        if let chain = ZeroWalletChainsUtil.shared.getChain(content.chainId) {
+                            WalletChainIcon(chainIcon: chain.logo)
                         }
                     }
                     
@@ -221,7 +219,7 @@ struct HomeWalletTabContentCell : View {
 
                             default:
                                 Text(actionPostText)
-                                    .foregroundColor(.compound.textPrimary)
+                                    .foregroundColor(.compound.textSecondary)
                                     .font(.zero.bodySM)
                                     .lineLimit(1)
                                     .truncationMode(.tail)

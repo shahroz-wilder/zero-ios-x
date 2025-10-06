@@ -737,7 +737,7 @@ extension HomeScreenPost {
             senderInfo: UserProfileProxy(userID: userProfile.id,
                                          displayName: userProfile.fullName,
                                          avatarURL: URL(string: userProfile.profileImage ?? "")),
-            senderPrimaryZId: post.zid,
+            senderPrimaryZId: post.userProfileView?.zIdOrPublicAddressDisplayText,
             postText: post.text,
             attributedSenderHeaderText: attributedSenderHeaderText,
             attributedPostText: attributedPostText,
@@ -745,7 +745,7 @@ extension HomeScreenPost {
             postCreatedAt: post.createdAt,
             postTimestamp: postTimeStamp,
             postImageURL: (post.imageUrl != nil) ? URL(string: post.imageUrl!) : nil,
-            worldPrimaryZId: post.worldZid,
+            worldPrimaryZId: post.worldZIdDisplayText,
             repliesCount: repliesCount,
             isPostInOwnFeed: isPostInOwnFeed,
             arweaveId: post.arweaveId,
@@ -927,7 +927,7 @@ extension HomeScreenWalletContent {
                   actionPreText: nil,
                   actionText: walletTransaction.formattedAmount,
                   actionPostText: "--",
-                  chainId: walletTransaction.token.chainId ?? ZeroWalletChainsUtil.shared.Z_CHAIN_ID)
+                  chainId: walletTransaction.token.chainId ?? ZeroWalletChainsUtil.shared.zChainId)
     }
 }
 
@@ -955,6 +955,6 @@ extension HomeScreenWalletStakingContent {
                   myStakeAmount: myStakeAmount,
                   myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())",
                   pendingRewards: pendingRewards,
-                  chainId: pool.chainId)
+                  chainId: pool.chainId.rawValue)
     }
 }

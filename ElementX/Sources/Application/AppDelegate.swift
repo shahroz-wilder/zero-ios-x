@@ -29,6 +29,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         NSTextAttachment.registerViewProviderClass(PillAttachmentViewProvider.self, forFileType: InfoPlistReader.main.pillsUTType)
         FirebaseApp.configure()
         _ = RemoteConfigManager.shared
+        BadgeManager.shared.clearBadgeAndNotifications()
         return true
     }
 

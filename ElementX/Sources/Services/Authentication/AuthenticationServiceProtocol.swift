@@ -44,6 +44,8 @@ enum AuthenticationServiceError: Error, Equatable {
     case invalidOtp
     case userNotFound
     case userAlreadyExists
+    case walletAlreadyExists
+    case zeroError(String)
 }
 
 protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {

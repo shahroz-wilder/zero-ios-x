@@ -60,6 +60,7 @@ struct Application: App {
                 }
                 .task {
                     appCoordinator.start()
+                    BadgeManager.shared.clearBadgeAndNotifications()
                 }
                 .overlay {
                     if remoteConfig.forceUpdateEnabled {

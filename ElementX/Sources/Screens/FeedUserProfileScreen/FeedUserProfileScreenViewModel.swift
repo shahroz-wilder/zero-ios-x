@@ -108,7 +108,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 state.userProfile = userProfile.withFallbackValues(state.userProfile)
             case .failure(let error):
                 MXLog.error("Failed to fetch user profile for user: \(state.userID), with error: \(error)")
-                displayError()
+                displayError(message: "There was an error fetching user profile. Please try again later.")
             }
         } else {
             state.shouldShowFollowButton = false
@@ -122,7 +122,6 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             state.userFollowStatus = isFollowing
         case .failure(let error):
             MXLog.error("Failed to fetch user profile status for user: \(state.userID), with error: \(error)")
-            displayError()
         }
     }
     
@@ -163,12 +162,6 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 MXLog.error("Failed to fetch zero post replies: \(error)")
                 state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
                 isFetchFeedsInProgress = false
-                switch error {
-                case .postsLimitReached:
-                    state.canLoadMoreFeeds = false
-                default:
-                    displayError()
-                }
             }
         }
     }
@@ -201,7 +194,6 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 feedProtocol?.onFeedUpdated(homePost)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
-//                displayError()
             }
         }
     }
@@ -295,11 +287,11 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                             self.actionsSubject.send(.openDirectChat(roomID))
                         }
                     case .failure:
-                        displayError()
+                        displayError(message: "There was an error creating a direct message with this user.")
                     }
                 }
             case .failure:
-                displayError()
+                displayError(message: "There was an error creating a direct message with this user.")
             }
         }
     }

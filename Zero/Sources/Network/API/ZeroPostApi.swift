@@ -14,7 +14,7 @@ protocol ZeroPostApiProtocol {
     func fetchPostReplies(postId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, Error>
     
-    func createNewPost(channelZId: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, Error>
+    func createNewPost(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, Error>
     
     func fetchUserPosts(userId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
 }
@@ -123,8 +123,10 @@ class ZeroPostApi: ZeroPostApiProtocol {
         }
     }
     
-    func createNewPost(channelZId: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, any Error> {
-        var parameters: [String: String] = ["text": content]
+    func createNewPost(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, any Error> {
+        var parameters: [String: String] = [
+            "text": content
+        ]
         if let replyToPostId = replyToPost {
             parameters["replyTo"] = replyToPostId
         }
@@ -132,9 +134,11 @@ class ZeroPostApi: ZeroPostApiProtocol {
             parameters["mediaId"] = mediaId
         }
         
-        let requestChannelZId = channelZId.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
-        let requestUrl = FeedEndPoints.newPostEndPoint
-            .replacingOccurrences(of: FeedConstants.channel_path_param, with: requestChannelZId)
+        let requestUrl = if let requestChannelZId = channelZId?.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") {
+            FeedEndPoints.newPostEndPoint.appending("/\(requestChannelZId)")
+        } else {
+            FeedEndPoints.newPostEndPoint
+        }
         
         let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(requestUrl, method: .post, appSettings: appSettings, parameters: parameters)
         switch result {
@@ -146,7 +150,7 @@ class ZeroPostApi: ZeroPostApiProtocol {
     }
     
     func fetchUserPosts(userId: String, limit: Int = 10, skip: Int = 0) async throws -> Result<[ZPost], Error> {
-        var parameters: [String: Any] = [
+        let parameters: [String: Any] = [
             "user_id": userId,
             "limit": limit,
             "skip": skip,
@@ -176,11 +180,10 @@ class ZeroPostApi: ZeroPostApiProtocol {
         static let postDetailsEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)"
         static let postRepliesEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)/replies"
         static let meowPostEndPoint = "\(hostUrl)api/v2/posts/post/\(FeedConstants.feed_id_path_param)/meow"
-        static let newPostEndPoint = "\(hostUrl)api/v2/posts/channel/raw/\(FeedConstants.channel_path_param)"
+        static let newPostEndPoint = "\(hostUrl)api/v2/posts/channel/raw"
     }
     
     private enum FeedConstants {
         static let feed_id_path_param = "{feed_id}"
-        static let channel_path_param = "{channel_zid}"
     }
 }

@@ -31,6 +31,7 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
         
         AppKit.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] response in
                 switch response.result {
                 case let .response(value):
@@ -117,6 +118,8 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
         switch error {
         case .userAlreadyExists:
             state.bindings.alertInfo = AlertInfo(id: .unknown, title: L10n.commonError, message: "This email is already associated with a ZERO account")
+        case .walletAlreadyExists:
+            state.bindings.alertInfo = AlertInfo(id: .unknown, title: L10n.commonError, message: "This wallet is already associated with a ZERO account")
         default:
             state.bindings.alertInfo = AlertInfo(id: .unknown)
         }

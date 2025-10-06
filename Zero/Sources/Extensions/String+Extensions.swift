@@ -53,3 +53,23 @@ public extension String {
         return self.range(of: other, options: .caseInsensitive) != nil
     }
 }
+
+extension String {
+    func toLocalizedFormattedString(
+        locale: Locale = .current,
+        minFractionDigits: Int = 0,
+        maxFractionDigits: Int = 2
+    ) -> String? {
+        guard let doubleValue = self.toLocalizedDouble(locale: Locale(identifier: "en_US_POSIX")) else {
+            return nil
+        }
+        return doubleValue.toLocalizedString(locale: locale, minFractionDigits: minFractionDigits, maxFractionDigits: maxFractionDigits)
+    }
+    
+    func toLocalizedDouble(locale: Locale = .current) -> Double? {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        return formatter.number(from: self)?.doubleValue
+    }
+}

@@ -789,6 +789,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.posts = homePosts.uniqued(on: \.id)
                 state.postListMode = .posts
                 isFetchPostsInProgress = false
+                state.canLoadMorePosts = posts.count >= HOME_SCREEN_POST_PAGE_COUNT
                 
                 if isForceRefresh {
                     self.feedMediaPreFetchService?.forceRefreshHomeFeedMedia(following: followingOnly)
@@ -799,12 +800,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .failure(let error):
             MXLog.error("Failed to fetch zero posts: \(error)")
             state.postListMode = state.posts.isEmpty ? .empty : .posts
-            switch error {
-            case .postsLimitReached:
-                state.canLoadMorePosts = false
-            default:
-                displayError()
-            }
             isFetchPostsInProgress = false
         }
     }
@@ -839,7 +834,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.posts[postIndex] = homePost
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
-//                displayError()
             }
         }
     }
@@ -860,7 +854,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .failure(let error):
             state.channelsListMode = .empty
             MXLog.error("Failed to fetch channels: \(error)")
-            displayError()
         }
     }
     
@@ -896,7 +889,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     getRoomInfoFromAlias(channel.id)
                 case .failure(let failure):
                     MXLog.error("Failed to join channel: \(failure)")
-                    displayError()
+                    displayError(message: "Failed to join channel. Please try again later.")
                 }
             }
         }
@@ -1171,7 +1164,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 for pool in stakePools {
                     group.addTask {
                         let poolAddress = pool.address
-                        let chainId = pool.chainId
+                        let chainId = pool.chainId.rawValue
                         let isAvaxChain = ZeroWalletChainsUtil.shared.isAvaxChain(chainId)
                         
                         async let totalStakedResult = self.userSession.clientProxy.getTotalStaked(poolAddress: poolAddress, chainId: chainId)

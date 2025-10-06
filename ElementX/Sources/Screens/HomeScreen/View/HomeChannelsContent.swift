@@ -183,7 +183,7 @@ struct HomeChannelsContent: View {
     
     @ViewBuilder
     private var topSection: some View {
-        SimpleTabButtonsView(tabs: HomeChannelsTab.allCases,
+        SimpleFixedTabButtonsView(tabs: HomeChannelsTab.allCases,
                              selectedTab: selectedTab,
                              tabTitle: { tab in
             switch tab {

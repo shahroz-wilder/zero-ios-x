@@ -106,10 +106,8 @@ private struct StakePoolDetailsView : View {
                 ZStack(alignment: .bottomTrailing) {
                     WalletTokenImage(url: selectedPool.pool.poolIcon)
                     
-                    if ZeroWalletChainsUtil.shared.isAvaxChain(selectedPool.pool.chainId) {
-                        AvaxChainIcon(size: 16)
-                    } else {
-                        ZChainIcon(size: 16)
+                    if let chain = ZeroWalletChainsUtil.shared.getChain(selectedPool.pool.chainId) {
+                        WalletChainIcon(chainIcon: chain.logo)
                     }
                 }
                 
@@ -280,10 +278,8 @@ private struct PoolStakeUnstakeView : View {
                 ZStack(alignment: .bottomTrailing) {
                     WalletTokenImage(url: selectedPool.pool.poolIcon)
                     
-                    if ZeroWalletChainsUtil.shared.isAvaxChain(selectedPool.pool.chainId) {
-                        AvaxChainIcon(size: 16)
-                    } else {
-                        ZChainIcon(size: 16)
+                    if let chain = ZeroWalletChainsUtil.shared.getChain(selectedPool.pool.chainId) {
+                        WalletChainIcon(chainIcon: chain.logo)
                     }
                 }
                 
@@ -330,7 +326,7 @@ private struct PoolStakeUnstakeView : View {
                                 }
                         }
                         .onChange(of: inputAmount) { _, newValue in
-                            let enteredAmount = Double(newValue) ?? 0
+                            let enteredAmount = newValue.toLocalizedDouble() ?? 0
                             hasEnteredAValidAmount = enteredAmount > 0 && enteredAmount <= refAmount
                         }
                         .toolbar {
@@ -354,7 +350,7 @@ private struct PoolStakeUnstakeView : View {
                         )
                     
                     Button(action: {
-                        inputAmount = refAmount.description
+                        inputAmount = refAmount.description.toLocalizedFormattedString() ?? refAmount.description
                     }) {
                         Text("Max")
                             .font(.compound.bodySMSemibold)
@@ -466,10 +462,8 @@ private struct TransactionSuccessOrFailureView : View {
                     ZStack(alignment: .bottomTrailing) {
                         WalletTokenImage(url: selectedPool.pool.poolIcon)
                         
-                        if ZeroWalletChainsUtil.shared.isAvaxChain(selectedPool.pool.chainId) {
-                            AvaxChainIcon(size: 16)
-                        } else {
-                            ZChainIcon(size: 16)
+                        if let chain = ZeroWalletChainsUtil.shared.getChain(selectedPool.pool.chainId) {
+                            WalletChainIcon(chainIcon: chain.logo)
                         }
                     }
                     

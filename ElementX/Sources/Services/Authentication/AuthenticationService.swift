@@ -214,16 +214,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .success:
                 return .success(())
             case .failure(let error):
-                if let apiError = (error as? APIErrorResponse) {
-                    switch apiError.code {
-                    case "INVITE_CODE_NOT_FOUND":
-                        return .failure(.invalidInviteCode)
-                    default:
-                        return .failure(.failedCreatingUserAccount)
-                    }
-                } else {
-                    return .failure(.failedCreatingUserAccount)
-                }
+                return handleZeroError(error, fallbackError: .invalidInviteCode)
             }
         } catch {
             MXLog.error(error)
@@ -238,7 +229,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .success:
                 return .success(())
             case .failure(let error):
-                return .failure(.failedRequestResetPassword)
+                return handleZeroError(error, fallbackError: .failedRequestResetPassword)
             }
         } catch {
             MXLog.error("Failed to request reset password: \(error)")
@@ -253,7 +244,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .success:
                 return .success(())
             case .failure(let error):
-                return .failure(.failedRequestOtp)
+                return handleZeroError(error, fallbackError: .failedRequestOtp)
             }
         } catch {
             MXLog.error("Failed to request OTP: \(error)")
@@ -283,20 +274,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 switch session {
                 case .success(let userSession):
                     return .success(userSession)
-                case .failure:
-                    return .failure(.failedCreatingUserAccount)
+                case .failure(let error):
+                    return handleZeroError(error, fallbackError: .failedCreatingUserAccount)
                 }
             case .failure(let error):
-                if let apiError = (error as? APIErrorResponse) {
-                    switch apiError.code {
-                    case "PROFILE_PRIMARY_EMAIL_ALREADY_EXISTS":
-                        return .failure(.userAlreadyExists)
-                    default:
-                        return .failure(.failedCreatingUserAccount)
-                    }
-                } else {
-                    return .failure(.failedCreatingUserAccount)
-                }
+                return handleZeroError(error, fallbackError: .failedCreatingUserAccount)
             }
         } catch {
             MXLog.error(error)
@@ -317,11 +299,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 switch session {
                 case .success(let userSession):
                     return .success(userSession)
-                case .failure(_):
-                    return .failure(.failedCreatingUserAccount)
+                case .failure(let error):
+                    return handleZeroError(error, fallbackError: .failedCreatingUserAccount)
                 }
-            case .failure(_):
-                return .failure(.failedCreatingUserAccount)
+            case .failure(let error):
+                return handleZeroError(error, fallbackError: .failedCreatingUserAccount)
             }
         } catch {
             MXLog.error(error)
@@ -383,8 +365,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 }
                 StateBus.shared.onUserAuthStateChanged(.authorised)
                 return await userSession(for: client)
-            case .failure:
-                return .failure(.failedLoggingIn)
+            case .failure(let error):
+                return handleZeroError(error, fallbackError: .failedLoggingIn)
             }
         } catch {
             MXLog.error(error)
@@ -431,20 +413,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 StateBus.shared.onUserAuthStateChanged(.authorised)
                 return await userSession(for: client)
             case .failure(let error):
-                if let apiError = (error as? APIErrorResponse) {
-                    switch apiError.code {
-                    case "INVALID_EMAIL_PASSWORD":
-                        return .failure(.invalidCredentials)
-                    case "INVALID_OTP":
-                        return .failure(.invalidOtp)
-                    case "USER_NOT_FOUND":
-                        return .failure(.userNotFound)
-                    default:
-                        return .failure(.failedLoggingIn)
-                    }
-                } else {
-                    return .failure(.failedLoggingIn)
-                }
+                return handleZeroError(error, fallbackError: .failedLoggingIn)
             }
         } catch let ClientError.MatrixApi(errorKind, _, _, _) {
             MXLog.error("Failed logging in with error kind: \(errorKind)")
@@ -460,6 +429,33 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return .failure(.failedLoggingIn)
         }
     }
+    
+    private func handleZeroError<T>(
+        _ error: Error,
+        fallbackError: AuthenticationServiceError
+    ) -> Result<T, AuthenticationServiceError> {
+        if let apiError = error as? APIErrorResponse {
+            switch apiError.code {
+            case "INVALID_EMAIL_PASSWORD":
+                return .failure(.invalidCredentials)
+            case "INVALID_OTP":
+                return .failure(.invalidOtp)
+            case "USER_NOT_FOUND":
+                return .failure(.userNotFound)
+            case "INVITE_CODE_NOT_FOUND":
+                return .failure(.invalidInviteCode)
+            case "PROFILE_PRIMARY_EMAIL_ALREADY_EXISTS":
+                return .failure(.userAlreadyExists)
+            case "PUBLIC_ADDRESS_ALREADY_EXISTS":
+                return .failure(.walletAlreadyExists)
+            default:
+                return .failure(.zeroError(apiError.message))
+            }
+        } else {
+            return .failure(fallbackError)
+        }
+    }
+
 }
 
 private extension HumanQrLoginError {

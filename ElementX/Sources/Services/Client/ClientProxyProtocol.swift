@@ -32,9 +32,7 @@ enum ClientProxyError: Error {
     case sdkError(Error)
     case forbiddenAccess
     case zeroError(Error)
-    
-    case postsLimitReached
-    
+        
     case invalidMedia
     case invalidServerName
     case invalidResponse
@@ -310,7 +308,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError>
     
-    func postNewFeed(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError>
+    func postNewFeed(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError>
     
     // MARK: - ZERO FEED USER
     
