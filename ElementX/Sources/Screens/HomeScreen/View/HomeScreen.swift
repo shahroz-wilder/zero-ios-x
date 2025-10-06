@@ -153,6 +153,7 @@ struct HomeScreen: View {
         ToolbarItem(placement: .navigationBarLeading) {
             settingsButton
         }
+        .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .principal) {
             Image(asset: Asset.Images.zeroWordmark)
@@ -172,6 +173,7 @@ struct HomeScreen: View {
         ToolbarItem(placement: .primaryAction) {
             userProfileButton
         }
+        .backportSharedBackgroundVisibility(.hidden)
     }
     
     private var settingsButton: some View {

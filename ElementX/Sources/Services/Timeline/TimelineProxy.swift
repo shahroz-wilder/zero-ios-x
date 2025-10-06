@@ -485,7 +485,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Toggling reaction \(reaction) for event: \(eventOrTransactionID)")
         
         do {
-            try await timeline.toggleReaction(itemId: eventOrTransactionID.rustValue, key: reaction)
+            _ = try await timeline.toggleReaction(itemId: eventOrTransactionID.rustValue, key: reaction)
             MXLog.info("Finished toggling reaction for event: \(eventOrTransactionID)")
             return .success(())
         } catch {

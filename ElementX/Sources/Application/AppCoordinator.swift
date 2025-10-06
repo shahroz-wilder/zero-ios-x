@@ -438,6 +438,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             await userSession.clientProxy.expireSyncSessions()
         }
         
+        if oldVersion < Version(25, 10, 0) {
+            MXLog.info("Migrating to version 25.10.0, showing new sound banner to existing user.")
+            appSettings.hasSeenNewSoundBanner = false
+        }
+        
         userSessionMigrationsOldVersion = nil
     }
     

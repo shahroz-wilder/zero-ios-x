@@ -48,6 +48,7 @@ enum HomeScreenViewAction {
     case confirmRecoveryKey
     case resetEncryption
     case skipRecoveryKeyConfirmation
+    case dismissNewSoundBanner
     case updateVisibleItemRange(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
@@ -205,6 +206,7 @@ struct HomeScreenViewState: BindableState {
     var currentUserZeroProfile: ZCurrentUser?
     
     var securityBannerMode = HomeScreenSecurityBannerMode.none
+    var shouldShowNewSoundBanner = false
     
     var requiresExtraAccountSetup = false
     
@@ -335,6 +337,10 @@ struct HomeScreenViewState: BindableState {
     
     var shouldShowFilters: Bool {
         !bindings.isSearchFieldFocused && roomListMode == .rooms
+    }
+    
+    var shouldShowBanner: Bool {
+        securityBannerMode.isShown || shouldShowNewSoundBanner
     }
     
     var postLinkPreviewsMap: [String: ZLinkPreview] = [:]

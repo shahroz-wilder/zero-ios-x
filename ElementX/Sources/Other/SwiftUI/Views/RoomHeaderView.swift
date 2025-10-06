@@ -29,6 +29,7 @@ struct RoomHeaderView: View {
         //        .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
         //}
         content
+                .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
     }
     
     private var content: some View {

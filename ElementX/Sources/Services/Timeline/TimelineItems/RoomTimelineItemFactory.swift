@@ -57,7 +57,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildRedactedTimelineItem(eventItemProxy, messageLikeContent, isOutgoing, repliedToEvent)
             case .unableToDecrypt(let encryptedMessage):
                 return buildEncryptedTimelineItem(eventItemProxy, messageLikeContent, encryptedMessage, isOutgoing, repliedToEvent)
-            case .other(eventType: let eventType):
+            case .other:
                 return nil // We shouldn't receive these without asking for custom event types.
             }
         case .failedToParseMessageLike(let eventType, let error):
