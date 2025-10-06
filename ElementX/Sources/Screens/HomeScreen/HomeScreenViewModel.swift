@@ -156,7 +156,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         appSettings.$hasSeenNewSoundBanner
             .sink { [weak self] hasSeenNewSoundBanner in
-                self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
+//                self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
+                self?.state.shouldShowNewSoundBanner = false
             }
             .store(in: &cancellables)
         

@@ -351,7 +351,6 @@
 		18D467AB2D109BD200861AA6 /* VoiceMessageRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A293D06BAB2B7A17D9314B /* VoiceMessageRoomTimelineView.swift */; };
 		18D467AC2D109BFE00861AA6 /* VoiceMessageRoomPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B41C36800DD4558D7BDA7 /* VoiceMessageRoomPlaybackView.swift */; };
 		18D467AD2D109C3900861AA6 /* TimelineItemBubbleBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE739A6836E86E3780748477 /* TimelineItemBubbleBackground.swift */; };
-		18D467AE2D109C6F00861AA6 /* ZoomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018194CAFBE80720FECCEDEE /* ZoomTransition.swift */; };
 		18D467AF2D109C7B00861AA6 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07934EF08BB39353E4A94272 /* BlurEffectView.swift */; };
 		18D467B02D109CAC00861AA6 /* KnockRequestProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F957320D0EB7D7B4E30C79D /* KnockRequestProxyMock.swift */; };
 		18D467B12D10A0AC00861AA6 /* SecurityAndPrivacyScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F2F6B6E56055EF173A2DD3 /* SecurityAndPrivacyScreenCoordinator.swift */; };
@@ -2145,6 +2144,11 @@
 		79ACACF52E70B5B300292618 /* CreateAccountFormsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF32E70B5AB00292618 /* CreateAccountFormsView.swift */; };
 		79ACACF72E70B68500292618 /* ValidateInviteCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */; };
 		79ACACF82E70B68500292618 /* ValidateInviteCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */; };
+		79AD2F732E9372D000B38AF3 /* LeaveSpaceHandleProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3CE05643C7791D46AC54B /* LeaveSpaceHandleProxy.swift */; };
+		79AD2F742E93731A00B38AF3 /* LeaveSpaceHandleSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580BDCD23DD02481AB5FFB47 /* LeaveSpaceHandleSDKMock.swift */; };
+		79AD2F752E93737D00B38AF3 /* LeaveSpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7813824C547ED121F6F8E0F /* LeaveSpaceView.swift */; };
+		79AD2F762E9373DA00B38AF3 /* Backports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A46ABD27628CB5FC402541 /* Backports.swift */; };
+		79AD2F772E93747500B38AF3 /* HomeScreenNewSoundBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5480F03306234FC086E93B /* HomeScreenNewSoundBanner.swift */; };
 		79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */; };
@@ -3256,7 +3260,7 @@
 		16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		16D353E10A64172D863769BF /* TombstonedAvatarImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TombstonedAvatarImage.swift; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
-		174E4AEF3DED300AA81046EC /* compound-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "compound-ios"; path = "compound-ios"; sourceTree = SOURCE_ROOT; };
+		174E4AEF3DED300AA81046EC /* compound-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "compound-ios"; sourceTree = SOURCE_ROOT; };
 		17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxyMock.swift; sourceTree = "<group>"; };
 		17BAE25A0E9E9F2F1BBA8930 /* DeactivateAccountScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeactivateAccountScreenViewModel.swift; sourceTree = "<group>"; };
 		180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSearchedUser.swift; sourceTree = "<group>"; };
@@ -10732,6 +10736,7 @@
 				18D467AF2D109C7B00861AA6 /* BlurEffectView.swift in Sources */,
 				18E9A4B42C9829970082DDA4 /* ComposerDraftService.swift in Sources */,
 				18E9A4B52C9829970082DDA4 /* ComposerDraftServiceMock.swift in Sources */,
+				79AD2F772E93747500B38AF3 /* HomeScreenNewSoundBanner.swift in Sources */,
 				792E92A12E5DB8D600C88D7B /* ManageWalletsViewModelProtocol.swift in Sources */,
 				18E9A4B62C9829970082DDA4 /* ComposerDraftServiceProtocol.swift in Sources */,
 				793F3A5D2E1801B2002F96F0 /* ZeroFlaggedFeaturesService.swift in Sources */,
@@ -10836,6 +10841,7 @@
 				18E9A4F92C9829970082DDA4 /* EncryptionResetPasswordScreenViewModel.swift in Sources */,
 				18E9A4FA2C9829970082DDA4 /* EncryptionResetPasswordScreenViewModelProtocol.swift in Sources */,
 				18D4679D2D109B0C00861AA6 /* ShouldScrollOnKeyboardDidShow.swift in Sources */,
+				79AD2F752E93737D00B38AF3 /* LeaveSpaceView.swift in Sources */,
 				18C4540C2CF09A5E00F25539 /* KnockRequestsListScreen.swift in Sources */,
 				18E9A4FB2C9829970082DDA4 /* EncryptionResetScreen.swift in Sources */,
 				7984575F2D60849F0039623F /* HomeScreenPostMeowButton.swift in Sources */,
@@ -11067,6 +11073,7 @@
 				796CD4342E535FE1000D6078 /* SpaceServiceProxyProtocol.swift in Sources */,
 				18E9A58E2C9829970082DDA4 /* MenuSheetLabelStyle.swift in Sources */,
 				799E1D1A2DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */,
+				79AD2F762E9373DA00B38AF3 /* Backports.swift in Sources */,
 				18E9A58F2C9829970082DDA4 /* MessageComposer.swift in Sources */,
 				790181672E453C1C0083B4BB /* StateMachineFactory.swift in Sources */,
 				799FE30F2E839B2E00CA6ACE /* ConfirmTransactionView.swift in Sources */,
@@ -11262,6 +11269,7 @@
 				18E9A6092C9829970082DDA4 /* RedactedRoomTimelineView.swift in Sources */,
 				18E9A60A2C9829970082DDA4 /* ReportContentScreen.swift in Sources */,
 				18E9A60B2C9829970082DDA4 /* ReportContentScreenCoordinator.swift in Sources */,
+				79AD2F732E9372D000B38AF3 /* LeaveSpaceHandleProxy.swift in Sources */,
 				18E9A60C2C9829970082DDA4 /* ReportContentScreenModels.swift in Sources */,
 				18E9A60D2C9829970082DDA4 /* ReportContentScreenViewModel.swift in Sources */,
 				18E9A60E2C9829970082DDA4 /* ReportContentScreenViewModelProtocol.swift in Sources */,
@@ -11270,6 +11278,7 @@
 				790A47572E6B09510033604D /* ZChainIcon.swift in Sources */,
 				18E9A6102C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenCoordinator.swift in Sources */,
 				18E9A6112C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
+				79AD2F742E93731A00B38AF3 /* LeaveSpaceHandleSDKMock.swift in Sources */,
 				18E9A6122C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
 				18E9A6132C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */,
 				185454E02CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */,
@@ -11642,7 +11651,6 @@
 				18E9A7192C9829970082DDA4 /* UITestsSignalling.swift in Sources */,
 				18E9A71A2C9829970082DDA4 /* UIView.swift in Sources */,
 				790922492E1DCC0400833940 /* TransferTokenViewModelProtocol.swift in Sources */,
-				18D467AE2D109C6F00861AA6 /* ZoomTransition.swift in Sources */,
 				797751732DD9F87E006CF62D /* FeedUserProfileScreenCoordinator.swift in Sources */,
 				18E9A71B2C9829970082DDA4 /* UNNotificationContent.swift in Sources */,
 				18E9A71C2C9829970082DDA4 /* URL.swift in Sources */,
@@ -13343,7 +13351,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.3;
+				MARKETING_VERSION = 0.21.8;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13379,7 +13387,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.21.3;
+				MARKETING_VERSION = 0.21.8;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -14450,14 +14458,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 2.37.12;
-			};
-		};
-		F71C70A4404CC6D9C4AF35F2 /* XCRemoteSwiftPackageReference "compound-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/element-hq/compound-ios";
-			requirement = {
-				kind = revision;
-				revision = 4ad0bd0acd825a905bb4955b32979fe34cc538eb;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {

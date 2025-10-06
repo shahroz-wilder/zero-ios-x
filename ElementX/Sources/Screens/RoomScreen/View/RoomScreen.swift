@@ -181,7 +181,13 @@ struct RoomScreen: View {
     private var toolbar: some ToolbarContent {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
-        ToolbarItem(placement: .topBarLeading) {
+//        ToolbarItem(placement: .topBarLeading) {
+        let toolbarItemPlacement: ToolbarItemPlacement = if #available(iOS 26, *) {
+            .principal
+        } else {
+            .topBarLeading
+        }
+        ToolbarItem(placement: toolbarItemPlacement) {
             RoomHeaderView(roomName: context.viewState.roomTitle,
                            roomSubtitle: context.viewState.roomSubtitle,
                            roomAvatar: context.viewState.roomAvatar,
