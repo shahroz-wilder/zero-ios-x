@@ -13,6 +13,7 @@ struct Application: App {
     @Environment(\.openURL) private var openURL
     
     @StateObject private var remoteConfig = RemoteConfigManager.shared
+    @StateObject private var appState = AppStateManager.shared
     
     private var appCoordinator: AppCoordinatorProtocol!
 
@@ -65,6 +66,12 @@ struct Application: App {
                         AppForceUpdateScreen()
                     } else if remoteConfig.maintenanceModeEnabled {
                         AppMaintenanceScreen()
+                    }
+                    
+                    if appState.isSyncing {
+                        BorderLoadingView()
+                            .transition(.opacity)
+                            .animation(.easeInOut(duration: 0.3), value: appState.isSyncing)
                     }
                 }
         }

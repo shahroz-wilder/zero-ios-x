@@ -1081,11 +1081,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 switch state {
                 case .loading:
                     if self?.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable {
-                        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+//                        ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
+                        AppStateManager.shared.setSyncing(true)
                     }
                 case .notLoading:
                     ServiceLocator.shared.analytics.signpost.endFirstSync()
-                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(toastIdentifier)
+//                    ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(toastIdentifier)
+                    AppStateManager.shared.setSyncing(false)
                 }
             }
     }

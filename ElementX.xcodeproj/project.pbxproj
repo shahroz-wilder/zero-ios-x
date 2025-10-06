@@ -2149,6 +2149,10 @@
 		79AD2F752E93737D00B38AF3 /* LeaveSpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7813824C547ED121F6F8E0F /* LeaveSpaceView.swift */; };
 		79AD2F762E9373DA00B38AF3 /* Backports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A46ABD27628CB5FC402541 /* Backports.swift */; };
 		79AD2F772E93747500B38AF3 /* HomeScreenNewSoundBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5480F03306234FC086E93B /* HomeScreenNewSoundBanner.swift */; };
+		79AD2F792E937BD000B38AF3 /* BorderedLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD2F782E937BCB00B38AF3 /* BorderedLoadingView.swift */; };
+		79AD2F7A2E937BD000B38AF3 /* BorderedLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD2F782E937BCB00B38AF3 /* BorderedLoadingView.swift */; };
+		79AD2F7C2E937F0100B38AF3 /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD2F7B2E937EFC00B38AF3 /* AppStateManager.swift */; };
+		79AD2F7D2E937F0100B38AF3 /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD2F7B2E937EFC00B38AF3 /* AppStateManager.swift */; };
 		79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */; };
@@ -3996,6 +4000,8 @@
 		79ACACF02E70ADBA00292618 /* CreateAccountOptionSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountOptionSegmentControl.swift; sourceTree = "<group>"; };
 		79ACACF32E70B5AB00292618 /* CreateAccountFormsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountFormsView.swift; sourceTree = "<group>"; };
 		79ACACF62E70B67C00292618 /* ValidateInviteCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateInviteCodeView.swift; sourceTree = "<group>"; };
+		79AD2F782E937BCB00B38AF3 /* BorderedLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedLoadingView.swift; sourceTree = "<group>"; };
+		79AD2F7B2E937EFC00B38AF3 /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
 		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
 		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
 		79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedProfileFlowCoordinator.swift; sourceTree = "<group>"; };
@@ -5462,6 +5468,7 @@
 		1882EB982C91B9F6001DA2A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				79AD2F7B2E937EFC00B38AF3 /* AppStateManager.swift */,
 				795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */,
 				7903937C2D50DA8E0022E293 /* DateUtil.swift */,
 				185454D62CFEFC79003CA957 /* ValidationUtil.swift */,
@@ -5477,6 +5484,7 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				79AD2F782E937BCB00B38AF3 /* BorderedLoadingView.swift */,
 				790A47592E6B098E0033604D /* AvaxChainIcon.swift */,
 				790A47562E6B094E0033604D /* ZChainIcon.swift */,
 				790A47462E6ADBEE0033604D /* Otp */,
@@ -11394,6 +11402,7 @@
 				18E9A6622C9829970082DDA4 /* RoomPollsHistoryScreenViewModel.swift in Sources */,
 				79B716492DA843F200A68055 /* EventTimelineItem.swift in Sources */,
 				79EC88BC2DDDBEFF006629EE /* ThreadTimelineScreenCoordinator.swift in Sources */,
+				79AD2F7D2E937F0100B38AF3 /* AppStateManager.swift in Sources */,
 				18E9A6632C9829970082DDA4 /* RoomPollsHistoryScreenViewModelProtocol.swift in Sources */,
 				790393852D53A1250022E293 /* TimelineControllerFactory.swift in Sources */,
 				18E9A6642C9829970082DDA4 /* RoomProxyProtocol.swift in Sources */,
@@ -11673,6 +11682,7 @@
 				18E9A72B2C9829970082DDA4 /* UserDiscoveryService.swift in Sources */,
 				79FCB1AB2DA5BA4800669122 /* DeclineAndBlockScreenViewModelProtocol.swift in Sources */,
 				18E9A72C2C9829970082DDA4 /* UserDiscoveryServiceProtocol.swift in Sources */,
+				79AD2F792E937BD000B38AF3 /* BorderedLoadingView.swift in Sources */,
 				185454F12D0042F7003CA957 /* SecureInputField.swift in Sources */,
 				18E9A72D2C9829970082DDA4 /* UserIndicator.swift in Sources */,
 				18E9A72E2C9829970082DDA4 /* UserIndicatorController.swift in Sources */,
@@ -12640,6 +12650,7 @@
 				6E63704717F17593A475D152 /* RoomNotificationSettingsScreenModels.swift in Sources */,
 				E9347F56CF0683208F4D9249 /* RoomNotificationSettingsScreenViewModel.swift in Sources */,
 				79281A852E6A33BA00D86DD6 /* ForgotPasswordScreenCoordinator.swift in Sources */,
+				79AD2F7C2E937F0100B38AF3 /* AppStateManager.swift in Sources */,
 				BA4C9049BC96DED3A2F3B82E /* RoomNotificationSettingsScreenViewModelProtocol.swift in Sources */,
 				491D62ACD19E6F134B1766AF /* RoomNotificationSettingsUserDefinedScreen.swift in Sources */,
 				DBC8D1DBFE9F9CA7662BC8AA /* RoomPermissions.swift in Sources */,
@@ -12696,6 +12707,7 @@
 				13C77FDF17C4C6627CFFC205 /* RoomTimelineItemFactoryProtocol.swift in Sources */,
 				70558528EF68CAAEF09972D5 /* RoomTimelineItemFixtures.swift in Sources */,
 				878070573C7BF19E735707B4 /* RoomTimelineItemProperties.swift in Sources */,
+				79AD2F7A2E937BD000B38AF3 /* BorderedLoadingView.swift in Sources */,
 				1AE4AEA0FA8DEF52671832E0 /* RoomTimelineItemProtocol.swift in Sources */,
 				AD55E245FE686D7DB4C86406 /* RoomTimelineItemView.swift in Sources */,
 				41CE5E1289C8768FC5B6490C /* RoomTimelineItemViewState.swift in Sources */,
