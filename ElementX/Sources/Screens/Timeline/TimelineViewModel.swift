@@ -932,13 +932,18 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id))
             } else {
                 let fallbackDisplayText = MentionUsersCache.shared.getMentionUserDisplayName(id: id) ?? id
-                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: fallbackDisplayText)
+                pillContext.viewState = .mention(isOwnMention: isOwnMention,
+                                                 displayText: PillUtilities.userPillDisplayText(username: fallbackDisplayText, userID: id))
                 pillContext.cancellable = context.$viewState
                     .compactMap { $0.members[id] }
                     .sink { [weak pillContext] profile in
                         guard let pillContext else {
                             return
                         }
+                        guard profile.displayName != fallbackDisplayText else {
+                            return
+                        }
+                        MentionUsersCache.shared.addMentionUser(id: id, name: profile.displayName ?? "")
                         pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id))
                         pillContext.cancellable = nil
                     }
