@@ -85,10 +85,10 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         return shouldScrollToTopClosure(scrollView)
     }
     
-    func scrollToTop() {
+    func scrollToTop(animated: Bool = true) {
         guard let scrollView = scrollView else { return }
         let topOffset = CGPoint(x: 0, y: -100)
-        scrollView.setContentOffset(topOffset, animated: true)
+        scrollView.setContentOffset(topOffset, animated: animated)
     }
     
     // MARK: - Private

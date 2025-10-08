@@ -42,7 +42,7 @@ struct HomeScreen: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         showBackToTop = false
                         hideNavigationBar = false
-                        scrollViewAdapter.scrollToTop()
+//                        scrollViewAdapter.scrollToTop(animated: false)
                         context.send(viewAction: .onHomeTabChanged)
                     }
                     selectedTab = tab
