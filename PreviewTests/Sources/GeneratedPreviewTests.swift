@@ -95,6 +95,12 @@ extension PreviewTests {
         }
     }
 
+    func testBloomModifier() async throws {
+        for (index, preview) in BloomModifier_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testBugReportScreen() async throws {
         for (index, preview) in BugReportScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -347,8 +353,20 @@ extension PreviewTests {
         }
     }
 
+    func testJoinRoomScreenSpace() async throws {
+        for (index, preview) in JoinRoomScreenSpace_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testJoinRoomScreen() async throws {
         for (index, preview) in JoinRoomScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    func testJoinedMembersBadgeView() async throws {
+        for (index, preview) in JoinedMembersBadgeView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
@@ -379,6 +397,12 @@ extension PreviewTests {
 
     func testLabsScreen() async throws {
         for (index, preview) in LabsScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    func testLeaveSpaceRoomDetailsCell() async throws {
+        for (index, preview) in LeaveSpaceRoomDetailsCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
@@ -925,6 +949,12 @@ extension PreviewTests {
 
     func testSpaceScreen() async throws {
         for (index, preview) in SpaceScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    func testSpacesAnnouncementSheetView() async throws {
+        for (index, preview) in SpacesAnnouncementSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

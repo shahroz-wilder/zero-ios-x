@@ -22,7 +22,11 @@ struct SpaceListScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .bloom()
+        .toolbarBloom(hasSearchBar: true)
+        .onAppear { context.send(viewAction: .screenAppeared) }
+        .sheet(isPresented: $context.isPresentingFeatureAnnouncement) {
+            SpacesAnnouncementSheetView(context: context)
+        }
     }
     
     var header: some View {
@@ -35,7 +39,7 @@ struct SpaceListScreen: View {
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                Text(context.viewState.subtitle)
+                Text(L10n.commonSpaces(context.viewState.joinedSpaces.count))
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
                     .multilineTextAlignment(.center)
@@ -110,6 +114,7 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
         
         let viewModel = SpaceListScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                  selectedSpacePublisher: .init(nil),
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  userIndicatorController: UserIndicatorControllerMock())
         
         return viewModel

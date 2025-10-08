@@ -11,20 +11,19 @@ import MatrixRustSDK
 enum SpaceRoomProxyVisibility: Equatable {
     case `public`
     case `private`
-    case restricted(parentName: String)
+    case restricted
     // We can add the external case in here eventually.
 }
 
 // sourcery: AutoMockable
 protocol SpaceRoomProxyProtocol {
     var id: String { get }
-    var name: String? { get }
+    var name: String { get }
+    var rawName: String? { get }
     var avatarURL: URL? { get }
     
     var isSpace: Bool { get }
     var isDirect: Bool? { get }
-    /// A temporary property until we get the `AllowRule`s from the server.
-    var parent: SpaceRoomProxyProtocol? { get }
     var childrenCount: Int { get }
     
     var joinedMembersCount: Int { get }
@@ -50,25 +49,12 @@ extension SpaceRoomProxyProtocol {
         }
     }
     
-    var computedName: String {
-        if !isSpace, isDirect == true, name == nil, heroes.count == 1, let dmRecipient = heroes.first {
-            dmRecipient.displayName ?? dmRecipient.id
-        } else {
-            name ?? canonicalAlias ?? id
-        }
-    }
-    
     var visibility: SpaceRoomProxyVisibility? {
         switch joinRule {
         case .public:
             .public
         case .restricted, .knockRestricted:
-            // Temporary solution until the server includes the `AllowRule` values (they're always empty right now).
-            if let parent {
-                .restricted(parentName: parent.computedName)
-            } else {
-                .private
-            }
+            .restricted
         case .invite, .knock, .private, .custom:
             .private
         case .none:

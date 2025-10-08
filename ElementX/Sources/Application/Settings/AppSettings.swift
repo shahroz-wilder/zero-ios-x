@@ -29,6 +29,7 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
+        case hasSeenSpacesAnnouncement
         case hasSeenNewSoundBanner
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
@@ -60,7 +61,6 @@ final class AppSettings {
         case enableKeyShareOnInvite
         case knockingEnabled
         case threadsEnabled
-        case spacesEnabled
         case developerOptionsEnabled
         case nextGenHTMLParserEnabled
         case linkPreviewsEnabled
@@ -166,6 +166,9 @@ final class AppSettings {
     /// This Set is being used to implement badges for unread invites.
     @UserPreference(key: UserDefaultsKeys.seenInvites, defaultValue: [], storageType: .userDefaults(store))
     var seenInvites: Set<String>
+    
+    @UserPreference(key: UserDefaultsKeys.hasSeenSpacesAnnouncement, defaultValue: false, storageType: .userDefaults(store))
+    var hasSeenSpacesAnnouncement
     
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
     @UserPreference(key: UserDefaultsKeys.hasSeenNewSoundBanner, defaultValue: true, storageType: .userDefaults(store))
@@ -391,9 +394,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.spacesEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var spacesEnabled
     
     @UserPreference(key: UserDefaultsKeys.nextGenHTMLParserEnabled, defaultValue: true, storageType: .userDefaults(store))
     var nextGenHTMLParserEnabled

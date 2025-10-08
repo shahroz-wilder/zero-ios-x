@@ -23,8 +23,8 @@ struct SpaceScreen: View {
         .navigationTitle(context.viewState.spaceName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .sheet(item: $context.leaveHandle) { _ in
-            LeaveSpaceView(context: context)
+        .sheet(item: $context.leaveHandle) { leaveHandle in
+            LeaveSpaceView(context: context, leaveHandle: leaveHandle)
         }
     }
     
@@ -58,19 +58,27 @@ struct SpaceScreen: View {
                            mediaProvider: context.mediaProvider)
         }
         
-        ToolbarItemGroup(placement: .secondaryAction) {
-            if let permalink = context.viewState.permalink {
-                Section {
-                    ShareLink(item: permalink) {
-                        Label(L10n.actionShare, icon: \.shareIos)
+        // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
+        // was crashing on iOS 26.0 when tapping the ShareLink as the popover presentation
+        // controller attempts to anchor itself to the button that is no longer visible.
+        ToolbarItem(placement: .primaryAction) {
+            Menu {
+                if let permalink = context.viewState.permalink {
+                    Section {
+                        ShareLink(item: permalink) {
+                            Label(L10n.actionShare, icon: \.shareIos)
+                        }
                     }
                 }
-            }
-            
-            Section {
-                Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
-                    Label(L10n.actionLeaveSpace, icon: \.leave)
+                
+                Section {
+                    Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
+                        Label(L10n.actionLeaveSpace, icon: \.leave)
+                    }
                 }
+            } label: {
+                // Use an SF Symbol to match what ToolbarItemGroup(placement: .secondaryAction) would give us.
+                Image(systemSymbol: .ellipsis)
             }
         }
     }
@@ -91,7 +99,6 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
         let spaceRoomProxy = SpaceRoomProxyMock(.init(id: "!eng-space:matrix.org",
                                                       name: "Engineering Team",
                                                       isSpace: true,
-                                                      parent: SpaceRoomProxyMock(.init(name: "MegaGroup", isSpace: true)),
                                                       childrenCount: 30,
                                                       joinedMembersCount: 76,
                                                       heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],

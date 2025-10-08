@@ -22,14 +22,14 @@ struct SpaceHeaderView: View {
                 .accessibilityHidden(true)
             
             VStack(spacing: 8) {
-                Text(spaceRoomProxy.computedName)
+                Text(spaceRoomProxy.name)
                     .font(.compound.headingLGBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
                 spaceDetails
                 
-                SpaceHeaderMembersView(heroes: spaceRoomProxy.heroes,
+                JoinedMembersBadgeView(heroes: spaceRoomProxy.heroes,
                                        joinedCount: spaceRoomProxy.joinedMembersCount,
                                        mediaProvider: mediaProvider)
             }
@@ -63,7 +63,7 @@ struct SpaceHeaderView: View {
     
     var spaceDetails: some View {
         Label {
-            Text(L10n.screenSpaceListDetails(spaceDetailsVisibilityTitle, L10n.commonRooms(spaceRoomProxy.childrenCount)))
+            Text(spaceDetailsVisibilityTitle)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textSecondary)
                 .multilineTextAlignment(.center)
@@ -77,7 +77,7 @@ struct SpaceHeaderView: View {
         switch spaceRoomProxy.visibility {
         case .public: L10n.commonPublicSpace
         case .private: L10n.commonPrivateSpace
-        case .restricted(let parentName): L10n.screenSpaceListParentSpace(parentName)
+        case .restricted: L10n.commonSharedSpace
         case .none: L10n.commonPrivateSpace
         }
     }
@@ -88,64 +88,6 @@ struct SpaceHeaderView: View {
         case .private: \.lock
         case .restricted: \.space
         case .none: \.lock
-        }
-    }
-}
-
-struct SpaceHeaderMembersView: View {
-    let heroes: [UserProfileProxy]
-    let joinedCount: Int
-    
-    let mediaProvider: MediaProviderProtocol?
-    
-    var body: some View {
-        if heroes.isEmpty {
-            Label(title: title) {
-                CompoundIcon(\.userProfile, size: .small, relativeTo: .compound.bodyMD)
-                    .foregroundStyle(.compound.textSecondary)
-            }
-            .font(.compound.bodyMD)
-            .foregroundStyle(.compound.textSecondary)
-            .labelStyle(.custom(spacing: 4))
-            .padding(.trailing, 8)
-            .background(.compound.bgSubtleSecondary, in: Capsule())
-        } else {
-            Label(title: title) {
-                heroesFacePile
-            }
-            .font(.compound.bodyMD)
-            .foregroundStyle(.compound.textSecondary)
-            .labelStyle(.custom(spacing: 6))
-        }
-    }
-    
-    func title() -> Text {
-        Text("\(joinedCount)")
-    }
-    
-    var heroesFacePile: some View {
-        HStack(spacing: -8) {
-            ForEach(heroes.prefix(3).reversed()) { hero in
-                LoadableAvatarImage(url: hero.avatarURL,
-                                    name: hero.displayName,
-                                    contentID: hero.userID,
-                                    avatarSize: .user(on: .spaceHeader),
-                                    mediaProvider: mediaProvider)
-                    .mask {
-                        Circle()
-                            .fill(Color.white)
-                            .overlay {
-                                if hero != heroes.first {
-                                    Circle()
-                                        .inset(by: -2)
-                                        .fill(Color.black)
-                                        .offset(x: 12)
-                                }
-                            }
-                            .compositingGroup()
-                            .luminanceToAlpha()
-                    }
-            }
         }
     }
 }
@@ -183,7 +125,6 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
             SpaceRoomProxyMock(.init(id: "!space3:matrix.org",
                                      name: "Subspace",
                                      isSpace: true,
-                                     parent: SpaceRoomProxyMock(.init(name: "Foundation", isSpace: true)),
                                      childrenCount: 30,
                                      joinedMembersCount: 123,
                                      heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],

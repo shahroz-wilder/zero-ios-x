@@ -81,6 +81,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var userFeedProfileFlowCoordinator: UserFeedProfileFlowCoordinator?
     // periphery:ignore - used to avoid deallocation
     private var childRoomFlowCoordinator: RoomFlowCoordinator?
+    // periphery:ignore - retaining purpose
+    private var spaceFlowCoordinator: SpaceFlowCoordinator?
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
@@ -261,24 +263,36 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         switch room {
         case .joined(let roomProxy):
-            await storeAndSubscribeToRoomProxy(roomProxy)
-            guard case let .eventFocus(focusEvent) = presentationAction else {
-                // If is not a focus event just handle the presentation action directly in `presentRoom`
-                stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
-                return
-            }
-            // Otherwise check if the focussed event exists to handle a possible error or theaded event.
-            switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
-            case .success(let event):
-                if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
-                    stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: threadRootEventID, shouldSetPin: false))), userInfo: EventUserInfo(animated: animated))
-                    stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
-                } else {
-                    stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
+            if roomProxy.infoPublisher.value.isSpace {
+                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomProxy.id, parent: nil) {
+                case .success(let spaceRoomListProxy):
+                    actionsSubject.send(.continueWithSpaceFlow(spaceRoomListProxy))
+                case .failure:
+                    showErrorIndicator()
+                    stateMachine.tryEvent(.dismissFlow)
                 }
-            case .failure:
-                showErrorIndicator()
-                stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
+            } else {
+                await storeAndSubscribeToRoomProxy(roomProxy)
+                
+                guard case let .eventFocus(focusEvent) = presentationAction else {
+                    // If is not a focus event just handle the presentation action directly in `presentRoom`
+                    stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
+                    return
+                }
+                
+                // Otherwise check if the focussed event exists to handle a possible error or theaded event.
+                switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
+                case .success(let event):
+                    if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
+                        stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: threadRootEventID, shouldSetPin: false))), userInfo: EventUserInfo(animated: animated))
+                        stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
+                    } else {
+                        stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
+                    }
+                case .failure:
+                    showErrorIndicator()
+                    stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
+                }
             }
         default:
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
@@ -327,7 +341,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         zeroAttachmentService.setRoomEncrypted(roomProxy.infoPublisher.value.isEncrypted)
     }
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     private func setupStateMachine() {
         addRouteMapping(stateMachine: stateMachine)
         
@@ -357,6 +371,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 Task { await self.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEventID, animated: animated) }
                 
             // Thread + Room
+                
+            case (_, .startSpaceFlow, .spaceFlow):
+                guard let spaceRoomListProxy = (context.userInfo as? EventUserInfo)?.spaceRoomListProxy else {
+                    fatalError("The space room list proxy is required to present a space.")
+                }
+                startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy, animated: animated)
+            case (.spaceFlow, .finishedSpaceFlow, _):
+                spaceFlowCoordinator = nil
                 
             case (_, .presentReportContent, .reportContent(let itemID, let senderID, _)):
                 presentReportContent(for: itemID, from: senderID)
@@ -753,8 +775,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentJoinRoomScreen(via: [String], animated: Bool) {
-        let coordinator = JoinRoomScreenCoordinator(parameters: .init(roomID: roomID,
-                                                                      via: via,
+        let coordinator = JoinRoomScreenCoordinator(parameters: .init(source: .generic(roomID: roomID, via: via),
                                                                       userSession: userSession,
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings))
@@ -1549,7 +1570,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
             case .continueWithSpaceFlow(let spaceRoomListProxy):
-                #warning("Present the space as a child.")
+                stateMachine.tryEvent(.startSpaceFlow, userInfo: EventUserInfo(animated: true, spaceRoomListProxy: spaceRoomListProxy))
             case .finished:
                 stateMachine.tryEvent(.dismissChildFlow)
             }
@@ -1620,12 +1641,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .viewInRoomTimeline(let itemID):
                 guard let eventID = itemID.eventID else {
                     MXLog.error("Unable to present room timeline for event \(itemID)")
+                   
                     return
                 }
                 stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))),
                                       userInfo: EventUserInfo(animated: false)) // No animation so the timeline visible when the preview animates away.
             case .finished:
                 stateMachine.tryEvent(.dismissMediaEventsTimeline)
+            case .displayMessageForwarding(let forwardingItem):
+                stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
             }
         }
         .store(in: &cancellables)
@@ -1633,6 +1657,31 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         mediaEventsTimelineFlowCoordinator = flowCoordinator
         
         flowCoordinator.start()
+    }
+    
+    private func startSpaceFlow(spaceRoomListProxy: SpaceRoomListProxyProtocol, animated: Bool) {
+        let coordinator = SpaceFlowCoordinator(entryPoint: .space(spaceRoomListProxy),
+                                               spaceServiceProxy: userSession.clientProxy.spaceService,
+                                               isChildFlow: true,
+                                               navigationStackCoordinator: navigationStackCoordinator,
+                                               flowParameters: flowParameters)
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .presentCallScreen(let roomProxy):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                case .verifyUser(let userID):
+                    actionsSubject.send(.verifyUser(userID: userID))
+                case .finished:
+                    stateMachine.tryEvent(.finishedSpaceFlow)
+                }
+            }
+            .store(in: &cancellables)
+        
+        spaceFlowCoordinator = coordinator
+        
+        coordinator.start()
     }
     
     private func startUserProfileWithFeedFlow(userId: String) {

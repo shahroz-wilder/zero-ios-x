@@ -21,6 +21,16 @@ extension LeaveSpaceHandleSDKMock {
 }
 
 extension [LeaveSpaceRoom] {
+    static func mockLastSpaceAdmin(spaceRoomProxy: SpaceRoomProxyProtocol) -> [LeaveSpaceRoom] {
+        mockRooms + [LeaveSpaceRoom(spaceRoom: SpaceRoom(id: spaceRoomProxy.id,
+                                                         name: spaceRoomProxy.name,
+                                                         avatarURL: spaceRoomProxy.avatarURL,
+                                                         isSpace: true,
+                                                         memberCount: UInt64(spaceRoomProxy.joinedMembersCount),
+                                                         joinRule: spaceRoomProxy.joinRule),
+                                    isLastAdmin: true)]
+    }
+    
     static var mockAdminRooms: [LeaveSpaceRoom] {
         mockRooms.filter(\.isLastAdmin)
     }
@@ -125,7 +135,8 @@ private extension SpaceRoom {
          via: [String] = []) {
         self.init(roomId: id,
                   canonicalAlias: canonicalAlias,
-                  name: name,
+                  displayName: name,
+                  rawName: name,
                   topic: topic,
                   avatarUrl: avatarURL?.absoluteString,
                   roomType: isSpace ? .space : .room,

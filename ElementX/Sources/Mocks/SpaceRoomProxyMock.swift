@@ -12,11 +12,11 @@ extension SpaceRoomProxyMock {
     struct Configuration {
         var id: String = UUID().uuidString
         var name: String?
+        var rawName: String?
         var avatarURL: URL?
         
         var isSpace: Bool
         var isDirect: Bool?
-        var parent: SpaceRoomProxyProtocol?
         var childrenCount = 0
         
         var joinedMembersCount = 0
@@ -34,11 +34,11 @@ extension SpaceRoomProxyMock {
         self.init()
         
         id = configuration.id
-        name = configuration.name
+        name = configuration.name ?? configuration.id
+        rawName = configuration.rawName
         avatarURL = configuration.avatarURL
         isSpace = configuration.isSpace
         isDirect = configuration.isDirect
-        parent = configuration.parent
         childrenCount = configuration.childrenCount
         joinedMembersCount = configuration.joinedMembersCount
         heroes = configuration.heroes
@@ -129,11 +129,50 @@ extension [SpaceRoomProxyProtocol] {
             SpaceRoomProxyMock(.init(id: "!\(typeName.lowercased())3:matrix.org",
                                      name: "Joined \(typeName)",
                                      isSpace: isSpace,
-                                     parent: SpaceRoomProxyMock(.init(name: "Company", isSpace: true)),
                                      joinedMembersCount: 123,
                                      topic: "Discussion on specific topic goes here.",
                                      joinRule: .restricted(rules: []),
                                      state: .joined))
         ]
+    }
+}
+
+extension SpaceRoomProxyMock {
+    convenience init(mode: JoinRoomScreenMode) {
+        var state: Membership?
+        var joinRule: JoinRule?
+        
+        switch mode {
+        case .joinable:
+            joinRule = .public
+        case .restricted:
+            joinRule = .restricted(rules: [])
+        case .inviteRequired:
+            joinRule = .private
+        case .invited:
+            state = .invited
+            joinRule = .private
+        case .knockable:
+            joinRule = .knock
+        case .knocked:
+            state = .knocked
+            joinRule = .knock
+        case .banned:
+            state = .banned
+        case .loading, .unknown, .forbidden:
+            break
+        }
+        
+        self.init(.init(id: "1",
+                        name: "The Three-Body Problem",
+                        avatarURL: .mockMXCAvatar,
+                        isSpace: true,
+                        childrenCount: 100,
+                        joinedMembersCount: 123,
+                        heroes: [.mockAlice, .mockBob, .mockCharlie],
+                        topic: "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”",
+                        canonicalAlias: "#3-body-problem:matrix.org",
+                        joinRule: joinRule,
+                        state: state))
     }
 }
