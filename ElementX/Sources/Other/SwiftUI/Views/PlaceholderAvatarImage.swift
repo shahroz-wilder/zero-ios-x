@@ -15,7 +15,7 @@ struct PlaceholderAvatarImage: View {
     private let contentID: String?
     private let onTap: (() -> Void)?
     
-    @State private var imageVisible = false
+//    @State private var imageVisible = false
     
     var body: some View {
         GeometryReader { _ in
@@ -36,12 +36,12 @@ struct PlaceholderAvatarImage: View {
                 .scaledToFit()
                 .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
                 .padding(4)
-                .opacity(imageVisible ? 1 : 0)
-                .onAppear {
-                    withAnimation(.easeIn(duration: 0.3)) {
-                        imageVisible = true
-                    }
-                }
+//                .opacity(imageVisible ? 1 : 0)
+//                .onAppear {
+//                    withAnimation(.easeIn(duration: 0.3)) {
+//                        imageVisible = true
+//                    }
+//                }
                 .onTapGesture {
                     onTap?()
                 }

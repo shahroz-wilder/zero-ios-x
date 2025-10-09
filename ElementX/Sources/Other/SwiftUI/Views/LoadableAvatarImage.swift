@@ -85,7 +85,7 @@ struct LoadableAvatarImage: View {
                     .placeholder { _ in
                         Circle().fill(.black)
                     }
-                    .animation(.elementDefault, value: contentID)
+//                    .animation(.elementDefault, value: contentID)
                     .aspectRatio(contentMode: .fit)
             }
         } else {
