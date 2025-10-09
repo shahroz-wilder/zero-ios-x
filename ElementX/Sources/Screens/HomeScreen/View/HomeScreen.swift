@@ -42,7 +42,6 @@ struct HomeScreen: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         showBackToTop = false
                         hideNavigationBar = false
-//                        scrollViewAdapter.scrollToTop(animated: false)
                         context.send(viewAction: .onHomeTabChanged)
                     }
                     selectedTab = tab
@@ -69,13 +68,15 @@ struct HomeScreen: View {
             }
             
             // Top gradient overlay when nav bar is hidden
-            if hideNavigationBar {
-                topBarGradientOverlay
-            }
+            topBarGradientOverlay
+                .opacity(hideNavigationBar ? 1 : 0)
+                .animation(.easeInOut(duration: 0.25), value: hideNavigationBar)
             
-            if showBackToTop {
-                backToTopButton
-            }
+            backToTopButton
+                .opacity(showBackToTop ? 1 : 0)
+                .offset(y: hideNavigationBar ? -30 : -5)
+                .animation(.spring(response: 0.35, dampingFraction: 0.8), value: hideNavigationBar)
+                .animation(.easeInOut(duration: 0.25), value: showBackToTop)
         }
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
@@ -143,11 +144,6 @@ struct HomeScreen: View {
                 }
             default:
                 break
-            }
-        }
-        .task {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                scrollViewAdapter.scrollToTop()
             }
         }
     }
@@ -257,7 +253,7 @@ struct HomeScreen: View {
         }
         .frame(maxWidth: .infinity)
         .transition(.opacity.combined(with:.scale))
-        .padding(.top, 16)
+        .padding(.top, 40)
     }
     
     @ViewBuilder
