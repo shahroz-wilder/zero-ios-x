@@ -700,7 +700,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID), zeroAttachmentService: zeroAttachmentService)
         
-        guard case let .success(timelineController) = await flowParameters.timelineControllerFactory.buildThreadTimelineController(eventID: threadRootEventID,
+        guard case let .success(timelineController) = await flowParameters.timelineControllerFactory.buildThreadTimelineController(threadRootEventID: threadRootEventID,
+                                                                                                                                   initialFocussedEventID: focusEventID,
                                                                                                                                    roomProxy: roomProxy,
                                                                                                                                    timelineItemFactory: timelineItemFactory,
                                                                                                                                    mediaProvider: userSession.mediaProvider) else {

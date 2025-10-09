@@ -356,7 +356,7 @@ extension Array where Element == RoomSummary {
     
     static let mockSpaceInvites: [Element] = [
         RoomSummary(room: RoomSDKMock(),
-                    id: "someAwesomeSpaceID1",
+                    id: "!space1:matrix.org",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
                     name: "First space",
                     isDirect: false,
@@ -378,7 +378,7 @@ extension Array where Element == RoomSummary {
                     isTombstoned: false,
                     isEncrypted: false),
         RoomSummary(room: RoomSDKMock(),
-                    id: "someAwesomeSpaceID2",
+                    id: "!space2:matrix.org",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
                     name: "Second space",
                     isDirect: false,
