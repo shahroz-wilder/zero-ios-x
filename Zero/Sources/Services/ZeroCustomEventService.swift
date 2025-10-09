@@ -101,7 +101,9 @@ class ZeroCustomEventService {
                     }
             }
         } else {
-            pendingEvents.append((eventName, category, parameters))
+            DispatchQueue.main.async {
+                self.pendingEvents.append((eventName, category, parameters))
+            }
         }
     }
 }
