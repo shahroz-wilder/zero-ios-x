@@ -40,11 +40,12 @@ struct DocumentPicker: UIViewControllerRepresentable {
         return documentPicker
     }
     
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {
-        // Override the app wide tint color (currently set to `.compound.texActionPrimary
-        // as it's not legible enough in dark mode
-        uiViewController.view.tintColor = .compound.textActionAccent
-    }
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) { }
+//    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {
+//        // Override the app wide tint color (currently set to `.compound.texActionPrimary
+//        // as it's not legible enough in dark mode
+//        uiViewController.view.tintColor = .compound.textActionAccent
+//    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
