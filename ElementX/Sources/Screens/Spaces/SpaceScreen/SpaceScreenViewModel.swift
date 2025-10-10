@@ -31,10 +31,15 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxy,
+        super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxyPublisher.value,
                                                           rooms: spaceRoomListProxy.spaceRoomsPublisher.value,
                                                           selectedSpaceRoomID: selectedSpaceRoomPublisher.value),
                    mediaProvider: userSession.mediaProvider)
+        
+        spaceRoomListProxy.spaceRoomProxyPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.space, on: self)
+            .store(in: &cancellables)
         
         spaceRoomListProxy.spaceRoomsPublisher
             .receive(on: DispatchQueue.main)
@@ -62,7 +67,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             .store(in: &cancellables)
         
         Task {
-            if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.spaceRoomProxy.id),
+            if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id),
                case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                 state.permalink = permalinkURL
             }
@@ -95,6 +100,11 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             for room in leaveHandle.rooms {
                 room.isSelected = false
             }
+        case .selectAllLeaveRoomDetails:
+            guard let leaveHandle = state.bindings.leaveHandle else { fatalError("The leave handle should be available.") }
+            for room in leaveHandle.rooms where !room.isLastAdmin {
+                room.isSelected = true
+            }
         case .toggleLeaveSpaceRoomDetails(let spaceRoomID):
             guard let room = state.bindings.leaveHandle?.rooms.first(where: { $0.spaceRoomProxy.id == spaceRoomID }) else {
                 fatalError("The space room to toggle is not in the list of rooms to leave.")
@@ -125,18 +135,11 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             return
         }
         
-        // If multiple join operations are running, then only show the last one.
-        guard state.joiningRoomIDs == [spaceRoomProxy.id] else { return }
-        
-        if spaceRoomProxy.isSpace {
-            await selectSpace(spaceRoomProxy)
-        } else {
-            actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
-        }
+        // We don't want to show the space room after joining it this way 🤷‍♂️
     }
     
     private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
-        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceRoomProxy.id, parent: spaceRoomListProxy.spaceRoomProxy) {
+        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceRoomProxy.id) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))
         case .failure(let error):
@@ -146,7 +149,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     }
     
     private func showLeaveSpaceConfirmation() async {
-        guard case let .success(leaveHandle) = await spaceServiceProxy.leaveSpace(spaceID: spaceRoomListProxy.spaceRoomProxy.id) else {
+        guard case let .success(leaveHandle) = await spaceServiceProxy.leaveSpace(spaceID: spaceRoomListProxy.id) else {
             showFailureIndicator()
             return
         }
