@@ -44,9 +44,6 @@ struct HomeScreenContent: View {
         .searchable(text: $context.searchQuery)
         .compoundSearchField()
         .disableAutocorrection(true)
-        .onAppear {
-            context.filtersState.activateZeroFilter(.primaryRooms)
-        }
     }
     
     private var roomList: some View {

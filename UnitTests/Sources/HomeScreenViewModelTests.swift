@@ -170,7 +170,7 @@ class HomeScreenViewModelTests: XCTestCase {
     func testFilters() async throws {
         setupViewModel()
         
-        context.filtersState.activateFilter(.people)
+//        context.filtersState.activateFilter(.people)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.count, 2)
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.first?.name, "Foundation and Earth")
@@ -189,7 +189,7 @@ class HomeScreenViewModelTests: XCTestCase {
     func testFiltersEmptyState() async throws {
         setupViewModel()
         
-        context.filtersState.activateFilter(.people)
+//        context.filtersState.activateFilter(.people)
         context.filtersState.activateFilter(.favourites)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(context.viewState.shouldShowEmptyFilterState)

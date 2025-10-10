@@ -182,6 +182,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
+        let activeZeroFilters = context.$viewState.map(\.bindings.filtersState.activeZeroFilter)
         isSearchFieldFocused
             .combineLatest(searchQuery, activeFilters)
             .removeDuplicates { $0 == $1 }
@@ -192,6 +193,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.updateFilter()
                 }
+            }
+            .store(in: &cancellables)
+        
+        activeZeroFilters
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.updateFilter()
             }
             .store(in: &cancellables)
         
@@ -210,7 +219,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .onHomeTabChanged:
             onHomeTabChanged()
         case .selectRoom(let roomIdentifier):
-            actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
+            // check whether a room is selected or channel
+            let isAChannel = roomIdentifier.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
+            if isAChannel {
+                if let channel = state.channels.first(where: { $0.channelFullName == roomIdentifier }) {
+                    joinZeroChannel(channel)
+                }
+            } else {
+                actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
+            }
         case .showRoomDetails(let roomIdentifier):
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(let roomIdentifier):
@@ -359,8 +376,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             fetchWalletData()
         case .searchUser:
             actionsSubject.send(.searchUser)
-        case .forceRefreshChannelSearchResults:
-            updateFilter()
         }
     }
     
@@ -507,8 +522,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             rooms.append(room)
         }
         
-        // In case custom(zero) filters are applied, as per UI view, WHILE SEARCHING ONLY, we need to filter listing
-        if context.isSearchFieldFocused, !context.searchQuery.isEmpty {
+        // In case custom(zero) filters are applied, as per UI view, we need to filter listing
+        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
             switch context.filtersState.activeZeroFilter {
             case .primaryRooms:
                 rooms = rooms.filter { $0.isPrimary }
@@ -519,6 +534,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             case .channels:
                 rooms = rooms.filter { $0.isAChannel }
             }
+        } else {
+            rooms = rooms.filter { !$0.isAChannel }
+            // append gated channels in the same list in case user is searching
+            let gatedChannels = state.channels
+                .filter { $0.displayName.containsIgnoringCase(context.searchQuery) }
+                .map { $0.mapToHomeScreenRoom() }
+            rooms.append(contentsOf: gatedChannels)
         }
         
         state.rooms = rooms.uniqued(on: { $0.id })

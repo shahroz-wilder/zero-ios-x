@@ -31,9 +31,10 @@ struct HomeScreenRoomList: View {
     
     @ViewBuilder
     private var content: some View {
-        let roomsList = fromChannelsTabs
-        ? context.viewState.visibleRooms.filter { channelMutedCategory ? $0.isMuted : $0.isSecondary }
-        : context.viewState.visibleRooms.filter { $0.isPrimary }
+//        let roomsList = fromChannelsTabs
+//        ? context.viewState.visibleRooms.filter { channelMutedCategory ? $0.isMuted : $0.isSecondary }
+//        : context.viewState.visibleRooms.filter { $0.isPrimary }
+        let roomsList = context.viewState.visibleRooms
         
         let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
             "execution": "HomeScreenRoomList",
@@ -41,7 +42,7 @@ struct HomeScreenRoomList: View {
             "roomsListCount": "\(roomsList.count)"
         ])
         
-        if fromChannelsTabs, roomsList.isEmpty {
+        if fromChannelsTabs, roomsList.isEmpty, !context.isSearchFieldFocused {
             HomeContentEmptyView(message: "No channels")
         } else {
             ForEach(roomsList) { room in

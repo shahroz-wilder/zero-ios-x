@@ -76,7 +76,6 @@ enum HomeScreenViewAction {
     case reloadFeedMedia(_ post: HomeScreenPost)
     
     case forceRefreshChannels
-    case forceRefreshChannelSearchResults
     case channelTapped(_ channel: HomeScreenChannel)
     case setNotificationFilter(_ tab: HomeNotificationsTab)
     
@@ -854,6 +853,24 @@ extension HomeScreenChannel {
             channelFullName: channelZId,
             displayName: channelDisplayName
         )
+    }
+    
+    func mapToHomeScreenRoom() -> HomeScreenRoom {
+        .init(id: id,
+              roomID: channelFullName,
+              type: .room,
+              badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
+              name: displayName,
+              isDirect: false,
+              isHighlighted: false,
+              isFavourite: false,
+              timestamp: nil,
+              lastMessage: nil,
+              avatar: .room(id: id, name: displayName, avatarURL: nil),
+              canonicalAlias: nil,
+              isTombstoned: false,
+              unreadNotificationsCount: 0,
+              isEncrypted: true)
     }
 }
 
