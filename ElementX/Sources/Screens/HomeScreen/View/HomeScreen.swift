@@ -82,14 +82,7 @@ struct HomeScreen: View {
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
-        .toolbar {
-            if #available(iOS 26, *) {
-                toolbar
-                    .sharedBackgroundVisibility(.hidden)
-            } else {
-                toolbar
-            }
-        }
+        .toolbar { toolbar }
         .navigationBarHidden(hideNavigationBar)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
@@ -160,6 +153,7 @@ struct HomeScreen: View {
         ToolbarItem(placement: .principal) {
             Image(asset: Asset.Images.zeroWordmark)
         }
+        .backportSharedBackgroundVisibility(.hidden)
         
         if selectedTab == HomeTab.feed {
             ToolbarItem(placement: .primaryAction) {
@@ -170,6 +164,7 @@ struct HomeScreen: View {
                         .tint(.compound.iconSecondary)
                 }
             }
+            .backportSharedBackgroundVisibility(.hidden)
         }
         
         ToolbarItem(placement: .primaryAction) {

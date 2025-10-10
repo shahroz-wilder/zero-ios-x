@@ -31,7 +31,7 @@ struct HomeChannelsContent: View {
             }
         }
         .isSearching($context.isSearchFieldFocused)
-        .searchable(text: $context.searchQuery)
+        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .compoundSearchField()
         .disableAutocorrection(true)
         .onAppear {
