@@ -347,8 +347,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/reown-com/reown-swift",
       "state" : {
-        "revision" : "b51cc1d267b64a682e5bdb95960be4132b4e5e78",
-        "version" : "1.1.1"
+        "revision" : "7590a3f421c0679dce49364ab44869a7c4d0290f",
+        "version" : "1.7.3"
       }
     },
     {
@@ -554,8 +554,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/MobileWalletProtocol/wallet-mobile-sdk",
       "state" : {
-        "revision" : "4aa89e682f8d7ab1515d85d0797f0d25306bb56a",
-        "version" : "1.0.5"
+        "revision" : "4293df51d3500b8e876ca4bf0d7548adf097569a",
+        "version" : "1.1.2"
       }
     },
     {
@@ -574,6 +574,15 @@
       "state" : {
         "revision" : "39de59b2d47f7ef3ca88a039dff3084688fe27f4",
         "version" : "1.5.2"
+      }
+    },
+    {
+      "identity" : "yttrium",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/reown-com/yttrium",
+      "state" : {
+        "revision" : "ed8e8f5af2029406263be5993e484c3a69c1db7a",
+        "version" : "0.9.68"
       }
     }
   ],

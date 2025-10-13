@@ -111,7 +111,12 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
             }
             
         case .failure(let error):
-            return .failure(error)
+            if error.asAFError?.isResponseSerializationError == true {
+                // This is the case we get NONCE token in response Showing user needs to sign-up
+                return .failure(APIErrorResponse(code: "USER_NOT_FOUND", message: "user not found."))
+            } else {
+                return .failure(error)
+            }
         }
     }
     

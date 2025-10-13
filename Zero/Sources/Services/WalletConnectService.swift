@@ -18,6 +18,8 @@ class WalletConnectService {
     private init() {}
     
     private var disposeBag = Set<AnyCancellable>()
+    
+    private var isZeroAppAlive: Bool = true
 
     func configureWalletConnect() {
         let projectId: String = ZeroContants.appServer.walletConnectProjectId
@@ -81,9 +83,18 @@ class WalletConnectService {
             .store(in: &disposeBag)
     }
     
+    func onApplicationDidBecomeActive() {
+        self.isZeroAppAlive = true
+//        requestPeronalSignIfNotPending()
+    }
+    
+    func onApplicationWillResignActive() {
+        self.isZeroAppAlive = false
+    }
+    
     func requestPersonalSignWithDelay() {
         Task {
-            try? await Task.sleep(for: .seconds(2))
+            try? await Task.sleep(for: .seconds(4))
             await requestWalletPersonalSign()
         }
     }

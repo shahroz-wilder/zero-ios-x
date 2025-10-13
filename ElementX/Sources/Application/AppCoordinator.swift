@@ -1128,6 +1128,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
         scheduleDelayedSyncStop()
         scheduleBackgroundAppRefresh()
+        WalletConnectService.shared.onApplicationWillResignActive()
     }
     
     private func scheduleDelayedSyncStop() {
@@ -1152,6 +1153,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Application did become active")
         endActiveBackgroundTask()
         startSync()
+        WalletConnectService.shared.onApplicationDidBecomeActive()
     }
     
     private func endActiveBackgroundTask() {
