@@ -82,7 +82,7 @@ struct ClaimedEarningsSheetView: View {
                 }
                 
                 if case .success = state {
-                    Text("Your daily earnings have been added to you Wallet.")
+                    Text("Your daily earnings have been added to your Wallet.")
                         .font(.compound.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                 }
