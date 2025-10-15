@@ -9,9 +9,7 @@ import SwiftUI
 
 struct HomeScreenRoomList: View {
     @ObservedObject var context: HomeScreenViewModel.Context
-    
     var fromChannelsTabs: Bool = false
-    var channelMutedCategory: Bool = false
     
     var body: some View {
         // Hide the room list when the search bar is focused but the query is empty
@@ -21,8 +19,7 @@ struct HomeScreenRoomList: View {
             "execution": "HomeScreenRoomList",
             "view": "showing rooms list",
             "shouldHideRoomList": context.viewState.shouldHideRoomList.description,
-            "fromChannelsTab": fromChannelsTabs.description,
-            "channelMutedCategory": channelMutedCategory.description
+            "fromChannelsTab": fromChannelsTabs.description
         ])
         if !context.viewState.shouldHideRoomList {
             content
@@ -31,10 +28,23 @@ struct HomeScreenRoomList: View {
     
     @ViewBuilder
     private var content: some View {
-//        let roomsList = fromChannelsTabs
-//        ? context.viewState.visibleRooms.filter { channelMutedCategory ? $0.isMuted : $0.isSecondary }
-//        : context.viewState.visibleRooms.filter { $0.isPrimary }
-        let roomsList = context.viewState.visibleRooms
+        let roomsList: [HomeScreenRoom] = {
+            let list = context.viewState.visibleRooms
+            if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+                switch context.filtersState.activeZeroFilter {
+                case .primaryRooms:
+                    return list.filter { $0.isPrimary }
+                case .secondaryRooms:
+                    return list.filter { $0.isSecondary }
+                case .mutedRooms:
+                    return list.filter { $0.isMuted }
+                case .channels:
+                    return list
+                }
+            } else {
+                return list
+            }
+        }()
         
         let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
             "execution": "HomeScreenRoomList",

@@ -39,6 +39,14 @@ struct HomeScreen: View {
                     }
                 },
                 onTabSelected: { tab in
+                    switch tab {
+                    case .chat:
+                        context.filtersState.activateZeroFilter(.primaryRooms)
+                    case .channels:
+                        context.filtersState.activateZeroFilter(.secondaryRooms)
+                    default:
+                        break
+                    }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         showBackToTop = false
                         hideNavigationBar = false

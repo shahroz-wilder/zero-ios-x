@@ -34,12 +34,6 @@ struct HomeChannelsContent: View {
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .compoundSearchField()
         .disableAutocorrection(true)
-        .onAppear {
-            context.filtersState.activateZeroFilter(.secondaryRooms)
-        }
-        .onDisappear {
-            context.filtersState.clearFilters()
-        }
         .onChange(of: selectedTab) { _, newTab in
             switch newTab {
             case .all:
@@ -126,7 +120,7 @@ struct HomeChannelsContent: View {
                         }
                     case .rooms:
                         LazyVStack(spacing: 0) {
-                            HomeScreenRoomList(context: context, fromChannelsTabs: true, channelMutedCategory: selectedTab == .muted)
+                            HomeScreenRoomList(context: context, fromChannelsTabs: true)
                             
                             HomeTabBottomSpace()
                         }

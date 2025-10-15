@@ -182,7 +182,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
-        let activeZeroFilters = context.$viewState.map(\.bindings.filtersState.activeZeroFilter)
         isSearchFieldFocused
             .combineLatest(searchQuery, activeFilters)
             .removeDuplicates { $0 == $1 }
@@ -193,14 +192,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.updateFilter()
                 }
-            }
-            .store(in: &cancellables)
-        
-        activeZeroFilters
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.updateFilter()
             }
             .store(in: &cancellables)
         
@@ -522,19 +513,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             rooms.append(room)
         }
         
-        // In case custom(zero) filters are applied, as per UI view, we need to filter listing
-        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
-            switch context.filtersState.activeZeroFilter {
-            case .primaryRooms:
-                rooms = rooms.filter { $0.isPrimary }
-            case .secondaryRooms:
-                rooms = rooms.filter { $0.isSecondary }
-            case .mutedRooms:
-                rooms = rooms.filter { $0.isMuted }
-            case .channels:
-                rooms = rooms.filter { $0.isAChannel }
-            }
-        } else {
+        // We need to append gated channels in the search listing as well, only when user is searching on home screen
+        if context.isSearchFieldFocused, !context.searchQuery.isEmpty {
             rooms = rooms.filter { !$0.isAChannel }
             // append gated channels in the same list in case user is searching
             let gatedChannels = state.channels
