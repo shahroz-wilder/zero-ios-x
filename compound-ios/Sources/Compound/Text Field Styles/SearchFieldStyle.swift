@@ -14,9 +14,9 @@ public extension View {
     @MainActor
     @ViewBuilder
     func compoundSearchField() -> some View {
-        if #available(iOS 26, *) {
-            self
-        } else {
+//        if #available(iOS 26, *) {
+//            self
+//        } else {
             introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
                 // Uses the navigation stack as .searchField is unreliable when pushing the second search bar, during the create rooms flow.
                 guard let searchController = navigationController.navigationBar.topItem?.searchController else { return }
@@ -52,8 +52,12 @@ public extension View {
                 effectBackgroundTop?.isHidden = true
                 let effectBackgroundBottom = searchTextField.value(forKey: "_effectBackgroundBottom") as? UIView
                 effectBackgroundBottom?.isHidden = false
+                
+                if #available(iOS 18.0, *) {
+                    searchController.searchBar.searchBarStyle = .minimal
+                }
             }
-        }
+//        }
     }
 }
 
