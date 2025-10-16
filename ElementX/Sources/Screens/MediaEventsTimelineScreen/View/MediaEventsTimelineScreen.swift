@@ -15,7 +15,7 @@ struct MediaEventsTimelineScreen: View {
     var body: some View {
         mainContent
             .navigationBarTitleDisplayMode(.inline)
-            .background(.compound.bgCanvasDefault)
+            .background(.zero.bgCanvasDefault)
             // Doesn't play well with the transformed scrollView
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar { toolbar }

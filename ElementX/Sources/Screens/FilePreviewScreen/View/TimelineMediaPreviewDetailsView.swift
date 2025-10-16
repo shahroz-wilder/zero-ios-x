@@ -56,9 +56,9 @@ struct TimelineMediaPreviewDetailsView: View {
                                 .foregroundStyle(.compound.decorativeColor(for: item.sender.id).text)
                         }
                         
-                        Text(item.sender.id)
-                            .font(.compound.bodySM)
-                            .foregroundStyle(.compound.textSecondary)
+//                        Text(item.sender.id)
+//                            .font(.compound.bodySM)
+//                            .foregroundStyle(.compound.textSecondary)
                     }
                 }
             }

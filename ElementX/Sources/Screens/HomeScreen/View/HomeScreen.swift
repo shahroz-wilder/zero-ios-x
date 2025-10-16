@@ -81,10 +81,6 @@ struct HomeScreen: View {
                 .animation(.easeInOut(duration: 0.25), value: hideNavigationBar)
             
             backToTopButton
-                .opacity(showBackToTop ? 1 : 0)
-                .offset(y: hideNavigationBar ? -30 : -5)
-                .animation(.spring(response: 0.35, dampingFraction: 0.8), value: hideNavigationBar)
-                .animation(.easeInOut(duration: 0.25), value: showBackToTop)
         }
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
@@ -255,8 +251,12 @@ struct HomeScreen: View {
             .clipShape(RoundedRectangle(cornerRadius: 32))
         }
         .frame(maxWidth: .infinity)
-        .transition(.opacity.combined(with:.scale))
-        .padding(.top, 40)
+        // Smooth fade + slide animation
+        .opacity(showBackToTop ? 1 : 0)
+        .offset(y: hideNavigationBar ? 5 : 40)
+        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: hideNavigationBar)
+        .animation(.easeInOut(duration: 0.3), value: showBackToTop)
+        .transition(.move(edge: .top).combined(with: .opacity))
     }
     
     @ViewBuilder
