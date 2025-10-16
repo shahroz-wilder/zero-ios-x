@@ -15,12 +15,12 @@ struct PillView: View {
     
     var textColor: Color {
 //        context.viewState.isOwnMention ? .zero._textOwnPill : .compound.textPrimary
-        .zero._textOwnPill
+        context.isRoomEncrypted ? .zero._textOwnPill : .mentionRoyalBlue
     }
     
     var backgroundColor: Color {
 //        context.viewState.isOwnMention ? .compound._bgOwnPill : .compound._bgPill
-        .zero._bgOwnPill
+        context.isRoomEncrypted ? .zero._bgOwnPill : .mentionRoyalBlue.opacity(0.05)
     }
         
     var body: some View {

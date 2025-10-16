@@ -95,6 +95,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
                                                        isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
+                                                       isEncryptedRoom: roomProxy.details.isEncrypted,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        hideTimelineMedia: hideTimelineMedia,

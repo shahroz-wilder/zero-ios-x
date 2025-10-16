@@ -14,13 +14,14 @@ struct FormattedBodyText: View {
     private let additionalWhitespacesCount: Int
     private let boostFontSize: Bool
     
-    private let defaultAttributesContainer: AttributeContainer = {
+    private let fontColor: UIColor
+    
+    private var defaultAttributesContainer: AttributeContainer {
         var container = AttributeContainer()
-        // Equivalent to compound's bodyLG
         container.font = UIFont.preferredFont(forTextStyle: .body)
-        container.foregroundColor = UIColor.compound.textPrimary
+        container.foregroundColor = fontColor
         return container
-    }()
+    }
         
     private var attributedComponents: [AttributedStringBuilderComponent] {
         var adjustedAttributedString = attributedString + AttributedString(additionalWhitespacesSuffix)
@@ -44,16 +45,19 @@ struct FormattedBodyText: View {
     
     init(attributedString: AttributedString,
          additionalWhitespacesCount: Int = 0,
-         boostFontSize: Bool = false) {
+         boostFontSize: Bool = false,
+         fontColor: UIColor = UIColor.compound.textPrimary) {
         self.attributedString = attributedString
         self.additionalWhitespacesCount = additionalWhitespacesCount
         self.boostFontSize = boostFontSize
+        self.fontColor = fontColor
     }
     
-    init(text: String, additionalWhitespacesCount: Int = 0, boostFontSize: Bool = false) {
+    init(text: String, additionalWhitespacesCount: Int = 0, boostFontSize: Bool = false, fontColor: UIColor = UIColor.compound.textPrimary) {
         self.init(attributedString: AttributedString(text),
                   additionalWhitespacesCount: additionalWhitespacesCount,
-                  boostFontSize: boostFontSize)
+                  boostFontSize: boostFontSize,
+                  fontColor: fontColor)
     }
     
     // These is needed to create the slightly off inlined timestamp effect

@@ -206,7 +206,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
                               insets: timelineItem.bubbleInsets,
-                              color: timelineItem.bubbleBackgroundColor)
+                              color: timelineItem.bubbleBackgroundColor(isRoomEncrypted: context.viewState.isEncryptedRoom))
     }
     
     @ViewBuilder
@@ -298,6 +298,22 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
         let defaultColor: Color = isOutgoing ? .zero.bgChatBubbleOutgoing : .zero.bgChatBubbleIncoming
+
+        switch self {
+        case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
+            // In case a reply detail or a thread decorator is present we render the color and the padding
+            return properties.replyDetails != nil || properties.isThreaded || hasMediaCaption ? defaultColor : nil
+        case is StickerRoomTimelineItem:
+            return nil
+        default:
+            return defaultColor
+        }
+    }
+    
+    func bubbleBackgroundColor(isRoomEncrypted: Bool) -> Color? {
+        let defaultColor: Color = isOutgoing
+        ? isRoomEncrypted ? .zero.bgChatBubbleOutgoing : .zero.bgChatBubbleOutgoingSecondary
+        : .zero.bgChatBubbleIncoming
 
         switch self {
         case is ImageRoomTimelineItem, is VideoRoomTimelineItem:

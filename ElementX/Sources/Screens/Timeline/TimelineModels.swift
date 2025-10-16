@@ -100,6 +100,7 @@ struct TimelineViewState: BindableState {
     var showLoading = false
     var showReadReceipts = false
     var isDirectOneToOneRoom = false
+    var isEncryptedRoom = false
     var timelineState: TimelineState // check the doc before changing this
 
     var ownUserID: String
