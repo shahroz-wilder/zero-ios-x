@@ -175,7 +175,7 @@ struct MediaEventsTimelineScreen: View {
     
     @ViewBuilder
     private var emptyState: some View {
-        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
+        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .none) {
             VStack(spacing: 16) {
                 switch context.screenMode {
                 case .media:

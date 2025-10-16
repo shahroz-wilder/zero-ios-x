@@ -1318,7 +1318,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func stakeAmount(_ amount: String) {
         guard let selectedPool = state.selectedStakePool else { return }
         guard let token = selectedPool.stakeToken else { return }
-        let stakeAmount = Double(amount) ?? 0
+        let stakeAmount = amount.toLocalizedDouble() ?? 0
         guard stakeAmount > 0 else { return }
         
         let actualStakeAmount = toSmallestUnit(amount: stakeAmount, decimals: token.decimals)
@@ -1350,7 +1350,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func unstakeAmount(_ amount: String) {
         guard let selectedPool = state.selectedStakePool else { return }
         guard let token = selectedPool.stakeToken else { return }
-        let unstakeAmount = Double(amount) ?? 0
+        let unstakeAmount = amount.toLocalizedDouble() ?? 0
         guard unstakeAmount > 0 else { return }
         
         let actualUnstakeAmount = toSmallestUnit(amount: unstakeAmount, decimals: token.decimals)
