@@ -112,14 +112,6 @@ struct HomeNotificationsContent: View {
     
     @ViewBuilder
     private var topSection: some View {
-//        if context.viewState.shouldShowFilters {
-//            VStack(spacing: 0) {
-//                if context.viewState.shouldShowFilters {
-//                    RoomListFiltersView(state: $context.filtersState)
-//                }
-//            }
-//            .background(Color.zero.bgCanvasDefault)
-//        }
         SimpleFixedTabButtonsView(tabs: HomeNotificationsTab.allCases,
                              selectedTab: selectedTab,
                              tabTitle: { tab in

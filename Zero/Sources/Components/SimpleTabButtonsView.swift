@@ -57,6 +57,8 @@ struct SimpleFixedTabButtonsView<Tab: Hashable>: View {
     
     var showDivider: Bool = false
     
+    @State private var isShown = false
+    
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             HStack {
@@ -84,6 +86,15 @@ struct SimpleFixedTabButtonsView<Tab: Hashable>: View {
             
             if showDivider {
                 HorizontalDivider()
+            }
+        }
+        .offset(y: isShown ? 0 : -20)     // slide down effect
+        .opacity(isShown ? 1 : 0)         // fade in smoothly
+        .animation(.easeOut(duration: 0.1), value: isShown)
+        .task {
+            // Delay slightly for a smoother effect if desired
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                isShown = true
             }
         }
     }

@@ -44,18 +44,7 @@ struct HomePostsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    SimpleFixedTabButtonsView(tabs: HomePostsTab.allCases,
-                                         selectedTab: selectedTab,
-                                         tabTitle: { tab in
-                        switch tab {
-                        case .following: return "Following"
-                        case .all: return "Everything"
-                        }
-                    },
-                                         onTabSelected: { tab in
-                        selectedTab = tab
-                        context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
-                    })
+                    topSection
                     
                     switch context.viewState.postListMode {
                     case .skeletons:
@@ -105,5 +94,21 @@ struct HomePostsContent: View {
                 context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: selectedTab == .following))
             }
         }
+    }
+    
+    @ViewBuilder
+    private var topSection: some View {
+        SimpleFixedTabButtonsView(tabs: HomePostsTab.allCases,
+                             selectedTab: selectedTab,
+                             tabTitle: { tab in
+            switch tab {
+            case .following: return "Following"
+            case .all: return "Everything"
+            }
+        },
+                             onTabSelected: { tab in
+            selectedTab = tab
+            context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
+        })
     }
 }
