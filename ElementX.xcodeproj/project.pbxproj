@@ -1905,6 +1905,9 @@
 		791DEF872D9381000057E6C5 /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 791DEF862D9381000057E6C5 /* EmbeddedElementCall */; };
 		791DEF882D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
 		791DEF892D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
+		7921F0EB2EA0C017000349B1 /* ImageDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7921F0EA2EA0C003000349B1 /* ImageDataCache.swift */; };
+		7921F0EC2EA0C017000349B1 /* ImageDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7921F0EA2EA0C003000349B1 /* ImageDataCache.swift */; };
+		7921F0ED2EA0C017000349B1 /* ImageDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7921F0EA2EA0C003000349B1 /* ImageDataCache.swift */; };
 		792206BF2E81123700AA4286 /* LinkMetadataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6885D1340AA9C76063E26868 /* LinkMetadataProviderProtocol.swift */; };
 		792206C02E81128600AA4286 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B6FFCE5B28AA03DD46F46 /* LinkPreviewView.swift */; };
 		792206C12E81128F00AA4286 /* LinkMetadataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C78111573987B1D79ED0868 /* LinkMetadataProvider.swift */; };
@@ -3930,6 +3933,7 @@
 		790AB7B62E1D397100555B1F /* ZeroConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = ZeroConfiguration.storekit; sourceTree = "<group>"; };
 		790AB7BE2E1DB65800555B1F /* ZWalletTransactionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTransactionResponse.swift; sourceTree = "<group>"; };
 		790AB7C12E1DB6A700555B1F /* ZWalletTransactionReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTransactionReceipt.swift; sourceTree = "<group>"; };
+		7921F0EA2EA0C003000349B1 /* ImageDataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataCache.swift; sourceTree = "<group>"; };
 		7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaSelectedProtocol.swift; sourceTree = "<group>"; };
 		79281A6D2E69A1AB00D86DD6 /* OnLandingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnLandingScreen.swift; sourceTree = "<group>"; };
 		79281A702E69A3AD00D86DD6 /* LandingScreenTabPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingScreenTabPager.swift; sourceTree = "<group>"; };
@@ -8713,6 +8717,7 @@
 		CA15BB3F6C62B35AE2C281A9 /* Provider */ = {
 			isa = PBXGroup;
 			children = (
+				7921F0EA2EA0C003000349B1 /* ImageDataCache.swift */,
 				DEC1D382565A4E9CAC2F14EA /* MediaFileHandleProxy.swift */,
 				8AFCE895ECFFA53FEE64D62B /* MediaLoader.swift */,
 				1A02406480C351B8C6E0682C /* MediaLoaderProtocol.swift */,
@@ -10398,6 +10403,7 @@
 				18D5D9AE2CEB6E6100107940 /* String+Extensions.swift in Sources */,
 				761EA50B2619307AB30891B8 /* PhishingDetector.swift in Sources */,
 				5DFC2A889D3B39DD47AC63A8 /* PillUtilities.swift in Sources */,
+				7921F0EB2EA0C017000349B1 /* ImageDataCache.swift in Sources */,
 				55CDD3968D95D1A820B5491E /* PlaceholderAvatarImage.swift in Sources */,
 				F12F6BED7B6D7EE4BEE55039 /* PlainMentionBuilder.swift in Sources */,
 				791DEF882D93959C0057E6C5 /* ZCurrentUser.swift in Sources */,
@@ -10883,6 +10889,7 @@
 				79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */,
 				18E9A4ED2C9829970082DDA4 /* EmoteRoomTimelineItem.swift in Sources */,
 				18E9A4EE2C9829970082DDA4 /* EmoteRoomTimelineItemContent.swift in Sources */,
+				7921F0EC2EA0C017000349B1 /* ImageDataCache.swift in Sources */,
 				18E9A4EF2C9829970082DDA4 /* EmoteRoomTimelineView.swift in Sources */,
 				18E9A4F02C9829970082DDA4 /* Encodable.swift in Sources */,
 				18E9A4F12C9829970082DDA4 /* EncryptedRoomTimelineItem.swift in Sources */,
@@ -12213,6 +12220,7 @@
 				F3F9D61C53C348043D3D6F51 /* EncryptionResetScreen.swift in Sources */,
 				3041EBA2660F28FFB7BDA339 /* EncryptionResetScreenCoordinator.swift in Sources */,
 				97BAEDD9054FB5F233EE928B /* EncryptionResetScreenModels.swift in Sources */,
+				7921F0ED2EA0C017000349B1 /* ImageDataCache.swift in Sources */,
 				EC3320639828BED8B3E5F2C6 /* EncryptionResetScreenViewModel.swift in Sources */,
 				A0868BDE84D2140A885BE3C9 /* EncryptionResetScreenViewModelProtocol.swift in Sources */,
 				4D2B54233C7B2C04B4ABE55A /* EncryptionSettingsFlowCoordinator.swift in Sources */,

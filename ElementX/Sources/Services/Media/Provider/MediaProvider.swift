@@ -106,8 +106,16 @@ struct MediaProvider: MediaProviderProtocol {
     }
     
     func loadImageDataFromSource(_ source: MediaSourceProxy) async -> Result<Data, MediaProviderError> {
+        guard let url = source.url else {
+            return .failure(.failedRetrievingImage)
+        }
+        if let data = localImageDataFromSource(source) {
+            return .success(data)
+        }
+        let cacheKey = url.absoluteString
         do {
             let imageData = try await mediaLoader.loadMediaContentForSource(source)
+            ImageDataCache.shared.store(imageData, forKey: cacheKey)
             return .success(imageData)
         } catch {
             MXLog.error("Failed retrieving image with error: \(error)")
@@ -140,6 +148,14 @@ struct MediaProvider: MediaProviderProtocol {
     }
     
     // MARK: - Private
+    
+    private func localImageDataFromSource(_ source: MediaSourceProxy) -> Data? {
+        guard let url = source.url else {
+            return nil
+        }
+        let cacheKey = url.absoluteString
+        return ImageDataCache.shared.retrieve(forKey: cacheKey)
+    }
     
     private func cacheKeyForURL(_ url: URL, size: CGSize?) -> String {
         if let size {

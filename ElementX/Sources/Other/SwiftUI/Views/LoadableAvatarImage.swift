@@ -75,7 +75,9 @@ struct LoadableAvatarImage: View {
                     image
                         .scaledToFill()
                 } placeholder: {
-                    Circle().fill(.black)
+                    PlaceholderAvatarImage(name: name, contentID: contentID, onTap: {
+                        onTap?(URL.dummayURL)
+                    })
                 }
             } else {
                 KFAnimatedImage(url)
