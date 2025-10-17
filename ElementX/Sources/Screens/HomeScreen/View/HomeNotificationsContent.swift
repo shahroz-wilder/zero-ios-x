@@ -21,7 +21,7 @@ struct HomeNotificationsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    @State private var selectedTab: HomeNotificationsTab = .all
+    @State private var selectedNotificationsTab: HomeNotificationsTab = .all
     
     var body: some View {
         notificationsList
@@ -36,7 +36,7 @@ struct HomeNotificationsContent: View {
                         case .skeletons:
                             LazyVStack(spacing: 0) {
                                 ForEach(context.viewState.visibleRooms) { room in
-                                    HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedTab)
+                                    HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedNotificationsTab)
                                         .redacted(reason: .placeholder)
                                         .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                                 }
@@ -45,18 +45,7 @@ struct HomeNotificationsContent: View {
                         case .empty:
                             HomeContentEmptyView(message: "No new notifications")
                         case .rooms:
-                            LazyVStack(spacing: 0) {
-                                let roomsWithNotifications = context.viewState.notificationsContent
-                                if roomsWithNotifications.isEmpty {
-                                    HomeContentEmptyView(message: "No new notifications")
-                                } else {
-                                    ForEach(roomsWithNotifications) { room in
-                                        HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedTab)
-                                    }
-                                    
-                                    HomeTabBottomSpace()
-                                }
-                            }
+                            NotificationsContentList(context: context, selectedNotificationsTab: selectedNotificationsTab)
                         }
                     } header : {
                         topSection
@@ -110,10 +99,9 @@ struct HomeNotificationsContent: View {
         }
     }
     
-    @ViewBuilder
     private var topSection: some View {
         SimpleFixedTabButtonsView(tabs: HomeNotificationsTab.allCases,
-                             selectedTab: selectedTab,
+                             selectedTab: selectedNotificationsTab,
                              tabTitle: { tab in
             switch tab {
             case .highlighted: return "Highlights"
@@ -122,12 +110,12 @@ struct HomeNotificationsContent: View {
             }
         },
                              onTabSelected: { tab in
-            selectedTab = tab
-            context.send(viewAction: .setNotificationFilter(tab))
+            selectedNotificationsTab = tab
+//            context.send(viewAction: .setNotificationFilter(tab))
         })
-        .onAppear {
-            context.send(viewAction: .setNotificationFilter(selectedTab))
-        }
+//        .onAppear {
+//            context.send(viewAction: .setNotificationFilter(selectedTab))
+//        }
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
@@ -157,5 +145,39 @@ struct HomeNotificationsContent: View {
         
         // This will be deduped and throttled on the view model layer
         context.send(viewAction: .updateVisibleItemRange(firstIndex..<lastIndex))
+    }
+}
+
+private struct NotificationsContentList : View {
+    @ObservedObject var context: HomeScreenViewModel.Context
+    let selectedNotificationsTab: HomeNotificationsTab
+    
+    var body: some View {
+        let filteredNotificationContent = context.viewState.visibleRooms.filter {
+            switch $0.type {
+            case .placeholder, .knock:
+                return false
+            default:
+                switch selectedNotificationsTab {
+                case .all:
+                    return $0.badges.isDotShown && !$0.badges.isMentionShown && !$0.badges.isMuteShown
+                case .highlighted:
+                    return $0.badges.isMentionShown
+                case .muted:
+                    return $0.badges.isDotShown && $0.badges.isMuteShown
+                }
+            }
+        }
+        LazyVStack(spacing: 0) {
+            if filteredNotificationContent.isEmpty {
+                HomeContentEmptyView(message: "No new notifications")
+            } else {
+                ForEach(filteredNotificationContent) { room in
+                    HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedNotificationsTab)
+                }
+                /// Bottom space to keep content above `HomeScreenBottomBar`
+                HomeTabBottomSpace()
+            }
+        }
     }
 }
