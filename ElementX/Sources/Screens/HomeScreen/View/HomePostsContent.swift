@@ -21,63 +21,52 @@ struct HomePostsContent: View {
     @State private var selectedTab: HomePostsTab = .following
     
     var body: some View {
-        ZStack {
-            postList
-            
-            switch context.viewState.postListMode {
-            case .empty, .posts:
-                FloatingActionButton(onTap: {
-                    context.send(viewAction: .newFeed)
-                })
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                .padding(.bottom, 70)
-            default:
-                EmptyView()
+        postList
+            .task {
+                context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
             }
-        }
-        .task {
-            context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
-        }
     }
     
     private var postList: some View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    topSection
-                    
-                    switch context.viewState.postListMode {
-                    case .skeletons:
-                        LazyVStack(spacing: 0) {
-                            ForEach(context.viewState.visiblePosts) { post in
-                                VStack {
-                                    HomeScreenPostCell(post: post)
-                                    .padding(.all, 16)
-                                    Divider()
-                                }
-                                .redacted(reason: .placeholder)
-                                .shimmer()
-                            }
-                        }
-                        .disabled(true)
-                    case .empty:
-                        HomeContentEmptyView(message: "No posts")
-                    case .posts:
-                        LazyVStack(spacing: 0) {
-                            HomeScreenPostList(context: context)
-                            
-                            if context.viewState.canLoadMorePosts {
-                                ProgressView()
-                                    .padding()
-                                    .onAppear {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                            context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
-                                        }
+                    Section {
+                        switch context.viewState.postListMode {
+                        case .skeletons:
+                            LazyVStack(spacing: 0) {
+                                ForEach(context.viewState.visiblePosts) { post in
+                                    VStack {
+                                        HomeScreenPostCell(post: post)
+                                        .padding(.all, 16)
+                                        Divider()
                                     }
-                            } else {
+                                    .redacted(reason: .placeholder)
+                                    .shimmer()
+                                }
+                            }
+                            .disabled(true)
+                        case .empty:
+                            HomeContentEmptyView(message: "No posts")
+                        case .posts:
+                            LazyVStack(spacing: 0) {
+                                HomeScreenPostList(context: context)
+                                
+                                if context.viewState.canLoadMorePosts {
+                                    ProgressView()
+                                        .padding()
+                                        .onAppear {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                                context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
+                                            }
+                                        }
+                                }
+                                /// Bottom space to keep content above `HomeScreenBottomBar`
                                 HomeTabBottomSpace()
                             }
                         }
+                    } header: {
+                        topSection
                     }
                 }
             }

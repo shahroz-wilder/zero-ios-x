@@ -15,72 +15,25 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
-    @State private var selectedTab: HomeTab = .chat
+    @State private var selectedHomeTab: HomeTab = .chat
+    
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
     
     var body: some View {
-        ZStack(alignment: .top) {
-            HomeTabView(
-                tabContent: { tab in
-                    switch tab {
-                    case .chat:
-                        HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                    case .channels:
-                        HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                    case .feed:
-                        HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                    case .notifications:
-                        HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                    case .myFeed:
-                        HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                    case .wallet:
-                        HomeWalletContent(context: context)
-                    }
-                },
-                onTabSelected: { tab in
-                    switch tab {
-                    case .chat:
-                        context.filtersState.activateZeroFilter(.primaryRooms)
-                    case .channels:
-                        context.filtersState.activateZeroFilter(.secondaryRooms)
-                    default:
-                        break
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        showBackToTop = false
-                        hideNavigationBar = false
-                        context.send(viewAction: .onHomeTabChanged)
-                    }
-                    selectedTab = tab
-                },
-                hasNewNotifications: context.viewState.hasNewNotificatios,
-                isTabViewVisible: !context.isSearchFieldFocused
-            )
-            .onReceive(scrollViewAdapter.isAtTopEdge) { isAtTop in
-                if showBackToTop == isAtTop {
-                    return
-                }
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    showBackToTop = isAtTop
-                }
+        ZStack {
+            switch selectedHomeTab {
+            case .chat:
+                HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            case .channels:
+                HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            case .feed:
+                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            case .notifications:
+                HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            case .wallet:
+                HomeWalletContent(context: context)
             }
-            .onReceive(scrollViewAdapter.scrollDirection) { direction in
-                let shouldHideNavBar = scrollViewAdapter.isAtTopEdge.value && direction == .down
-                
-                guard shouldHideNavBar != hideNavigationBar else { return }
-                
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    hideNavigationBar = shouldHideNavBar
-                }
-            }
-            
-            // Top gradient overlay when nav bar is hidden
-            topBarGradientOverlay
-                .opacity(hideNavigationBar ? 1 : 0)
-                .animation(.easeInOut(duration: 0.25), value: hideNavigationBar)
-            
-            backToTopButton
         }
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
@@ -93,42 +46,58 @@ struct HomeScreen: View {
         .track(screen: .Home)
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
-        .sheet(isPresented: $context.showEarningsClaimedSheet) {
-            ClaimedEarningsSheetView(
-                state: context.viewState.claimRewardsState,
-                userRewards: context.viewState.claimableUserRewards,
-                onDismiss: {
-                    context.send(viewAction: .claimRewards(trigger: false))
-                },
-                onRetryClaim: {
-                    context.send(viewAction: .claimRewards(trigger: true))
-                },
-                onViewClaimTransaction: { transactionId in
-                    context.send(viewAction: .viewTransactionDetails(transactionId: transactionId, chainId: nil))
+        .overlay(alignment: .top) {
+            backToTopButton
+                .ignoresSafeArea(.container, edges: .top)
+        }
+        .overlay(alignment: .top) {
+            topBarGradientOverlay
+                .opacity(hideNavigationBar ? 1 : 0)
+                .animation(.easeInOut(duration: 0.25), value: hideNavigationBar)
+        }
+        .overlay(alignment: .bottom) {
+            HomeScreenBottomBar(context: context,
+                                selectedTab: $selectedHomeTab,
+                                onTabSelected: { homeTab in self.selectedHomeTab = homeTab })
+        }
+        .overlay(alignment: .bottom) {
+            if !context.isSearchFieldFocused {
+                Group {
+                    if selectedHomeTab == .chat, context.viewState.roomListMode != .skeletons {
+                        FloatingActionButton(onTap: {
+                            context.send(viewAction: .startChat)
+                        })
+                    } else if selectedHomeTab == .feed, context.viewState.postListMode != .skeletons {
+                        FloatingActionButton(onTap: {
+                            context.send(viewAction: .newFeed)
+                        })
+                    }
                 }
-            )
-            .presentationDetents([.height(400)])
-            .presentationDragIndicator(.hidden)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .padding(.bottom, 70)
+            }
+        }
+        .sheet(isPresented: $context.showEarningsClaimedSheet) {
+            ClaimedEarningsSheetContent(context: context)
         }
         .sheet(isPresented: $context.showStakePoolSheet) {
-            if let stakePool = context.viewState.selectedStakePool {
-                StakePoolSheetView(selectedPool: stakePool,
-                                   state: $context.stakePoolViewState,
-                                   onStakeAmount: { amount in
-                    context.send(viewAction: .stakeAmount(amount))
-                },
-                                   onUnstakeAmount: { amount in
-                    context.send(viewAction: .unstakeAmount(amount))
-                },
-                                   onDismissSheet: {
-                    context.showStakePoolSheet = false
-                }, onClaimStakeRewards: {
-                    context.send(viewAction: .claimStakeRewards)
-                })
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
-            } else {
-                EmptyView()
+            StakePoolSheetContent(context: context)
+        }
+        .onReceive(scrollViewAdapter.isAtTopEdge) { isAtTop in
+            if showBackToTop == isAtTop {
+                return
+            }
+            withAnimation(.easeInOut(duration: 0.25)) {
+                showBackToTop = isAtTop
+            }
+        }
+        .onReceive(scrollViewAdapter.scrollDirection) { direction in
+            let shouldHideNavBar = scrollViewAdapter.isAtTopEdge.value && direction == .down
+            
+            guard shouldHideNavBar != hideNavigationBar else { return }
+            
+            withAnimation(.easeInOut(duration: 0.25)) {
+                hideNavigationBar = shouldHideNavBar
             }
         }
         .onChange(of: context.viewState.securityBannerMode) { _, newValue in
@@ -141,6 +110,13 @@ struct HomeScreen: View {
                 }
             default:
                 break
+            }
+        }
+        .onChange(of: selectedHomeTab) { _, newTab in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                showBackToTop = false
+                hideNavigationBar = false
+                context.send(viewAction: .onHomeTabChanged)
             }
         }
     }
@@ -159,7 +135,7 @@ struct HomeScreen: View {
         }
         .backportSharedBackgroundVisibility(.hidden)
         
-        if selectedTab == HomeTab.feed {
+        if selectedHomeTab == HomeTab.feed {
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     context.send(viewAction: .searchUser)
@@ -168,13 +144,11 @@ struct HomeScreen: View {
                         .tint(.compound.iconSecondary)
                 }
             }
-            .backportSharedBackgroundVisibility(.hidden)
         }
         
         ToolbarItem(placement: .primaryAction) {
             userProfileButton
         }
-        .backportSharedBackgroundVisibility(.hidden)
     }
     
     private var settingsButton: some View {
@@ -253,9 +227,9 @@ struct HomeScreen: View {
         .frame(maxWidth: .infinity)
         // Smooth fade + slide animation
         .opacity(showBackToTop ? 1 : 0)
-        .offset(y: hideNavigationBar ? 5 : 40)
-        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: hideNavigationBar)
-        .animation(.easeInOut(duration: 0.3), value: showBackToTop)
+        .offset(y: showBackToTop ? 110 : -40)
+        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: showBackToTop)
+        .animation(.easeInOut(duration: 0.25), value: showBackToTop)
         .transition(.move(edge: .top).combined(with: .opacity))
     }
     

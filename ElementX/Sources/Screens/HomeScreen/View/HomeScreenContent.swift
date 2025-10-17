@@ -16,30 +16,11 @@ struct HomeScreenContent: View {
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
-        ZStack {
-            roomList
-                .sentryTrace("\(Self.self)")
-                .task {
-                    context.send(viewAction: .loadRewards)
-                }
-            
-            switch context.viewState.roomListMode {
-            case .empty, .rooms:
-                if !context.isSearchFieldFocused {
-                    FloatingActionButton(onTap: {
-                        context.send(viewAction: .startChat)
-                    })
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                    .padding(.bottom, 70)
-                }
-            default:
-                EmptyView()
+        roomList
+            .sentryTrace("\(Self.self)")
+            .task {
+                context.send(viewAction: .loadRewards)
             }
-        }
-        .isSearching($context.isSearchFieldFocused)
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
-        .compoundSearchField()
-        .disableAutocorrection(true)
     }
     
     private var roomList: some View {
@@ -67,19 +48,20 @@ struct HomeScreenContent: View {
                     }
                 case .rooms:
                     LazyVStack(spacing: 0) {
-                        let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-                            "execution": "HomeScreenContent",
-                            "view": "showing rooms",
-                            "shouldShowEmptyFilterState": context.viewState.shouldShowEmptyFilterState.description
-                        ])
-                        if !context.viewState.shouldShowEmptyFilterState {
+                        Section {
+                            if !context.viewState.shouldShowEmptyFilterState {
+                                HomeScreenRoomList(context: context)
+                                /// Bottom space to keep content above `HomeScreenBottomBar`
+                                HomeTabBottomSpace()
+                            }
+                        } header: {
                             topSection
-                            
-                            HomeScreenRoomList(context: context, fromChannelsTabs: false)
-                            
-                            HomeTabBottomSpace()
                         }
                     }
+                    .isSearching($context.isSearchFieldFocused)
+                    .searchable(text: $context.searchQuery)
+                    .compoundSearchField()
+                    .disableAutocorrection(true)
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in

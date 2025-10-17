@@ -20,21 +20,24 @@ struct HomeChannelsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    @State private var selectedTab: HomeChannelsTab = .all
+    @State private var selectedChannelsTab: HomeChannelsTab = .all
+    var showChannelList: Bool {
+        selectedChannelsTab == .gated && !context.isSearchFieldFocused && context.searchQuery.isEmpty
+    }
     
     var body: some View {
-        Group {
-            if selectedTab == .gated, !context.isSearchFieldFocused, context.searchQuery.isEmpty {
-                channelList
-            } else {
-                roomList
-            }
+        ZStack {
+            channelList
+                .id("channels")
+                .opacity(showChannelList ? 1 : 0)
+                .allowsHitTesting(showChannelList)
+            
+            roomList
+                .id("rooms")
+                .opacity(showChannelList ? 0 : 1)
+                .allowsHitTesting(!showChannelList)
         }
-        .isSearching($context.isSearchFieldFocused)
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
-        .compoundSearchField()
-        .disableAutocorrection(true)
-        .onChange(of: selectedTab) { _, newTab in
+        .onChange(of: selectedChannelsTab) { _, newTab in
             switch newTab {
             case .all:
                 context.filtersState.activateZeroFilter(.secondaryRooms)
@@ -50,46 +53,53 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
-                        topSection
-                    }
-                    switch context.viewState.channelsListMode {
-                    case .skeletons:
-                        LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach(context.viewState.visibleChannels) { channel in
-                                HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
-                                    .redacted(reason: .placeholder)
-                                    .shimmer()
+                    Section {
+                        switch context.viewState.channelsListMode {
+                        case .skeletons:
+                            LazyVStack(alignment: .leading, spacing: 0) {
+                                ForEach(context.viewState.visibleChannels) { channel in
+                                    HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
+                                        .redacted(reason: .placeholder)
+                                        .shimmer()
+                                }
                             }
+                            .disabled(true)
+                        case .empty:
+                            HomeContentEmptyView(message: "No channels")
+                        case .channels:
+                            LazyVStack(alignment: .leading, spacing: 0) {
+                                ForEach(context.viewState.visibleChannels, id: \.id) { channel in
+                                    HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
+                                        context.send(viewAction: .channelTapped(channel))
+                                    }, mediaProvider: context.mediaProvider)
+                                }
+                                
+                                /// Bottom space to keep content above `HomeScreenBottomBar`
+                                HomeTabBottomSpace()
+                            }
+                            .isSearching($context.isSearchFieldFocused)
+                            .searchable(text: $context.searchQuery)
+                            .compoundSearchField()
+                            .disableAutocorrection(true)
                         }
-                        .disabled(true)
-                    case .empty:
-                        HomeContentEmptyView(message: "No channels")
-                    case .channels:
-                        LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach(context.viewState.visibleChannels, id: \.id) { channel in
-                                HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
-                                    context.send(viewAction: .channelTapped(channel))
-                                }, mediaProvider: context.mediaProvider)
-                            }
-                            
-                            HomeTabBottomSpace()
+                    } header: {
+                        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+                            topSection
                         }
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                guard scrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = scrollView
+                if showChannelList {
+                    guard scrollView != scrollViewAdapter.scrollView else { return }
+                    scrollViewAdapter.scrollView = scrollView
+                }
             }
             .scrollDismissesKeyboard(.immediately)
             .scrollDisabled(context.viewState.channelsListMode == .skeletons)
             .scrollBounceBehavior(context.viewState.channelsListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.channelsListMode)
             .animation(.none, value: context.viewState.visibleChannels)
-//            .refreshable {
-//                context.send(viewAction: .forceRefreshChannels)
-//            }
         }
     }
     
@@ -97,39 +107,49 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
-                        topSection
-                    }
-                    switch context.viewState.roomListMode {
-                    case .skeletons:
-                        LazyVStack(spacing: 0) {
-                            ForEach(context.viewState.visibleRooms) { room in
-                                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
-                                    .redacted(reason: .placeholder)
-                                    .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
+                    Section {
+                        switch context.viewState.roomListMode {
+                        case .skeletons:
+                            LazyVStack(spacing: 0) {
+                                ForEach(context.viewState.visibleRooms) { room in
+                                    HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
+                                        .redacted(reason: .placeholder)
+                                        .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
+                                }
                             }
+                            .disabled(true)
+                            .accessibilityRepresentation {
+                                Text(L10n.commonLoading)
+                            }
+                        case .empty:
+                            HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
+                                HomeScreenEmptyStateView(context: context)
+                                    .layoutPriority(1)
+                            }
+                        case .rooms:
+                            LazyVStack(spacing: 0) {
+                                HomeScreenRoomList(context: context, fromChannelsTabs: true)
+                                
+                                /// Bottom space to keep content above `HomeScreenBottomBar`
+                                HomeTabBottomSpace()
+                            }
+                            .isSearching($context.isSearchFieldFocused)
+                            .searchable(text: $context.searchQuery)
+                            .compoundSearchField()
+                            .disableAutocorrection(true)
                         }
-                        .disabled(true)
-                        .accessibilityRepresentation {
-                            Text(L10n.commonLoading)
-                        }
-                    case .empty:
-                        HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
-                            HomeScreenEmptyStateView(context: context)
-                                .layoutPriority(1)
-                        }
-                    case .rooms:
-                        LazyVStack(spacing: 0) {
-                            HomeScreenRoomList(context: context, fromChannelsTabs: true)
-                            
-                            HomeTabBottomSpace()
+                    } header: {
+                        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+                            topSection
                         }
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                guard scrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = scrollView
+                if !showChannelList {
+                    guard scrollView != scrollViewAdapter.scrollView else { return }
+                    scrollViewAdapter.scrollView = scrollView
+                }
             }
             .onReceive(scrollViewAdapter.didScroll) { _ in
                 updateVisibleRange()
@@ -174,20 +194,20 @@ struct HomeChannelsContent: View {
         }
     }
     
-    @ViewBuilder
     private var topSection: some View {
         SimpleFixedTabButtonsView(tabs: HomeChannelsTab.allCases,
-                             selectedTab: selectedTab,
-                             tabTitle: { tab in
+                                  selectedTab: selectedChannelsTab,
+                                  tabTitle: { tab in
             switch tab {
             case .all: return "Channels"
             case .gated: return "Gated"
             case .muted: return "Muted"
             }
         },
-                             onTabSelected: { tab in
-            selectedTab = tab
+                                  onTabSelected: { tab in
+            selectedChannelsTab = tab
         })
+        .id("channel-tabs")
     }
     
     /// FOR ROOMS LIST

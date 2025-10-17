@@ -1771,8 +1771,6 @@
 		790282022E784DA00049DA63 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 790282012E784DA00049DA63 /* SwiftSoup */; };
 		7902C42B2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */; };
 		7902C42C2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */; };
-		790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
-		790393722D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
 		790393742D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostApi.swift */; };
 		790393752D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostApi.swift */; };
 		790393772D4CDE4B0022E293 /* ZPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393762D4CDE470022E293 /* ZPosts.swift */; };
@@ -2228,6 +2226,8 @@
 		79C6F7342DF828F9003CEBB9 /* RoomFlowCoordinatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407C8DD85179D2DB896FC0FA /* RoomFlowCoordinatorStateMachine.swift */; };
 		79C9BA8D2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79C9BA8E2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
+		79CD97772EA249C400F489D9 /* HomeScreenBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */; };
+		79CD97782EA249C400F489D9 /* HomeScreenBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */; };
 		79D57E9AE03A2DC689D14EA2 /* UserSessionStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */; };
 		79D5985C2E8A3F29008F54E0 /* OnboardingContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */; };
 		79D5985D2E8A3F29008F54E0 /* OnboardingContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */; };
@@ -3877,7 +3877,6 @@
 		7893780A1FD6E3F38B3E9049 /* UserIndicatorControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorControllerMock.swift; sourceTree = "<group>"; };
 		78BBDF7A05CF53B5CDC13682 /* landscape_test_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = landscape_test_video.mov; sourceTree = "<group>"; };
 		7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletUtil.swift; sourceTree = "<group>"; };
-		790393702D4CD63A0022E293 /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
 		790393732D4CDC750022E293 /* ZeroPostApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPostApi.swift; sourceTree = "<group>"; };
 		790393762D4CDE470022E293 /* ZPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPosts.swift; sourceTree = "<group>"; };
 		790393792D4D62B40022E293 /* HomePostsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostsContent.swift; sourceTree = "<group>"; };
@@ -4039,6 +4038,7 @@
 		79C25B582E25AACE00936A5D /* PostImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageViewer.swift; sourceTree = "<group>"; };
 		79C25B5B2E25AB2500936A5D /* PostVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVideoPlayer.swift; sourceTree = "<group>"; };
 		79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWalletQRCode.swift; sourceTree = "<group>"; };
+		79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenBottomBar.swift; sourceTree = "<group>"; };
 		79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainer.swift; sourceTree = "<group>"; };
 		79D5985E2E8A43E0008F54E0 /* ZeroPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPrimaryButton.swift; sourceTree = "<group>"; };
 		79D598612E8A44E1008F54E0 /* ZeroSimpleTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSimpleTextButton.swift; sourceTree = "<group>"; };
@@ -6616,8 +6616,8 @@
 				7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */,
 				C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */,
 				79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */,
-				790393702D4CD63A0022E293 /* HomeTabView.swift */,
 				7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */,
+				79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */,
 				79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */,
 				799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */,
 				037A5661B26EC6BE068188D7 /* Filters */,
@@ -11137,7 +11137,6 @@
 				18525D092CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
 				18E9A58B2C9829970082DDA4 /* MediaUploadingPreprocessor.swift in Sources */,
 				18E9A58C2C9829970082DDA4 /* MentionBuilder.swift in Sources */,
-				790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */,
 				18E9A58D2C9829970082DDA4 /* MentionSuggestionItemView.swift in Sources */,
 				796CD4342E535FE1000D6078 /* SpaceServiceProxyProtocol.swift in Sources */,
 				18E9A58E2C9829970082DDA4 /* MenuSheetLabelStyle.swift in Sources */,
@@ -11612,6 +11611,7 @@
 				18E9A6C82C9829970082DDA4 /* Snapshotting.swift in Sources */,
 				18E9A6C92C9829970082DDA4 /* SoftLogoutScreen.swift in Sources */,
 				18E9A6CA2C9829970082DDA4 /* SoftLogoutScreenCoordinator.swift in Sources */,
+				79CD97772EA249C400F489D9 /* HomeScreenBottomBar.swift in Sources */,
 				18E9A6CB2C9829970082DDA4 /* SoftLogoutScreenModels.swift in Sources */,
 				18E9A6CC2C9829970082DDA4 /* SoftLogoutScreenViewModel.swift in Sources */,
 				18E9A6CD2C9829970082DDA4 /* SoftLogoutScreenViewModelProtocol.swift in Sources */,
@@ -12285,6 +12285,7 @@
 				7968A4322D540A0900E9056A /* FeedDetailsScreenModels.swift in Sources */,
 				77574A519A4E484880053EAD /* IdentityConfirmationScreenModels.swift in Sources */,
 				7968A42C2D5409E500E9056A /* FeedDetailsScreenCoordinator.swift in Sources */,
+				79CD97782EA249C400F489D9 /* HomeScreenBottomBar.swift in Sources */,
 				0C346A4AD174F441EDB1414E /* IdentityConfirmationScreenViewModel.swift in Sources */,
 				489BB6A733D3DA0FE7062650 /* IdentityConfirmationScreenViewModelProtocol.swift in Sources */,
 				9C4EC28A921486B1775D7F8C /* IdentityConfirmedScreen.swift in Sources */,
@@ -12680,7 +12681,6 @@
 				799616322E0B36D6008E73C4 /* SimpleTabButtonsView.swift in Sources */,
 				790922672E1FBC0600833940 /* CompletedTransactionView.swift in Sources */,
 				79096A342E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */,
-				790393722D4CD63E0022E293 /* HomeTabView.swift in Sources */,
 				79281A7A2E6A337400D86DD6 /* ForgotPasswordView.swift in Sources */,
 				42F1C8731166633E35A6D7E6 /* RoomEventStringBuilder.swift in Sources */,
 				D55AF9B5B55FEED04771A461 /* RoomFlowCoordinator.swift in Sources */,

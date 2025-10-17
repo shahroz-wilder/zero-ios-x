@@ -8,7 +8,29 @@
 import Compound
 import SwiftUI
 
-struct ClaimedEarningsSheetView: View {
+struct ClaimedEarningsSheetContent : View {
+    @ObservedObject var context: HomeScreenViewModel.Context
+    
+    var body: some View {
+        ClaimedEarningsSheetView(
+            state: context.viewState.claimRewardsState,
+            userRewards: context.viewState.claimableUserRewards,
+            onDismiss: {
+                context.send(viewAction: .claimRewards(trigger: false))
+            },
+            onRetryClaim: {
+                context.send(viewAction: .claimRewards(trigger: true))
+            },
+            onViewClaimTransaction: { transactionId in
+                context.send(viewAction: .viewTransactionDetails(transactionId: transactionId, chainId: nil))
+            }
+        )
+        .presentationDetents([.height(500)])
+        .presentationDragIndicator(.hidden)
+    }
+}
+
+private struct ClaimedEarningsSheetView: View {
     var state: ClaimRewardsState = .none
     
     let userRewards: ZeroRewards

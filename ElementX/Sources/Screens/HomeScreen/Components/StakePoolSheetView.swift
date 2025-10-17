@@ -8,7 +8,33 @@
 import Compound
 import SwiftUI
 
-struct StakePoolSheetView : View {
+struct StakePoolSheetContent: View {
+    @ObservedObject var context: HomeScreenViewModel.Context
+    
+    var body: some View {
+        if let stakePool = context.viewState.selectedStakePool {
+            StakePoolSheetView(selectedPool: stakePool,
+                               state: $context.stakePoolViewState,
+                               onStakeAmount: { amount in
+                context.send(viewAction: .stakeAmount(amount))
+            },
+                               onUnstakeAmount: { amount in
+                context.send(viewAction: .unstakeAmount(amount))
+            },
+                               onDismissSheet: {
+                context.showStakePoolSheet = false
+            }, onClaimStakeRewards: {
+                context.send(viewAction: .claimStakeRewards)
+            })
+            .presentationDetents([.height(500)])
+            .presentationDragIndicator(.visible)
+        } else {
+            EmptyView()
+        }
+    }
+}
+
+private struct StakePoolSheetView : View {
     let selectedPool: SelectedHomeWalletStakePool
     @Binding var state: StakePoolViewState
     let onStakeAmount: (String) -> Void

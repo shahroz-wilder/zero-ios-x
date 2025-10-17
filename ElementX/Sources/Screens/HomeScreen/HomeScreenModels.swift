@@ -346,7 +346,7 @@ struct HomeScreenViewState: BindableState {
     var postMediaInfoMap: [String: HomeScreenPostMediaInfo] = [:]
     
     var notificationsContent: [HomeScreenRoom] = []
-    var hasNewNotificatios: Bool {
+    var hasNewNotifications: Bool {
         let allNotificationContent = visibleRooms.filter {
             switch $0.type {
             case .placeholder, .knock:

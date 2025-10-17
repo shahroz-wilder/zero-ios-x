@@ -56,6 +56,7 @@ struct SimpleFixedTabButtonsView<Tab: Hashable>: View {
     let onTabSelected: (Tab) -> Void
     
     var showDivider: Bool = false
+    var animateView: Bool = true
     
     @State private var isShown = false
     
@@ -88,12 +89,20 @@ struct SimpleFixedTabButtonsView<Tab: Hashable>: View {
                 HorizontalDivider()
             }
         }
-        .offset(y: isShown ? 0 : -20)     // slide down effect
-        .opacity(isShown ? 1 : 0)         // fade in smoothly
-        .animation(.easeOut(duration: 0.1), value: isShown)
+        .offset(y: isShown ? 0 : -20)
+        .opacity(isShown ? 1 : 0)
+        .animation(
+            animateView ? .easeOut(duration: 0.25) : .none,
+            value: isShown
+        )
         .task {
-            // Delay slightly for a smoother effect if desired
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if animateView {
+                // Delay and animate
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isShown = true
+                }
+            } else {
+                // Show instantly, no animation
                 isShown = true
             }
         }
