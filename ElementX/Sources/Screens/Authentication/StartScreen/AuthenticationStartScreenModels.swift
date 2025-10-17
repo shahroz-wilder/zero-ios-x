@@ -80,6 +80,7 @@ struct AuthenticationStartScreenViewStateBindings {
 enum AuthenticationStartScreenAlertType {
     case genericError
     case userNotFound
+    case caution
 }
 
 enum AuthenticationStartScreenViewAction {

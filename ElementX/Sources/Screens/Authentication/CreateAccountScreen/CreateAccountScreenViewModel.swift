@@ -126,7 +126,14 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
     }
     
     private func presentWalletConnectModal() {
-        WalletConnectService.shared.presentWalletConnectModal()
+        /// Show user alert to navigate back to app manually due to walletConnect automatic redirection issues
+        state.bindings.alertInfo = AlertInfo(id: .alert(""),
+                                             title: "Wallet Connect",
+                                             message: "Please return to the ZERO app after connecting your wallet and signing the message.",
+                                             primaryButton: .init(title: L10n.actionConfirm) {
+            WalletConnectService.shared.presentWalletConnectModal()
+        },
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
     
     private func createUserAccountWithWallet(token: String) {

@@ -30,9 +30,8 @@ class WalletConnectService {
                                        description: "ZERO Messenger",
                                        url: "https://zos.zero.tech/",
                                        icons: ["https://avatars.githubusercontent.com/u/37784886"],
-                                       redirect: try! .init(native: "com.zero.ios.messenger://",
-                                                            universal: "https://zos.zero.tech/ios",
-                                                            linkMode: true))
+                                       redirect: try! .init(native: "example://",
+                                                            universal: nil))
             
             Networking.configure(groupIdentifier: "group.com.zero.ios.messenger",
                                  projectId: projectId,
@@ -94,7 +93,7 @@ class WalletConnectService {
     
     func requestPersonalSignWithDelay() {
         Task {
-            try? await Task.sleep(for: .seconds(4))
+            try? await Task.sleep(for: .seconds(1))
             await requestWalletPersonalSign()
         }
     }
