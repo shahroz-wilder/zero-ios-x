@@ -15,40 +15,12 @@ class ZeroCustomEventService {
         
     private var userId: String? = nil
     private var userName: String? = nil
-    
-    private var pendingEvents: [(String, String, [String: Any]?)] = []
-        
+            
     private init() { }
     
     func setup(userId: String, userName: String) {
         self.userId = userId
         self.userName = userName
-        
-        if !pendingEvents.isEmpty {
-            for (eventName, cat, parameters) in pendingEvents {
-                self.logEvent(eventName, category: cat, parameters: parameters)
-            }
-            pendingEvents.removeAll()
-        }
-    }
-    
-    func logUserRooms(rooms: [RoomSummary]) {
-        Task.detached {
-            var roomParameters: [String: [String : Any]] = [:]
-            for room in rooms {
-                roomParameters[room.id] = [
-                    "id" : room.id,
-                    "name" : room.name,
-                    "isDirect" : room.isDirect,
-                    "isDirectOneToOne" : room.isDirectOneToOneRoom,
-                    "activeMembersCount" : room.room.activeMembersCount(),
-                    "joinedMembersCount" : room.room.joinedMembersCount(),
-                    "invitedMembersCount" : room.room.invitedMembersCount(),
-                    "herosCount" : room.room.heroes().count,
-                ]
-            }
-            self.roomScreenEvent(parameters: roomParameters)
-        }
     }
     
     func roomScreenEvent(parameters: [String: Any]) {
@@ -99,10 +71,6 @@ class ZeroCustomEventService {
                             print("❌ Failed to log event: \(error.localizedDescription)")
                         }
                     }
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.pendingEvents.append((eventName, category, parameters))
             }
         }
     }

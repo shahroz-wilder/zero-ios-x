@@ -15,12 +15,6 @@ struct HomeScreenRoomList: View {
         // Hide the room list when the search bar is focused but the query is empty
         // This works hand in hand with the room list service layer filtering and
         // avoids glitches when focusing the search bar
-        let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-            "execution": "HomeScreenRoomList",
-            "view": "showing rooms list",
-            "shouldHideRoomList": context.viewState.shouldHideRoomList.description,
-            "fromChannelsTab": fromChannelsTabs.description
-        ])
         if !context.viewState.shouldHideRoomList {
             content
         }

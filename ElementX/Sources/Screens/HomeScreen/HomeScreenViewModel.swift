@@ -407,10 +407,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         userSession.clientProxy.setRoomNotificationModeProtocol(self)
         
         guard let roomSummaryProvider else {
-            ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-                "execution": "setupRoomListSubscriptions",
-                "error": "Room summary provider unavailable"
-            ])
             MXLog.error("Room summary provider unavailable")
             return
         }
@@ -421,11 +417,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 guard let self else { return }
-                
-                ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-                    "execution": "setupRoomListSubscriptions",
-                    "call": "updating room list mode"
-                ])
                 updateRoomListMode(with: state)
             }
             .store(in: &cancellables)
@@ -433,10 +424,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-                    "execution": "setupRoomListSubscriptions",
-                    "call": "updating rooms"
-                ])
                 self?.updateRooms()
             }
             .store(in: &cancellables)
@@ -454,18 +441,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         } else {
             roomListMode = .rooms
         }
-        ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-            "execution": "updateRoomListMode",
-            "isLoadingData": isLoadingData.description,
-            "roomListMode": roomListMode.description,
-            "hasNoRooms": hasNoRooms.description,
-        ])
         
         guard roomListMode != state.roomListMode else {
-            ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-                "execution": "updateRoomListMode",
-                "call": "Returning early as roomListMode hasn't changed",
-            ])
             return
         }
         
@@ -473,10 +450,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             analyticsService.signpost.endFirstRooms()
         }
         
-        ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-            "execution": "updateRoomListMode",
-            "call": "setting list mode to state",
-        ])
         state.roomListMode = roomListMode
         
         MXLog.info("Received room summary provider update, setting view room list mode to \"\(state.roomListMode)\"")
@@ -490,14 +463,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func updateRooms() {
-        ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-            "execution": "updateRooms"
-        ])
         guard let roomSummaryProvider else {
-            ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-                "execution": "updateRooms",
-                "error": "Room summary provider unavailable"
-            ])
             MXLog.error("Room summary provider unavailable")
             return
         }
