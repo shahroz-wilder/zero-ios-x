@@ -20,6 +20,8 @@ struct HomeScreen: View {
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
     
+    @State private var glassNonce = 0
+    
     var body: some View {
         ZStack {
             switch selectedHomeTab {
@@ -46,6 +48,13 @@ struct HomeScreen: View {
         .track(screen: .Home)
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
+        /// This is temp to fix the glass effect not being applied issue
+        /// https://stackoverflow.com/questions/79739688/liquid-glass-not-appearing-for-the-first-launch-of-the-app
+        .id(glassNonce)
+        .onAppear {
+            DispatchQueue.main.async { glassNonce &+= 1 }
+        }
+        /// end
         .overlay(alignment: .top) {
             backToTopButton
                 .ignoresSafeArea(.container, edges: .top)

@@ -711,11 +711,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func fetchZeroHomeScreenData() {
+        /// This is temp to fix the glass effect not being applied issue, triggering a UI change for a minute to apply effects
+        /// https://stackoverflow.com/questions/79739688/liquid-glass-not-appearing-for-the-first-launch-of-the-app
+        toggleSyncing()
+        
         Task.detached {
             async let checkUser: () = self.userSession.clientProxy.checkAndLinkZeroUser()
             async let channels: () = self.fetchChannels()
 //            async let posts: () = fetchPosts()
             _ = await (checkUser, channels)
+        }
+    }
+    
+    private func toggleSyncing() {
+        AppStateManager.shared.setSyncing(true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            AppStateManager.shared.setSyncing(false)
         }
     }
     
