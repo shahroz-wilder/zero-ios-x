@@ -71,20 +71,19 @@ struct HomeScreen: View {
         }
         .overlay(alignment: .bottom) {
             if !context.isSearchFieldFocused {
-                Group {
-                    if selectedHomeTab == .chat, context.viewState.roomListMode != .skeletons {
-                        FloatingActionButton(onTap: {
-                            context.send(viewAction: .startChat)
-                        })
-                    } else if selectedHomeTab == .feed, context.viewState.postListMode != .skeletons {
-                        FloatingActionButton(onTap: {
-                            context.send(viewAction: .newFeed)
-                        })
-                    }
+                if let action = floatingButtonAction {
+                    FloatingActionButton(onTap: action)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                        .padding(.bottom, 70)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                .padding(.bottom, 70)
             }
+        }
+        .overlay(alignment: .topLeading) {
+            HomeUserRewardsTooltip(context: context)
+                .offset(x: 18, y: 90)
+                .ignoresSafeArea()
+                .opacity(context.viewState.showNewUserRewardsIntimation ? 1 : 0)
+                .animation(.easeInOut(duration: 0.3), value: context.viewState.showNewUserRewardsIntimation)
         }
         .sheet(isPresented: $context.showEarningsClaimedSheet) {
             ClaimedEarningsSheetContent(context: context)
@@ -189,13 +188,6 @@ struct HomeScreen: View {
                 .clipShape(.circle)
                 .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                 .compositingGroup()
-                .overlay {
-                    if context.viewState.showNewUserRewardsIntimation {
-                        userRewardsToolTip
-                            .offset(x: 85, y: 45)
-                            .allowsHitTesting(false)
-                    }
-                }
             }
         }
         .accessibilityLabel(L10n.commonSettings)
@@ -267,42 +259,14 @@ struct HomeScreen: View {
         Text(item.subtitle)
     }
     
-    private var userRewardsToolTip: some View {
-        Button {
-            context.send(viewAction: .rewardsIntimated)
-        } label: {
-            VStack(alignment: .leading, spacing: 0) {
-                Triangle()
-                    .fill(.ultraThickMaterial)
-                    .frame(width: 25, height: 15)
-                    .padding(.leading, 16)
-                
-                HStack {
-                    Text("You earned $\(context.viewState.userRewards.getRefPriceFormatted())")
-                        .font(.inter(size: 16))
-                    
-                    Spacer()
-                    
-                    CompoundIcon(\.close)
-                }
-                .padding(.all, 16)
-                .background(.ultraThickMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            }
-        }
-        .allowsHitTesting(false)
-        .frame(width: 225, height: 30, alignment: .leading)
-    }
-    
-    private struct Triangle: Shape {
-        func path(in rect: CGRect) -> Path {
-            var path = Path()
-            // Define the three points of the triangle
-            path.move(to: CGPoint(x: rect.midX, y: rect.minY)) // Top middle
-            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY)) // Bottom right
-            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY)) // Bottom left
-            path.closeSubpath()
-            return path
+    private var floatingButtonAction: (() -> Void)? {
+        switch selectedHomeTab {
+        case .chat where context.viewState.roomListMode != .skeletons:
+            return { context.send(viewAction: .startChat) }
+        case .feed where context.viewState.postListMode != .skeletons:
+            return { context.send(viewAction: .newFeed) }
+        default:
+            return nil
         }
     }
 }

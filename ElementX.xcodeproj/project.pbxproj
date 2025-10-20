@@ -2001,6 +2001,8 @@
 		7944A7692D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */; };
 		7944A76C2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
 		7944A76D2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
+		7946147E2EA6510E000D5A20 /* HomeUserRewardsTooltip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */; };
+		7946147F2EA6510E000D5A20 /* HomeUserRewardsTooltip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */; };
 		794A325F2E8E9BC900688144 /* WalletChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A325E2E8E9BC100688144 /* WalletChainIcon.swift */; };
 		794A32602E8E9BC900688144 /* WalletChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A325E2E8E9BC100688144 /* WalletChainIcon.swift */; };
 		794A75522E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */; };
@@ -3967,6 +3969,7 @@
 		7944A7642D589F3F00B75DAC /* CreateFeedScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModel.swift; sourceTree = "<group>"; };
 		7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenView.swift; sourceTree = "<group>"; };
+		7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserRewardsTooltip.swift; sourceTree = "<group>"; };
 		794A325E2E8E9BC100688144 /* WalletChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletChainIcon.swift; sourceTree = "<group>"; };
 		794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAvaxTokenPrice.swift; sourceTree = "<group>"; };
 		794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletApi.swift; sourceTree = "<group>"; };
@@ -6594,6 +6597,7 @@
 		4F43EBE458FBE634996AD7C6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */,
 				8D152423EE6CF0ECCC84091A /* BloomModifier.swift */,
 				7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */,
 				79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */,
@@ -11396,6 +11400,7 @@
 				7937A5922DB287E9001A60CB /* TimelineItemThreadSummary.swift in Sources */,
 				18E9A6342C9829970082DDA4 /* RoomDirectorySearchScreenCoordinator.swift in Sources */,
 				799D85852E2709F7000A362A /* UserWalletInfoView.swift in Sources */,
+				7946147E2EA6510E000D5A20 /* HomeUserRewardsTooltip.swift in Sources */,
 				18F3D1F42CD41A77002D2677 /* VisualListItem.swift in Sources */,
 				18E9A6352C9829970082DDA4 /* RoomDirectorySearchScreenModels.swift in Sources */,
 				18E9A6362C9829970082DDA4 /* RoomDirectorySearchScreenScreenModelProtocol.swift in Sources */,
@@ -12914,6 +12919,7 @@
 				250D2E8309C8CC48796D41D1 /* SpaceScreenModels.swift in Sources */,
 				5A58C7C1837D3E5F2C3E8C8C /* SpaceScreenViewModel.swift in Sources */,
 				639A0A27383EC655B0E81E95 /* SpaceScreenViewModelProtocol.swift in Sources */,
+				7946147F2EA6510E000D5A20 /* HomeUserRewardsTooltip.swift in Sources */,
 				94C2B531B96493B68B976E5F /* SpaceServiceProxy.swift in Sources */,
 				A2091F4B1332D9BF273B09D5 /* SpaceServiceProxyMock.swift in Sources */,
 				DB5200B87C4CE9DF0024AC4E /* SpaceServiceProxyProtocol.swift in Sources */,
