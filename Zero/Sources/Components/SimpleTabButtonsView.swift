@@ -89,10 +89,10 @@ struct SimpleFixedTabButtonsView<Tab: Hashable>: View {
                 HorizontalDivider()
             }
         }
-        .offset(y: isShown ? 0 : -20)
+//        .offset(y: isShown ? 0 : -20)
         .opacity(isShown ? 1 : 0)
         .animation(
-            animateView ? .easeOut(duration: 0.25) : .none,
+            animateView ? .easeOut(duration: 0.35) : .none,
             value: isShown
         )
         .task {
