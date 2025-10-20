@@ -183,19 +183,35 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
     
     private func addMeowToPost(_ postId: String, _ amount: Int) {
+        //update locallyFirst
+        guard let postIndex = state.userFeeds.firstIndex(where: { $0.id == postId }) else { return }
+        let originalPost = state.userFeeds[postIndex]
+        state.userFeeds[postIndex] = originalPost.withUpdatedMeowCount(amount)
+        
         Task {
             let addMeowResult = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
             switch addMeowResult {
             case .success(let post):
                 let homePost = HomeScreenPost(loggedInUserId: clientProxy.userID, post: post, rewardsDecimalPlaces: state.userRewards.decimals)
-                if let index = state.userFeeds.firstIndex(where: { $0.id == homePost.id }) {
-                    state.userFeeds[index] = homePost
-                }
+                state.userFeeds[postIndex] = homePost
                 feedProtocol?.onFeedUpdated(homePost)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
+                state.userFeeds[postIndex] = originalPost.withDefaultMeowCount()
+                switch error {
+                case .insufficientMeowBalance:
+                    displayError(message: "Insuffient Meow Balance")
+                default:
+                    displayError(message: "Failed to add meow to post. Please try again later.")
+                }
             }
         }
+    }
+    
+    private func displayError(title: String? = nil, message: String? = nil) {
+        state.bindings.alertInfo = .init(id: UUID(),
+                                         title: title ?? L10n.commonError,
+                                         message: message ?? L10n.errorUnknown)
     }
     
     private func loadPostContentConcurrently(for posts: [HomeScreenPost], isForceRefresh: Bool) async {

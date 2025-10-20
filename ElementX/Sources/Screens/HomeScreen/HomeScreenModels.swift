@@ -512,7 +512,9 @@ struct HomeScreenPost: Identifiable, Equatable {
     let senderProfile: ZPostUserProfile?
     
     var meowCount: String
+    var actualMeowCount: String
     var isMeowedByMe: Bool
+    var actualMeowedByMy: Bool
     
     var mediaInfo: HomeScreenPostMediaInfo?
     var urlLinkPreview: ZLinkPreview?
@@ -536,7 +538,9 @@ struct HomeScreenPost: Identifiable, Equatable {
                        isMyPost: false,
                        senderProfile: nil,
                        meowCount: "0",
+                       actualMeowCount: "0",
                        isMeowedByMe: false,
+                       actualMeowedByMy: false,
                        mediaInfo: nil,
                        urlLinkPreview: nil)
     }
@@ -710,6 +714,7 @@ extension HomeScreenPost {
     init(loggedInUserId: String, post: ZPost, rewardsDecimalPlaces: Int = 0) {
         let userProfile = post.user.profileSummary
         let meowCount = post.postsMeowsSummary?.meowCount(decimal: rewardsDecimalPlaces) ?? "0"
+        let haveAddedMeows = (post.meows?.isEmpty == false)
         let postUpdatedAt = DateUtil.shared.dateFromISO8601String(post.updatedAt)
         let postTimeStamp = postUpdatedAt.timeAgo()
         let repliesCount = String(post.replies?.count ?? 0)
@@ -752,7 +757,9 @@ extension HomeScreenPost {
             isMyPost: isMyPost,
             senderProfile: post.userProfileView,
             meowCount: meowCount,
-            isMeowedByMe: (post.meows?.isEmpty == false),
+            actualMeowCount: meowCount,
+            isMeowedByMe: haveAddedMeows,
+            actualMeowedByMy: haveAddedMeows,
             mediaInfo: mediaInfo
         )
     }
@@ -773,9 +780,16 @@ extension HomeScreenPost {
     
     func withUpdatedMeowCount(_ meowCount: Int) -> Self {
         var updatedSelf = self
-        let updatedMeowCount = (Int(updatedSelf.meowCount) ?? 0) + meowCount
+        let updatedMeowCount = (updatedSelf.meowCount.toLocalizedDouble() ?? 0) + Double(meowCount)
         updatedSelf.meowCount = updatedMeowCount.description
         updatedSelf.isMeowedByMe = true
+        return updatedSelf
+    }
+    
+    func withDefaultMeowCount() -> Self {
+        var updatedSelf = self
+        updatedSelf.meowCount = updatedSelf.actualMeowCount
+        updatedSelf.isMeowedByMe = updatedSelf.actualMeowedByMy
         return updatedSelf
     }
     

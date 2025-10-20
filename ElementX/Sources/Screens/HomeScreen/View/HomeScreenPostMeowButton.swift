@@ -6,66 +6,95 @@
 //
 
 import SwiftUI
+import Combine
 
 struct HomeScreenPostMeowButton: View {
     let count: String
     let highlightColor: Bool
     let isEnabled: Bool
-    
-    @State private var counter: Int = 0
+    let onMeowTouchEnded: (Int) -> Void
+
+    @State private var totalCounter: Int = 0
+    @State private var holdCounter: Int = 0
     @State private var isTouching: Bool = false
     @State private var timer: Timer? = nil
-    
-    private let MAX_MEOW_LIMIT = 100
-    
-    let onMeowTouchEnded: (Int) -> Void
-    
+    @State private var debounceCancellable: AnyCancellable? = nil
+
+    private let MAX_MEOW_LIMIT = 50
+    private let debounceDelay: TimeInterval = 1.0
+
     var body: some View {
         HStack(alignment: .center) {
-            HomeScreenPostFooterItem(icon: Asset.Images.postMeowIcon,
-                                     count: count,
-                                     highlightColor: highlightColor,
-                                     action: {})
+            HomeScreenPostFooterItem(
+                icon: Asset.Images.postMeowIcon,
+                count: count,
+                highlightColor: highlightColor,
+                action: {}
+            )
             .simultaneousGesture(
-                DragGesture(minimumDistance: 0) // Detect touch down
+                DragGesture(minimumDistance: 0)
                     .onChanged { _ in
-                        if !isTouching, isEnabled {
-                            startIncrementing()
+                        guard isEnabled else { return }
+
+                        if !isTouching {
+                            // Start long press accumulation
                             isTouching = true
+                            startIncrementing()
                         }
                     }
                     .onEnded { _ in
-                        if isEnabled {
-                            onMeowTouchEnded(counter)
-                        }
+                        guard isEnabled else { return }
+
                         stopIncrementing()
                         isTouching = false
+                        scheduleDebouncedSend()
                     }
             )
-            
-            if isTouching {
-                Text("+\(counter)")
+
+            // Shows live hold count while pressed
+            if isTouching && holdCounter > 0 {
+                Text("+\(totalCounter)")
                     .font(.compound.bodyMDSemibold)
                     .foregroundStyle(.zero.bgAccentRest)
             }
         }
     }
-    
-    func startIncrementing() {
+
+    private func startIncrementing() {
         stopIncrementing()
-        counter += 1
-        // Start a timer that fires every 250 milliseconds
+
+        holdCounter = min(holdCounter + 1, MAX_MEOW_LIMIT)
+        totalCounter = min(totalCounter + 1, MAX_MEOW_LIMIT)
+        restartDebounce()
+
         timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
-            if counter < MAX_MEOW_LIMIT {
-                counter += 1
-            }
+            guard holdCounter < MAX_MEOW_LIMIT else { return }
+            holdCounter = min(holdCounter + 1, MAX_MEOW_LIMIT)
+            totalCounter = min(totalCounter + 1, MAX_MEOW_LIMIT)
+            restartDebounce()
         }
     }
-    
-    func stopIncrementing() {
-        // Stop the timer when touch ends
+
+    private func stopIncrementing() {
         timer?.invalidate()
         timer = nil
-        counter = 0
+        holdCounter = 0
+    }
+
+    private func restartDebounce() {
+        debounceCancellable?.cancel()
+
+        debounceCancellable = Just(())
+            .delay(for: .seconds(debounceDelay), scheduler: RunLoop.main)
+            .sink { _ in
+                guard totalCounter > 0 else { return }
+                onMeowTouchEnded(totalCounter)
+                totalCounter = 0
+            }
+    }
+
+    private func scheduleDebouncedSend() {
+        // Extend or restart debounce window after a long press ends
+        restartDebounce()
     }
 }

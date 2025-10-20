@@ -46,6 +46,7 @@ enum ClientProxyError: Error {
     case failedCompletingUserProfile
     
     case insufficientGasBalance
+    case insufficientMeowBalance
 }
 
 enum SlidingSyncConstants {

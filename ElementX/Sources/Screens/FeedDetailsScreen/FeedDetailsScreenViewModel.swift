@@ -170,35 +170,56 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     }
     
     private func addMeowToPost(_ postId: String, _ amount: Int, isPostAReply: Bool) {
-        //update post locally first
+        // update post locally first
+        var originalPost: HomeScreenPost
+        var updatedPost: HomeScreenPost
         if isPostAReply {
-            guard let postIndex = state.feedReplies.firstIndex(where: { $0.id == postId }) else { return }
-            let localPost = state.feedReplies[postIndex]
-            let updatedLocalPost = localPost.withUpdatedMeowCount(amount)
-            state.feedReplies[postIndex] = updatedLocalPost
+            guard let index = state.feedReplies.firstIndex(where: { $0.id == postId }) else { return }
+            originalPost = state.feedReplies[index]
+            updatedPost = originalPost.withUpdatedMeowCount(amount)
+            state.feedReplies[index] = updatedPost
         } else {
-            let mainFeedUpdated = state.bindings.feed.withUpdatedMeowCount(amount)
-            state.bindings.feed = mainFeedUpdated
-            mainFeedProtocol?.onFeedUpdated(mainFeedUpdated)
+            originalPost = state.bindings.feed
+            updatedPost = originalPost.withUpdatedMeowCount(amount)
+            state.bindings.feed = updatedPost
+            mainFeedProtocol?.onFeedUpdated(updatedPost)
         }
         
         Task(priority: .background) {
-            let addMeowResult = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
-            switch addMeowResult {
+            let result = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            switch result {
             case .success(let post):
                 let homePost = HomeScreenPost(loggedInUserId: clientProxy.userID, post: post, rewardsDecimalPlaces: state.userRewards.decimals)
                 if isPostAReply {
-                    if let index = state.feedReplies.firstIndex(where: { $0.id == homePost.id }) {
-                        state.feedReplies[index] = homePost
-                    }
+                    guard let index = state.feedReplies.firstIndex(where: { $0.id == postId }) else { return }
+                    state.feedReplies[index] = homePost
                 } else {
                     state.bindings.feed = homePost
                 }
                 mainFeedProtocol?.onFeedUpdated(homePost)
+                
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
+                if isPostAReply {
+                    guard let index = state.feedReplies.firstIndex(where: { $0.id == postId }) else { return }
+                    state.feedReplies[index] = originalPost.withDefaultMeowCount()
+                } else {
+                    state.bindings.feed = originalPost.withDefaultMeowCount()
+                }
+                switch error {
+                case .insufficientMeowBalance:
+                    displayError(message: "Insuffient Meow Balance")
+                default:
+                    displayError(message: "Failed to add meow to post. Please try again later.")
+                }
             }
         }
+    }
+    
+    private func displayError(title: String? = nil, message: String? = nil) {
+        state.bindings.alertInfo = .init(id: UUID(),
+                                         title: title ?? L10n.commonError,
+                                         message: message ?? L10n.errorUnknown)
     }
     
     private func postFeedReply() {

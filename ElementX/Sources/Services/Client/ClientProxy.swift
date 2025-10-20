@@ -1270,11 +1270,11 @@ class ClientProxy: ClientProxyProtocol {
             case .success(let post):
                 return .success(post)
             case .failure(let error):
-                return .failure(.zeroError(error))
+                return handleZeroError(error, fallbackError: .zeroError(error))
             }
         } catch {
             MXLog.error(error)
-            return .failure(.zeroError(error))
+            return handleZeroError(error, fallbackError: .zeroError(error))
         }
     }
     
@@ -1865,6 +1865,8 @@ class ClientProxy: ClientProxyProtocol {
             switch apiError.code {
             case "INSUFFICIENT_BALANCE":
                 return .failure(.insufficientGasBalance)
+            case "INSUFFICIENT_MEOW_BALANCE":
+                return .failure(.insufficientMeowBalance)
             default:
                 return .failure(fallbackError)
             }

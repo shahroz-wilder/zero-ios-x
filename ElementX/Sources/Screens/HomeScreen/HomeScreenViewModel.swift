@@ -800,8 +800,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func addMeowToPost(_ postId: String, _ amount: Int) {
         //update post locally first
         guard let postIndex = state.posts.firstIndex(where: { $0.id == postId }) else { return }
-        let localPost = state.posts[postIndex]
-        state.posts[postIndex] = localPost.withUpdatedMeowCount(amount)
+        let originalPost = state.posts[postIndex]
+        state.posts[postIndex] = originalPost.withUpdatedMeowCount(amount)
         
         Task(priority: .background) {
             let addMeowResult = await userSession.clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
@@ -813,6 +813,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.posts[postIndex] = homePost
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
+                // revert to original post
+                state.posts[postIndex] = originalPost.withDefaultMeowCount()
+                switch error {
+                case .insufficientMeowBalance:
+                    displayError(message: "Insuffient Meow Balance")
+                default:
+                    displayError(message: "Failed to add meow to post. Please try again later.")
+                }
             }
         }
     }
