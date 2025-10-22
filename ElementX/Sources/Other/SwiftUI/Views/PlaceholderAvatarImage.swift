@@ -50,7 +50,7 @@ struct PlaceholderAvatarImage: View {
         .aspectRatio(1, contentMode: .fill)
     }
 
-    init(name: String?, contentID: String) {
+    init(name: String?, contentID: String, onTap: (() -> Void)?) {
         let baseName = name ?? contentID.trimmingCharacters(in: .punctuationCharacters)
         textForImage = baseName.first?.uppercased() ?? ""
         self.contentID = contentID

@@ -71,7 +71,7 @@ struct RoomAvatarImage: View {
             if users.count == 0 {
                 let _ = assertionFailure("We should never pass empty heroes here.")
                 PlaceholderAvatarImage(
-                    name: nil, contentID: nil, onTap: {}
+                    name: nil, contentID: "", onTap: {}
                 )
             } else if users.count == 2 {
                 let clusterSize = avatarSize.value * 1.6

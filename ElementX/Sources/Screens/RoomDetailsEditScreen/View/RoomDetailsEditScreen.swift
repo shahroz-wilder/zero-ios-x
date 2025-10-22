@@ -60,7 +60,10 @@ struct RoomDetailsEditScreen: View {
                                    name: context.viewState.initialName,
                                    contentID: context.viewState.roomID,
                                    avatarSize: .user(on: .memberDetails),
-                                   mediaProvider: context.mediaProvider)
+                                   mediaProvider: context.mediaProvider,
+                                   onTap: {
+                context.send(viewAction: .presentMediaSource)
+            })
                 .accessibilityLabel(L10n.a11yEditAvatar)
                 .overlay(alignment: .bottomTrailing) {
                     if context.viewState.canEditAvatar {

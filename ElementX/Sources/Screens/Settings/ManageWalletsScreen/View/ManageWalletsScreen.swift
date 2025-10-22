@@ -154,7 +154,7 @@ private struct WalletCell: View {
             } label: {
                 HStack(alignment: .center) {
                     
-                    PlaceholderAvatarImage(name: wallet.address, contentID: wallet.id)
+                    PlaceholderAvatarImage(name: wallet.address, contentID: wallet.id, onTap: nil)
                         .frame(width: 32, height: 32)
                     
                     VStack(alignment: .leading) {

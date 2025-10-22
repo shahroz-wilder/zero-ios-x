@@ -16,7 +16,7 @@ struct OverridableAvatarImage: View {
     let contentID: String
     let avatarSize: Avatars.Size
     let mediaProvider: MediaProviderProtocol?
-    private let onTap: (() -> Void)?
+    let onTap: (() -> Void)?
     
     var body: some View {
         if let overrideURL {

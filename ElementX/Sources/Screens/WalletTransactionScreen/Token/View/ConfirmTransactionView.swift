@@ -89,7 +89,7 @@ private struct UserInfoView: View {
         VStack {
             LoadableAvatarImage(url: URL(string: image ?? ""),
                                 name: name,
-                                contentID: nil,
+                                contentID: "",
                                 avatarSize: .user(on: .inviteUsers),
                                 mediaProvider: mediaProvider)
             

@@ -48,7 +48,7 @@ struct CompleteProfileScreen: View {
             OverridableAvatarImage(overrideURL: context.viewState.localMedia?.thumbnailURL,
                                    url: context.viewState.selectedAvatarURL,
                                    name: nil,
-                                   contentID: nil,
+                                   contentID: "",
                                    avatarSize: .user(on: .completeProfile),
                                    mediaProvider: context.mediaProvider,
                                    onTap: { context.send(viewAction: .presentMediaSource) })
