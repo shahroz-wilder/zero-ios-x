@@ -43,6 +43,7 @@ struct PollView: View {
     let poll: Poll
     let state: PollViewState
     let sender: TimelineItemSender
+    let pollAccentColor: Color
     let actionHandler: (PollViewAction) -> Void
     
     var body: some View {
@@ -81,10 +82,12 @@ struct PollView: View {
                          size: .custom(22),
                          relativeTo: .compound.bodyLGSemibold)
                 .accessibilityLabel(poll.hasEnded ? L10n.a11yPollEnd : L10n.a11yPoll)
+                .foregroundStyle(pollAccentColor)
 
             Text(poll.question)
                 .multilineTextAlignment(.leading)
                 .font(.zero.bodyLGSemibold)
+                .foregroundStyle(pollAccentColor)
         }
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isHeader)
@@ -109,6 +112,7 @@ struct PollView: View {
             feedbackGenerator.impactOccurred()
         } label: {
             PollOptionView(pollOption: option,
+                           pollOptionColor: pollAccentColor,
                            showVotes: showVotes,
                            isFinalResult: poll.hasEnded)
                 .foregroundColor(progressBarColor(for: option))
@@ -159,9 +163,9 @@ struct PollView: View {
 
     private func progressBarColor(for option: Poll.Option) -> Color {
         if poll.hasEnded {
-            return option.isWinning ? .zero.textActionAccent : .compound.textDisabled
+            return option.isWinning ? .compound.iconTertiary : .compound.textDisabled
         } else {
-            return .compound.textPrimary
+            return pollAccentColor
         }
     }
 
@@ -191,31 +195,31 @@ private extension Poll {
 
 struct PollView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PollView(poll: .disclosed(), state: .full(isEditable: false), sender: .test) { _ in }
+        PollView(poll: .disclosed(), state: .full(isEditable: false), sender: .test, pollAccentColor: .white) { _ in }
             .padding()
             .previewDisplayName("Disclosed")
 
-        PollView(poll: .undisclosed(), state: .full(isEditable: false), sender: .test) { _ in }
+        PollView(poll: .undisclosed(), state: .full(isEditable: false), sender: .test, pollAccentColor: .white) { _ in }
             .padding()
             .previewDisplayName("Undisclosed")
 
-        PollView(poll: .endedDisclosed, state: .full(isEditable: false), sender: .test) { _ in }
+        PollView(poll: .endedDisclosed, state: .full(isEditable: false), sender: .test, pollAccentColor: .white) { _ in }
             .padding()
             .previewDisplayName("Ended, Disclosed")
 
-        PollView(poll: .endedUndisclosed, state: .full(isEditable: false), sender: .test) { _ in }
+        PollView(poll: .endedUndisclosed, state: .full(isEditable: false), sender: .test, pollAccentColor: .white) { _ in }
             .padding()
             .previewDisplayName("Ended, Undisclosed")
 
-        PollView(poll: .disclosed(createdByAccountOwner: true), state: .full(isEditable: true), sender: .test) { _ in }
+        PollView(poll: .disclosed(createdByAccountOwner: true), state: .full(isEditable: true), sender: .test, pollAccentColor: .white) { _ in }
             .padding()
             .previewDisplayName("Creator, disclosed")
         
-        PollView(poll: .emptyDisclosed, state: .full(isEditable: true), sender: .test) { _ in }
+        PollView(poll: .emptyDisclosed, state: .full(isEditable: true), sender: .test, pollAccentColor: .white) { _ in }
             .padding()
             .previewDisplayName("Creator, no votes")
         
-        PollView(poll: .emptyDisclosed, state: .preview, sender: .test) { _ in }
+        PollView(poll: .emptyDisclosed, state: .preview, sender: .test, pollAccentColor: .white) { _ in }
             .padding()
             .previewDisplayName("Preview")
     }

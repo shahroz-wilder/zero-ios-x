@@ -14,6 +14,12 @@ struct VideoRoomTimelineView: View {
     
     private var hasMediaCaption: Bool { timelineItem.content.caption != nil }
     
+    var captionColor: UIColor {
+        timelineItem.isOutgoing
+        ? context?.viewState.isEncryptedRoom == true ? UIColor.compound.textPrimary : UIColor.black
+        : UIColor.compound.textPrimary
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 4) {
@@ -31,11 +37,13 @@ struct VideoRoomTimelineView: View {
                 if let attributedCaption = timelineItem.content.formattedCaption {
                     FormattedBodyText(attributedString: attributedCaption,
                                       additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostFontSize: timelineItem.shouldBoost)
+                                      boostFontSize: timelineItem.shouldBoost,
+                                      fontColor: captionColor)
                 } else if let caption = timelineItem.content.caption {
                     FormattedBodyText(text: caption,
                                       additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostFontSize: timelineItem.shouldBoost)
+                                      boostFontSize: timelineItem.shouldBoost,
+                                      fontColor: captionColor)
                 }
             }
         }

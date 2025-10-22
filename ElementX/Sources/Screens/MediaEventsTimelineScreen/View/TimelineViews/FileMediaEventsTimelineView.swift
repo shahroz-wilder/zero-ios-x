@@ -11,10 +11,17 @@ import SwiftUI
 struct FileMediaEventsTimelineView: View {
     let timelineItem: FileRoomTimelineItem
     
+    var captionColor: UIColor {
+        timelineItem.isOutgoing
+        ? UIColor.black
+        : UIColor.compound.textPrimary
+    }
+    
     var body: some View {
         MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
                                      fileSize: timelineItem.content.fileSize,
                                      caption: timelineItem.content.caption,
+                                     captionColor: captionColor,
                                      formattedCaption: timelineItem.content.formattedCaption,
                                      additionalWhitespaces: timelineItem.additionalWhitespaces())
             .accessibilityLabel(L10n.commonFile)

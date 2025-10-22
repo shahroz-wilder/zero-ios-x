@@ -19,11 +19,18 @@ struct PollRoomTimelineView: View {
         }
     }
     
+    var pollAccentColor: UIColor {
+        timelineItem.isOutgoing
+        ? context.viewState.isEncryptedRoom ? UIColor.compound.textPrimary : UIColor.black
+        : UIColor.compound.textPrimary
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             PollView(poll: poll,
                      state: state,
-                     sender: timelineItem.sender) { action in
+                     sender: timelineItem.sender,
+                     pollAccentColor: Color(pollAccentColor)) { action in
                 switch action {
                 case .selectOption(let optionID):
                     guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }

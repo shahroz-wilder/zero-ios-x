@@ -12,6 +12,7 @@ struct PollOptionView: View {
     @Environment(\.isEnabled) private var isEnabled
     
     let pollOption: Poll.Option
+    let pollOptionColor: Color
     let showVotes: Bool
     let isFinalResult: Bool
 
@@ -19,7 +20,7 @@ struct PollOptionView: View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Image(systemSymbol: pollOption.isSelected ? .checkmarkCircleFill : .circle)
                 .font(.zero.bodyLG)
-                .foregroundColor(pollOption.isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
+                .foregroundColor(pollOption.isSelected && isEnabled ? pollOptionColor : .compound.iconTertiary)
                 .accessibilityAddTraits(pollOption.isSelected ? .isSelected : [])
 
             VStack(spacing: 10) {
@@ -27,19 +28,19 @@ struct PollOptionView: View {
                     Text(pollOption.text)
                         .font(isFinalWinningOption ? .compound.bodyLGSemibold : .compound.bodyLG)
                         .multilineTextAlignment(.leading)
-                        .foregroundColor(.compound.textPrimary)
+                        .foregroundColor(pollOptionColor)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     if showVotes {
                         if isFinalWinningOption {
                             HStack(spacing: 4) {
                                 CompoundIcon(asset: Asset.Images.pollWinner)
-                                    .foregroundColor(.zero.iconAccentTertiary)
+                                    .foregroundColor(.compound.iconTertiary)
                                     .accessibilityLabel(L10n.a11yPollsWinningAnswer)
                                 
                                 Text(L10n.commonPollVotesCount(pollOption.votes))
                                     .font(.zero.bodySMSemibold)
-                                    .foregroundColor(.compound.textPrimary)
+                                    .foregroundStyle(pollOptionColor)
                             }
                         } else {
                             Text(L10n.commonPollVotesCount(pollOption.votes))
@@ -99,6 +100,7 @@ struct PollOptionView_Previews: PreviewProvider, TestablePreview {
                                                  allVotes: 10,
                                                  isSelected: true,
                                                  isWinning: false),
+                               pollOptionColor: .white,
                                showVotes: false,
                                isFinalResult: false)
 
@@ -108,6 +110,7 @@ struct PollOptionView_Previews: PreviewProvider, TestablePreview {
                                                  allVotes: 10,
                                                  isSelected: false,
                                                  isWinning: true),
+                               pollOptionColor: .white,
                                showVotes: true,
                                isFinalResult: false)
 
@@ -117,6 +120,7 @@ struct PollOptionView_Previews: PreviewProvider, TestablePreview {
                                                  allVotes: 10,
                                                  isSelected: false,
                                                  isWinning: true),
+                               pollOptionColor: .white,
                                showVotes: true,
                                isFinalResult: true)
             }

@@ -12,11 +12,18 @@ struct FileRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: FileRoomTimelineItem
     
+    var captionColor: UIColor {
+        timelineItem.isOutgoing
+        ? context?.viewState.isEncryptedRoom == true ? UIColor.compound.textPrimary : UIColor.black
+        : UIColor.compound.textPrimary
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
+                                         captionColor: captionColor,
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          additionalWhitespaces: timelineItem.additionalWhitespaces(),
                                          shouldBoost: timelineItem.shouldBoost) {
@@ -33,6 +40,7 @@ struct MediaFileRoomTimelineContent: View {
     let filename: String
     let fileSize: UInt?
     let caption: String?
+    let captionColor: UIColor
     let formattedCaption: AttributedString?
     let additionalWhitespaces: Int
     var shouldBoost = false
@@ -66,11 +74,13 @@ struct MediaFileRoomTimelineContent: View {
             if let formattedCaption {
                 FormattedBodyText(attributedString: formattedCaption,
                                   additionalWhitespacesCount: additionalWhitespaces,
-                                  boostFontSize: shouldBoost)
+                                  boostFontSize: shouldBoost,
+                                  fontColor: captionColor)
             } else if let caption {
                 FormattedBodyText(text: caption,
                                   additionalWhitespacesCount: additionalWhitespaces,
-                                  boostFontSize: shouldBoost)
+                                  boostFontSize: shouldBoost,
+                                  fontColor: captionColor)
             }
         }
     }

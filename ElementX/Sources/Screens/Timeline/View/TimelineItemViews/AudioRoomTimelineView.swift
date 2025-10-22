@@ -12,11 +12,18 @@ struct AudioRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: AudioRoomTimelineItem
     
+    var captionColor: UIColor {
+        timelineItem.isOutgoing
+        ? context?.viewState.isEncryptedRoom == true ? UIColor.compound.textPrimary : UIColor.black
+        : UIColor.compound.textPrimary
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
+                                         captionColor: captionColor,
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          additionalWhitespaces: timelineItem.additionalWhitespaces(),
                                          shouldBoost: timelineItem.shouldBoost,
