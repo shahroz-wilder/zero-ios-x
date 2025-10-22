@@ -18,24 +18,19 @@ struct HomeScreen: View {
     
     @State private var selectedHomeTab: HomeTab = .chat
     
+    @State private var selectedChildChannelsTab: HomeChannelsTab = .all
+    @State private var selectedChildFeedsTab: HomePostsTab = .following
+    @State private var selectedChildNotificationsTab: HomeNotificationsTab = .all
+    
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
 
     var body: some View {
-        ZStack {
-            switch selectedHomeTab {
-            case .chat:
-                HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            case .channels:
-                HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            case .feed:
-                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            case .notifications:
-                HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            case .wallet:
-                HomeWalletContent(context: context)
-            }
-        }
+        mainContent
+//        .conditionalSearchable(if: (selectedHomeTab == .chat || selectedHomeTab == .channels),
+//                               isSearching: $context.isSearchFieldFocused,
+//                               searchQuery: $context.searchQuery)
+        .animation(.easeInOut(duration: 0.25), value: selectedHomeTab)
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
@@ -47,6 +42,11 @@ struct HomeScreen: View {
         .track(screen: .Home)
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
+        .safeAreaInset(edge: .top) {
+            topTabView
+                .transition(.asymmetric(insertion: .move(edge: .top), removal: .move(edge: .top)))
+                .opacity(hideNavigationBar ? 0 : 1)
+        }
         .overlay(alignment: .top) {
             backToTopButton
                 .ignoresSafeArea(.container, edges: .top)
@@ -113,11 +113,122 @@ struct HomeScreen: View {
             }
         }
         .onChange(of: selectedHomeTab) { _, newTab in
+            selectedChildChannelsTab = .all
+            selectedChildFeedsTab = .following
+            selectedChildNotificationsTab = .all
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 showBackToTop = false
                 hideNavigationBar = false
                 context.send(viewAction: .onHomeTabChanged)
             }
+        }
+        .onChange(of: selectedChildChannelsTab) { _, newTab in
+            switch newTab {
+            case .all:
+                context.filtersState.activateZeroFilter(.secondaryRooms)
+            case .gated:
+                context.filtersState.activateZeroFilter(.channels)
+            case .muted:
+                context.filtersState.activateZeroFilter(.mutedRooms)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var topTabView: some View {
+        Group {
+            switch selectedHomeTab {
+            case .channels:
+                SimpleFixedTabButtonsView(tabs: HomeChannelsTab.allCases,
+                                          selectedTab: selectedChildChannelsTab,
+                                          tabTitle: { tab in
+                    switch tab {
+                    case .all: return "Channels"
+                    case .gated: return "Gated"
+                    case .muted: return "Muted"
+                    }
+                },
+                                          onTabSelected: { tab in
+                    selectedChildChannelsTab = tab
+                })
+            case .feed:
+                SimpleFixedTabButtonsView(tabs: HomePostsTab.allCases,
+                                          selectedTab: selectedChildFeedsTab,
+                                     tabTitle: { tab in
+                    switch tab {
+                    case .following: return "Following"
+                    case .all: return "Everything"
+                    }
+                },
+                                     onTabSelected: { tab in
+                    selectedChildFeedsTab = tab
+                    context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
+                })
+            case .notifications:
+                SimpleFixedTabButtonsView(tabs: HomeNotificationsTab.allCases,
+                                          selectedTab: selectedChildNotificationsTab,
+                                     tabTitle: { tab in
+                    switch tab {
+                    case .highlighted: return "Highlights"
+                    case .muted: return "Muted"
+                    case .all: return "All"
+                    }
+                },
+                                     onTabSelected: { tab in
+                    selectedChildNotificationsTab = tab
+                })
+            default:
+                EmptyView()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        ZStack(alignment: .top) {
+            /// Chats Content
+            let shouldShowHomeScreenContent: Bool = switch selectedHomeTab {
+            case .chat:
+                true
+            case .channels:
+                selectedChildChannelsTab != .gated
+            default:
+                false
+            }
+            HomeScreenContent(context: context,
+                              scrollViewAdapter: scrollViewAdapter,
+                              shouldAttachScrollAdapter: shouldShowHomeScreenContent)
+            .opacity(shouldShowHomeScreenContent ? 1 : 0)
+            
+            /// Channels Content
+            let shouldShowHomeChannelsContent: Bool = switch selectedHomeTab {
+            case .channels:
+                selectedChildChannelsTab == .gated
+            default:
+                false
+            }
+            HomeChannelsContent(context: context,
+                                scrollViewAdapter: scrollViewAdapter,
+                                shouldAttachScrollAdapter: shouldShowHomeChannelsContent)
+            .opacity(shouldShowHomeChannelsContent ? 1 : 0)
+            
+            /// Posts Content
+            HomePostsContent(context: context,
+                             scrollViewAdapter: scrollViewAdapter,
+                             shouldAttachScrollAdapter: selectedHomeTab == .feed,
+                             selectedFeedTab: selectedChildFeedsTab)
+                .opacity(selectedHomeTab == .feed ? 1 : 0)
+            
+            /// Notifications Content
+            HomeNotificationsContent(context: context,
+                                     scrollViewAdapter: scrollViewAdapter,
+                                     shouldAttachScrollAdapter: selectedHomeTab == .notifications,
+                                     selectedNotificationsTab: selectedChildNotificationsTab)
+                .opacity(selectedHomeTab == .notifications ? 1 : 0)
+            
+            /// Wallet Content
+            HomeWalletContent(context: context)
+                .opacity(selectedHomeTab == .wallet ? 1 : 0)
         }
     }
     
@@ -125,6 +236,10 @@ struct HomeScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
+//        if #available(iOS 26.0, *) {
+//            DefaultToolbarItem(kind: .search, placement: .bottomBar)
+//        }
+        
         ToolbarItem(placement: .navigationBarLeading) {
             settingsButton
         }
@@ -200,7 +315,7 @@ struct HomeScreen: View {
     @ViewBuilder
     private var backToTopButton: some View {
         Button(action: {
-            scrollViewAdapter.scrollToTop()
+            scrollViewAdapter.scrollToTop(addPadding: showsTopTab)
         }) {
             HStack {
                 Text("Back to Top")
@@ -259,6 +374,15 @@ struct HomeScreen: View {
             return { context.send(viewAction: .newFeed) }
         default:
             return nil
+        }
+    }
+    
+    private var showsTopTab: Bool {
+        switch selectedHomeTab {
+        case .channels, .feed, .notifications:
+            return true
+        default:
+            return false
         }
     }
 }

@@ -21,7 +21,9 @@ struct HomeNotificationsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    @State private var selectedNotificationsTab: HomeNotificationsTab = .all
+    let shouldAttachScrollAdapter: Bool
+    let selectedNotificationsTab: HomeNotificationsTab
+    
     
     var body: some View {
         notificationsList
@@ -31,30 +33,28 @@ struct HomeNotificationsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    Section {
-                        switch context.viewState.roomListMode {
-                        case .skeletons:
-                            LazyVStack(spacing: 0) {
-                                ForEach(context.viewState.visibleRooms) { room in
-                                    HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedNotificationsTab)
-                                        .redacted(reason: .placeholder)
-                                        .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
-                                }
+                    switch context.viewState.roomListMode {
+                    case .skeletons:
+                        LazyVStack(spacing: 0) {
+                            ForEach(context.viewState.visibleRooms) { room in
+                                HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedNotificationsTab)
+                                    .redacted(reason: .placeholder)
+                                    .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                             }
-                            .disabled(true)
-                        case .empty:
-                            HomeContentEmptyView(message: "No new notifications")
-                        case .rooms:
-                            NotificationsContentList(context: context, selectedNotificationsTab: selectedNotificationsTab)
                         }
-                    } header : {
-                        topSection
+                        .disabled(true)
+                    case .empty:
+                        HomeContentEmptyView(message: "No new notifications")
+                    case .rooms:
+                        NotificationsContentList(context: context, selectedNotificationsTab: selectedNotificationsTab)
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                guard scrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = scrollView
+                if shouldAttachScrollAdapter {
+                    guard scrollView != scrollViewAdapter.scrollView else { return }
+                    scrollViewAdapter.scrollView = scrollView
+                }
             }
             .onReceive(scrollViewAdapter.didScroll) { _ in
                 updateVisibleRange()
@@ -97,25 +97,6 @@ struct HomeNotificationsContent: View {
             .animation(.elementDefault, value: context.viewState.roomListMode)
             .animation(.none, value: context.viewState.visibleRooms)
         }
-    }
-    
-    private var topSection: some View {
-        SimpleFixedTabButtonsView(tabs: HomeNotificationsTab.allCases,
-                             selectedTab: selectedNotificationsTab,
-                             tabTitle: { tab in
-            switch tab {
-            case .highlighted: return "Highlights"
-            case .muted: return "Muted"
-            case .all: return "All"
-            }
-        },
-                             onTabSelected: { tab in
-            selectedNotificationsTab = tab
-//            context.send(viewAction: .setNotificationFilter(tab))
-        })
-//        .onAppear {
-//            context.send(viewAction: .setNotificationFilter(selectedTab))
-//        }
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search

@@ -16,29 +16,32 @@ struct HomeScreenRoomList: View {
         // Hide the room list when the search bar is focused but the query is empty
         // This works hand in hand with the room list service layer filtering and
         // avoids glitches when focusing the search bar
-        if !context.viewState.shouldHideRoomList {
-            content
-        }
+        content
+            .opacity(context.viewState.shouldHideRoomList ? 0 : 1)
+//        if !context.viewState.shouldHideRoomList {
+//            content
+//        }
     }
     
     @ViewBuilder
     private var content: some View {
         let roomsList: [HomeScreenRoom] = {
             let list = context.viewState.visibleRooms
-            if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
-                switch context.filtersState.activeZeroFilter {
-                case .primaryRooms:
-                    return list.filter { $0.isPrimary }
-                case .secondaryRooms:
-                    return list.filter { $0.isSecondary }
-                case .mutedRooms:
-                    return list.filter { $0.isMuted }
-                case .channels:
-                    return list
-                }
-            } else {
-                return list
-            }
+//            if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+//                switch context.filtersState.activeZeroFilter {
+//                case .primaryRooms:
+//                    return list.filter { $0.isPrimary }
+//                case .secondaryRooms:
+//                    return list.filter { $0.isSecondary }
+//                case .mutedRooms:
+//                    return list.filter { $0.isMuted }
+//                case .channels:
+//                    return list
+//                }
+//            } else {
+//                return list
+//            }
+            return list
         }()
         
         let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [

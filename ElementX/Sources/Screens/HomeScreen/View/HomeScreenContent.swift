@@ -16,6 +16,8 @@ struct HomeScreenContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
+    let shouldAttachScrollAdapter: Bool
+    
     var body: some View {
         roomList
             .sentryTrace("\(Self.self)")
@@ -59,15 +61,17 @@ struct HomeScreenContent: View {
                             topSection
                         }
                     }
-                    .isSearching($context.isSearchFieldFocused)
-                    .searchable(text: $context.searchQuery)
-                    .compoundSearchField()
-                    .disableAutocorrection(true)
+//                    .isSearching($context.isSearchFieldFocused)
+//                    .searchable(text: $context.searchQuery)
+//                    .compoundSearchField()
+//                    .disableAutocorrection(true)
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                guard scrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = scrollView
+                if shouldAttachScrollAdapter {
+                    guard scrollView != scrollViewAdapter.scrollView else { return }
+                    scrollViewAdapter.scrollView = scrollView
+                }
             }
             .onReceive(scrollViewAdapter.didScroll) { _ in
                 updateVisibleRange()
