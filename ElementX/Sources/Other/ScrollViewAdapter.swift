@@ -86,10 +86,10 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         return shouldScrollToTopClosure(scrollView)
     }
     
-    func scrollToTop(animated: Bool = true, addPadding: Bool = false) {
+    func scrollToTop(animated: Bool = true, addTabBarPadding: Bool = false) {
         guard let scrollView = scrollView else { return }
         let yOffset = -100
-        let topOffset = CGPoint(x: 0, y: addPadding ? (yOffset - 48) : yOffset)
+        let topOffset = CGPoint(x: 0, y: addTabBarPadding ? (yOffset - 48) : yOffset)
         scrollView.setContentOffset(topOffset, animated: animated)
     }
     

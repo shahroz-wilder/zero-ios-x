@@ -17,14 +17,15 @@ public extension View {
     func conditionalSearchable(
         if condition: Bool,
         isSearching: Binding<Bool>,
+        isPresented: Binding<Bool>,
         searchQuery: Binding<String>,
         placement: SearchFieldPlacement = .automatic,
         prompt: Text? = nil
     ) -> some View {
-        if condition {
+        if condition, isPresented.wrappedValue {
             self
                 .isSearching(isSearching)
-                .searchable(text: searchQuery)
+                .searchable(text: searchQuery, isPresented: isPresented, placement: placement, prompt: prompt)
                 .compoundSearchField()
                 .disableAutocorrection(true)
         } else {

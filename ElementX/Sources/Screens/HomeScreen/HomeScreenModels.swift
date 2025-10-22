@@ -374,6 +374,7 @@ struct HomeScreenViewStateBindings {
     var filtersState: RoomListFiltersState
     var searchQuery = ""
     var isSearchFieldFocused = false
+    var isSearchFieldPresented = false
     
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
