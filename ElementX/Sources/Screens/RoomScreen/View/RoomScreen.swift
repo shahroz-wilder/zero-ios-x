@@ -66,7 +66,7 @@ struct RoomScreen: View {
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
                 }
             }
-            // .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
+            .toolbarRole(RoomHeaderView.toolbarRole)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
