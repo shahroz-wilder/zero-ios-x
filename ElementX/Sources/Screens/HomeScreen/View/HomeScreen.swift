@@ -37,7 +37,9 @@ struct HomeScreen: View {
                     searchQuery: $context.searchQuery
                 )
         }
+        // Animation to slide content up/down whenever tabs get visible
         .animation(.easeInOut(duration: 0.25), value: selectedHomeTab)
+        // To disable the home screen animation jerk whenever the search closes
         .animation(.none, value: context.isSearchFieldPresented)
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
@@ -55,14 +57,6 @@ struct HomeScreen: View {
                 .transition(.asymmetric(insertion: .move(edge: .top), removal: .move(edge: .top)))
                 .opacity(hideNavigationBar ? 0 : 1)
                 .opacity(context.isSearchFieldPresented ? 0 : 1)
-            //                    .animation(
-            //                        .easeInOut(duration: 0.25),
-            //                        value: hideNavigationBar
-            //                    )
-            //                    .animation(
-            //                        .easeInOut(duration: 0.25),
-            //                        value: context.isSearchFieldPresented
-            //                    )
         }
         .overlay(alignment: .top) {
             backToTopButton
@@ -159,18 +153,7 @@ struct HomeScreen: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 showBackToTop = false
                 hideNavigationBar = false
-                scrollViewAdapter.scrollToTop(animated: false, addTabBarPadding: showsTopTab)
                 context.send(viewAction: .onHomeTabChanged)
-            }
-        }
-        .onChange(of: selectedChildChannelsTab) { _, newTab in
-            switch newTab {
-            case .all:
-                context.filtersState.activateZeroFilter(.secondaryRooms)
-            case .gated:
-                context.filtersState.activateZeroFilter(.channels)
-            case .muted:
-                context.filtersState.activateZeroFilter(.mutedRooms)
             }
         }
     }
@@ -235,30 +218,17 @@ struct HomeScreen: View {
     private var mainContent: some View {
         ZStack(alignment: .top) {
             /// Chats Content
-            let shouldShowHomeScreenContent: Bool = switch selectedHomeTab {
-            case .chat:
-                true
-            case .channels:
-                selectedChildChannelsTab != .gated
-            default:
-                false
-            }
             HomeScreenContent(context: context,
                               scrollViewAdapter: scrollViewAdapter,
-                              shouldAttachScrollAdapter: shouldShowHomeScreenContent)
-            .opacity(shouldShowHomeScreenContent ? 1 : 0)
+                              shouldAttachScrollAdapter: selectedHomeTab == .chat)
+            .opacity(selectedHomeTab == .chat ? 1 : 0)
             
             /// Channels Content
-            let shouldShowHomeChannelsContent: Bool = switch selectedHomeTab {
-            case .channels:
-                selectedChildChannelsTab == .gated
-            default:
-                false
-            }
             HomeChannelsContent(context: context,
                                 scrollViewAdapter: scrollViewAdapter,
-                                shouldAttachScrollAdapter: shouldShowHomeChannelsContent)
-            .opacity(shouldShowHomeChannelsContent ? 1 : 0)
+                                selectedChannelsTab: selectedChildChannelsTab,
+                                shouldAttachScrollAdapter: selectedHomeTab == .channels)
+            .opacity(selectedHomeTab == .channels ? 1 : 0)
             
             /// Posts Content
             HomePostsContent(context: context,

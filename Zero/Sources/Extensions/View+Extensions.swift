@@ -22,6 +22,7 @@ public extension View {
         placement: SearchFieldPlacement = .automatic,
         prompt: Text? = nil
     ) -> some View {
+        // We only need to show search whenever user taps search icon
         if condition, isPresented.wrappedValue {
             self
                 .isSearching(isSearching)
