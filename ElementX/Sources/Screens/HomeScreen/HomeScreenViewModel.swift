@@ -219,6 +219,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             onHomeTabChanged()
         case .selectRoom(let roomIdentifier):
             // check whether a room is selected or channel
+            state.bindings.isSearchFieldFocused = false
             let isAChannel = roomIdentifier.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
             if isAChannel {
                 if let channel = state.channels.first(where: { $0.channelFullName == roomIdentifier }) {
@@ -228,6 +229,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
             }
         case .showRoomDetails(let roomIdentifier):
+            state.bindings.isSearchFieldFocused = false
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(let roomIdentifier):
             startLeaveRoomProcess(roomID: roomIdentifier)

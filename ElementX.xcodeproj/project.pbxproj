@@ -628,7 +628,7 @@
 		18E9A5192C9829970082DDA4 /* GlobalSearchScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B788615712FED326F73D3F83 /* GlobalSearchScreenViewModelProtocol.swift */; };
 		18E9A51B2C9829970082DDA4 /* HighlightedTimelineItemModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B7CC77B82C6C67DE3AD869 /* HighlightedTimelineItemModifier.swift */; };
 		18E9A51C2C9829970082DDA4 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B902EA6CD3296B0E10EE432B /* HomeScreen.swift */; };
-		18E9A51D2C9829970082DDA4 /* HomeScreenContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B4B58B79A6FA250B24A1EC /* HomeScreenContent.swift */; };
+		18E9A51D2C9829970082DDA4 /* HomeChatContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B4B58B79A6FA250B24A1EC /* HomeChatContent.swift */; };
 		18E9A51E2C9829970082DDA4 /* HomeScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653265D006E708E4E51AD64 /* HomeScreenCoordinator.swift */; };
 		18E9A51F2C9829970082DDA4 /* HomeScreenEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FEA560929DD73FFEF8C3DF /* HomeScreenEmptyStateView.swift */; };
 		18E9A5202C9829970082DDA4 /* HomeScreenInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FC33C3F6BF597E095CE9FA /* HomeScreenInviteCell.swift */; };
@@ -1609,7 +1609,7 @@
 		62811275F1ED9EA55638838E /* RoomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7728AA8046D460145EAC740 /* RoomTests.swift */; };
 		6298AB0906DDD3525CD78C6B /* KZFileWatchers in Frameworks */ = {isa = PBXBuildFile; productRef = 81DB3AB6CE996AB3954F4F03 /* KZFileWatchers */; };
 		62A7FC3A0191BC7181AA432B /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907FA4DE17DEA1A3738EFB83 /* AudioRecorder.swift */; };
-		62C5876C4254C58C2086F0DE /* HomeScreenContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B4B58B79A6FA250B24A1EC /* HomeScreenContent.swift */; };
+		62C5876C4254C58C2086F0DE /* HomeChatContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B4B58B79A6FA250B24A1EC /* HomeChatContent.swift */; };
 		63780F9DA06573E38A471ECA /* GenericCallLinkWidgetDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C202C1C7E330F124981A31 /* GenericCallLinkWidgetDriver.swift */; };
 		6386EA3C898AD1A4BC1DC8A5 /* TimelineMediaPreviewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD40B92FCF20165658296AD /* TimelineMediaPreviewModifier.swift */; };
 		639A0A27383EC655B0E81E95 /* SpaceScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459A3921046977CBF4F3C359 /* SpaceScreenViewModelProtocol.swift */; };
@@ -2228,6 +2228,8 @@
 		79C6F7342DF828F9003CEBB9 /* RoomFlowCoordinatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407C8DD85179D2DB896FC0FA /* RoomFlowCoordinatorStateMachine.swift */; };
 		79C9BA8D2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79C9BA8E2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
+		79CABA222EAA944700701B05 /* SearchRoomScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CABA212EAA944100701B05 /* SearchRoomScreen.swift */; };
+		79CABA232EAA944700701B05 /* SearchRoomScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CABA212EAA944100701B05 /* SearchRoomScreen.swift */; };
 		79CD97772EA249C400F489D9 /* HomeScreenBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */; };
 		79CD97782EA249C400F489D9 /* HomeScreenBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */; };
 		79D57E9AE03A2DC689D14EA2 /* UserSessionStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */; };
@@ -4041,6 +4043,7 @@
 		79C25B582E25AACE00936A5D /* PostImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageViewer.swift; sourceTree = "<group>"; };
 		79C25B5B2E25AB2500936A5D /* PostVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVideoPlayer.swift; sourceTree = "<group>"; };
 		79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWalletQRCode.swift; sourceTree = "<group>"; };
+		79CABA212EAA944100701B05 /* SearchRoomScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRoomScreen.swift; sourceTree = "<group>"; };
 		79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenBottomBar.swift; sourceTree = "<group>"; };
 		79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainer.swift; sourceTree = "<group>"; };
 		79D5985E2E8A43E0008F54E0 /* ZeroPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPrimaryButton.swift; sourceTree = "<group>"; };
@@ -4284,7 +4287,7 @@
 		A1C22B1B5FA3A765EADB2CC9 /* SessionVerificationStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationStateMachineTests.swift; sourceTree = "<group>"; };
 		A232D9156D225BD9FD1D0C43 /* PhotoLibraryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryPicker.swift; sourceTree = "<group>"; };
 		A243A6E6207297123E60DE48 /* TimelineItemMacContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemMacContextMenu.swift; sourceTree = "<group>"; };
-		A3B4B58B79A6FA250B24A1EC /* HomeScreenContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenContent.swift; sourceTree = "<group>"; };
+		A3B4B58B79A6FA250B24A1EC /* HomeChatContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChatContent.swift; sourceTree = "<group>"; };
 		A3FBD9C2B9A5479526920399 /* BugReportScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportScreenCoordinator.swift; sourceTree = "<group>"; };
 		A40C19719687984FD9478FBE /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		A40F1985065500F0E7F61A27 /* PollFormScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -6597,13 +6600,14 @@
 		4F43EBE458FBE634996AD7C6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				79CABA212EAA944100701B05 /* SearchRoomScreen.swift */,
 				7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */,
 				8D152423EE6CF0ECCC84091A /* BloomModifier.swift */,
 				7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */,
 				79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */,
 				7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */,
 				B902EA6CD3296B0E10EE432B /* HomeScreen.swift */,
-				A3B4B58B79A6FA250B24A1EC /* HomeScreenContent.swift */,
+				A3B4B58B79A6FA250B24A1EC /* HomeChatContent.swift */,
 				C0FEA560929DD73FFEF8C3DF /* HomeScreenEmptyStateView.swift */,
 				D8FC33C3F6BF597E095CE9FA /* HomeScreenInviteCell.swift */,
 				A103580EBA06155B1343EF16 /* HomeScreenKnockedCell.swift */,
@@ -10972,7 +10976,7 @@
 				18E9A51B2C9829970082DDA4 /* HighlightedTimelineItemModifier.swift in Sources */,
 				18E9A51C2C9829970082DDA4 /* HomeScreen.swift in Sources */,
 				7996162B2E09EDBC008E73C4 /* RoomPowerLevelsProxyMock.swift in Sources */,
-				18E9A51D2C9829970082DDA4 /* HomeScreenContent.swift in Sources */,
+				18E9A51D2C9829970082DDA4 /* HomeChatContent.swift in Sources */,
 				18E9A51E2C9829970082DDA4 /* HomeScreenCoordinator.swift in Sources */,
 				796CD4402E536133000D6078 /* SpaceScreenCoordinator.swift in Sources */,
 				79C25B5C2E25AB2D00936A5D /* PostVideoPlayer.swift in Sources */,
@@ -11027,6 +11031,7 @@
 				796CD43F2E53612F000D6078 /* SpaceScreenModels.swift in Sources */,
 				7944A7682D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */,
 				18E9A53B2C9829970082DDA4 /* InviteUsersScreen.swift in Sources */,
+				79CABA222EAA944700701B05 /* SearchRoomScreen.swift in Sources */,
 				18E9A53C2C9829970082DDA4 /* InviteUsersScreenCoordinator.swift in Sources */,
 				79EF67152E2FB41F00D86B0F /* Client.swift in Sources */,
 				18E9A53D2C9829970082DDA4 /* InviteUsersScreenModels.swift in Sources */,
@@ -12266,7 +12271,7 @@
 				E8C4D9F93F0DCED211D5F187 /* HTMLParserStyle.swift in Sources */,
 				0C1E537A49ABB386F7554D4A /* HighlightedTimelineItemModifier.swift in Sources */,
 				964B9D2EC38C488C360CE0C9 /* HomeScreen.swift in Sources */,
-				62C5876C4254C58C2086F0DE /* HomeScreenContent.swift in Sources */,
+				62C5876C4254C58C2086F0DE /* HomeChatContent.swift in Sources */,
 				7996163B2E0EA313008E73C4 /* ZWalletNFTs.swift in Sources */,
 				8CC12086CBF91A7E10CDC205 /* HomeScreenCoordinator.swift in Sources */,
 				77BB228AEA861E50FFD6A228 /* HomeScreenEmptyStateView.swift in Sources */,
@@ -12969,6 +12974,7 @@
 				BB784A02BADB03C820617A46 /* TextRoomTimelineItem.swift in Sources */,
 				53F1196F9C69512306A2693F /* TextRoomTimelineItemContent.swift in Sources */,
 				D8CFA0EE46376F9FF04EEE45 /* TextRoomTimelineView.swift in Sources */,
+				79CABA232EAA944700701B05 /* SearchRoomScreen.swift in Sources */,
 				790A47512E6B061E0033604D /* ZeroWalletChainsUtil.swift in Sources */,
 				793899D42DF0ECB600980991 /* HorizontalDivider.swift in Sources */,
 				71643093F87153F633A1B025 /* ThreadDecorator.swift in Sources */,
@@ -13445,7 +13451,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.22.7;
+				MARKETING_VERSION = 0.22.8;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13481,7 +13487,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.22.7;
+				MARKETING_VERSION = 0.22.8;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

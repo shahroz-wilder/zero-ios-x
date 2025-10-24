@@ -87,11 +87,11 @@ struct HomeScreenRoomCell: View {
                     .foregroundColor(room.badges.isDotShown ? .compound.textPrimary : .compound.textSecondary)
                     .lineLimit(1)
                 
-                if showProBadge {
-                    CompoundIcon(\.verified, size: .small, relativeTo: .zero.bodyLG)
-                        .foregroundStyle(.zero.bgAccentRest)
-                        .padding(.horizontal, 6)
-                }
+                CompoundIcon(\.verified, size: .small, relativeTo: .zero.bodyLG)
+                    .foregroundStyle(.zero.bgAccentRest)
+                    .padding(.horizontal, 6)
+                    .opacity(showProBadge ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.25), value: showProBadge)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             

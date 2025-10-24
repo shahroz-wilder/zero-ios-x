@@ -25,24 +25,7 @@ struct HomeScreenRoomList: View {
     
     @ViewBuilder
     private var content: some View {
-        let roomsList: [HomeScreenRoom] = {
-            let list = context.viewState.visibleRooms
-//            if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
-//                switch context.filtersState.activeZeroFilter {
-//                case .primaryRooms:
-//                    return list.filter { $0.isPrimary }
-//                case .secondaryRooms:
-//                    return list.filter { $0.isSecondary }
-//                case .mutedRooms:
-//                    return list.filter { $0.isMuted }
-//                case .channels:
-//                    return list
-//                }
-//            } else {
-//                return list
-//            }
-            return list
-        }()
+        let roomsList = context.viewState.visibleRooms
         
         let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
             "execution": "HomeScreenRoomList",
@@ -85,19 +68,19 @@ struct HomeScreenRoomList: View {
                             }
                         }
                         
-                        if room.isFavourite {
-                            Button {
-                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
-                            } label: {
-                                Label(L10n.commonFavourited, icon: \.favouriteSolid)
-                            }
-                        } else {
-                            Button {
-                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
-                            } label: {
-                                Label(L10n.commonFavourite, icon: \.favourite)
-                            }
-                        }
+//                        if room.isFavourite {
+//                            Button {
+//                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
+//                            } label: {
+//                                Label(L10n.commonFavourited, icon: \.favouriteSolid)
+//                            }
+//                        } else {
+//                            Button {
+//                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
+//                            } label: {
+//                                Label(L10n.commonFavourite, icon: \.favourite)
+//                            }
+//                        }
                         
                         Button {
                             context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
@@ -105,19 +88,19 @@ struct HomeScreenRoomList: View {
                             Label(L10n.commonSettings, icon: \.settings)
                         }
                         
-                        if context.viewState.reportRoomEnabled {
-                            Button(role: .destructive) {
-                                context.send(viewAction: .reportRoom(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.actionReportRoom, icon: \.chatProblem)
-                            }
-                        }
-                        
-                        //                        Button(role: .destructive) {
-                        //                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-                        //                        } label: {
-                        //                            Label(L10n.actionLeaveRoom, icon: \.leave)
-                        //                        }
+//                        if context.viewState.reportRoomEnabled {
+//                            Button(role: .destructive) {
+//                                context.send(viewAction: .reportRoom(roomIdentifier: room.id))
+//                            } label: {
+//                                Label(L10n.actionReportRoom, icon: \.chatProblem)
+//                            }
+//                        }
+//                        
+//                        Button(role: .destructive) {
+//                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
+//                        } label: {
+//                            Label(L10n.actionLeaveRoom, icon: \.leave)
+//                        }
                     }
                 }
             }

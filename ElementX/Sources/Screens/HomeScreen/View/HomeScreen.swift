@@ -15,7 +15,6 @@ struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
-    
     @State private var selectedHomeTab: HomeTab = .chat
     
     @State private var selectedChildChannelsTab: HomeChannelsTab = .all
@@ -24,18 +23,11 @@ struct HomeScreen: View {
     
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
+    @State private var roomSearchTriggered = false
     
     var body: some View {
         ZStack {
             mainContent
-                .conditionalSearchable(
-                    if: (
-                        selectedHomeTab == .chat || selectedHomeTab == .channels
-                    ),
-                    isSearching: $context.isSearchFieldFocused,
-                    isPresented: $context.isSearchFieldPresented,
-                    searchQuery: $context.searchQuery
-                )
         }
         // Animation to slide content up/down whenever tabs get visible
         .animation(.easeInOut(duration: 0.25), value: selectedHomeTab)
@@ -65,10 +57,7 @@ struct HomeScreen: View {
         .overlay(alignment: .top) {
             topBarGradientOverlay
                 .opacity(hideNavigationBar ? 1 : 0)
-                .animation(
-                    .easeInOut(duration: 0.25),
-                    value: hideNavigationBar
-                )
+                .animation(.easeInOut(duration: 0.25), value: hideNavigationBar)
         }
         .overlay(alignment: .bottom) {
             HomeScreenBottomBar(
@@ -78,15 +67,10 @@ struct HomeScreen: View {
                     homeTab in self.selectedHomeTab = homeTab
                 })
         }
-        .overlay(alignment: .bottom) {
+        .overlay(alignment: .bottomTrailing) {
             if !context.isSearchFieldFocused {
                 if let action = floatingButtonAction {
                     FloatingActionButton(onTap: action)
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .bottomTrailing
-                        )
                         .padding(.bottom, 70)
                 }
             }
@@ -95,19 +79,17 @@ struct HomeScreen: View {
             HomeUserRewardsTooltip(context: context)
                 .offset(x: 18, y: 90)
                 .ignoresSafeArea()
-                .opacity(
-                    context.viewState.showNewUserRewardsIntimation ? 1 : 0
-                )
-                .animation(
-                    .easeInOut(duration: 0.3),
-                    value: context.viewState.showNewUserRewardsIntimation
-                )
+                .opacity(context.viewState.showNewUserRewardsIntimation ? 1 : 0)
+                .animation(.easeInOut(duration: 0.3), value: context.viewState.showNewUserRewardsIntimation)
         }
         .sheet(isPresented: $context.showEarningsClaimedSheet) {
             ClaimedEarningsSheetContent(context: context)
         }
         .sheet(isPresented: $context.showStakePoolSheet) {
             StakePoolSheetContent(context: context)
+        }
+        .sheet(isPresented: $roomSearchTriggered) {
+            SearchRoomScreen(context: context)
         }
         .onReceive(
             scrollViewAdapter.isAtTopEdge.removeDuplicates()
@@ -154,6 +136,17 @@ struct HomeScreen: View {
                 showBackToTop = false
                 hideNavigationBar = false
                 context.send(viewAction: .onHomeTabChanged)
+            }
+        }
+        .onChange(of: roomSearchTriggered) { _, value in
+            if !value {
+                context.isSearchFieldPresented = false
+                context.searchQuery = ""
+            }
+        }
+        .onChange(of: context.isSearchFieldFocused) { _, value in
+            if !value {
+                roomSearchTriggered = false
             }
         }
     }
@@ -218,9 +211,10 @@ struct HomeScreen: View {
     private var mainContent: some View {
         ZStack(alignment: .top) {
             /// Chats Content
-            HomeScreenContent(context: context,
-                              scrollViewAdapter: scrollViewAdapter,
-                              shouldAttachScrollAdapter: selectedHomeTab == .chat)
+            HomeChatContent(context: context,
+                            scrollViewAdapter: scrollViewAdapter,
+                            shouldAttachScrollAdapter: selectedHomeTab == .chat,
+                            isSearchableContent: false)
             .opacity(selectedHomeTab == .chat ? 1 : 0)
             
             /// Channels Content
@@ -282,10 +276,7 @@ struct HomeScreen: View {
         if selectedHomeTab == HomeTab.chat || selectedHomeTab == HomeTab.channels {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    context.isSearchFieldPresented = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        context.isSearchFieldFocused = true
-                    }
+                    roomSearchTriggered = true
                 } label: {
                     CompoundIcon(\.search)
                         .tint(.compound.iconSecondary)

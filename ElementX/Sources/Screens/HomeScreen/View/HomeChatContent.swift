@@ -10,13 +10,14 @@ import Compound
 import SentrySwiftUI
 import SwiftUI
 
-struct HomeScreenContent: View {
+struct HomeChatContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
     let shouldAttachScrollAdapter: Bool
+    let isSearchableContent: Bool
     
     var body: some View {
         roomList
@@ -61,10 +62,10 @@ struct HomeScreenContent: View {
                             topSection
                         }
                     }
-//                    .isSearching($context.isSearchFieldFocused)
-//                    .searchable(text: $context.searchQuery)
-//                    .compoundSearchField()
-//                    .disableAutocorrection(true)
+                    .conditionalSearchable(if: isSearchableContent,
+                                           isSearching: $context.isSearchFieldFocused,
+                                           isPresented: $context.isSearchFieldPresented,
+                                           searchQuery: $context.searchQuery)
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
