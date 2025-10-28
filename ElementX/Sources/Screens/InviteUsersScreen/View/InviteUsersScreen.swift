@@ -160,7 +160,8 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
                                           selectedUsers: .init([]),
                                           roomType: .draft,
                                           userDiscoveryService: userDiscoveryService,
-                                          userIndicatorController: UserIndicatorControllerMock())
+                                          userIndicatorController: UserIndicatorControllerMock(),
+                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static var previews: some View {
