@@ -17,6 +17,7 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
     @State private var selectedHomeTab: HomeTab = .chat
+    @State private var selectedChatTab: HomeChatTab = .all
     
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
@@ -25,7 +26,7 @@ struct HomeScreen: View {
         ZStack {
             switch selectedHomeTab {
             case .chat:
-                HomeChatContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                HomeChatContent(context: context, selectedChatTab: $selectedChatTab, scrollViewAdapter: scrollViewAdapter)
                     .transition(.asymmetric(insertion: .opacity, removal: .opacity))
             case .channels:
                 HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
@@ -65,7 +66,10 @@ struct HomeScreen: View {
         .overlay(alignment: .bottom) {
             HomeScreenBottomBar(context: context,
                                 selectedTab: $selectedHomeTab,
-                                onTabSelected: { homeTab in self.selectedHomeTab = homeTab })
+                                onTabSelected: { homeTab in
+                self.selectedHomeTab = homeTab
+                self.selectedChatTab = .all
+            })
         }
         .overlay(alignment: .bottom) {
             if !context.isSearchFieldFocused {

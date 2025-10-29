@@ -20,14 +20,14 @@ struct RoomListFiltersEmptyStateView: View {
 //                return L10n.screenRoomlistFilterPeopleEmptyStateTitle
             case .rooms:
                 return L10n.screenRoomlistFilterRoomsEmptyStateTitle
-            case .channels:
-                return "You are not in any channel yet"
+//            case .channels:
+//                return "You are not in any channel yet"
             case .favourites:
                 return L10n.screenRoomlistFilterFavouritesEmptyStateTitle
-            case .invites:
-                return L10n.screenRoomlistFilterInvitesEmptyStateTitle
-            case .lowPriority:
-                return L10n.screenRoomlistFilterLowPriorityEmptyStateTitle
+//            case .invites:
+//                return L10n.screenRoomlistFilterInvitesEmptyStateTitle
+//            case .lowPriority:
+//                return L10n.screenRoomlistFilterLowPriorityEmptyStateTitle
             }
         }
         return L10n.screenRoomlistFilterMixedEmptyStateTitle

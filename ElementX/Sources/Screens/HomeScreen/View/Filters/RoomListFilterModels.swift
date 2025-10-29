@@ -27,10 +27,10 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 //    case unreads
 //    case people
     case rooms
-    case channels
+//    case channels
     case favourites
-    case invites
-    case lowPriority
+//    case invites
+//    case lowPriority
     
     static var availableFilters: [RoomListFilter] {
         RoomListFilter.allCases
@@ -41,17 +41,18 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 //        case .people:
 //            return L10n.screenRoomlistFilterPeople
         case .rooms:
-            return L10n.screenRoomlistFilterRooms
-        case .channels:
-            return "Channels"
+//            return L10n.screenRoomlistFilterRooms
+            return "Unread"
+//        case .channels:
+//            return "Channels"
 //        case .unreads:
 //            return L10n.screenRoomlistFilterUnreads
         case .favourites:
             return L10n.screenRoomlistFilterFavourites
-        case .invites:
-            return L10n.screenRoomlistFilterInvites
-        case .lowPriority:
-            return L10n.screenRoomlistFilterLowPriority
+//        case .invites:
+//            return L10n.screenRoomlistFilterInvites
+//        case .lowPriority:
+//            return L10n.screenRoomlistFilterLowPriority
         }
     }
     
@@ -60,19 +61,21 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 //        case .people:
 //            return [.rooms, .invites]
         case .rooms:
-            return [.channels, .invites]
-        case .channels:
-            return [.rooms, .invites, .favourites]
+//            return [.channels, .invites]
+            return []
+//        case .channels:
+//            return [.rooms, .invites, .favourites]
 //        case .unreads:
 //            return [.invites]
         case .favourites:
             // When we will have Low Priority we may need to return it here
-            return [.channels, .invites]
-        case .invites:
+//            return [.channels, .invites]
+            return []
+//        case .invites:
 //            return [.rooms, .people, .unreads, .favourites]
-            return [.rooms, .channels, .favourites]
-        case .lowPriority:
-            return [.invites, .favourites]
+//            return [.rooms, .channels, .favourites]
+//        case .lowPriority:
+//            return [.invites, .favourites]
         }
     }
     
@@ -83,17 +86,17 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .rooms:
 //            return .all(filters: [.category(expect: .group), .joined])
             return .all(filters: [.unread, .joined])
-        case .channels:
-            return .all(filters: [.normalizedMatchRoomName(pattern: ZeroContants.ZERO_CHANNEL_PREFIX), .joined])
+//        case .channels:
+//            return .all(filters: [.normalizedMatchRoomName(pattern: ZeroContants.ZERO_CHANNEL_PREFIX), .joined])
 //        case .unreads:
 //            return .all(filters: [.unread, .joined])
         case .favourites:
             return .all(filters: [.favourite, .joined])
-        case .invites:
-            return .invite
-        case .lowPriority:
-            // Note: When not activated, the setFilter method automatically applies the .nonLowPriority filter.
-            return .all(filters: [.lowPriority, .joined])
+//        case .invites:
+//            return .invite
+//        case .lowPriority:
+//            // Note: When not activated, the setFilter method automatically applies the .nonLowPriority filter.
+//            return .all(filters: [.lowPriority, .joined])
         }
     }
 }
@@ -112,9 +115,9 @@ struct RoomListFiltersState {
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
         
-        if !appSettings.lowPriorityFilterEnabled {
-            availableFilters.remove(.lowPriority)
-        }
+//        if !appSettings.lowPriorityFilterEnabled {
+//            availableFilters.remove(.lowPriority)
+//        }
         
         for filter in activeFilters {
             availableFilters.remove(filter)
@@ -139,7 +142,12 @@ struct RoomListFiltersState {
         activeFilters.append(filter)
     }
     
+    mutating func activateMatrixFilter(_ filter: RoomListFilter) {
+        activeFilters = [filter]
+    }
+    
     mutating func activateZeroFilter(_ filter: ZeroRoomListFilter) {
+        activeFilters.removeAll()
         activeZeroFilter = filter
     }
     

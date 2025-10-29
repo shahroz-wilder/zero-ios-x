@@ -10,10 +10,17 @@ import Compound
 import SentrySwiftUI
 import SwiftUI
 
+enum HomeChatTab: CaseIterable {
+    case all
+    case unread
+    case favourite
+}
+
 struct HomeChatContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: HomeScreenViewModel.Context
+    var selectedChatTab: Binding<HomeChatTab>
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
@@ -21,6 +28,16 @@ struct HomeChatContent: View {
             .sentryTrace("\(Self.self)")
             .task {
                 context.send(viewAction: .loadRewards)
+            }
+            .onChange(of: selectedChatTab.wrappedValue) { _, newValue in
+                switch newValue {
+                case .all:
+                    context.filtersState.clearFilters()
+                case .unread:
+                    context.filtersState.activateMatrixFilter(.rooms)
+                case .favourite:
+                    context.filtersState.activateMatrixFilter(.favourites)
+                }
             }
     }
     
@@ -130,10 +147,11 @@ struct HomeChatContent: View {
         // An empty VStack causes glitches within the room list
         if context.viewState.shouldShowFilters || context.viewState.shouldShowBanner {
             VStack(spacing: 0) {
-//                if context.viewState.shouldShowFilters {
+                if context.viewState.shouldShowFilters {
 //                    RoomListFiltersView(state: $context.filtersState)
-//                }
-//
+                    customChatFiltersView
+                }
+
                 // Only showing banner in case user needs to setup recovery key for the first time
                 if case let .show(state) = context.viewState.securityBannerMode, state == .setUpRecovery {
                     HomeScreenRecoveryKeyConfirmationBanner(state: state, context: context)
@@ -143,6 +161,22 @@ struct HomeChatContent: View {
             }
             .background(Color.zero.bgCanvasDefault)
         }
+    }
+    
+    private var customChatFiltersView: some View {
+        SimpleFixedTabButtonsView(tabs: HomeChatTab.allCases,
+                                  selectedTab: selectedChatTab.wrappedValue,
+                                  tabTitle: { tab in
+            switch tab {
+            case .all: return "All"
+            case .unread: return "Unread"
+            case .favourite: return "Favourite"
+            }
+        },
+                                  onTabSelected: { tab in
+            selectedChatTab.wrappedValue = tab
+        })
+        .id("chat-tabs")
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
