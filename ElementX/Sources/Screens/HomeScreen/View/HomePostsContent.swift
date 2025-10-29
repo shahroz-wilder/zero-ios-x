@@ -18,13 +18,12 @@ struct HomePostsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    let shouldAttachScrollAdapter: Bool
-    let selectedFeedTab: HomePostsTab
+    @State private var selectedTab: HomePostsTab = .following
     
     var body: some View {
         postList
             .task {
-                context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedFeedTab == .following))
+                context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
             }
     }
     
@@ -32,46 +31,48 @@ struct HomePostsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    switch context.viewState.postListMode {
-                    case .skeletons:
-                        LazyVStack(spacing: 0) {
-                            ForEach(context.viewState.visiblePosts) { post in
-                                VStack {
-                                    HomeScreenPostCell(post: post)
-                                    .padding(.all, 16)
-                                    Divider()
-                                }
-                                .redacted(reason: .placeholder)
-                                .shimmer()
-                            }
-                        }
-                        .disabled(true)
-                    case .empty:
-                        HomeContentEmptyView(message: "No posts")
-                    case .posts:
-                        LazyVStack(spacing: 0) {
-                            HomeScreenPostList(context: context)
-                            
-                            if context.viewState.canLoadMorePosts {
-                                ProgressView()
-                                    .padding()
-                                    .onAppear {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                            context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedFeedTab == .following))
-                                        }
+                    Section {
+                        switch context.viewState.postListMode {
+                        case .skeletons:
+                            LazyVStack(spacing: 0) {
+                                ForEach(context.viewState.visiblePosts) { post in
+                                    VStack {
+                                        HomeScreenPostCell(post: post)
+                                        .padding(.all, 16)
+                                        Divider()
                                     }
+                                    .redacted(reason: .placeholder)
+                                    .shimmer()
+                                }
                             }
-                            /// Bottom space to keep content above `HomeScreenBottomBar`
-                            HomeTabBottomSpace()
+                            .disabled(true)
+                        case .empty:
+                            HomeContentEmptyView(message: "No posts")
+                        case .posts:
+                            LazyVStack(spacing: 0) {
+                                HomeScreenPostList(context: context)
+                                
+                                if context.viewState.canLoadMorePosts {
+                                    ProgressView()
+                                        .padding()
+                                        .onAppear {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                                context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
+                                            }
+                                        }
+                                }
+                                /// Bottom space to keep content above `HomeScreenBottomBar`
+                                HomeTabBottomSpace()
+                            }
                         }
+                    } header: {
+                        topSection
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                if shouldAttachScrollAdapter {
-                    guard scrollView != scrollViewAdapter.scrollView else { return }
-                    scrollViewAdapter.scrollView = scrollView
-                }
+                guard scrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = scrollView
             }
             .scrollDismissesKeyboard(.immediately)
             .scrollDisabled(context.viewState.postListMode == .skeletons)
@@ -79,8 +80,24 @@ struct HomePostsContent: View {
             .animation(.elementDefault, value: context.viewState.postListMode)
             .animation(.none, value: context.viewState.visiblePosts)
             .refreshable {
-                context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: selectedFeedTab == .following))
+                context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: selectedTab == .following))
             }
         }
+    }
+    
+    @ViewBuilder
+    private var topSection: some View {
+        SimpleFixedTabButtonsView(tabs: HomePostsTab.allCases,
+                             selectedTab: selectedTab,
+                             tabTitle: { tab in
+            switch tab {
+            case .following: return "Following"
+            case .all: return "Everything"
+            }
+        },
+                             onTabSelected: { tab in
+            selectedTab = tab
+            context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
+        })
     }
 }

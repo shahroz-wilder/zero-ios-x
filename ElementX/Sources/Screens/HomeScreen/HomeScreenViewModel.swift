@@ -183,7 +183,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
-        let activeZeroFilters = context.$viewState.map(\.bindings.filtersState.activeZeroFilter)
         isSearchFieldFocused
             .combineLatest(searchQuery, activeFilters)
             .removeDuplicates { $0 == $1 }
@@ -194,12 +193,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.updateFilter()
                 }
-            }
-            .store(in: &cancellables)
-        activeZeroFilters
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.updateFilter()
             }
             .store(in: &cancellables)
         
@@ -219,7 +212,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             onHomeTabChanged()
         case .selectRoom(let roomIdentifier):
             // check whether a room is selected or channel
-            state.bindings.isSearchFieldFocused = false
             let isAChannel = roomIdentifier.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
             if isAChannel {
                 if let channel = state.channels.first(where: { $0.channelFullName == roomIdentifier }) {
@@ -229,7 +221,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
             }
         case .showRoomDetails(let roomIdentifier):
-            state.bindings.isSearchFieldFocused = false
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(let roomIdentifier):
             startLeaveRoomProcess(roomID: roomIdentifier)
@@ -497,17 +488,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 .filter { $0.displayName.containsIgnoringCase(context.searchQuery) }
                 .map { $0.mapToHomeScreenRoom() }
             rooms.append(contentsOf: gatedChannels)
-        } else {
-            switch context.filtersState.activeZeroFilter {
-            case .primaryRooms:
-                rooms = rooms.filter { $0.isPrimary }
-            case .secondaryRooms:
-                rooms = rooms.filter { $0.isSecondary }
-            case .mutedRooms:
-                rooms = rooms.filter { $0.isMuted }
-            case .channels:
-                rooms = rooms.filter { $0.isAChannel }
-            }
         }
         
         state.rooms = rooms.uniqued(on: { $0.id })

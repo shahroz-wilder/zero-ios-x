@@ -56,9 +56,6 @@ struct SimpleFixedTabButtonsView<Tab: Hashable>: View {
     let onTabSelected: (Tab) -> Void
     
     var showDivider: Bool = false
-    var animateView: Bool = true
-    
-    @State private var isShown = false
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {

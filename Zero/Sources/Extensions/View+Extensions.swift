@@ -12,26 +12,6 @@ public extension View {
             .scrollContentBackground(.hidden)
             .background(backgroundColor.ignoresSafeArea())
     }
-    
-    @ViewBuilder
-    func conditionalSearchable(
-        if condition: Bool,
-        isSearching: Binding<Bool>,
-        isPresented: Binding<Bool>,
-        searchQuery: Binding<String>,
-        placement: SearchFieldPlacement = .automatic,
-        prompt: Text? = nil
-    ) -> some View {
-        if condition {
-            self
-                .isSearching(isSearching)
-                .searchable(text: searchQuery, isPresented: isPresented, placement: placement, prompt: prompt)
-                .compoundSearchField()
-                .disableAutocorrection(true)
-        } else {
-            self
-        }
-    }
 }
 
 extension TextField {

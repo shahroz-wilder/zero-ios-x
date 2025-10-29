@@ -20,9 +20,7 @@ struct HomeChannelsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    let selectedChannelsTab: HomeChannelsTab
-    let shouldAttachScrollAdapter: Bool
-    
+    @State private var selectedChannelsTab: HomeChannelsTab = .all
     var showChannelList: Bool {
         selectedChannelsTab == .gated && !context.isSearchFieldFocused && context.searchQuery.isEmpty
     }
@@ -55,34 +53,44 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    switch context.viewState.channelsListMode {
-                    case .skeletons:
-                        LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach(context.viewState.visibleChannels) { channel in
-                                HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
-                                    .redacted(reason: .placeholder)
-                                    .shimmer()
+                    Section {
+                        switch context.viewState.channelsListMode {
+                        case .skeletons:
+                            LazyVStack(alignment: .leading, spacing: 0) {
+                                ForEach(context.viewState.visibleChannels) { channel in
+                                    HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
+                                        .redacted(reason: .placeholder)
+                                        .shimmer()
+                                }
                             }
+                            .disabled(true)
+                        case .empty:
+                            HomeContentEmptyView(message: "No channels")
+                        case .channels:
+                            LazyVStack(alignment: .leading, spacing: 0) {
+                                ForEach(context.viewState.visibleChannels, id: \.id) { channel in
+                                    HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
+                                        context.send(viewAction: .channelTapped(channel))
+                                    }, mediaProvider: context.mediaProvider)
+                                }
+                                
+                                /// Bottom space to keep content above `HomeScreenBottomBar`
+                                HomeTabBottomSpace()
+                            }
+                            .isSearching($context.isSearchFieldFocused)
+                            .searchable(text: $context.searchQuery)
+                            .compoundSearchField()
+                            .disableAutocorrection(true)
                         }
-                        .disabled(true)
-                    case .empty:
-                        HomeContentEmptyView(message: "No channels")
-                    case .channels:
-                        LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach(context.viewState.visibleChannels, id: \.id) { channel in
-                                HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
-                                    context.send(viewAction: .channelTapped(channel))
-                                }, mediaProvider: context.mediaProvider)
-                            }
-                            
-                            /// Bottom space to keep content above `HomeScreenBottomBar`
-                            HomeTabBottomSpace()
+                    } header: {
+                        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+                            topSection
                         }
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                if shouldAttachScrollAdapter, showChannelList {
+                if showChannelList {
                     guard scrollView != scrollViewAdapter.scrollView else { return }
                     scrollViewAdapter.scrollView = scrollView
                 }
@@ -99,36 +107,46 @@ struct HomeChannelsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    switch context.viewState.roomListMode {
-                    case .skeletons:
-                        LazyVStack(spacing: 0) {
-                            ForEach(context.viewState.visibleRooms) { room in
-                                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
-                                    .redacted(reason: .placeholder)
-                                    .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
+                    Section {
+                        switch context.viewState.roomListMode {
+                        case .skeletons:
+                            LazyVStack(spacing: 0) {
+                                ForEach(context.viewState.visibleRooms) { room in
+                                    HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
+                                        .redacted(reason: .placeholder)
+                                        .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
+                                }
                             }
+                            .disabled(true)
+                            .accessibilityRepresentation {
+                                Text(L10n.commonLoading)
+                            }
+                        case .empty:
+                            HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
+                                HomeScreenEmptyStateView(context: context)
+                                    .layoutPriority(1)
+                            }
+                        case .rooms:
+                            LazyVStack(spacing: 0) {
+                                HomeScreenRoomList(context: context, fromChannelsTabs: true)
+                                
+                                /// Bottom space to keep content above `HomeScreenBottomBar`
+                                HomeTabBottomSpace()
+                            }
+                            .isSearching($context.isSearchFieldFocused)
+                            .searchable(text: $context.searchQuery)
+                            .compoundSearchField()
+                            .disableAutocorrection(true)
                         }
-                        .disabled(true)
-                        .accessibilityRepresentation {
-                            Text(L10n.commonLoading)
-                        }
-                    case .empty:
-                        HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
-                            HomeScreenEmptyStateView(context: context)
-                                .layoutPriority(1)
-                        }
-                    case .rooms:
-                        LazyVStack(spacing: 0) {
-                            HomeScreenRoomList(context: context, fromChannelsTabs: true)
-                            
-                            /// Bottom space to keep content above `HomeScreenBottomBar`
-                            HomeTabBottomSpace()
+                    } header: {
+                        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+                            topSection
                         }
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                if shouldAttachScrollAdapter, !showChannelList {
+                if !showChannelList {
                     guard scrollView != scrollViewAdapter.scrollView else { return }
                     scrollViewAdapter.scrollView = scrollView
                 }
@@ -174,6 +192,22 @@ struct HomeChannelsContent: View {
             .animation(.elementDefault, value: context.viewState.roomListMode)
             .animation(.none, value: context.viewState.visibleRooms)
         }
+    }
+    
+    private var topSection: some View {
+        SimpleFixedTabButtonsView(tabs: HomeChannelsTab.allCases,
+                                  selectedTab: selectedChannelsTab,
+                                  tabTitle: { tab in
+            switch tab {
+            case .all: return "Channels"
+            case .gated: return "Gated"
+            case .muted: return "Muted"
+            }
+        },
+                                  onTabSelected: { tab in
+            selectedChannelsTab = tab
+        })
+        .id("channel-tabs")
     }
     
     /// FOR ROOMS LIST

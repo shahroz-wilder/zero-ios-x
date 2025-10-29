@@ -15,24 +15,33 @@ struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
-    @State private var selectedHomeTab: HomeTab = .chat
     
-    @State private var selectedChildChannelsTab: HomeChannelsTab = .all
-    @State private var selectedChildFeedsTab: HomePostsTab = .following
-    @State private var selectedChildNotificationsTab: HomeNotificationsTab = .all
+    @State private var selectedHomeTab: HomeTab = .chat
     
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
-    @State private var roomSearchTriggered = false
-    
+
     var body: some View {
         ZStack {
-            mainContent
+            switch selectedHomeTab {
+            case .chat:
+                HomeChatContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+            case .channels:
+                HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+            case .feed:
+                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+            case .notifications:
+                HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+            case .wallet:
+                HomeWalletContent(context: context)
+                    .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+            }
         }
-        // Animation to slide content up/down whenever tabs get visible
-        .animation(.easeInOut(duration: 0.25), value: selectedHomeTab)
-        // To disable the home screen animation jerk whenever the search closes
-        .animation(.none, value: context.isSearchFieldPresented)
+        .animation(.easeInOut(duration: 0.2), value: selectedHomeTab)
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
@@ -44,12 +53,6 @@ struct HomeScreen: View {
         .track(screen: .Home)
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
-        .safeAreaInset(edge: .top) {
-            topTabView
-                .transition(.asymmetric(insertion: .move(edge: .top), removal: .move(edge: .top)))
-                .opacity(hideNavigationBar ? 0 : 1)
-                .opacity(context.isSearchFieldPresented ? 0 : 1)
-        }
         .overlay(alignment: .top) {
             backToTopButton
                 .ignoresSafeArea(.container, edges: .top)
@@ -60,17 +63,15 @@ struct HomeScreen: View {
                 .animation(.easeInOut(duration: 0.25), value: hideNavigationBar)
         }
         .overlay(alignment: .bottom) {
-            HomeScreenBottomBar(
-                context: context,
-                selectedTab: $selectedHomeTab,
-                onTabSelected: {
-                    homeTab in self.selectedHomeTab = homeTab
-                })
+            HomeScreenBottomBar(context: context,
+                                selectedTab: $selectedHomeTab,
+                                onTabSelected: { homeTab in self.selectedHomeTab = homeTab })
         }
-        .overlay(alignment: .bottomTrailing) {
+        .overlay(alignment: .bottom) {
             if !context.isSearchFieldFocused {
                 if let action = floatingButtonAction {
                     FloatingActionButton(onTap: action)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                         .padding(.bottom, 70)
                 }
             }
@@ -88,28 +89,20 @@ struct HomeScreen: View {
         .sheet(isPresented: $context.showStakePoolSheet) {
             StakePoolSheetContent(context: context)
         }
-        .sheet(isPresented: $roomSearchTriggered) {
-            SearchRoomScreen(context: context)
-        }
-        .onReceive(
-            scrollViewAdapter.isAtTopEdge.removeDuplicates()
-        ) { isAtTop in
-            guard showBackToTop != isAtTop else { return }
-            
-            // Use a task to debounce updates
-            Task { @MainActor in
+        .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { isAtTop in
+            if showBackToTop == isAtTop {
+                return
+            }
+            withAnimation(.easeInOut(duration: 0.25)) {
                 showBackToTop = isAtTop
             }
         }
-        .onReceive(
-            scrollViewAdapter.scrollDirection.removeDuplicates()
-        ) { direction in
+        .onReceive(scrollViewAdapter.scrollDirection.removeDuplicates()) { direction in
             let shouldHideNavBar = scrollViewAdapter.isAtTopEdge.value && direction == .down
             
             guard shouldHideNavBar != hideNavigationBar else { return }
             
-            // Use a task to debounce updates
-            Task { @MainActor in
+            withAnimation(.easeInOut(duration: 0.25)) {
                 hideNavigationBar = shouldHideNavBar
             }
         }
@@ -117,130 +110,20 @@ struct HomeScreen: View {
             switch newValue {
             case .show(let state):
                 if state == .recoveryOutOfSync {
-                    DispatchQueue.main
-                        .asyncAfter(deadline: .now() + 2, execute: {
-                            context.send(viewAction: .setupRecovery)
-                        })
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                        context.send(viewAction: .setupRecovery)
+                    })
                 }
             default:
                 break
             }
         }
         .onChange(of: selectedHomeTab) { _, newTab in
-            // Reset other tabs to initial position
-            selectedChildChannelsTab = .all
-            selectedChildFeedsTab = .following
-            selectedChildNotificationsTab = .all
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 showBackToTop = false
                 hideNavigationBar = false
                 context.send(viewAction: .onHomeTabChanged)
             }
-        }
-        .onChange(of: roomSearchTriggered) { _, value in
-            if !value {
-                context.isSearchFieldPresented = false
-                context.searchQuery = ""
-            }
-        }
-        .onChange(of: context.isSearchFieldFocused) { _, value in
-            if !value {
-                roomSearchTriggered = false
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var topTabView: some View {
-        Group {
-            switch selectedHomeTab {
-            case .channels:
-                SimpleFixedTabButtonsView(tabs: HomeChannelsTab.allCases,
-                                          selectedTab: selectedChildChannelsTab,
-                                          tabTitle: { tab in
-                    switch tab {
-                    case .all: return "Channels"
-                    case .gated: return "Gated"
-                    case .muted: return "Muted"
-                    }
-                },
-                                          onTabSelected: { tab in
-                    selectedChildChannelsTab = tab
-                })
-            case .feed:
-                SimpleFixedTabButtonsView(
-                    tabs: HomePostsTab.allCases,
-                    selectedTab: selectedChildFeedsTab,
-                    tabTitle: { tab in
-                        switch tab {
-                        case .following: return "Following"
-                        case .all: return "Everything"
-                        }
-                    },
-                    onTabSelected: { tab in
-                        selectedChildFeedsTab = tab
-                        context
-                            .send(
-                                viewAction:
-                                        .forceRefreshAllPosts(
-                                            followingPostsOnly: tab == .following
-                                        )
-                            )
-                    })
-            case .notifications:
-                SimpleFixedTabButtonsView(tabs: HomeNotificationsTab.allCases,
-                                          selectedTab: selectedChildNotificationsTab,
-                                          tabTitle: { tab in
-                    switch tab {
-                    case .highlighted: return "Highlights"
-                    case .muted: return "Muted"
-                    case .all: return "All"
-                    }
-                },
-                                          onTabSelected: { tab in
-                    selectedChildNotificationsTab = tab
-                })
-            default:
-                EmptyView()
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var mainContent: some View {
-        ZStack(alignment: .top) {
-            /// Chats Content
-            HomeChatContent(context: context,
-                            scrollViewAdapter: scrollViewAdapter,
-                            shouldAttachScrollAdapter: selectedHomeTab == .chat,
-                            isSearchableContent: false)
-            .opacity(selectedHomeTab == .chat ? 1 : 0)
-            
-            /// Channels Content
-            HomeChannelsContent(context: context,
-                                scrollViewAdapter: scrollViewAdapter,
-                                selectedChannelsTab: selectedChildChannelsTab,
-                                shouldAttachScrollAdapter: selectedHomeTab == .channels)
-            .opacity(selectedHomeTab == .channels ? 1 : 0)
-            
-            /// Posts Content
-            HomePostsContent(context: context,
-                             scrollViewAdapter: scrollViewAdapter,
-                             shouldAttachScrollAdapter: selectedHomeTab == .feed,
-                             selectedFeedTab: selectedChildFeedsTab)
-            .opacity(selectedHomeTab == .feed ? 1 : 0)
-            
-            /// Notifications Content
-            HomeNotificationsContent(context: context,
-                                     scrollViewAdapter: scrollViewAdapter,
-                                     shouldAttachScrollAdapter: selectedHomeTab == .notifications,
-                                     selectedNotificationsTab: selectedChildNotificationsTab)
-            .opacity(selectedHomeTab == .notifications ? 1 : 0)
-            
-            /// Wallet Content
-            HomeWalletContent(context: context)
-                .opacity(selectedHomeTab == .wallet ? 1 : 0)
         }
     }
     
@@ -248,10 +131,6 @@ struct HomeScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        //        if #available(iOS 26.0, *) {
-        //            DefaultToolbarItem(kind: .search, placement: .bottomBar)
-        //        }
-        
         ToolbarItem(placement: .navigationBarLeading) {
             settingsButton
         }
@@ -273,17 +152,6 @@ struct HomeScreen: View {
             }
         }
         
-        if selectedHomeTab == HomeTab.chat || selectedHomeTab == HomeTab.channels {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    roomSearchTriggered = true
-                } label: {
-                    CompoundIcon(\.search)
-                        .tint(.compound.iconSecondary)
-                }
-            }
-        }
-        
         ToolbarItem(placement: .primaryAction) {
             userProfileButton
         }
@@ -296,11 +164,7 @@ struct HomeScreen: View {
             ZStack {
                 if context.viewState.showNewUserRewardsIntimation {
                     ZStack(alignment: .center) {
-                        Circle()
-                            .stroke(
-                                Color.zero.bgAccentRest.opacity(0.5),
-                                lineWidth: 1
-                            )
+                        Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
                             .frame(width: 38, height: 38)
                         Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
                             .frame(width: 35, height: 35)
@@ -320,10 +184,7 @@ struct HomeScreen: View {
                 })
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                 .clipShape(.circle)
-                .overlayBadge(
-                    10,
-                    isBadged: context.viewState.requiresExtraAccountSetup
-                )
+                .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                 .compositingGroup()
             }
         }
@@ -345,7 +206,7 @@ struct HomeScreen: View {
     @ViewBuilder
     private var backToTopButton: some View {
         Button(action: {
-            scrollViewAdapter.scrollToTop(addTabBarPadding: showsTopTab)
+            scrollViewAdapter.scrollToTop()
         }) {
             HStack {
                 Text("Back to Top")
@@ -366,10 +227,7 @@ struct HomeScreen: View {
         // Smooth fade + slide animation
         .opacity(showBackToTop ? 1 : 0)
         .offset(y: showBackToTop ? 110 : -40)
-        .animation(
-            .spring(response: 0.5, dampingFraction: 0.8),
-            value: showBackToTop
-        )
+        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: showBackToTop)
         .animation(.easeInOut(duration: 0.25), value: showBackToTop)
         .transition(.move(edge: .top).combined(with: .opacity))
     }
@@ -391,10 +249,7 @@ struct HomeScreen: View {
     private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle, role: .destructive) {
-            context
-                .send(
-                    viewAction: .confirmLeaveRoom(roomIdentifier: item.roomID)
-                )
+            context.send(viewAction: .confirmLeaveRoom(roomIdentifier: item.roomID))
         }
     }
     
@@ -410,15 +265,6 @@ struct HomeScreen: View {
             return { context.send(viewAction: .newFeed) }
         default:
             return nil
-        }
-    }
-    
-    private var showsTopTab: Bool {
-        switch selectedHomeTab {
-        case .channels, .feed, .notifications:
-            return true
-        default:
-            return false
         }
     }
 }
@@ -468,28 +314,16 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
                 .loaded(.mockRooms)
         }
         
-        let clientProxy = ClientProxyMock(
-            .init(
-                userID: userID,
-                roomSummaryProvider: RoomSummaryProviderMock(
-                    .init(state: roomSummaryProviderState)
-                )
-            )
-        )
+        let clientProxy = ClientProxyMock(.init(userID: userID,
+                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
-        return HomeScreenViewModel(
-            userSession: userSession,
-            selectedRoomPublisher: CurrentValueSubject<String?,
-            Never>(
-                nil
-            )
-            .asCurrentValuePublisher(),
-            appSettings: ServiceLocator.shared.settings,
-            analyticsService: ServiceLocator.shared.analytics,
-            notificationManager: NotificationManagerMock(),
-            userIndicatorController: ServiceLocator.shared.userIndicatorController
-        )
+        return HomeScreenViewModel(userSession: userSession,
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analyticsService: ServiceLocator.shared.analytics,
+                                   notificationManager: NotificationManagerMock(),
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

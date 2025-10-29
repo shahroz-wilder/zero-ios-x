@@ -16,9 +16,6 @@ struct HomeChatContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    let shouldAttachScrollAdapter: Bool
-    let isSearchableContent: Bool
-    
     var body: some View {
         roomList
             .sentryTrace("\(Self.self)")
@@ -62,17 +59,15 @@ struct HomeChatContent: View {
                             topSection
                         }
                     }
-                    .conditionalSearchable(if: isSearchableContent,
-                                           isSearching: $context.isSearchFieldFocused,
-                                           isPresented: $context.isSearchFieldPresented,
-                                           searchQuery: $context.searchQuery)
+                    .isSearching($context.isSearchFieldFocused)
+                    .searchable(text: $context.searchQuery)
+                    .compoundSearchField()
+                    .disableAutocorrection(true)
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                if shouldAttachScrollAdapter {
-                    guard scrollView != scrollViewAdapter.scrollView else { return }
-                    scrollViewAdapter.scrollView = scrollView
-                }
+                guard scrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = scrollView
             }
             .onReceive(scrollViewAdapter.didScroll) { _ in
                 updateVisibleRange()
