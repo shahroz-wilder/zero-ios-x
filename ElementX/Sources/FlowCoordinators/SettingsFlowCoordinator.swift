@@ -47,7 +47,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         self.flowParameters = flowParameters
     }
     
-    func start() {
+    func start(animated: Bool) {
         fatalError("Unavailable")
     }
     

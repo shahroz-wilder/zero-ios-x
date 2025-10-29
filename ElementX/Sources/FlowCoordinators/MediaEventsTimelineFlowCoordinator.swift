@@ -40,7 +40,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
     }
     
-    func start() {
+    func start(animated: Bool) {
         Task { await presentMediaEventsTimeline() }
     }
     
