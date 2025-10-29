@@ -23,6 +23,9 @@ enum RoomMembersFlowCoordinatorEntryPoint: Hashable {
 }
 
 final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
+    // periphery:ignore - used to avoid deallocation
+    private var userFeedProfileFlowCoordinator: UserFeedProfileFlowCoordinator?
+    
     indirect enum State: StateType {
         /// The state machine hasn't started.
         case initial
@@ -172,7 +175,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 presentRoomMembersList()
                 
             case (_, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID, animated: animated)
+//                presentRoomMemberDetails(userID: userID, animated: animated)
+                startUserProfileWithFeedFlow(userId: userID)
             case (.roomMemberDetails, .dismissedRoomMemberDetails, .roomMembersList):
                 break
                 
@@ -216,6 +220,41 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.actionsSubject.send(.finished)
         }
+    }
+    
+    private func startUserProfileWithFeedFlow(userId: String) {
+        let flowCoordinator = UserFeedProfileFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
+                                                             userSession: flowParameters.userSession,
+                                                             userIndicatorController: flowParameters.userIndicatorController,
+                                                             appMediator: flowParameters.appMediator,
+                                                             fromHomeFlow: false,
+                                                             userId: userId,
+                                                             userFeedProfile: nil,
+                                                             feedProtocol: nil)
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .finished:
+//                if case let .roomMemberDetails(_, previousState) = stateMachine.state,
+//                   previousState == .initial {
+//                    actionsSubject.send(.finished)
+//                } else {
+//                    stateMachine.tryEvent(.dismissedRoomMemberDetails)
+//                }
+                break
+            case .presentMatrixProfile:
+                presentRoomMemberDetails(userID: userId, animated: true)
+            case .presentFeedDetails(_):
+                break
+            case .openDirectChat(let roomId):
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomId, via: [], eventID: nil))
+            }
+        }
+        .store(in: &cancellables)
+        
+        userFeedProfileFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
     }
     
     private func presentRoomMemberDetails(userID: String, animated: Bool) {

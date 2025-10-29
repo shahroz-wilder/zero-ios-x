@@ -52,7 +52,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
         self.feedProtocol = feedProtocol
     }
     
-    func start() {
+    func start(animated: Bool) {
         Task { await presentUserFeedProfileScreen() }
     }
     

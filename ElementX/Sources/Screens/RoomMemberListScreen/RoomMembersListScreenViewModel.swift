@@ -48,7 +48,8 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     override func process(viewAction: RoomMembersListScreenViewAction) {
         switch viewAction {
         case .selectMember(let member):
-            selectMember(member)
+            //selectMember(member)
+            showMemberDetails(member)
         case .invite:
             actionsSubject.send(.invite)
         }

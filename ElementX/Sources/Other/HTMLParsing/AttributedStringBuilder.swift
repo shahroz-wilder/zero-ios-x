@@ -53,7 +53,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         self.mentionBuilder = mentionBuilder
     }
         
-    func fromPlain(_ string: String?) -> AttributedString? {
+    func fromPlain(_ string: String?, isClickable: Bool) -> AttributedString? {
         guard let string else {
             return nil
         }
@@ -64,7 +64,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
         addLinksAndMentions(mutableAttributedString)
-        addMatrixEntityPermalinkAttributesTo(mutableAttributedString)
+        addMatrixEntityPermalinkAttributesTo(mutableAttributedString, isClickable: isClickable)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.cacheValue(result, forKey: string, cacheKey: cacheKey)
@@ -79,7 +79,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // Using DTCoreText, which renders static string, helps to avoid code injection attacks
     // that could happen with the default HTML renderer of NSAttributedString which is a
     // webview.
-    func fromHTML(_ htmlString: String?) -> AttributedString? {
+    func fromHTML(_ htmlString: String?, isClickable: Bool) -> AttributedString? {
         guard let originalHTMLString = htmlString else {
             return nil
         }
@@ -100,7 +100,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = attributedString(element: body, documentBody: body, preserveFormatting: false, listTag: nil, listIndex: &listIndex, indentLevel: 0)
         detectPhishingAttempts(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
-        addMatrixEntityPermalinkAttributesTo(mutableAttributedString)
+        addMatrixEntityPermalinkAttributesTo(mutableAttributedString, isClickable: isClickable)
         removeParsingArtefacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -303,6 +303,17 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return TextParsingMatch(type: .userID(identifier: identifier), range: match.range)
         }
         
+        matches.append(contentsOf: MatrixEntityRegex.zeroMentionRegex.matches(in: string).compactMap { match in
+            guard let matchRange = Range(match.range, in: string) else {
+                return nil
+            }
+            
+            let mention = String(string[matchRange])
+            let zeroIdentifier = MatrixEntityRegex.createIdentifierFromZeroMention(inputString: mention)
+            
+            return TextParsingMatch(type: .userID(identifier: zeroIdentifier), range: match.range)
+        })
+        
         matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string).compactMap { match in
             guard let matchRange = Range(match.range, in: string) else {
                 return nil
@@ -380,14 +391,14 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    func addMatrixEntityPermalinkAttributesTo(_ attributedString: NSMutableAttributedString) {
+    func addMatrixEntityPermalinkAttributesTo(_ attributedString: NSMutableAttributedString, isClickable: Bool) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
                 if let url = value as? URL,
                    let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) {
                     switch matrixEntity.id {
                     case .user(let userID):
-                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID, userDisplayName: nil)
+                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID, userDisplayName: nil, isClickable: isClickable)
                     case .room(let roomID):
                         mentionBuilder.handleRoomIDMention(for: attributedString, in: range, url: url, roomID: roomID)
                     case .roomAlias(let alias):

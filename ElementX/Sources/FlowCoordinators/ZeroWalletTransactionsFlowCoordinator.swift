@@ -42,7 +42,7 @@ class ZeroWalletTransactionsFlowCoordinator: FlowCoordinatorProtocol {
         self.meowPrice = meowPrice
     }
     
-    func start() {
+    func start(animated: Bool) {
         presentView()
     }
     
