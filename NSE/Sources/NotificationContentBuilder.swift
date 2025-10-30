@@ -140,24 +140,30 @@ struct NotificationContentBuilder {
     }
     
     private func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
+//        if notificationItem.isDM {
+//            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+//                .init(mediaSource: notificationItem.senderAvatarMediaSource,
+//                      groupInfo: .init(name: L10n.commonThread,
+//                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
+//            } else {
+//                .init(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+//            }
+//        } else {
+//            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+//                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+//                      groupInfo: .init(name: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),
+//                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
+//            } else {
+//                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+//                      groupInfo: .init(name: notificationItem.roomDisplayName,
+//                                       id: notificationItem.roomID))
+//            }
+//        }
         if notificationItem.isDM {
-            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
-                .init(mediaSource: notificationItem.senderAvatarMediaSource,
-                      groupInfo: .init(name: L10n.commonThread,
-                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
-            } else {
-                .init(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
-            }
+            return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
         } else {
-            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
-                .init(mediaSource: notificationItem.roomAvatarMediaSource,
-                      groupInfo: .init(name: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),
-                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
-            } else {
-                .init(mediaSource: notificationItem.roomAvatarMediaSource,
-                      groupInfo: .init(name: notificationItem.roomDisplayName,
-                                       id: notificationItem.roomID))
-            }
+            return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
+                                    groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
         }
     }
 

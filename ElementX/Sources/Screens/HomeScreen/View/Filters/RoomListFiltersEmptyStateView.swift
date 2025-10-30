@@ -19,7 +19,8 @@ struct RoomListFiltersEmptyStateView: View {
 //            case .people:
 //                return L10n.screenRoomlistFilterPeopleEmptyStateTitle
             case .rooms:
-                return L10n.screenRoomlistFilterRoomsEmptyStateTitle
+//                return L10n.screenRoomlistFilterRoomsEmptyStateTitle
+                return "You don't have any unread chats."
 //            case .channels:
 //                return "You are not in any channel yet"
             case .favourites:
@@ -45,12 +46,12 @@ struct RoomListFiltersEmptyStateView: View {
             Text(emptyStateTitle)
                 .multilineTextAlignment(.center)
                 .font(.zero.headingSMSemibold)
-                .foregroundColor(.compound.textPrimary)
-            
-            Text(emptyStateSubtitle)
-                .multilineTextAlignment(.center)
-                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textSecondary)
+            
+//            Text(emptyStateSubtitle)
+//                .multilineTextAlignment(.center)
+//                .font(.zero.bodyMD)
+//                .foregroundColor(.compound.textSecondary)
         }
         .padding(.horizontal, 60)
     }
