@@ -1,0 +1,277 @@
+//
+// Copyright 2025 Element Creations Ltd.
+// Copyright 2022-2025 New Vector Ltd.
+//
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+// Please see LICENSE files in the repository root for full details.
+//
+
+import Compound
+import SwiftUI
+
+struct CreateRoomScreen: View {
+    @ObservedObject var context: CreateRoomScreenViewModel.Context
+    @FocusState private var focus: Focus?
+
+    private enum Focus {
+        case name
+        case topic
+        case alias
+    }
+    
+    private var aliasBinding: Binding<String> {
+        .init(get: {
+            context.viewState.aliasLocalPart
+        }, set: {
+            context.send(viewAction: .updateAliasLocalPart($0))
+        })
+    }
+    
+    private var roomNameBinding: Binding<String> {
+        .init(get: {
+            context.viewState.roomName
+        }, set: {
+            context.send(viewAction: .updateRoomName($0))
+        })
+    }
+    
+    var body: some View {
+        Form {
+            roomSection
+            // topicSection
+            securitySection
+            if context.viewState.isKnockingFeatureEnabled,
+               !context.isRoomPrivate {
+                roomAccessSection
+                roomAliasSection
+            }
+        }
+        .zeroList()
+        .track(screen: .CreateRoom)
+        .scrollDismissesKeyboard(.immediately)
+        .navigationTitle("Group Details")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+        .alert(item: $context.alertInfo)
+        .shouldScrollOnKeyboardDidShow(focus == .alias, to: Focus.alias)
+    }
+    
+    private var roomSection: some View {
+        Section {
+            VStack(alignment: .center, spacing: 16) {
+                roomAvatarButton
+                
+                VStack(alignment: .leading, spacing: 8) {
+//                    Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
+//                        .padding(.leading, ZeroListRowPadding.horizontal)
+//                        .compoundListSectionHeader()
+                    
+                    TextField(L10n.screenCreateRoomRoomNameLabel,
+                              text: roomNameBinding,
+                              prompt: Text("Group Name").foregroundColor(.compound.textSecondary),
+                              axis: .horizontal)
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
+                        .tint(.compound.iconAccentTertiary)
+                        .focused($focus, equals: .name)
+                        .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
+                        .padding(.horizontal, ZeroListRowPadding.horizontal)
+                        .padding(.vertical, ZeroListRowPadding.vertical)
+                        .background(.zero.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
+                }
+            }
+            .listRowInsets(.init())
+            .listRowBackground(Color.clear)
+        }
+    }
+    
+    private var roomAvatarButton: some View {
+        Button {
+            focus = nil
+            context.showAttachmentConfirmationDialog = true
+        } label: {
+            if let url = context.viewState.avatarURL {
+                AsyncImage(url: url) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    ProgressView()
+                }
+                .scaledFrame(size: 120)
+                .clipShape(Circle())
+            } else {
+                CompoundIcon(\.takePhoto, size: .custom(36), relativeTo: .title)
+                    .foregroundColor(.compound.iconSecondary)
+                    .scaledFrame(size: 120, relativeTo: .title)
+                    .background(.compound.bgSubtlePrimary, in: Circle())
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomAvatar)
+        .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
+            Button(L10n.actionTakePhoto) {
+                context.send(viewAction: .displayCameraPicker)
+            }
+            Button(L10n.actionChoosePhoto) {
+                context.send(viewAction: .displayMediaPicker)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
+            
+            if context.viewState.avatarURL != nil {
+                Button(L10n.actionRemove, role: .destructive) {
+                    context.send(viewAction: .removeImage)
+                }
+            }
+        }
+    }
+    
+    private var topicSection: some View {
+        Section {
+            ZeroListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+                        kind: .textField(text: $context.roomTopic, axis: .vertical))
+                .lineLimit(3, reservesSpace: false)
+                .focused($focus, equals: .topic)
+                .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
+        } header: {
+            Text(L10n.screenCreateRoomTopicLabel)
+                .compoundListSectionHeader()
+        }
+    }
+    
+    private var securitySection: some View {
+        Section {
+            ZeroListRow(label: .default(title: "Encrypted Group",
+                                        description: "Encrypted Groups are ideal for more focused, intimate conversations and are encrypted by default. Check this box if you are creating a room intended for smaller groups.",
+                                        icon: \.lock,
+                                        iconAlignment: .top),
+                        kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
+            ZeroListRow(label: .default(title: "Super Group",
+                                        description: "Super Groups are designed to accommodate larger communities and are not encrypted by default. Check this box if you are creating a room intended for larger groups (10+ people).",
+                                        icon: \.public,
+                                        iconAlignment: .top),
+                        kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
+        } header: {
+            Text("Group Type")
+                .compoundListSectionHeader()
+        }
+    }
+    
+    private var roomAccessSection: some View {
+        Section {
+            ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
+                                      description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
+                        kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
+            ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
+                                      description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
+                        kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
+        } header: {
+            Text(L10n.screenCreateRoomRoomAccessSectionHeader)
+                .compoundListSectionHeader()
+        }
+    }
+    
+    private var roomAliasSection: some View {
+        Section {
+            EditRoomAddressListRow(aliasLocalPart: aliasBinding,
+                                   serverName: context.viewState.serverName,
+                                   shouldDisplayError: context.viewState.aliasErrors.errorDescription != nil)
+                .focused($focus, equals: .alias)
+                .id(Focus.alias)
+        } header: {
+            Text(L10n.screenCreateRoomRoomAddressSectionTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            VStack(alignment: .leading, spacing: 12) {
+                if let errorDescription = context.viewState.aliasErrors.errorDescription {
+                    Label(errorDescription, icon: \.errorSolid, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                        .foregroundStyle(.compound.textCriticalPrimary)
+                        .font(.compound.bodySM)
+                }
+                Text(L10n.screenCreateRoomRoomAddressSectionFooter)
+                    .compoundListSectionFooter()
+                    .font(.compound.bodySM)
+            }
+        }
+    }
+    
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.actionCreate) {
+                focus = nil
+                context.send(viewAction: .createRoom)
+            }
+            .disabled(!context.viewState.canCreateRoom)
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.create)
+        }
+    }
+}
+
+// MARK: - Previews
+
+struct CreateRoom_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let publicRoomViewModel = {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let publicRoomInvalidAliasViewModel = {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "#:"),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let publicRoomExistingAliasViewModel = {
+        let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
+        clientProxy.isAliasAvailableReturnValue = .success(false)
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "existing"),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
+    }()
+
+    static var previews: some View {
+        NavigationStack {
+            CreateRoomScreen(context: viewModel.context)
+        }
+        .previewDisplayName("Create Room")
+        
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomViewModel.context)
+        }
+        .previewDisplayName("Create Public Room")
+        
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
+        }
+        .snapshotPreferences(expect: publicRoomInvalidAliasViewModel.context.$viewState.map { !$0.aliasErrors.isEmpty })
+        .previewDisplayName("Create Public Room, invalid alias")
+        
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomExistingAliasViewModel.context)
+        }
+        .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { !$0.aliasErrors.isEmpty })
+        .previewDisplayName("Create Public Room, existing alias")
+    }
+}

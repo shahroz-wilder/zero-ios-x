@@ -1273,12 +1273,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentInviteUsersScreen() {
-        let selectedUsersSubject: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
-        
         let stackCoordinator = NavigationStackCoordinator()
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: userSession,
-                                                                      selectedUsers: .init(selectedUsersSubject),
-                                                                      roomType: .room(roomProxy: roomProxy),
+                                                                      roomProxy: roomProxy,
+                                                                      isSkippable: false,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings)
@@ -1292,8 +1290,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
-            case .proceed:
-                fatalError("Not handled in this flow.")
             }
         }
         .store(in: &cancellables)

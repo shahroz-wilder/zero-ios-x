@@ -99,9 +99,9 @@ struct LeaveSpaceView: View {
                 .buttonStyle(.compound(.primary))
             } else if context.viewState.isSpaceManagementEnabled {
                 Button {
-                    context.send(viewAction: .spaceSettings)
+                    context.send(viewAction: .rolesAndPermissions)
                 } label: {
-                    Label(L10n.actionGoToSettings, icon: \.settings)
+                    Label(L10n.actionGoToRolesAndPermissions, icon: \.settings)
                 }
                 .buttonStyle(.compound(.primary))
             }
@@ -173,6 +173,7 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
                                              spaceServiceProxy: spaceServiceProxy,
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: UserSessionMock(.init()),
+                                             appSettings: AppSettings(),
                                              userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }

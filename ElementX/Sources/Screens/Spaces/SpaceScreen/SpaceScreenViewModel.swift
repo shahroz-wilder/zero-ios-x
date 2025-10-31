@@ -15,6 +15,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     private let spaceRoomListProxy: SpaceRoomListProxyProtocol
     private let spaceServiceProxy: SpaceServiceProxyProtocol
     private let clientProxy: ClientProxyProtocol
+    private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<SpaceScreenViewModelAction, Never> = .init()
@@ -26,11 +27,13 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
          spaceServiceProxy: SpaceServiceProxyProtocol,
          selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>,
          userSession: UserSessionProtocol,
+         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.spaceRoomListProxy = spaceRoomListProxy
         self.spaceServiceProxy = spaceServiceProxy
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         
         super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxyPublisher.value,
                                                           rooms: spaceRoomListProxy.spaceRoomsPublisher.value,
@@ -75,6 +78,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                     state.permalink = permalinkURL
                 }
+                
+                appSettings.$spaceSettingsEnabled
+                    .weakAssign(to: \.state.isSpaceManagementEnabled, on: self)
+                    .store(in: &cancellables)
             }
         }
     }
@@ -121,8 +128,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             Task { await confirmLeaveSpace() }
         case .displayMembers(let roomProxy):
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
-        case .spaceSettings:
-            break // Not implemented.
+        case .spaceSettings(let roomProxy):
+            actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
+        case .rolesAndPermissions:
+            break // Not implemented yet
         }
     }
     
@@ -178,6 +187,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             showFailureIndicator()
         }
     }
+    
+    private func updatePermissions() { }
     
     // MARK: - Indicators
     

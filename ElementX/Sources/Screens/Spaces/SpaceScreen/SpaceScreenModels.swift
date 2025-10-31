@@ -14,6 +14,7 @@ enum SpaceScreenViewModelAction {
     case selectRoom(roomID: String)
     case leftSpace
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
+    case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
 }
 
 struct SpaceScreenViewState: BindableState {
@@ -43,6 +44,7 @@ enum SpaceScreenViewAction {
     case selectAllLeaveRoomDetails
     case toggleLeaveSpaceRoomDetails(id: String)
     case confirmLeaveSpace
-    case spaceSettings
+    case spaceSettings(roomProxy: JoinedRoomProxyProtocol)
+    case rolesAndPermissions
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
 }

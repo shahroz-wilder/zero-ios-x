@@ -76,6 +76,13 @@ struct SpaceScreen: View {
                             Label(L10n.actionShare, icon: \.shareIos)
                         }
                     }
+                    
+                    if context.viewState.isSpaceManagementEnabled,
+                       let roomProxy = context.viewState.roomProxy {
+                        Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
+                            Label(L10n.commonSettings, icon: \.settings)
+                        }
+                    }
                 }
                 
                 Section {
@@ -124,6 +131,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: userSession,
+                                             appSettings: AppSettings(),
                                              userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }
