@@ -15,11 +15,9 @@ final class PillContext: ObservableObject {
     
     let data: PillTextAttachmentData
     var cancellable: AnyCancellable?
-    let isRoomEncrypted: Bool
     
     init(timelineContext: TimelineViewModel.Context, data: PillTextAttachmentData) {
         self.data = data
-        self.isRoomEncrypted = timelineContext.viewState.isEncryptedRoom
         timelineContext.viewState.pillContextUpdater?(self)
     }
 }

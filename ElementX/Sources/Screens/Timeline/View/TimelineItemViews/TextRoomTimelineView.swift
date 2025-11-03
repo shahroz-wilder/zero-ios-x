@@ -24,25 +24,17 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
         self.linkMetadata = linkMetadata
     }
     
-    var fontColor: UIColor {
-        timelineItem.isOutgoing
-        ? context?.viewState.isEncryptedRoom == true ? UIColor.compound.textPrimary : UIColor.black
-        : UIColor.compound.textPrimary
-    }
-    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 8) {
                 if let attributedString = timelineItem.content.formattedBody {
                     FormattedBodyText(attributedString: attributedString,
                                       additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostFontSize: timelineItem.shouldBoost,
-                                      fontColor: fontColor)
+                                      boostFontSize: timelineItem.shouldBoost)
                 } else {
                     FormattedBodyText(text: timelineItem.body,
                                       additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostFontSize: timelineItem.shouldBoost,
-                                      fontColor: fontColor)
+                                      boostFontSize: timelineItem.shouldBoost)
                 }
                 
                 if context?.viewState.linkPreviewsEnabled ?? false, !linkMetadata.keys.isEmpty {

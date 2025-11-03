@@ -75,13 +75,11 @@ struct MediaFileRoomTimelineContent: View {
             if let formattedCaption {
                 FormattedBodyText(attributedString: formattedCaption,
                                   additionalWhitespacesCount: additionalWhitespaces,
-                                  boostFontSize: shouldBoost,
-                                  fontColor: captionColor)
+                                  boostFontSize: shouldBoost)
             } else if let caption {
                 FormattedBodyText(text: caption,
                                   additionalWhitespacesCount: additionalWhitespaces,
-                                  boostFontSize: shouldBoost,
-                                  fontColor: captionColor)
+                                  boostFontSize: shouldBoost)
             }
         }
     }

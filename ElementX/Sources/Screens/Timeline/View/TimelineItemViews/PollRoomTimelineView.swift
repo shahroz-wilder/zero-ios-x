@@ -21,9 +21,7 @@ struct PollRoomTimelineView: View {
     }
     
     var pollAccentColor: UIColor {
-        timelineItem.isOutgoing
-        ? context.viewState.isEncryptedRoom ? UIColor.compound.textPrimary : UIColor.black
-        : UIColor.compound.textPrimary
+        UIColor.compound.textPrimary
     }
     
     var body: some View {
