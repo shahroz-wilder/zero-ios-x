@@ -40,6 +40,9 @@ struct ComposerToolbar: View {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
                     .ignoresSafeArea()
+            } else {
+                Color.zero.bgCanvasDefault
+                    .ignoresSafeArea(.all)
             }
         }
         .readFrame($frame)
@@ -56,7 +59,7 @@ struct ComposerToolbar: View {
 //                .padding(4.0)
 //            }
 //        }
-        .overlay(alignment: .bottom) {
+        .background(alignment: .bottom) {
             ZStack {
                 if verticalSizeClass != .compact, !context.composerExpanded {
                     suggestionView
@@ -74,6 +77,8 @@ struct ComposerToolbar: View {
                                  showBackgroundShadow: !context.composerExpanded) { suggestion in
             context.send(viewAction: .selectedSuggestion(suggestion))
         }
+                                 .transition(.move(edge: .bottom))
+                                 .animation(.easeInOut(duration: 0.15), value: UUID())
     }
     
     private var topBar: some View {
