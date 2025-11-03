@@ -2107,6 +2107,8 @@
 		7996163F2E0EA5B5008E73C4 /* ZWalletTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996163D2E0EA5A8008E73C4 /* ZWalletTransactions.swift */; };
 		7999A7DD2D955CD700738A7C /* MapTilerURLBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1033290D99D5BBA1AF3560A /* MapTilerURLBuilderProtocol.swift */; };
 		799C86532EB8D7A300CB467F /* CopyTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B682FE2C44C5E163E7023B05 /* CopyTextButton.swift */; };
+		799C86582EB8F0FA00CB467F /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799C86572EB8F0F500CB467F /* KeyboardResponder.swift */; };
+		799C86592EB8F0FA00CB467F /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799C86572EB8F0F500CB467F /* KeyboardResponder.swift */; };
 		799D7F212DB03A5800B17C18 /* SDKListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5CD2993048222B64C45006 /* SDKListener.swift */; };
 		799D85712E270369000A362A /* ReceiveTransactionViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799D85702E27034E000A362A /* ReceiveTransactionViewModelProtocol.swift */; };
 		799D85722E270369000A362A /* ReceiveTransactionViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799D85702E27034E000A362A /* ReceiveTransactionViewModelProtocol.swift */; };
@@ -4004,6 +4006,7 @@
 		799616372E0EA061008E73C4 /* ZWalletTokenBalances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTokenBalances.swift; sourceTree = "<group>"; };
 		7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletNFTs.swift; sourceTree = "<group>"; };
 		7996163D2E0EA5A8008E73C4 /* ZWalletTransactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTransactions.swift; sourceTree = "<group>"; };
+		799C86572EB8F0F500CB467F /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		799D85702E27034E000A362A /* ReceiveTransactionViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionViewModelProtocol.swift; sourceTree = "<group>"; };
 		799D85732E27036D000A362A /* ReceiveTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionViewModel.swift; sourceTree = "<group>"; };
 		799D85762E270374000A362A /* ReceiveTransactionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionModel.swift; sourceTree = "<group>"; };
@@ -5036,6 +5039,7 @@
 		052CC920F473C10B509F9FC1 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				799C86572EB8F0F500CB467F /* KeyboardResponder.swift */,
 				76A46ABD27628CB5FC402541 /* Backports.swift */,
 				693E16574C6F7F9FA1015A8C /* Search.swift */,
 				832397B5C3D00A4BF52C5F0B /* ShouldScrollOnKeyboardDidShow.swift */,
@@ -11816,6 +11820,7 @@
 				18E9A7462C9829970082DDA4 /* VideoRoomTimelineItem.swift in Sources */,
 				790AB7AB2E1C517600555B1F /* StrikedLabel.swift in Sources */,
 				18E9A7472C9829970082DDA4 /* VideoRoomTimelineItemContent.swift in Sources */,
+				799C86592EB8F0FA00CB467F /* KeyboardResponder.swift in Sources */,
 				79EF67132E2FB1E300D86B0F /* PillViewOnBubblePreviews.swift in Sources */,
 				18FFCED42CEC8F66002F2647 /* RoomSelectionScreenModels.swift in Sources */,
 				18E9A7482C9829970082DDA4 /* VideoRoomTimelineView.swift in Sources */,
@@ -12434,6 +12439,7 @@
 				651341E67C3514F9811A1EC1 /* LoginScreenCoordinator.swift in Sources */,
 				C5A07E2D88BE7D51DCECD166 /* LoginScreenModels.swift in Sources */,
 				BDA68E8D95B2B24B28825B8B /* LoginScreenViewModel.swift in Sources */,
+				799C86582EB8F0FA00CB467F /* KeyboardResponder.swift in Sources */,
 				A5B9EF45C7B8ACEB4954AE36 /* LoginScreenViewModelProtocol.swift in Sources */,
 				B10F7D5C237417DA160F4603 /* LongPressWithFeedback.swift in Sources */,
 				B94368839BDB69172E28E245 /* MXLog.swift in Sources */,

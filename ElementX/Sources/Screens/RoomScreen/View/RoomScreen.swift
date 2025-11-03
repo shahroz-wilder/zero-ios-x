@@ -15,6 +15,8 @@ struct RoomScreen: View {
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
     let composerToolbar: ComposerToolbar
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
+    
+    @StateObject private var keyboardResponder = KeyboardResponder()
 
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
@@ -65,7 +67,10 @@ struct RoomScreen: View {
                         // Make sure the reply header honours the hideTimelineMedia setting too.
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
                 }
+                // Add this padding to push safeAreaInset content up
+                .padding(.bottom, keyboardResponder.currentHeight)
             }
+            .ignoresSafeArea(.keyboard) // Add this to prevent double adjustment
             .toolbarRole(RoomHeaderView.toolbarRole)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
