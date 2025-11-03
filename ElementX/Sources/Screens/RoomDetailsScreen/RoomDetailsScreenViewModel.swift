@@ -181,6 +181,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     // MARK: - Private
     
     private func processTapToLeave() {
+        guard !roomProxy.infoPublisher.value.isSpace else {
+            Task { await processLeaveSpace() }
+            return
+        }
+        
         guard state.joinedMembersCount > 1 else {
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
                                                                    isDM: roomProxy.isDirectOneToOneRoom,
@@ -223,6 +228,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
         } else {
             displayFullScreenAvatar(url)
+        }
+    }
+    
+    private func processLeaveSpace() async {
+        switch await userSession.clientProxy.spaceService.leaveSpace(spaceID: roomProxy.id) {
+        case .success:
+            // TODO: Handle leave space
+            break
+        case .failure(let failure):
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
         }
     }
     

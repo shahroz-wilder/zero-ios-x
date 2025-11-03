@@ -80,7 +80,7 @@ struct RoomDetailsScreenViewState: BindableState {
         dmRecipientInfo == nil && canEditRolesOrPermissions
     }
     
-    var canEdit: Bool {
+    var canEditBaseInfo: Bool {
         !isDirect && !isAChannel && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }
     
