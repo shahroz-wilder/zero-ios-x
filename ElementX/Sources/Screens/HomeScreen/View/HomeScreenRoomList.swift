@@ -23,23 +23,7 @@ struct HomeScreenRoomList: View {
     
     @ViewBuilder
     private var content: some View {
-        let roomsList: [HomeScreenRoom] = {
-            let list = context.viewState.visibleRooms
-            if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
-                switch context.filtersState.activeZeroFilter {
-                case .primaryRooms:
-                    return list.filter { $0.isPrimary }
-                case .secondaryRooms:
-                    return list.filter { $0.isSecondary }
-                case .mutedRooms:
-                    return list.filter { $0.isMuted }
-                case .channels:
-                    return list
-                }
-            } else {
-                return list
-            }
-        }()
+        let roomsList = context.viewState.visibleRooms
         
         let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
             "execution": "HomeScreenRoomList",

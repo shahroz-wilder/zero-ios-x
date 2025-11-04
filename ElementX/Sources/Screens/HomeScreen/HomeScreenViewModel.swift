@@ -183,10 +183,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
+        let activeZeroFilters = context.$viewState.map(\.bindings.filtersState.activeZeroFilter)
         isSearchFieldFocused
-            .combineLatest(searchQuery, activeFilters)
+            .combineLatest(searchQuery, activeFilters, activeZeroFilters)
             .removeDuplicates { $0 == $1 }
-            .sink { [weak self] isSearchFieldFocused, _, _ in
+            .sink { [weak self] isSearchFieldFocused, _, _, _ in
                 guard let self else { return }
                 // isSearchFieldFocused` is sometimes turning to true after cancelling the search. So to be extra sure we are updating the values correctly we read them directly in the next run loop, and we add a small delay if the value has changed
                 let delay = isSearchFieldFocused == self.context.viewState.bindings.isSearchFieldFocused ? 0.0 : 0.05
@@ -488,6 +489,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 .filter { $0.displayName.containsIgnoringCase(context.searchQuery) }
                 .map { $0.mapToHomeScreenRoom() }
             rooms.append(contentsOf: gatedChannels)
+        } else {
+            // We need to filter rooms based on active zeroFilter
+            switch context.filtersState.activeZeroFilter {
+            case .primaryRooms:
+                rooms = rooms.filter { $0.isPrimary }
+            case .secondaryRooms:
+                rooms = rooms.filter { $0.isSecondary }
+            case .mutedRooms:
+                rooms = rooms.filter { $0.isMuted }
+            case .channels:
+                rooms = rooms.filter { $0.isAChannel }
+            }
         }
         
         state.rooms = rooms.uniqued(on: { $0.id })
