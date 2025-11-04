@@ -32,7 +32,7 @@ struct HomeScreen: View {
                 HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
                     .transition(.asymmetric(insertion: .opacity, removal: .opacity))
             case .feed:
-                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                HomeFeedContent(context: context, scrollViewAdapter: scrollViewAdapter)
                     .transition(.asymmetric(insertion: .opacity, removal: .opacity))
             case .notifications:
                 HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
@@ -76,7 +76,7 @@ struct HomeScreen: View {
                 if let action = floatingButtonAction {
                     FloatingActionButton(onTap: action)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                        .padding(.bottom, 70)
+                        .padding(.bottom, 64)
                 }
             }
         }
@@ -151,7 +151,7 @@ struct HomeScreen: View {
                     context.send(viewAction: .searchUser)
                 } label: {
                     CompoundIcon(\.search)
-                        .tint(.compound.iconSecondary)
+                        .foregroundStyle(.compound.iconSecondary)
                 }
             }
         }
@@ -200,7 +200,7 @@ struct HomeScreen: View {
         Button {
             context.send(viewAction: .openUserProfile)
         } label: {
-            Image(asset: Asset.Images.homeTabProfileIcon)
+            Image(asset: Asset.Images.homeProfileIcon)
                 .tint(.compound.iconSecondary)
         }
         .accessibilityLabel("action_user_profile")

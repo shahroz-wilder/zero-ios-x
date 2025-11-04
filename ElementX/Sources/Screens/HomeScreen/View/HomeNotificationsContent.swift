@@ -100,7 +100,7 @@ struct HomeNotificationsContent: View {
     }
     
     private var topSection: some View {
-        SimpleFixedTabButtonsView(tabs: HomeNotificationsTab.allCases,
+        SimpleTabButtonsView(tabs: HomeNotificationsTab.allCases,
                              selectedTab: selectedNotificationsTab,
                              tabTitle: { tab in
             switch tab {

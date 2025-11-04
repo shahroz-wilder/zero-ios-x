@@ -12,7 +12,7 @@ enum HomePostsTab: CaseIterable {
     case all
 }
 
-struct HomePostsContent: View {
+struct HomeFeedContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: HomeScreenViewModel.Context
@@ -87,7 +87,7 @@ struct HomePostsContent: View {
     
     @ViewBuilder
     private var topSection: some View {
-        SimpleFixedTabButtonsView(tabs: HomePostsTab.allCases,
+        SimpleTabButtonsView(tabs: HomePostsTab.allCases,
                              selectedTab: selectedTab,
                              tabTitle: { tab in
             switch tab {

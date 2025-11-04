@@ -19,8 +19,8 @@ struct FloatingActionButton: View {
                 .foregroundColor(.black)
                 .padding()
                 .background(.zero.bgAccentRest)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .shadow(radius: 5)
+                .clipShape(Circle())
+                .shadow(radius: 6)
         }
         .padding()
     }

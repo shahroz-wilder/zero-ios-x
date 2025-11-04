@@ -153,7 +153,7 @@ enum RoomAvatarSizeOnScreen {
     var value: CGFloat {
         switch self {
         case .chats, .spaces, .spaceSettings:
-            return 48
+            return 40
 //            return 52
         case .timeline, .leaveSpace:
             return 32

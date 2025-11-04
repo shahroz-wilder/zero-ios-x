@@ -55,9 +55,8 @@ struct VerifyLoginScreen: View {
                 Button {
                     isShowingDismissAlert = true
                 } label: {
-                    Image(asset: Asset.Images.crossIcon)
+                    CompoundIcon(\.close, size: .small, relativeTo: .body)
                         .foregroundStyle(Color.white)
-                        .frame(width: 32, height: 32)
                 }
                 .padding([.top, .trailing], 16)
             }

@@ -164,16 +164,16 @@ struct HomeChatContent: View {
     }
     
     private var customChatFiltersView: some View {
-        SimpleFixedTabButtonsView(tabs: HomeChatTab.allCases,
-                                  selectedTab: selectedChatTab.wrappedValue,
-                                  tabTitle: { tab in
+        SimpleTabButtonsView(tabs: HomeChatTab.allCases,
+                             selectedTab: selectedChatTab.wrappedValue,
+                             tabTitle: { tab in
             switch tab {
             case .all: return "All"
             case .unread: return "Unread"
             case .favourite: return "Favourite"
             }
         },
-                                  onTabSelected: { tab in
+                             onTabSelected: { tab in
             selectedChatTab.wrappedValue = tab
         })
         .id("chat-tabs")

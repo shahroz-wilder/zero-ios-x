@@ -22,7 +22,7 @@ struct HomeScreenRoomCell: View {
     var showProBadge: Bool = false
     
     private let verticalInsets = 12.0
-    private let horizontalInsets = 16.0
+    private let horizontalInsets = 12.0
     
     var body: some View {
         Button {
@@ -30,8 +30,9 @@ struct HomeScreenRoomCell: View {
                 action(.selectRoom(roomIdentifier: roomID))
             }
         } label: {
-            HStack(spacing: 16.0) {
+            HStack(alignment: .top, spacing: horizontalInsets) {
                 avatar
+                    .padding(.top, verticalInsets)
                 
                 content
                     .padding(.vertical, verticalInsets)

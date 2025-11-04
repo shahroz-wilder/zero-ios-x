@@ -195,16 +195,16 @@ struct HomeChannelsContent: View {
     }
     
     private var topSection: some View {
-        SimpleFixedTabButtonsView(tabs: HomeChannelsTab.allCases,
-                                  selectedTab: selectedChannelsTab,
-                                  tabTitle: { tab in
+        SimpleTabButtonsView(tabs: HomeChannelsTab.allCases,
+                             selectedTab: selectedChannelsTab,
+                             tabTitle: { tab in
             switch tab {
             case .all: return "Channels"
             case .gated: return "Gated"
             case .muted: return "Muted"
             }
         },
-                                  onTabSelected: { tab in
+                             onTabSelected: { tab in
             selectedChannelsTab = tab
         })
         .id("channel-tabs")

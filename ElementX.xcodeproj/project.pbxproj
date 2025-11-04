@@ -1757,8 +1757,8 @@
 		790393752D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostApi.swift */; };
 		790393772D4CDE4B0022E293 /* ZPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393762D4CDE470022E293 /* ZPosts.swift */; };
 		790393782D4CDE4B0022E293 /* ZPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393762D4CDE470022E293 /* ZPosts.swift */; };
-		7903937A2D4D62C70022E293 /* HomePostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393792D4D62B40022E293 /* HomePostsContent.swift */; };
-		7903937B2D4D62C70022E293 /* HomePostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393792D4D62B40022E293 /* HomePostsContent.swift */; };
+		7903937A2D4D62C70022E293 /* HomeFeedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393792D4D62B40022E293 /* HomeFeedContent.swift */; };
+		7903937B2D4D62C70022E293 /* HomeFeedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393792D4D62B40022E293 /* HomeFeedContent.swift */; };
 		7903937D2D50DA930022E293 /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7903937C2D50DA8E0022E293 /* DateUtil.swift */; };
 		7903937E2D50DA930022E293 /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7903937C2D50DA8E0022E293 /* DateUtil.swift */; };
 		790393802D50DFE60022E293 /* HomeScreenPostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */; };
@@ -2001,8 +2001,6 @@
 		795A854F63301DC6B46217B9 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */; };
 		795B2A862DB923C700FEA3DC /* MentionUsersCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */; };
 		795B2A872DB923C700FEA3DC /* MentionUsersCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */; };
-		795CF4462D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
-		795CF4472D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
 		795EAA0D2D4AD83D0015DAD8 /* TimelineMediaPreviewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18A454132A5A5247802821E /* TimelineMediaPreviewDataSource.swift */; };
 		795F104C2E7D04A7001B8AFE /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78C13EF5035879B6131030F /* Room.swift */; };
 		796146CF2E2E63AA00ECDE0A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 796146CE2E2E63AA00ECDE0A /* FirebaseFirestore */; };
@@ -3875,7 +3873,7 @@
 		7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletUtil.swift; sourceTree = "<group>"; };
 		790393732D4CDC750022E293 /* ZeroPostApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPostApi.swift; sourceTree = "<group>"; };
 		790393762D4CDE470022E293 /* ZPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPosts.swift; sourceTree = "<group>"; };
-		790393792D4D62B40022E293 /* HomePostsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostsContent.swift; sourceTree = "<group>"; };
+		790393792D4D62B40022E293 /* HomeFeedContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedContent.swift; sourceTree = "<group>"; };
 		7903937C2D50DA8E0022E293 /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
 		7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostList.swift; sourceTree = "<group>"; };
 		7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChannelApi.swift; sourceTree = "<group>"; };
@@ -3971,7 +3969,6 @@
 		795A0C852D77EB94000928B7 /* ZeroApiProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroApiProxy.swift; sourceTree = "<group>"; };
 		795A0C882D784534000928B7 /* ZeroAuthApiProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAuthApiProxy.swift; sourceTree = "<group>"; };
 		795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionUsersCache.swift; sourceTree = "<group>"; };
-		795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMyPostsContent.swift; sourceTree = "<group>"; };
 		7968A42B2D5409D900E9056A /* FeedDetailsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenCoordinator.swift; sourceTree = "<group>"; };
 		7968A42E2D5409EA00E9056A /* FeedDetailsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenViewModel.swift; sourceTree = "<group>"; };
 		7968A4312D5409FF00E9056A /* FeedDetailsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenModels.swift; sourceTree = "<group>"; };
@@ -6604,8 +6601,7 @@
 				05512FB13987D221B7205DE0 /* HomeScreenRecoveryKeyConfirmationBanner.swift */,
 				ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */,
 				793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */,
-				790393792D4D62B40022E293 /* HomePostsContent.swift */,
-				795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */,
+				790393792D4D62B40022E293 /* HomeFeedContent.swift */,
 				79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */,
 				79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */,
 				7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */,
@@ -11253,7 +11249,7 @@
 				79E1E7F32DFC2D6200195CF0 /* HomeContentEmptyView.swift in Sources */,
 				790393782D4CDE4B0022E293 /* ZPosts.swift in Sources */,
 				18E9A5E22C9829970082DDA4 /* PlaceholderScreenCoordinator.swift in Sources */,
-				7903937A2D4D62C70022E293 /* HomePostsContent.swift in Sources */,
+				7903937A2D4D62C70022E293 /* HomeFeedContent.swift in Sources */,
 				18E9A5E32C9829970082DDA4 /* PlainMentionBuilder.swift in Sources */,
 				799D85722E270369000A362A /* ReceiveTransactionViewModelProtocol.swift in Sources */,
 				79D67B422E5DF59C00079555 /* ConfirmLinkWalletSheet.swift in Sources */,
@@ -11453,7 +11449,6 @@
 				18E9A6642C9829970082DDA4 /* RoomProxyProtocol.swift in Sources */,
 				18E9A6652C9829970082DDA4 /* RoomRolesAndPermissionsFlowCoordinator.swift in Sources */,
 				79894B732D9E75A100311B4F /* BugReportServiceMock.swift in Sources */,
-				795CF4462D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */,
 				18E9A6662C9829970082DDA4 /* RoomRolesAndPermissionsScreen.swift in Sources */,
 				18E9A6672C9829970082DDA4 /* RoomRolesAndPermissionsScreenCoordinator.swift in Sources */,
 				79C6BB282D47B74300FC3CBF /* RoomMembershipDetailsProxy.swift in Sources */,
@@ -12496,7 +12491,6 @@
 				7F7EA51A9A43125A8CB6AC90 /* NotificationSettingsScreenViewModel.swift in Sources */,
 				CBD2ABE4C1A47ECD99E1488E /* NotificationSettingsScreenViewModelProtocol.swift in Sources */,
 				523C6800ED85D5810CF18C19 /* OIDCAccountSettingsPresenter.swift in Sources */,
-				795CF4472D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */,
 				9A4E3D5AA44B041DAC3A0D81 /* OIDCAuthenticationPresenter.swift in Sources */,
 				7366E5783D1871D42CF99D34 /* OIDCConfiguration.swift in Sources */,
 				FD573B5D665824EB79EABF06 /* Observable.swift in Sources */,
@@ -12978,7 +12972,7 @@
 				799FE30E2E839B2E00CA6ACE /* ConfirmTransactionView.swift in Sources */,
 				6C98153D60FF9B648C166C27 /* TimelineItemMenu.swift in Sources */,
 				AE07F215EBC2B9CBF17AA54B /* TimelineItemMenuAction.swift in Sources */,
-				7903937B2D4D62C70022E293 /* HomePostsContent.swift in Sources */,
+				7903937B2D4D62C70022E293 /* HomeFeedContent.swift in Sources */,
 				12CD8B5CC30A05061228BF9E /* TimelineItemMenuActionProvider.swift in Sources */,
 				79F31B352E02F6060043E100 /* AppMaintenanceScreen.swift in Sources */,
 				A6FFC4C5154C446BAD6B40D8 /* TimelineItemProvider.swift in Sources */,

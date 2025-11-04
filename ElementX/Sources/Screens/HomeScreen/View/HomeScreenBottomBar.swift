@@ -46,12 +46,12 @@ private struct HomeScreenBottomBarView : View {
     let hasNewNotifications: Bool
     let isHomeSearchActive: Bool
     
-    private let homeTabs: [(title: String, icon: ImageAsset, tab: HomeTab)] = [
-        ("Chat", Asset.Images.homeTabChatIcon, .chat),
-        ("Channels", Asset.Images.homeTabExplorerIcon, .channels),
-        ("Feed", Asset.Images.homeTabFeedIcon, .feed),
-        ("Notifications", Asset.Images.homeTabNotificationsIcon, .notifications),
-        ("Wallet", Asset.Images.homeTabWalletIcon, .wallet)
+    private let homeTabs: [(title: String, icon: ImageAsset, iconSelected: ImageAsset, tab: HomeTab)] = [
+        ("Chat", Asset.Images.homeTabChatIcon, Asset.Images.homeTabChatFilledIcon, .chat),
+        ("Channels", Asset.Images.homeTabExplorerIcon, Asset.Images.homeTabExplorerIcon, .channels),
+        ("Feed", Asset.Images.homeTabFeedIcon, Asset.Images.homeTabFeedIcon, .feed),
+        ("Notifications", Asset.Images.homeTabNotificationIcon, Asset.Images.homeTabNotificationFilledIcon, .notifications),
+        ("Wallet", Asset.Images.homeTabWalletIcon, Asset.Images.homeTabWalletFilledIcon, .wallet)
     ]
     
     var body: some View {
@@ -68,7 +68,7 @@ private struct HomeScreenBottomBarView : View {
     private var customTabView: some View {
         ZStack {
             tabBar
-                .padding(.bottom, 16)
+                .padding(.bottom, 12)
         }
         .background(
             LinearGradient(
@@ -88,27 +88,28 @@ private struct HomeScreenBottomBarView : View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 24)
+            RoundedRectangle(cornerRadius: 32)
                 .fill(.thinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 24)
+                    RoundedRectangle(cornerRadius: 32)
                         .stroke(Color.gray.opacity(0.2), lineWidth: 1)
                 )
                 .padding(.horizontal)
-                .shadow(radius: 5)
+                .shadow(radius: 6)
         )
     }
     
-    private func tabButton(for tabInfo: (title: String, icon: ImageAsset, tab: HomeTab)) -> some View {
-        Button {
+    private func tabButton(for tabInfo: (title: String, icon: ImageAsset, iconSelected: ImageAsset, tab: HomeTab)) -> some View {
+        let isTabSelected = selectedTab.wrappedValue == tabInfo.tab
+        return Button {
             onTabSelected(tabInfo.tab)
         } label: {
             ZStack(alignment: .topTrailing) {
-                Image(asset: tabInfo.icon)
+                Image(asset: isTabSelected ? tabInfo.iconSelected : tabInfo.icon)
                     .resizable()
                     .renderingMode(.template)
                     .frame(width: 24, height: 24)
-                    .foregroundStyle(selectedTab.wrappedValue == tabInfo.tab ? .zero.bgAccentRest : .compound.iconSecondary)
+                    .foregroundStyle(isTabSelected ? .zero.bgAccentRest : .compound.iconSecondary)
                 
                 if hasNewNotifications && tabInfo.tab == .notifications {
                     Circle()

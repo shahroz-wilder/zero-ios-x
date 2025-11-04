@@ -132,7 +132,8 @@ struct HomeWalletContent: View {
                                  onTabSelected: { tab in
                 selectedTab = tab
             },
-                                 showDivider: true)
+                                 showDivider: true,
+                                 horizontalPadding: 0)
             
 //            Image(systemName: "ellipsis")
 //                .resizable()

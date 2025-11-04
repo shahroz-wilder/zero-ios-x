@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct SimpleTabButtonsView<Tab: Hashable>: View {
@@ -13,7 +14,8 @@ struct SimpleTabButtonsView<Tab: Hashable>: View {
     let tabTitle: (Tab) -> String
     let onTabSelected: (Tab) -> Void
     
-    var showDivider: Bool = false
+    var showDivider: Bool = true
+    var horizontalPadding: CGFloat = 16
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -26,11 +28,12 @@ struct SimpleTabButtonsView<Tab: Hashable>: View {
                             VStack(spacing: 0) {
                                 Text(tabTitle(tab))
                                     .font(.compound.bodyMDSemibold)
-                                    .foregroundStyle(tab == selectedTab ? .compound.textPrimary : .compound.textSecondary)
+                                    .foregroundStyle(tab == selectedTab ? .zero.bgAccentRest : .compound.textSecondary)
+                                    .padding(.horizontal, 8) // Left and right padding
                                 
                                 Rectangle()
                                     .fill(tab == selectedTab ? Color.zero.bgAccentRest : .clear)
-                                    .frame(width: 90, height: 2)
+                                    .frame(height: 2)
                                     .cornerRadius(1.5)
                                     .padding(.top, 8)
                             }
@@ -41,11 +44,13 @@ struct SimpleTabButtonsView<Tab: Hashable>: View {
                     Spacer()
                 }
             }
+            .padding(.horizontal, horizontalPadding)
             
             if showDivider {
                 HorizontalDivider()
             }
         }
+        .padding(.bottom, 8)
     }
 }
 
