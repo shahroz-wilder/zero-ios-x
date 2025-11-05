@@ -66,6 +66,7 @@ final class AppSettings {
         case linkPreviewsEnabled
         case latestEventSorterEnabled
         case spaceSettingsEnabled
+        case focusEventOnNotificationTap
         
         case zeroAccessToken
         case zeroRewardsCredit
@@ -395,6 +396,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.focusEventOnNotificationTap, defaultValue: false, storageType: .userDefaults(store))
+    var focusEventOnNotificationTap
     
     @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var spaceSettingsEnabled
