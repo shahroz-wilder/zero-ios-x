@@ -36,22 +36,22 @@ struct RoomScreen: View {
             }
             .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
             .overlay(alignment: .top) {
-                if !isVoiceOverEnabled {
+                if !isVoiceOverEnabled, context.viewState.shouldShowPinnedEventsBanner {
                     pinnedItemsBanner
                 }
             }
             // This can overlay on top of the pinnedItemsBanner
-            //.overlay(alignment: .top) {
-            //    knockRequestsBanner
-            //}
-            //.safeAreaInset(edge: .top) {
-            //    // When voice over is on the table view is not reversed
-            //    // and the scroll gestures are not intercepted
-            //    // so we render the pinned banner on top.
-            //    if isVoiceOverEnabled {
-            //        pinnedItemsBanner
-            //   }
-            //}
+//            .overlay(alignment: .top) {
+//                knockRequestsBanner
+//            }
+//            .safeAreaInset(edge: .top) {
+//                // When voice over is on the table view is not reversed
+//                // and the scroll gestures are not intercepted
+//                // so we render the pinned banner on top.
+//                if isVoiceOverEnabled {
+//                    pinnedItemsBanner
+//                }
+//            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 VStack(spacing: 0) {
                     RoomScreenFooterView(details: context.viewState.footerDetails,
@@ -83,41 +83,19 @@ struct RoomScreen: View {
     
     @ViewBuilder
     private var pinnedItemsBanner: some View {
-        // Color.clear and clipped() are required for iOS 26 transparent nav bar
-        VStack(spacing: 0) {
-            if context.viewState.shouldShowPinnedEventsBanner {
-                PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
-                                      onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
-                                      onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
-                    .transition(.move(edge: .top))
-            } else {
-                Color.clear
-                    .allowsHitTesting(false)
-            }
-        }
-        .animation(.elementDefault, value: context.viewState.shouldShowPinnedEventsBanner)
-        .clipped()
+        PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
+                              onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
+                              onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
     }
     
     @ViewBuilder
     private var knockRequestsBanner: some View {
-        // Color.clear and clipped() are required for iOS 26 transparent nav bar
-        VStack(spacing: 0) {
-            if context.viewState.shouldSeeKnockRequests {
-                KnockRequestsBannerView(requests: context.viewState.displayedKnockRequests,
-                                        onDismiss: dismissKnockRequestsBanner,
-                                        onAccept: context.viewState.canAcceptKnocks ? acceptKnockRequest : nil,
-                                        onViewAll: onViewAllKnockRequests,
-                                        mediaProvider: context.mediaProvider)
-                    .padding(.top, 16)
-                    .transition(.move(edge: .top))
-            } else {
-                Color.clear
-                    .allowsHitTesting(false)
-            }
-        }
-        .animation(.elementDefault, value: context.viewState.shouldSeeKnockRequests)
-        .clipped()
+        KnockRequestsBannerView(requests: context.viewState.displayedKnockRequests,
+                                onDismiss: dismissKnockRequestsBanner,
+                                onAccept: context.viewState.canAcceptKnocks ? acceptKnockRequest : nil,
+                                onViewAll: onViewAllKnockRequests,
+                                mediaProvider: context.mediaProvider)
+            .padding(.top, 16)
     }
     
     private func dismissKnockRequestsBanner() {

@@ -49,6 +49,7 @@ struct CompleteProfileScreen: View {
                                    url: context.viewState.selectedAvatarURL,
                                    name: nil,
                                    contentID: "",
+                                   isSpace: false,
                                    avatarSize: .user(on: .completeProfile),
                                    mediaProvider: context.mediaProvider,
                                    onTap: { context.send(viewAction: .presentMediaSource) })

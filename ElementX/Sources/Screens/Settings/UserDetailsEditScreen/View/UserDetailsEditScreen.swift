@@ -57,6 +57,7 @@ struct UserDetailsEditScreen: View {
                                    url: context.viewState.selectedAvatarURL,
                                    name: context.viewState.currentDisplayName,
                                    contentID: context.viewState.userID,
+                                   isSpace: false,
                                    avatarSize: .user(on: .editUserDetails),
                                    mediaProvider: context.mediaProvider,
                                    onTap: { context.send(viewAction: .presentMediaSource) })
