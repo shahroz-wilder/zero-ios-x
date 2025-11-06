@@ -124,10 +124,8 @@ class ZeroPostApi: ZeroPostApiProtocol {
     }
     
     func createNewPost(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, any Error> {
-        var parameters: [String: String] = [
-            "text": content,
-//            "walletAddress": walletAddress
-        ]
+        var parameters: [String: String] = ["text": content]
+        
         if let replyToPostId = replyToPost {
             parameters["replyTo"] = replyToPostId
         }
@@ -138,7 +136,7 @@ class ZeroPostApi: ZeroPostApiProtocol {
         let requestUrl = if let requestChannelZId = channelZId?.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") {
             FeedEndPoints.newPostEndPoint.appending("/\(requestChannelZId)")
         } else {
-            FeedEndPoints.newPostEndPoint
+            FeedEndPoints.newPostEndPoint.appending("/\(walletAddress)")
         }
         
         let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(requestUrl, method: .post, appSettings: appSettings, parameters: parameters)
