@@ -62,6 +62,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
     private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
+    /// The last coordinator in the `navigationStackCoordinator` stack at the initial state
+    private let initialCoordinator: CoordinatorProtocol?
     private let flowParameters: CommonFlowParameters
     
     private let stateMachine: StateMachine<State, Event>
@@ -72,7 +74,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var roomFlowCoordinator: RoomFlowCoordinator?
+    private var childFlowCoordinator: FlowCoordinatorProtocol?
     
     init(entryPoint: RoomMembersFlowCoordinatorEntryPoint,
          roomProxy: JoinedRoomProxyProtocol,
@@ -82,8 +84,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         self.roomProxy = roomProxy
         self.flowParameters = flowParameters
         self.navigationStackCoordinator = navigationStackCoordinator
+        initialCoordinator = navigationStackCoordinator.stackCoordinators.last ?? navigationStackCoordinator.rootCoordinator
         
-        stateMachine = .init(state: .initial)
+        stateMachine = flowParameters.stateMachineFactory.makeMembersFlowStateMachine(state: .initial)
         configureStateMachine()
     }
     
@@ -99,20 +102,20 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .roomMemberDetails(let userID):
-            if case .roomFlow = stateMachine.state, let roomFlowCoordinator {
-                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            if case .roomFlow = stateMachine.state, let childFlowCoordinator {
+                childFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             } else {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: animated)
             }
         case .childRoom(let roomID, let via):
-            if case .roomFlow = stateMachine.state, let roomFlowCoordinator {
-                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            if case .roomFlow = stateMachine.state, let childFlowCoordinator {
+                childFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             } else {
                 stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: via, eventID: nil), userInfo: animated)
             }
         case .childEvent(let eventID, let roomID, let via):
-            if case .roomFlow = stateMachine.state, let roomFlowCoordinator {
-                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            if case .roomFlow = stateMachine.state, let childFlowCoordinator {
+                childFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             } else {
                 stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: via, eventID: eventID), userInfo: animated)
             }
@@ -126,14 +129,13 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
-        if stateMachine.state == .inviteUsersScreen {
-            navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
-        } else if let roomFlowCoordinator {
-            roomFlowCoordinator.clearRoute(animated: animated)
+        childFlowCoordinator?.clearRoute(animated: animated)
+        navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
+        
+        guard let initialCoordinator else {
+            return
         }
-        // We don't support dismissing a sub flow by itself, only the entire chain.
-        // The presenter flow will take care of dismissing it
-        actionsSubject.send(.finished)
+        navigationStackCoordinator.pop(to: initialCoordinator, animated: animated)
     }
     
     private func configureStateMachine() {
@@ -193,7 +195,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .startRoomFlow(let roomID, let via, let eventID), .roomFlow):
                 startRoomFlow(roomID: roomID, via: via, eventID: eventID, animated: animated)
             case (.roomFlow, .stopRoomFlow, _):
-                roomFlowCoordinator = nil
+                childFlowCoordinator = nil
                 
             default:
                 fatalError("Unhandled transition")
@@ -371,7 +373,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        roomFlowCoordinator = coordinator
+        childFlowCoordinator = coordinator
         if let eventID {
             coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: animated)
         } else {
