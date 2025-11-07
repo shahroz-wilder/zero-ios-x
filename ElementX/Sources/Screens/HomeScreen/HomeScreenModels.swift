@@ -32,6 +32,7 @@ enum HomeScreenViewModelAction {
     case openPostUserProfile(_ profile: ZPostUserProfile, feedProtocol: FeedProtocol)
     case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType, ZeroCurrency?)
     case searchUser
+    case selectRoomAlias(roomAlias: String)
 }
 
 enum HomeScreenViewAction {
@@ -444,7 +445,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let isTombstoned: Bool
     
-    let isPublic: Bool
+    let isDiscoverable: Bool
     
     var displayedLastMessage: AttributedString? {
         // If the room is tombstoned, show a specific message, regardless of any last message.
@@ -488,7 +489,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        avatar: .room(id: "", name: "", avatarURL: nil),
                        canonicalAlias: nil,
                        isTombstoned: false,
-                       isPublic: false,
+                       isDiscoverable: false,
                        unreadNotificationsCount: 0,
                        isEncrypted: false)
     }
@@ -714,7 +715,7 @@ extension HomeScreenRoom {
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias,
                   isTombstoned: summary.isTombstoned,
-                  isPublic: summary.isPublicRoom,
+                  isDiscoverable: false,
                   unreadNotificationsCount: summary.unreadMessagesCount, // settings to unread messages count to show new messages count only
                   isEncrypted: summary.isEncrypted
         )
@@ -894,7 +895,7 @@ extension HomeScreenChannel {
               avatar: .room(id: id, name: displayName, avatarURL: nil),
               canonicalAlias: nil,
               isTombstoned: false,
-              isPublic: false,
+              isDiscoverable: false,
               unreadNotificationsCount: 0,
               isEncrypted: true)
     }
@@ -1017,7 +1018,7 @@ extension RoomDirectorySearchResult {
               avatar: avatar,
               canonicalAlias: nil,
               isTombstoned: false,
-              isPublic: false,
+              isDiscoverable: true,
               unreadNotificationsCount: 0,
               isEncrypted: false)
     }

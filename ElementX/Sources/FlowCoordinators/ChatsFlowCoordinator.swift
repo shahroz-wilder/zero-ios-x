@@ -424,6 +424,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type, meowPrice: meowPrice)
                 case .searchUser:
                     presentSearchUserScreen()
+                case .selectRoomAlias(let roomAlias):
+                    handleAppRoute(.roomAlias(roomAlias), animated: true)
                 }
             }
             .store(in: &cancellables)

@@ -181,7 +181,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         roomDirectorySearchProxy.resultsPublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.publicRooms, on: self)
+            .sink { [weak self] rooms in
+                guard let self else { return }
+                
+                let uniqueRooms = rooms.uniqued(on: \.id)
+                if self.state.bindings.isSearchFieldFocused, !self.state.bindings.searchQuery.isEmpty {
+                    //user is searching, this result is search result, we need to assign it
+                    self.state.publicRooms = uniqueRooms
+                } else {
+                    var existingRooms = self.state.publicRooms
+                    existingRooms.append(contentsOf: uniqueRooms)
+                    self.state.publicRooms = existingRooms.uniqued(on: \.id)
+                }
+            }
             .store(in: &cancellables)
                 
         Task {
@@ -382,12 +394,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .reachedPublicRoomsBottom:
             loadPublicRoomsNextPage()
         case .selectPublicRoom(let publicRoom):
-//            if let alias = room.alias {
-//                actionsSubject.send(.selectAlias(alias))
-//            } else {
-//                actionsSubject.send(.selectRoomID(room.id))
-//            }
-            break
+            if let alias = publicRoom.alias {
+                actionsSubject.send(.selectRoomAlias(roomAlias: alias))
+            } else {
+                actionsSubject.send(.presentRoom(roomIdentifier: publicRoom.id))
+            }
         }
     }
     

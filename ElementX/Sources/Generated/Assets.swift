@@ -77,6 +77,7 @@ internal enum Asset {
     internal static let iconClaimRewards = ImageAsset(name: "images/icon-claim-rewards")
     internal static let iconCopy = ImageAsset(name: "images/icon-copy")
     internal static let iconMore = ImageAsset(name: "images/icon-more")
+    internal static let iconPeople = ImageAsset(name: "images/icon_people")
     internal static let imgAppMaintenance = ImageAsset(name: "images/img-app-maintenance")
     internal static let imgAppUpdate = ImageAsset(name: "images/img-app-update")
     internal static let imgInviteFriend = ImageAsset(name: "images/img-invite-friend")

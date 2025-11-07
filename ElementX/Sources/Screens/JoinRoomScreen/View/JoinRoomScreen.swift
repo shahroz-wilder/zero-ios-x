@@ -301,9 +301,12 @@ struct JoinRoomScreen: View {
     }
     
     var joinButton: some View {
-        Button(L10n.screenJoinRoomJoinAction) { context.send(viewAction: .join) }
-            .buttonStyle(.compound(.super))
-            .accessibilityIdentifier(A11yIdentifiers.joinRoomScreen.join)
+        ZeroPrimaryButton(title: "Join Now") {
+            context.send(viewAction: .join)
+        }
+//        Button(L10n.screenJoinRoomJoinAction) { context.send(viewAction: .join) }
+//            .buttonStyle(.compound(.super))
+//            .accessibilityIdentifier(A11yIdentifiers.joinRoomScreen.join)
     }
     
     @ToolbarContentBuilder

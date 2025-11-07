@@ -18,14 +18,15 @@ struct JoinedMembersBadgeView: View {
     var body: some View {
         if heroes.isEmpty {
             Label(title: title) {
-                CompoundIcon(\.userProfile, size: .small, relativeTo: .compound.bodyMD)
-                    .foregroundStyle(.compound.textSecondary)
+//                CompoundIcon(\.userProfile, size: .small, relativeTo: .compound.bodyMD)
+//                    .foregroundStyle(.compound.textSecondary)
+                Image(asset: Asset.Images.iconPeople)
             }
             .font(.compound.bodyMD)
             .foregroundStyle(.compound.textSecondary)
             .labelStyle(.custom(spacing: 4))
-            .padding(.trailing, 8)
-            .background(.compound.bgSubtleSecondary, in: Capsule())
+            .padding(.trailing, 12)
+//            .background(.compound.bgSubtleSecondary, in: Capsule())
         } else {
             Label(title: title) {
                 heroesFacePile

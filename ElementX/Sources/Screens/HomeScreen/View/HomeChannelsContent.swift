@@ -78,57 +78,55 @@ struct HomeChannelsContent: View {
     }
     
     private var channelList: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    Section {
-                        switch context.viewState.channelsListMode {
-                        case .skeletons:
-                            LazyVStack(alignment: .leading, spacing: 0) {
-                                ForEach(context.viewState.visibleChannels) { channel in
-                                    HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
-                                        .redacted(reason: .placeholder)
-                                        .shimmer()
-                                }
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                Section {
+                    switch context.viewState.channelsListMode {
+                    case .skeletons:
+                        LazyVStack(alignment: .leading, spacing: 0) {
+                            ForEach(context.viewState.visibleChannels) { channel in
+                                HomeScreenChannelCell(channel: channel, onChannelSelected: { _ in }, mediaProvider: context.mediaProvider)
+                                    .redacted(reason: .placeholder)
+                                    .shimmer()
                             }
-                            .disabled(true)
-                        case .empty:
-                            HomeContentEmptyView(message: "No channels")
-                        case .channels:
-                            LazyVStack(alignment: .leading, spacing: 0) {
-                                ForEach(context.viewState.visibleChannels, id: \.id) { channel in
-                                    HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
-                                        context.send(viewAction: .channelTapped(channel))
-                                    }, mediaProvider: context.mediaProvider)
-                                }
-                                
-                                /// Bottom space to keep content above `HomeScreenBottomBar`
-                                HomeTabBottomSpace()
+                        }
+                        .disabled(true)
+                    case .empty:
+                        HomeContentEmptyView(message: "No channels")
+                    case .channels:
+                        LazyVStack(alignment: .leading, spacing: 0) {
+                            ForEach(context.viewState.visibleChannels, id: \.id) { channel in
+                                HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
+                                    context.send(viewAction: .channelTapped(channel))
+                                }, mediaProvider: context.mediaProvider)
                             }
-                            .isSearching($context.isSearchFieldFocused)
-                            .searchable(text: $context.searchQuery)
-                            .compoundSearchField()
-                            .disableAutocorrection(true)
+                            
+                            /// Bottom space to keep content above `HomeScreenBottomBar`
+                            HomeTabBottomSpace()
                         }
-                    } header: {
-                        if isSearchDisable {
-                            topSection
-                        }
+                        .isSearching($context.isSearchFieldFocused)
+                        .searchable(text: $context.searchQuery)
+                        .compoundSearchField()
+                        .disableAutocorrection(true)
+                    }
+                } header: {
+                    if isSearchDisable {
+                        topSection
                     }
                 }
             }
-            .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                if isChannelTabSelected {
-                    guard scrollView != scrollViewAdapter.scrollView else { return }
-                    scrollViewAdapter.scrollView = scrollView
-                }
-            }
-            .scrollDismissesKeyboard(.immediately)
-            .scrollDisabled(context.viewState.channelsListMode == .skeletons)
-            .scrollBounceBehavior(context.viewState.channelsListMode == .empty ? .basedOnSize : .automatic)
-            .animation(.elementDefault, value: context.viewState.channelsListMode)
-            .animation(.none, value: context.viewState.visibleChannels)
         }
+        .introspect(.scrollView, on: .supportedVersions) { scrollView in
+            if isChannelTabSelected {
+                guard scrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = scrollView
+            }
+        }
+        .scrollDismissesKeyboard(.immediately)
+        .scrollDisabled(context.viewState.channelsListMode == .skeletons)
+        .scrollBounceBehavior(context.viewState.channelsListMode == .empty ? .basedOnSize : .automatic)
+        .animation(.elementDefault, value: context.viewState.channelsListMode)
+        .animation(.none, value: context.viewState.visibleChannels)
     }
     
     private var roomList: some View {
@@ -224,35 +222,35 @@ struct HomeChannelsContent: View {
     
     private var roomDiscoveryList: some View {
         ScrollView {
-            Section {
-                LazyVStack(alignment: .leading, spacing: 0) {
-                    if context.viewState.publicRooms.isEmpty {
-                        HomeContentEmptyView(message: "No rooms")
-                    } else {
+            VStack(spacing: 0) {
+                if isSearchDisable {
+                    topSection
+                }
+                
+                if context.viewState.publicRooms.isEmpty {
+                    HomeContentEmptyView(message: "No rooms")
+                } else {
+                    LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(context.viewState.publicRooms) { room in
                             RoomDirectorySearchCell(result: room, mediaProvider: context.mediaProvider) {
                                 context.send(viewAction: .selectPublicRoom(room))
                             }
                         }
-                        .isSearching($context.isSearchFieldFocused)
-                        .searchable(text: $context.searchQuery)
-                        .compoundSearchField()
-                        .disableAutocorrection(true)
+                        
+                        emptyRectangle
+                            .onAppear {
+                                context.send(viewAction: .reachedPublicRoomsBottom)
+                            }
+                        
+                        /// Bottom space to keep content above `HomeScreenBottomBar`
+                        HomeTabBottomSpace()
                     }
-                    emptyRectangle
-                        .onAppear {
-                            context.send(viewAction: .reachedPublicRoomsBottom)
-                        }
-                    
-                    /// Bottom space to keep content above `HomeScreenBottomBar`
-                    HomeTabBottomSpace()
+                    .isSearching($context.isSearchFieldFocused)
+                    .searchable(text: $context.searchQuery)
+                    .compoundSearchField()
+                    .disableAutocorrection(true)
                 }
-                
-            } header: {
-                if isSearchDisable {
-                    topSection
-                }
-            }
+            } 
         }
         .introspect(.scrollView, on: .supportedVersions) { scrollView in
             if isPublicRoomTabSelected {

@@ -30,7 +30,8 @@ struct RoomDirectorySearchCell: View {
 
     var body: some View {
         ZeroListRow(label: .avatar(title: result.name ?? result.alias ?? result.id,
-                                   description: description,
+//                                   description: description,
+                                   description: nil,
                                    icon: avatar),
                     kind: result.canBeJoined ? .navigationLink(action: joinAction) : .label)
     }

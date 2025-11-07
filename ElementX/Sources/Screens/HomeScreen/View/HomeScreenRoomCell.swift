@@ -27,16 +27,16 @@ struct HomeScreenRoomCell: View {
     
     var body: some View {
         Button {
-//            if room.isPublic {
-//                selectPublicRoom(room.id)
-//            } else {
-//                if let roomID = room.roomID {
-//                    action(.selectRoom(roomIdentifier: roomID))
-//                }
-//            }
-            if let roomID = room.roomID {
-                action(.selectRoom(roomIdentifier: roomID))
+            if room.isDiscoverable {
+                selectPublicRoom(room.id)
+            } else {
+                if let roomID = room.roomID {
+                    action(.selectRoom(roomIdentifier: roomID))
+                }
             }
+//            if let roomID = room.roomID {
+//                action(.selectRoom(roomIdentifier: roomID))
+//            }
         } label: {
             HStack(alignment: .top, spacing: horizontalInsets) {
                 avatar
