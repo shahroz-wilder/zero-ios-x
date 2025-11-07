@@ -37,7 +37,11 @@ struct HomeScreenRoomList: View {
             ForEach(roomsList) { room in
                 switch room.type {
                 case .placeholder:
-                    HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
+                    HomeScreenRoomCell(room: room,
+                                       isSelected: false,
+                                       mediaProvider: context.mediaProvider,
+                                       action: context.send,
+                                       selectPublicRoom: { _ in })
                         .redacted(reason: .placeholder)
                 case .invite:
                     HomeScreenInviteCell(room: room, context: context, hideInviteAvatars: context.viewState.hideInviteAvatars)
@@ -50,6 +54,11 @@ struct HomeScreenRoomList: View {
                                        isSelected: isSelected,
                                        mediaProvider: context.mediaProvider,
                                        action: context.send,
+                                       selectPublicRoom: { roomId in
+                        if let publicRoom = context.viewState.publicRooms.first(where: { $0.id == roomId }) {
+                            context.send(viewAction: .selectPublicRoom(publicRoom))
+                        }
+                    },
                                        showProBadge: context.viewState.directRoomsUserStatusMap[room.id] == true)
                     .contextMenu {
                         if room.badges.isDotShown {

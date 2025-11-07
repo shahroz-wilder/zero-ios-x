@@ -9,9 +9,7 @@ import Compound
 import SwiftUI
 
 enum HomeChannelsTab: CaseIterable {
-    case all
-    case gated
-    case muted
+    case explore, all, gated, muted
 }
 
 struct HomeChannelsContent: View {
@@ -20,26 +18,56 @@ struct HomeChannelsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    @State private var selectedChannelsTab: HomeChannelsTab = .all
-    var showChannelList: Bool {
-        selectedChannelsTab == .gated && !context.isSearchFieldFocused && context.searchQuery.isEmpty
+    @State private var selectedChannelsTab: HomeChannelsTab = .explore
+    
+    var isSearchDisable : Bool {
+        !context.isSearchFieldFocused && context.searchQuery.isEmpty
+    }
+    var isChannelTabSelected: Bool {
+        selectedChannelsTab == .gated && isSearchDisable
+    }
+    var isChatTabSelected: Bool {
+        (selectedChannelsTab == .all || selectedChannelsTab == .muted)
+    }
+    var isPublicRoomTabSelected: Bool {
+        selectedChannelsTab == .explore && isSearchDisable
     }
     
     var body: some View {
-        ZStack {
-            channelList
-                .id("channels")
-                .opacity(showChannelList ? 1 : 0)
-                .allowsHitTesting(showChannelList)
-            
-            roomList
-                .id("rooms")
-                .opacity(showChannelList ? 0 : 1)
-                .allowsHitTesting(!showChannelList)
+        Group {
+            switch selectedChannelsTab {
+            case .explore:
+                ZStack {
+                    roomList
+                        .id("rooms")
+                        .opacity(!isSearchDisable ? 1 : 0)
+                        .allowsHitTesting(!isSearchDisable)
+                    
+                    roomDiscoveryList
+                        .id("rooms-discovery")
+                        .opacity(isSearchDisable ? 1 : 0)
+                        .allowsHitTesting(isSearchDisable)
+                }
+            case .gated:
+                ZStack {
+                    roomList
+                        .id("rooms")
+                        .opacity(!isSearchDisable ? 1 : 0)
+                        .allowsHitTesting(!isSearchDisable)
+                    
+                    channelList
+                        .id("channels")
+                        .opacity(isSearchDisable ? 1 : 0)
+                        .allowsHitTesting(isSearchDisable)
+                }
+            default:
+                roomList
+                    .id("rooms")
+            }
         }
         .onChange(of: selectedChannelsTab) { _, newTab in
             switch newTab {
-            case .all:
+            case .all, .explore:
                 context.filtersState.activateZeroFilter(.secondaryRooms)
             case .gated:
                 context.filtersState.activateZeroFilter(.channels)
@@ -83,14 +111,14 @@ struct HomeChannelsContent: View {
                             .disableAutocorrection(true)
                         }
                     } header: {
-                        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+                        if isSearchDisable {
                             topSection
                         }
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                if showChannelList {
+                if isChannelTabSelected {
                     guard scrollView != scrollViewAdapter.scrollView else { return }
                     scrollViewAdapter.scrollView = scrollView
                 }
@@ -112,7 +140,7 @@ struct HomeChannelsContent: View {
                         case .skeletons:
                             LazyVStack(spacing: 0) {
                                 ForEach(context.viewState.visibleRooms) { room in
-                                    HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
+                                    HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send, selectPublicRoom: { _ in })
                                         .redacted(reason: .placeholder)
                                         .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                                 }
@@ -139,14 +167,14 @@ struct HomeChannelsContent: View {
                             .disableAutocorrection(true)
                         }
                     } header: {
-                        if !context.isSearchFieldFocused, context.searchQuery.isEmpty {
+                        if isSearchDisable {
                             topSection
                         }
                     }
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                if !showChannelList {
+                if isChatTabSelected {
                     guard scrollView != scrollViewAdapter.scrollView else { return }
                     scrollViewAdapter.scrollView = scrollView
                 }
@@ -194,11 +222,53 @@ struct HomeChannelsContent: View {
         }
     }
     
+    private var roomDiscoveryList: some View {
+        ScrollView {
+            Section {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    if context.viewState.publicRooms.isEmpty {
+                        HomeContentEmptyView(message: "No rooms")
+                    } else {
+                        ForEach(context.viewState.publicRooms) { room in
+                            RoomDirectorySearchCell(result: room, mediaProvider: context.mediaProvider) {
+                                context.send(viewAction: .selectPublicRoom(room))
+                            }
+                        }
+                        .isSearching($context.isSearchFieldFocused)
+                        .searchable(text: $context.searchQuery)
+                        .compoundSearchField()
+                        .disableAutocorrection(true)
+                    }
+                    emptyRectangle
+                        .onAppear {
+                            context.send(viewAction: .reachedPublicRoomsBottom)
+                        }
+                    
+                    /// Bottom space to keep content above `HomeScreenBottomBar`
+                    HomeTabBottomSpace()
+                }
+                
+            } header: {
+                if isSearchDisable {
+                    topSection
+                }
+            }
+        }
+        .introspect(.scrollView, on: .supportedVersions) { scrollView in
+            if isPublicRoomTabSelected {
+                guard scrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = scrollView
+            }
+        }
+        .scrollDismissesKeyboard(.immediately)
+    }
+    
     private var topSection: some View {
         SimpleTabButtonsView(tabs: HomeChannelsTab.allCases,
                              selectedTab: selectedChannelsTab,
                              tabTitle: { tab in
             switch tab {
+            case .explore: return "Explore"
             case .all: return "Channels"
             case .gated: return "Gated"
             case .muted: return "Muted"
@@ -208,6 +278,11 @@ struct HomeChannelsContent: View {
             selectedChannelsTab = tab
         })
         .id("channel-tabs")
+    }
+    
+    private var emptyRectangle: some View {
+        Rectangle()
+            .frame(width: 0, height: 0)
     }
     
     /// FOR ROOMS LIST

@@ -18,8 +18,7 @@ protocol RoomNotificationModeUpdatedProtocol {
     func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy)
 }
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
-                           FeedProtocol, RoomNotificationModeUpdatedProtocol,
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedProtocol, RoomNotificationModeUpdatedProtocol,
                            WalletTransactionProtocol, UserRewardsProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
@@ -29,6 +28,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private let mediaProvider: MediaProviderProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
+    private let roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol
     
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> {
@@ -60,6 +60,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         self.mediaProvider = userSession.mediaProvider
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
+        roomDirectorySearchProxy = userSession.clientProxy.roomDirectorySearchProxy()
         
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID,
                                            bindings: .init(filtersState: .init(appSettings: appSettings))),
@@ -70,6 +71,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }),
                                                                  clientProxy: userSession.clientProxy,
                                                                  loadInitialPosts: true)
+        
+        state.publicRooms = roomDirectorySearchProxy.resultsPublisher.value
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
@@ -175,6 +178,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 self?.mapDirectChatUsersProBadgeStatus(users)
             }
             .store(in: &cancellables)
+        
+        roomDirectorySearchProxy.resultsPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.publicRooms, on: self)
+            .store(in: &cancellables)
                 
         Task {
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
@@ -200,6 +208,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         setupRoomListSubscriptions()
         
         updateRooms()
+        
+        loadPublicRoomsNextPage()
         
         fetchZeroHomeScreenData()
         
@@ -369,6 +379,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             fetchWalletData()
         case .searchUser:
             actionsSubject.send(.searchUser)
+        case .reachedPublicRoomsBottom:
+            loadPublicRoomsNextPage()
+        case .selectPublicRoom(let publicRoom):
+//            if let alias = room.alias {
+//                actionsSubject.send(.selectAlias(alias))
+//            } else {
+//                actionsSubject.send(.selectRoomID(room.id))
+//            }
+            break
         }
     }
     
@@ -489,6 +508,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 .filter { $0.displayName.containsIgnoringCase(context.searchQuery) }
                 .map { $0.mapToHomeScreenRoom() }
             rooms.append(contentsOf: gatedChannels)
+            
+            // append public rooms in the same list in case user is searching
+            let publicRooms = state.publicRooms
+                .filter { $0.name?.containsIgnoringCase(context.searchQuery) == true }
+                .map { $0.mapToHomeScreenRoom() }
+            rooms.append(contentsOf: publicRooms)
         } else {
             // We need to filter rooms based on active zeroFilter
             switch context.filtersState.activeZeroFilter {
@@ -1456,6 +1481,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 self.isRoomUsersExtractionInProgress = false
                 self.state.directRoomsUserStatusMap = userStatusMap
             }
+        }
+    }
+    
+    private func loadPublicRoomsNextPage() {
+        guard !state.isLoadingPublicRooms else {
+            return
+        }
+        
+        Task {
+            state.isLoadingPublicRooms = true
+            let _ = await roomDirectorySearchProxy.nextPage()
+            state.isLoadingPublicRooms = false
         }
     }
     

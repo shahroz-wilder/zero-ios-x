@@ -18,6 +18,7 @@ struct HomeScreenRoomCell: View {
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
+    let selectPublicRoom: (String) -> Void
     
     var showProBadge: Bool = false
     
@@ -26,6 +27,13 @@ struct HomeScreenRoomCell: View {
     
     var body: some View {
         Button {
+//            if room.isPublic {
+//                selectPublicRoom(room.id)
+//            } else {
+//                if let roomID = room.roomID {
+//                    action(.selectRoom(roomIdentifier: roomID))
+//                }
+//            }
             if let roomID = room.roomID {
                 action(.selectRoom(roomIdentifier: roomID))
             }
@@ -189,17 +197,17 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(genericRooms) { room in
-                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in } selectPublicRoom: { _ in }
             }
             
-            HomeScreenRoomCell(room: .placeholder(), isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+            HomeScreenRoomCell(room: .placeholder(), isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in } selectPublicRoom: { _ in }
                 .redacted(reason: .placeholder)
         }
         .previewDisplayName("Generic")
         
         VStack(spacing: 0) {
             ForEach(notificationsStateRooms) { room in
-                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in } selectPublicRoom: { _ in }
             }
         }
         .previewLayout(.sizeThatFits)

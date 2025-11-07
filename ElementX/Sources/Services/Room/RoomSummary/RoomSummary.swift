@@ -64,6 +64,7 @@ struct RoomSummary {
     var hasUnreadMentions: Bool { unreadMentionsCount > 0 }
     var hasUnreadNotifications: Bool { unreadNotificationsCount > 0 }
     var isMuted: Bool { notificationMode == .mute }
+    var isPublicRoom: Bool { room.isPublic() ?? false }
 }
 
 extension RoomSummary {

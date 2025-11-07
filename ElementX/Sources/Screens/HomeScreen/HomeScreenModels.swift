@@ -95,6 +95,8 @@ enum HomeScreenViewAction {
     case refreshWalletData
     
     case searchUser
+    case reachedPublicRoomsBottom
+    case selectPublicRoom(RoomDirectorySearchResult)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -219,6 +221,10 @@ struct HomeScreenViewState: BindableState {
     var walletTransactions: [HomeScreenWalletContent] = []
     var walletNFTs: [HomeScreenWalletContent] = []
     var walletStakings: [HomeScreenWalletStakingContent] = []
+    
+    // public rooms from room directory
+    var publicRooms: [RoomDirectorySearchResult] = []
+    var isLoadingPublicRooms = false
     
     var walletTokenNextPageParams: NextPageParams? = nil
     var walletNFTsNextPageParams: NextPageParams? = nil
@@ -438,6 +444,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let isTombstoned: Bool
     
+    let isPublic: Bool
+    
     var displayedLastMessage: AttributedString? {
         // If the room is tombstoned, show a specific message, regardless of any last message.
         guard !isTombstoned else {
@@ -480,6 +488,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        avatar: .room(id: "", name: "", avatarURL: nil),
                        canonicalAlias: nil,
                        isTombstoned: false,
+                       isPublic: false,
                        unreadNotificationsCount: 0,
                        isEncrypted: false)
     }
@@ -705,6 +714,7 @@ extension HomeScreenRoom {
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias,
                   isTombstoned: summary.isTombstoned,
+                  isPublic: summary.isPublicRoom,
                   unreadNotificationsCount: summary.unreadMessagesCount, // settings to unread messages count to show new messages count only
                   isEncrypted: summary.isEncrypted
         )
@@ -884,6 +894,7 @@ extension HomeScreenChannel {
               avatar: .room(id: id, name: displayName, avatarURL: nil),
               canonicalAlias: nil,
               isTombstoned: false,
+              isPublic: false,
               unreadNotificationsCount: 0,
               isEncrypted: true)
     }
@@ -988,5 +999,26 @@ extension HomeScreenWalletStakingContent {
                   myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())",
                   pendingRewards: pendingRewards,
                   chainId: pool.chainId.rawValue)
+    }
+}
+
+extension RoomDirectorySearchResult {
+    func mapToHomeScreenRoom() -> HomeScreenRoom {
+        .init(id: id,
+              roomID: id,
+              type: .room,
+              badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, isCallShown: false),
+              name: name ?? "",
+              isDirect: false,
+              isHighlighted: false,
+              isFavourite: false,
+              timestamp: nil,
+              lastMessage: nil,
+              avatar: avatar,
+              canonicalAlias: nil,
+              isTombstoned: false,
+              isPublic: false,
+              unreadNotificationsCount: 0,
+              isEncrypted: false)
     }
 }
