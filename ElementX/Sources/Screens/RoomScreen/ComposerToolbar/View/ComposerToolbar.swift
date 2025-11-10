@@ -96,8 +96,10 @@ struct ComposerToolbar: View {
                         case .previewVoiceMessage(let state, let waveform, let isUploading):
                             EmptyView()
                         default:
-                            voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
-                                .padding(.leading, 3)
+                            if !context.viewState.showSendButton {
+                                voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
+                                    .padding(.leading, 3)
+                            }
                         }
                         
                         if context.viewState.showSendButton {
@@ -190,6 +192,7 @@ struct ComposerToolbar: View {
                 .scaledPadding(4, relativeTo: .compound.headingLG)
         }
         .disabled(context.viewState.sendButtonDisabled)
+        .padding(.leading, 3)
         .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.sendButton)
