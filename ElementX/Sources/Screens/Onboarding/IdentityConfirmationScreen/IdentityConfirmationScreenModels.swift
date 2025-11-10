@@ -24,7 +24,7 @@ struct IdentityConfirmationScreenViewState: BindableState {
         case interactiveVerification
     }
     
-    var availableActions: [AvailableActions] = []
+    var availableActions: [AvailableActions]?
     let learnMoreURL: URL
 }
 

@@ -18,7 +18,7 @@ import Compound
 import SwiftUI
 
 struct VerifyLoginScreen: View {
-    @ObservedObject var context: IdentityConfirmationScreenViewModel.Context
+    let context: IdentityConfirmationScreenViewModel.Context
     
     @State var isShowingDismissAlert = false
     
