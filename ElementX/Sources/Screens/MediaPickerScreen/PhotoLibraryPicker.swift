@@ -46,15 +46,32 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         let pickerViewController = PHPickerViewController(configuration: configuration)
         pickerViewController.delegate = context.coordinator
         
+        // Create wrapper
+        let wrapper = UIViewController()
+        wrapper.addChild(pickerViewController)
+        wrapper.view.addSubview(pickerViewController.view)
+        pickerViewController.view.frame = wrapper.view.bounds
+        pickerViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        pickerViewController.didMove(toParent: wrapper)
+        
+        // Apply tint with delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            pickerViewController.view.tintColor = .black
+            pickerViewController.view.window?.tintColor = .black
+            wrapper.view.tintColor = .black
+        }
+        
         return pickerViewController
     }
     
-    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) { }
-//    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {
-//        // Override the app wide tint color (currently set to `.compound.texActionPrimary
-//        // as it's not legible enough in dark mode
-//        uiViewController.view.tintColor = .compound.textActionAccent
-//    }
+//    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {
+        // Re-apply tint periodically
+        if let picker = uiViewController.children.first as? PHPickerViewController {
+            picker.view.tintColor = .black
+            picker.view.window?.tintColor = .black
+        }
+    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
