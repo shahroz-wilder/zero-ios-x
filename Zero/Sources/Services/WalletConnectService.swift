@@ -44,8 +44,6 @@ class WalletConnectService {
                 // Handle error
                 print(error)
             }
-            
-            addObservers()
         }
     }
     
@@ -74,14 +72,6 @@ class WalletConnectService {
         }
     }
     
-    private func addObservers() {
-        AppKit.instance.sessionSettlePublisher
-            .sink { [weak self] _ in
-                self?.requestPersonalSignWithDelay()
-            }
-            .store(in: &disposeBag)
-    }
-    
     func onApplicationDidBecomeActive() {
         self.isZeroAppAlive = true
 //        requestPeronalSignIfNotPending()
@@ -91,20 +81,24 @@ class WalletConnectService {
         self.isZeroAppAlive = false
     }
     
-    func requestPersonalSignWithDelay() {
+    func requestPersonalSign(
+        withDelay: Bool = true,
+        signingMessage: String = "Sign with your wallet to log in to ZERO?"
+    ) {
         Task {
-            try? await Task.sleep(for: .seconds(1))
-            await requestWalletPersonalSign()
+            if withDelay {
+                try? await Task.sleep(for: .seconds(2))
+            }
+            await requestWalletPersonalSign(signingMessage: signingMessage)
         }
     }
     
-    private func requestWalletPersonalSign() async {
+    private func requestWalletPersonalSign(signingMessage: String) async {
         do {
             guard let address = AppKit.instance.getAddress() else { return }
             AppKit.instance.launchCurrentWallet()
             try await AppKit.instance.request(
-                .personal_sign(address: address,
-                               message: "Sign with your wallet to log in to ZERO?")
+                .personal_sign(address: address, message: signingMessage)
             )
         } catch {
             MXLog.debug("AppKit is not configured yet in walletConnectService")

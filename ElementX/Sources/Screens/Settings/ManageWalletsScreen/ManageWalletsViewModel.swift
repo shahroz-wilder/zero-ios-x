@@ -34,6 +34,15 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
                 self?.state.userZeroWalletAddress = currentUser.publicWalletAddress
             }
             .store(in: &cancellables)
+        
+        AppKit.instance.sessionSettlePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                    WalletConnectService.shared.requestPersonalSign()
+                })
+            }
+            .store(in: &cancellables)
                 
         AppKit.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
@@ -90,13 +99,20 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
             state.connectedWalletAddress = connectedWalletAddress
             state.bindings.showLinkWalletAddressDialog = true
         } else {
-            WalletConnectService.shared.presentWalletConnectModal()
+            /// Show user alert to navigate back to app manually due to walletConnect automatic redirection issues
+            state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                                 title: "Wallet Connect",
+                                                 message: "Please return to the ZERO app after connecting your wallet and signing the message.",
+                                                 primaryButton: .init(title: L10n.actionConfirm) {
+                WalletConnectService.shared.presentWalletConnectModal()
+            },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         }
     }
     
     private func startAddWalletFlow(_ enableLoggingIn: Bool = false) {
         self.enableLoggingIn = enableLoggingIn
-        WalletConnectService.shared.requestPersonalSignWithDelay()
+        WalletConnectService.shared.requestPersonalSign()
     }
     
     private func addUserWallet(_ token: String) {

@@ -2130,6 +2130,8 @@
 		79A49F702D917196005D365D /* TraceLogPack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7149BDDE47F8AD104E644E2 /* TraceLogPack.swift */; };
 		79AAF6E72EC1D599008F2FB3 /* LeaveSpaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C59748CC34606FF4FE95F0 /* LeaveSpaceViewModel.swift */; };
 		79AAF6E82EC1D5DC008F2FB3 /* LeaveSpaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7385BAB2EBDFF7B000B0961 /* LeaveSpaceModels.swift */; };
+		79AAF6EA2EC1DA6B008F2FB3 /* ZAuthenticationChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AAF6E92EC1DA60008F2FB3 /* ZAuthenticationChallenge.swift */; };
+		79AAF6EB2EC1DA6B008F2FB3 /* ZAuthenticationChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AAF6E92EC1DA60008F2FB3 /* ZAuthenticationChallenge.swift */; };
 		79AB3A892E252A4900E94E54 /* PostActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A882E252A3600E94E54 /* PostActions.swift */; };
 		79AB3A8A2E252A4900E94E54 /* PostActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A882E252A3600E94E54 /* PostActions.swift */; };
 		79AB3A8D2E252BBF00E94E54 /* PostMediaPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */; };
@@ -4015,6 +4017,7 @@
 		799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineLinkPreviewView.swift; sourceTree = "<group>"; };
 		799FE30D2E839B2E00CA6ACE /* ConfirmTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransactionView.swift; sourceTree = "<group>"; };
 		79A106D76741914F82664959 /* StateStoreViewModelV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStoreViewModelV2.swift; sourceTree = "<group>"; };
+		79AAF6E92EC1DA60008F2FB3 /* ZAuthenticationChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAuthenticationChallenge.swift; sourceTree = "<group>"; };
 		79AB3A882E252A3600E94E54 /* PostActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostActions.swift; sourceTree = "<group>"; };
 		79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMediaPreview.swift; sourceTree = "<group>"; };
 		79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshButton.swift; sourceTree = "<group>"; };
@@ -5340,6 +5343,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				79AAF6E92EC1DA60008F2FB3 /* ZAuthenticationChallenge.swift */,
 				1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */,
 				7994E5642DD52B3F005F7039 /* YoutubeLinkMetaData.swift */,
 				18E99FF52C9450F00082DDA4 /* ZAttachmentUploadInfo.swift */,
@@ -11111,6 +11115,7 @@
 				79621A4D2DA78E080006C391 /* ManageRoomMemberSheetViewModel.swift in Sources */,
 				18E9A5782C9829970082DDA4 /* MatrixEntityRegex.swift in Sources */,
 				18E9A5792C9829970082DDA4 /* MatrixUserShareLink.swift in Sources */,
+				79AAF6EB2EC1DA6B008F2FB3 /* ZAuthenticationChallenge.swift in Sources */,
 				79DB42A42E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */,
 				18E9A57A2C9829970082DDA4 /* MediaFileHandleProxy.swift in Sources */,
 				18E9A57B2C9829970082DDA4 /* MediaLoader.swift in Sources */,
@@ -13086,6 +13091,7 @@
 				044DD8F80231BC30570F7965 /* UserDiscoveryService.swift in Sources */,
 				1C409A26A99F0371C47AFA51 /* UserDiscoveryServiceProtocol.swift in Sources */,
 				7A495A5F3E5522DD7928CF8F /* UserIdentityProxy.swift in Sources */,
+				79AAF6EA2EC1DA6B008F2FB3 /* ZAuthenticationChallenge.swift in Sources */,
 				12AF926E783E40BFB32A2D84 /* UserIdentityProxyMock.swift in Sources */,
 				4E9782D683660463804C2DC3 /* UserIdentityProxyProtocol.swift in Sources */,
 				988BA75A182738150894A23F /* UserIndicator.swift in Sources */,
@@ -13449,7 +13455,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.23.5;
+				MARKETING_VERSION = 0.23.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13485,7 +13491,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.23.5;
+				MARKETING_VERSION = 0.23.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

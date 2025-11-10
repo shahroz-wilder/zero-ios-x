@@ -74,7 +74,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 if self?.shouldListenToWalletConnectListeners == true {
-                    self?.startLoading()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: { [weak self] in
+                        self?.requestAuthenticationConfirmation()
+                    })
                 }
             }
             .store(in: &cancellables)
@@ -89,6 +91,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
                     case let .response(value):
                         self?.loginWithWallet(token: value.stringRepresentation.replacingOccurrences(of: "\"", with: ""))
                     case let .error(error):
+                        self?.stopLoading()
                         MXLog.error("Session error: \(error)")
                         self?.state.bindings.alertInfo = AlertInfo(id: .genericError)
                     }
@@ -176,13 +179,17 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     }
     
     private func loginWithWallet(token: String) {
+        guard let authChallenge = state.authenticationChallenge else {
+            stopLoading()
+            return displayError()
+        }
         startLoading()
-        
         Task {
             defer { stopLoading() }
-            switch await authenticationService.loginWithWeb3(web3Token: token,
-                                                             initialDeviceName: UIDevice.current.initialDeviceName,
-                                                             deviceID: nil) {
+            switch await authenticationService.requestAuthenticationAuthorization(authChallenge,
+                                                                                  walletSignature: token,
+                                                                                  initialDeviceName: UIDevice.current.initialDeviceName,
+                                                                                  deviceID: nil) {
             case .success(let userSession):
                 actionsSubject.send(.signedIn(userSession))
             case .failure(let error):
@@ -243,6 +250,24 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
                 }
             case .failure(_):
                 self.displayError()
+            }
+        }
+    }
+    
+    private func requestAuthenticationConfirmation() {
+        guard let connectedWalletAddress = WalletConnectService.shared.connectedWalletAddress() else {
+            return displayError()
+        }
+        Task {
+            startLoading()
+            let result = await authenticationService.requestAuthenticationConfirmation(connectedWalletAddress)
+            switch result {
+            case .success(let authChallenge):
+                self.state.authenticationChallenge = authChallenge
+                WalletConnectService.shared.requestPersonalSign(signingMessage: authChallenge.message)
+            case .failure(_):
+                stopLoading()
+                displayError()
             }
         }
     }

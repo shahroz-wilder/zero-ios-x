@@ -71,6 +71,8 @@ struct AuthenticationStartScreenViewState: BindableState {
 //        bindings.inviteCode.count == VALID_INVITE_CODE_LENGTH
         !bindings.inviteCode.isEmpty
     }
+    
+    var authenticationChallenge: ZAuthenticationChallenge? = nil
 }
 
 struct AuthenticationStartScreenViewStateBindings {

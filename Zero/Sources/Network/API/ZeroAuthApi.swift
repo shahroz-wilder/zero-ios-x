@@ -19,6 +19,10 @@ protocol ZeroAuthApiProtocol {
     func verifyOtp(email: String, otp: String) async throws -> Result<ZSSOToken, Error>
     
     func zeroSocialLogin(token: String) async throws -> Result<ZSSOToken, Error>
+    
+    func requestAuthenticationChallenge(userWalletAddress: String) async throws -> Result<ZAuthenticationChallenge, Error>
+    
+    func requestAuthenticationAuthorization(challenge: ZAuthenticationChallenge, walletSignature: String) async throws -> Result<ZSSOToken, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -177,9 +181,8 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     
     func requestResetPassword(email: String) async throws -> Result<Void, any Error> {
         let parameters: [String: Any] = ["email": email]
-        let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(AuthEndPoints.requestResetPasswordEndPoint,
+        let result: Result<Void, Error> = try await APIManager.shared.request(AuthEndPoints.requestResetPasswordEndPoint,
                                                                                         method: .post,
-                                                                                        appSettings: appSettings,
                                                                                         parameters: parameters)
         switch result {
         case .success:
@@ -191,9 +194,8 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     
     func requestOtp(email: String) async throws -> Result<Void, any Error> {
         let parameters: [String: Any] = ["email": email]
-        let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(AuthEndPoints.requestOtpEndPoint,
+        let result: Result<Void, Error> = try await APIManager.shared.request(AuthEndPoints.requestOtpEndPoint,
                                                                                         method: .post,
-                                                                                        appSettings: appSettings,
                                                                                         parameters: parameters)
         switch result {
         case .success:
@@ -205,10 +207,54 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     
     func verifyOtp(email: String, otp: String) async throws -> Result<ZSSOToken, any Error> {
         let parameters: [String: Any] = ["email": email, "code": otp]
-        let result: Result<ZSessionDataResponse, Error> = try await APIManager.shared.authorisedRequest(AuthEndPoints.verifyOtpEndPoint,
+        let result: Result<ZSessionDataResponse, Error> = try await APIManager.shared.request(AuthEndPoints.verifyOtpEndPoint,
                                                                                         method: .post,
-                                                                                        appSettings: appSettings,
                                                                                         parameters: parameters)
+        switch result {
+        case .success(let sessionData):
+            // save Access Token
+            appSettings.zeroAccessToken = sessionData.accessToken
+            // fetch SSO Token
+            let ssoResult: Result<ZSSOToken, Error> = try await fetchSSOToken()
+            switch ssoResult {
+            case .success(let ssoToken):
+                return .success(ssoToken)
+            case .failure(let error):
+                return .failure(error)
+            }
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func requestAuthenticationChallenge(userWalletAddress: String) async throws -> Result<ZAuthenticationChallenge, any Error> {
+        guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
+            return .failure(AuthenticationError.missingBundleIdentifier)
+        }
+        let parameters: [String: Any] = [
+            "address": userWalletAddress,
+            "domain": bundleIdentifier
+        ]
+        let result: Result<ZAuthenticationChallenge, Error> = try await APIManager.shared.request(AuthEndPoints.authenticationChallengeEndPoint,
+                                                                                                  method: .get,
+                                                                                                  parameters: parameters,
+                                                                                                  encoding: URLEncoding.queryString)
+        switch result {
+        case .success(let challenge):
+            return .success(challenge)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func requestAuthenticationAuthorization(challenge: ZAuthenticationChallenge, walletSignature: String) async throws -> Result<ZSSOToken, any Error> {
+        let parameters: [String: Any] = [
+            "message": challenge.message,
+            "signature": walletSignature
+        ]
+        let result: Result<ZSessionDataResponse, Error> = try await APIManager.shared.request(AuthEndPoints.authenticationAuthorizationEndPoint,
+                                                                                              method: .post,
+                                                                                              parameters: parameters)
         switch result {
         case .success(let sessionData):
             // save Access Token
@@ -244,6 +290,9 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let verifyOtpEndPoint = "\(hostURL)api/otp/verify"
         
         static let zeroSocialLogin = "\(hostURL)api/oauth/establish-session"
+        
+        static let authenticationChallengeEndPoint = "\(hostURL)api/v2/authentication/challenge"
+        static let authenticationAuthorizationEndPoint = "\(hostURL)api/v2/authentication/authorize"
     }
     
     private enum AuthConstants {
@@ -253,5 +302,9 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let web3AuthHeaderKey = "Authorization"
         static let web3AuthTokenPrefix = "Web3"
         static let socialAuthTokenPrefix = "Bearer"
+    }
+    
+    private enum AuthenticationError: Error {
+        case missingBundleIdentifier
     }
 }

@@ -253,7 +253,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     func verifyOtp(email: String, code: String, initialDeviceName: String?) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
-        guard let client else { return .failure(.failedVerifyOtp) }
         return await proceedPostSSOLoginFlow(ssoBlock: {
             try await self.zeroAuthApiProxy.authApi.verifyOtp(email: email, otp: code)
         },
@@ -309,6 +308,34 @@ class AuthenticationService: AuthenticationServiceProtocol {
             MXLog.error(error)
             return .failure(.failedCreatingUserAccount)
         }
+    }
+    
+    func requestAuthenticationConfirmation(_ userwalletAddress: String) async -> Result<ZAuthenticationChallenge, AuthenticationServiceError> {
+        do {
+            let result = try await zeroAuthApiProxy.authApi.requestAuthenticationChallenge(userWalletAddress: userwalletAddress)
+            switch result {
+            case .success(let challenge):
+                return .success(challenge)
+            case .failure(let error):
+                return handleZeroError(error, fallbackError: .failedLoggingIn)
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.failedLoggingIn)
+        }
+    }
+    
+    func requestAuthenticationAuthorization(_ authChallenge: ZAuthenticationChallenge,
+                                            walletSignature: String,
+                                            initialDeviceName: String?,
+                                            deviceID: String?) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
+        await _ = configure(for: ZeroContants.appServer.matrixHomeServerUrl, flow: .login)
+        return await proceedPostSSOLoginFlow(ssoBlock: {
+            try await self.zeroAuthApiProxy.authApi.requestAuthenticationAuthorization(challenge: authChallenge,
+                                                                                       walletSignature: walletSignature)
+        },
+                                             initialDeviceName: initialDeviceName,
+                                             deviceID: deviceID)
     }
     
     // MARK: - Private

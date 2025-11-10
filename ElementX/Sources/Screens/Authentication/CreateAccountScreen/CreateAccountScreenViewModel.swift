@@ -29,6 +29,15 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
         
         super.init(initialViewState: .init())
         
+        AppKit.instance.sessionSettlePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                    WalletConnectService.shared.requestPersonalSign()
+                })
+            }
+            .store(in: &cancellables)
+        
         AppKit.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
             .removeDuplicates()

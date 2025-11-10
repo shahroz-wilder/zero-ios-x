@@ -81,6 +81,12 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     func requestResetPassword(email: String) async -> Result<Void, AuthenticationServiceError>
     func requestOtp(email: String) async -> Result<Void, AuthenticationServiceError>
     func verifyOtp(email: String, code: String, initialDeviceName: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    
+    func requestAuthenticationConfirmation(_ userwalletAddress: String) async -> Result<ZAuthenticationChallenge, AuthenticationServiceError>
+    func requestAuthenticationAuthorization(_ authChallenge: ZAuthenticationChallenge,
+                                            walletSignature: String,
+                                            initialDeviceName: String?,
+                                            deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }
 
 // MARK: - OIDC
