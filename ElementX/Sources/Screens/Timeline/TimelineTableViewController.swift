@@ -174,6 +174,39 @@ class TimelineTableViewController: UIViewController {
         UIAccessibility.isVoiceOverRunning ? 1 : -1
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        registerForKeyboardNotifications()
+    }
+    
+    private func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillChangeFrame(_:)),
+            name: UIResponder.keyboardWillChangeFrameNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func keyboardWillChangeFrame(_ notification: Notification) {
+        guard
+            let userInfo = notification.userInfo,
+            let endFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+            let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt
+        else { return }
+        
+        let keyboardHeight = view.convert(endFrame, from: nil).intersection(view.bounds).height
+        
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       options: UIView.AnimationOptions(rawValue: curveValue << 16),
+                       animations: {
+            self.additionalSafeAreaInsets.bottom = keyboardHeight
+            self.view.layoutIfNeeded()
+        })
+    }
+    
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
