@@ -18,7 +18,8 @@ struct HomeChannelsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
-    @State private var selectedChannelsTab: HomeChannelsTab = .explore
+    @State private var selectedChannelsTab: HomeChannelsTab = .all
+    @State private var hasShiftedToExploreTabOnce: Bool = false
     
     var isSearchDisable : Bool {
         !context.isSearchFieldFocused && context.searchQuery.isEmpty
@@ -154,7 +155,16 @@ struct HomeChannelsContent: View {
                             }
                         case .rooms:
                             LazyVStack(spacing: 0) {
-                                HomeScreenRoomList(context: context, fromChannelsTabs: true)
+                                HomeScreenRoomList(context: context, fromChannelsTabs: true, perform: {
+                                    // shift to explore tab, as rooms list is empty
+                                    guard !hasShiftedToExploreTabOnce else { return }
+                                    if selectedChannelsTab == .all {
+                                        hasShiftedToExploreTabOnce = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                                            selectedChannelsTab = .explore
+                                        })
+                                    }
+                                })
                                 
                                 /// Bottom space to keep content above `HomeScreenBottomBar`
                                 HomeTabBottomSpace()

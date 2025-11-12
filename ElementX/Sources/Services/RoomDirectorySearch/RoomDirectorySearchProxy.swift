@@ -150,6 +150,7 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
                                   name: value.name,
                                   topic: value.topic,
                                   avatar: .room(id: value.roomId, name: value.name, avatarURL: value.avatarUrl.flatMap(URL.init(string:))),
-                                  canBeJoined: value.joinRule == .public || (appSettings.knockingEnabled && value.joinRule == .knock))
+                                  canBeJoined: value.joinRule == .public || (appSettings.knockingEnabled && value.joinRule == .knock),
+                                  membersCount: value.joinedMembers)
     }
 }

@@ -10,7 +10,9 @@ import SwiftUI
 
 struct HomeScreenRoomList: View {
     @ObservedObject var context: HomeScreenViewModel.Context
+    
     var fromChannelsTabs: Bool = false
+    var perform: (() -> Void)? = nil
     
     var body: some View {
         // Hide the room list when the search bar is focused but the query is empty
@@ -33,6 +35,7 @@ struct HomeScreenRoomList: View {
         
         if fromChannelsTabs, roomsList.isEmpty, !context.isSearchFieldFocused {
             HomeContentEmptyView(message: "No channels")
+                .task { perform?() }
         } else {
             ForEach(roomsList) { room in
                 switch room.type {

@@ -28,4 +28,5 @@ struct RoomDirectorySearchResult: Identifiable {
     let topic: String?
     let avatar: RoomAvatar
     let canBeJoined: Bool
+    let membersCount: UInt64
 }
