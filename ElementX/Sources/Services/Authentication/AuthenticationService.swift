@@ -187,7 +187,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         do {
             let client = try await makeClient(homeserverAddress: scannedServerName)
-            let qrCodeHandler = client.loginWithQrCode(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
+            let qrCodeHandler = client.newLoginWithQrCodeHandler(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
             try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
             return await userSession(for: client)
         } catch let error as HumanQrLoginError {

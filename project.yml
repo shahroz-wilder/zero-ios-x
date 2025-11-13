@@ -52,7 +52,7 @@ settings:
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ZERO
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 25.11.1
+  MARKETING_VERSION: 25.11.2
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -72,7 +72,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.11.04
+    exactVersion: 25.11.11
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
@@ -103,6 +103,9 @@ packages:
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
     minorVersion: 1.0.0
+  Clocks:
+    url: https://github.com/pointfreeco/swift-clocks
+    from: 1.0.6
   Collections:
     url: https://github.com/apple/swift-collections
     minorVersion: 1.2.0

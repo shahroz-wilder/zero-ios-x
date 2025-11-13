@@ -53,8 +53,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
-    private let detailNavigationStackCoordinator: NavigationStackCoordinator
-    
+
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
     private let actionsSubject: PassthroughSubject<ChatsFlowCoordinatorAction, Never> = .init()
@@ -70,7 +69,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         self.flowParameters = flowParameters
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
-        detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
         
         setupStateMachine()
@@ -278,6 +276,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             switch context.toState {
             case .roomList(detailState: .room(let detailStateRoomID)):
                 self?.selectedRoomSubject.send(detailStateRoomID)
+            case .roomList(detailState: .space):
+                // We don't show joined spaces in the room list yet so clear the selected room when accepting a space invite.
+                self?.selectedRoomSubject.send(nil)
             case .roomList(detailState: nil):
                 self?.selectedRoomSubject.send(nil)
             default:
@@ -490,9 +491,10 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                via: [String],
                                entryPoint: RoomFlowCoordinatorEntryPoint,
                                animated: Bool) {
+        let navigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         let coordinator = RoomFlowCoordinator(roomID: roomID,
                                               isChildFlow: false,
-                                              navigationStackCoordinator: detailNavigationStackCoordinator,
+                                              navigationStackCoordinator: navigationStackCoordinator,
                                               flowParameters: flowParameters)
         
         coordinator.actions.sink { [weak self] action in
@@ -513,9 +515,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         roomFlowCoordinator = coordinator
         
-        if navigationSplitCoordinator.detailCoordinator !== detailNavigationStackCoordinator {
-            navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator, animated: animated)
-        }
+        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator, animated: animated)
         
         switch entryPoint {
         case .room:
@@ -548,10 +548,11 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Space Flow
     
     private func startSpaceFlow(spaceRoomListProxy: SpaceRoomListProxyProtocol, animated: Bool) {
+        let navigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         let coordinator = SpaceFlowCoordinator(entryPoint: .space(spaceRoomListProxy),
                                                spaceServiceProxy: userSession.clientProxy.spaceService,
                                                isChildFlow: false,
-                                               navigationStackCoordinator: detailNavigationStackCoordinator,
+                                               navigationStackCoordinator: navigationStackCoordinator,
                                                flowParameters: flowParameters)
         coordinator.actionsPublisher
             .sink { [weak self] action in
@@ -569,9 +570,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         spaceFlowCoordinator = coordinator
         
-        if navigationSplitCoordinator.detailCoordinator !== detailNavigationStackCoordinator {
-            navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator, animated: animated)
-        }
+        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator, animated: animated)
         
         coordinator.start()
     }
