@@ -935,7 +935,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         guard let userId = userID ?? profile?.userId.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) else {
             return
         }
-        let flowCoordinator = UserFeedProfileFlowCoordinator(navigationStackCoordinator: detailNavigationStackCoordinator,
+        let navigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
+
+        let flowCoordinator = UserFeedProfileFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
                                                              userSession: userSession,
                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                              appMediator: flowParameters.appMediator,
@@ -996,7 +998,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func startZeroWalletTransactionsFlow(_ walletTransactionProtocol: WalletTransactionProtocol,
                                                  type: WalletTransactionType,
                                                  meowPrice: ZeroCurrency?) {
-        let flowCoordinator = ZeroWalletTransactionsFlowCoordinator(rootStackCoordinator: detailNavigationStackCoordinator,
+        let navigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
+
+        let flowCoordinator = ZeroWalletTransactionsFlowCoordinator(rootStackCoordinator: navigationStackCoordinator,
                                                                     userSession: userSession,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
                                                                     appMediator: flowParameters.appMediator,
@@ -1009,7 +1013,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case .transactionCompleted:
                 walletTransactionProtocol.onTransactionCompleted()
             case .finished:
-                detailNavigationStackCoordinator.setSheetCoordinator(nil)
+                navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)

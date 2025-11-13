@@ -74,7 +74,7 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var permissionsSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsPermissionsHeader,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsPermissionsHeader,
                                     icon: \.settings),
                     details: .isWaiting(context.viewState.permissions == nil),
                     kind: .navigationLink {
@@ -87,7 +87,7 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var resetSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsReset,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsReset,
                                     icon: \.delete,
                                     role: .destructive),
                     kind: .button {

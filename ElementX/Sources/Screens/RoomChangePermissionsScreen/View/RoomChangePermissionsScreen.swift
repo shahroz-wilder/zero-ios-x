@@ -14,18 +14,12 @@ struct RoomChangePermissionsScreen: View {
     
     var body: some View {
         Form {
-            ForEach($context.settings) { $setting in
-                Section {
-                    ZeroListRow(label: .plain(title: setting.title),
-                                kind: .inlinePicker(selection: $setting.value, items: setting.allValues))
-                } header: {
-                    Text(setting.title)
-                        .compoundListSectionHeader()
-                }
+            ForEach(RoomChangePermissionsScreenGroup.allCases, id: \.self) { group in
+                section(for: group)
             }
         }
         .zeroList()
-        .navigationTitle(context.viewState.title)
+        .navigationTitle(L10n.screenRoomChangePermissionsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(context.viewState.hasChanges)
         .toolbar { toolbar }
