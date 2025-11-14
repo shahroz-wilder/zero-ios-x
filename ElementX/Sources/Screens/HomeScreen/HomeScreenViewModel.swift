@@ -921,8 +921,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 case .success(let transactionHash):
                     state.claimRewardsState = .success(transactionHash)
                     loadUserRewards()
-//                    try? await Task.sleep(for: .seconds(1))
-//                    TODO: fetchWalletData(silentRefresh: true)
+                    actionsSubject.send(.refreshWallet)
                 case .failure(_):
                     state.claimRewardsState = .failure
                 }

@@ -87,6 +87,10 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
                                          message: message ?? L10n.errorUnknown)
     }
     
+    func refreshWallet() {
+        fetchWalletData(silentRefresh: true)
+    }
+    
     private func fetchWalletData(silentRefresh: Bool = false) {
         guard let walletAddress = state.currentUserZeroProfile?.publicWalletAddress else { return }
         if !silentRefresh {

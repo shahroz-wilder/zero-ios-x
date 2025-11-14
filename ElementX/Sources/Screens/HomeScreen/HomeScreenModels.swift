@@ -28,6 +28,8 @@ enum HomeScreenViewModelAction {
     case presentGlobalSearch
     case logout
     case selectRoomAlias(roomAlias: String)
+    
+    case refreshWallet
 }
 
 enum HomeScreenViewAction {

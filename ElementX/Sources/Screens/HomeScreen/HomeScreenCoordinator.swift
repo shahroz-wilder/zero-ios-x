@@ -108,6 +108,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.transferOwnership(roomIdentifier: roomIdentifier))
                 case .selectRoomAlias(let roomAlias):
                     actionsSubject.send(.selectRoomAlias(roomAlias: roomAlias))
+                case .refreshWallet:
+                    walletViewModel.refreshWallet()
                 }
             }
             .store(in: &cancellables)
