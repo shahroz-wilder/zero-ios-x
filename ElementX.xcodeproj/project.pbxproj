@@ -2257,6 +2257,12 @@
 		79E1E7F12DFB6C8700195CF0 /* HomeTabBottomSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */; };
 		79E1E7F32DFC2D6200195CF0 /* HomeContentEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */; };
 		79E1E7F42DFC2D6200195CF0 /* HomeContentEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */; };
+		79E290C62EC749FB00644784 /* HomeFeedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290C52EC749F800644784 /* HomeFeedModels.swift */; };
+		79E290C72EC749FB00644784 /* HomeFeedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290C52EC749F800644784 /* HomeFeedModels.swift */; };
+		79E290C92EC74CEA00644784 /* HomeFeedViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290C82EC74CE200644784 /* HomeFeedViewModelProtocol.swift */; };
+		79E290CA2EC74CEA00644784 /* HomeFeedViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290C82EC74CE200644784 /* HomeFeedViewModelProtocol.swift */; };
+		79E290CC2EC74D1000644784 /* HomeFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290CB2EC74D0B00644784 /* HomeFeedViewModel.swift */; };
+		79E290CD2EC74D1000644784 /* HomeFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290CB2EC74D0B00644784 /* HomeFeedViewModel.swift */; };
 		79EC88BC2DDDBEFF006629EE /* ThreadTimelineScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FEE625AB52042049DB9268 /* ThreadTimelineScreenCoordinator.swift */; };
 		79EC88BD2DDDBF03006629EE /* ThreadTimelineScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69AEA8755382DB34892FB7B /* ThreadTimelineScreenModels.swift */; };
 		79EC88BE2DDDBF07006629EE /* ThreadTimelineScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9ACDD96F36510C1FC0836B /* ThreadTimelineScreenViewModel.swift */; };
@@ -4060,6 +4066,9 @@
 		79DB42B22E4BF85800F6E809 /* StakePoolSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakePoolSheetView.swift; sourceTree = "<group>"; };
 		79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBottomSpace.swift; sourceTree = "<group>"; };
 		79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContentEmptyView.swift; sourceTree = "<group>"; };
+		79E290C52EC749F800644784 /* HomeFeedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedModels.swift; sourceTree = "<group>"; };
+		79E290C82EC74CE200644784 /* HomeFeedViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedViewModelProtocol.swift; sourceTree = "<group>"; };
+		79E290CB2EC74D0B00644784 /* HomeFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedViewModel.swift; sourceTree = "<group>"; };
 		79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
 		79F31B2C2E02EDCE0043E100 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		79F31B302E02F5EF0043E100 /* AppForceUpdateScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppForceUpdateScreen.swift; sourceTree = "<group>"; };
@@ -6605,33 +6614,16 @@
 		4F43EBE458FBE634996AD7C6 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */,
-				8D152423EE6CF0ECCC84091A /* BloomModifier.swift */,
-				7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */,
-				79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */,
-				7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */,
 				B902EA6CD3296B0E10EE432B /* HomeScreen.swift */,
-				A3B4B58B79A6FA250B24A1EC /* HomeChatContent.swift */,
 				C0FEA560929DD73FFEF8C3DF /* HomeScreenEmptyStateView.swift */,
 				D8FC33C3F6BF597E095CE9FA /* HomeScreenInviteCell.swift */,
 				A103580EBA06155B1343EF16 /* HomeScreenKnockedCell.swift */,
 				BD5480F03306234FC086E93B /* HomeScreenNewSoundBanner.swift */,
 				05512FB13987D221B7205DE0 /* HomeScreenRecoveryKeyConfirmationBanner.swift */,
-				ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */,
-				793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */,
-				790393792D4D62B40022E293 /* HomeFeedContent.swift */,
-				79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */,
-				79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */,
-				7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */,
-				7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */,
-				7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */,
-				C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */,
-				79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */,
-				7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */,
-				79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */,
-				79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */,
-				799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */,
 				037A5661B26EC6BE068188D7 /* Filters */,
+				79E290B62EC7469300644784 /* Chat */,
+				79E290B52EC7468D00644784 /* Channel */,
+				79E290B32EC7467E00644784 /* Notification */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7617,6 +7609,7 @@
 			isa = PBXGroup;
 			children = (
 				79AB3A882E252A3600E94E54 /* PostActions.swift */,
+				8D152423EE6CF0ECCC84091A /* BloomModifier.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -7627,10 +7620,13 @@
 				79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */,
 				79C25B582E25AACE00936A5D /* PostImageViewer.swift */,
 				79C25B5B2E25AB2500936A5D /* PostVideoPlayer.swift */,
+				79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */,
+				79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */,
 				79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */,
 				79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */,
 				79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */,
-				79DB42B22E4BF85800F6E809 /* StakePoolSheetView.swift */,
+				79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */,
+				7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -7659,6 +7655,76 @@
 				79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */,
 			);
 			path = Component;
+			sourceTree = "<group>";
+		};
+		79E290B22EC7467600644784 /* Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				79E290BB2EC7470600644784 /* View */,
+			);
+			path = Wallet;
+			sourceTree = "<group>";
+		};
+		79E290B32EC7467E00644784 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */,
+				79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		79E290B42EC7468600644784 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				79E290C52EC749F800644784 /* HomeFeedModels.swift */,
+				79E290CB2EC74D0B00644784 /* HomeFeedViewModel.swift */,
+				79E290C82EC74CE200644784 /* HomeFeedViewModelProtocol.swift */,
+				79E290B92EC746D600644784 /* View */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		79E290B52EC7468D00644784 /* Channel */ = {
+			isa = PBXGroup;
+			children = (
+				7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */,
+				7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */,
+			);
+			path = Channel;
+			sourceTree = "<group>";
+		};
+		79E290B62EC7469300644784 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				A3B4B58B79A6FA250B24A1EC /* HomeChatContent.swift */,
+				C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */,
+				ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		79E290B92EC746D600644784 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */,
+				790393792D4D62B40022E293 /* HomeFeedContent.swift */,
+				7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */,
+				7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */,
+				7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		79E290BB2EC7470600644784 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */,
+				79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */,
+				799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */,
+				79DB42B22E4BF85800F6E809 /* StakePoolSheetView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		79E560F5113ED25D172E550C /* Media */ = {
@@ -8527,6 +8593,8 @@
 		B53CA9BECD3F97805E1432D0 /* HomeScreen */ = {
 			isa = PBXGroup;
 			children = (
+				79E290B42EC7468600644784 /* Feed */,
+				79E290B22EC7467600644784 /* Wallet */,
 				79AB3A872E252A3000E94E54 /* Helper */,
 				79AB3A8B2E252BAD00E94E54 /* Components */,
 				D653265D006E708E4E51AD64 /* HomeScreenCoordinator.swift */,
@@ -10864,6 +10932,7 @@
 				18E9A4D72C9829970082DDA4 /* EffectsView.swift in Sources */,
 				18E9A4D82C9829970082DDA4 /* ElementAnimations.swift in Sources */,
 				7977518E2DDB4780006CF62D /* FeedUserProfileDetailsView.swift in Sources */,
+				79E290C92EC74CEA00644784 /* HomeFeedViewModelProtocol.swift in Sources */,
 				793849382DF85D7C00316004 /* RoomScreenHook.swift in Sources */,
 				18E9A4D92C9829970082DDA4 /* ElementCallConfiguration.swift in Sources */,
 				185454DD2CFF0DDD003CA957 /* CompleteProfileScreenCoordinator.swift in Sources */,
@@ -10910,6 +10979,7 @@
 				18E9A4F22C9829970082DDA4 /* EncryptedRoomTimelineView.swift in Sources */,
 				79B8E34D2D660CEC000304AE /* VerificationBadge.swift in Sources */,
 				18D467B52D10A0BD00861AA6 /* SecurityAndPrivacyScreen.swift in Sources */,
+				79E290C72EC749FB00644784 /* HomeFeedModels.swift in Sources */,
 				799E1D1C2DBBA8BB00E3D512 /* ZLinkPreview.swift in Sources */,
 				18E9A4F32C9829970082DDA4 /* EncryptionAuthenticity.swift in Sources */,
 				185454D02CFE3D2E003CA957 /* InfoBox.swift in Sources */,
@@ -11717,6 +11787,7 @@
 				18E9A7022C9829970082DDA4 /* TimelineModels.swift in Sources */,
 				18E9A7032C9829970082DDA4 /* TimelineProxy.swift in Sources */,
 				18E9A7042C9829970082DDA4 /* TimelineProxyProtocol.swift in Sources */,
+				79E290CC2EC74D1000644784 /* HomeFeedViewModel.swift in Sources */,
 				7977517C2DD9F89E006CF62D /* FeedUserProfileScreenViewModelProtocol.swift in Sources */,
 				79C6F7292DF82465003CEBB9 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */,
 				18E9A7052C9829970082DDA4 /* TimelineReactionsView.swift in Sources */,
@@ -12863,6 +12934,7 @@
 				A588572ED0EB18D947B32A5E /* SendInviteConfirmationView.swift in Sources */,
 				08547E55DD3686A84550996D /* SeparatorMediaEventsTimelineView.swift in Sources */,
 				14E99D27628B1A6F0CB46FEA /* SeparatorRoomTimelineItem.swift in Sources */,
+				79E290CA2EC74CEA00644784 /* HomeFeedViewModelProtocol.swift in Sources */,
 				5341D48F833E3E30F16FA2A3 /* SeparatorRoomTimelineView.swift in Sources */,
 				2E8C6672D0EE7D5B1BEDB8E2 /* ServerConfirmationScreen.swift in Sources */,
 				795A0C872D77EBA5000928B7 /* ZeroApiProxy.swift in Sources */,
@@ -12984,9 +13056,11 @@
 				799616352E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */,
 				2C4C750D0039AFABDF24236C /* TemplateScreenViewModelProtocol.swift in Sources */,
 				6B3AB95A6993646A5081BFF9 /* TestablePreview.swift in Sources */,
+				79E290C62EC749FB00644784 /* HomeFeedModels.swift in Sources */,
 				1ECE584D2CFA0FEF0ADE458C /* TestablePreviewsDictionary.swift in Sources */,
 				887AC93C523AEFB640EA5EC8 /* TextBasedRoomTimelineItem.swift in Sources */,
 				18E99FF22C944F350082DDA4 /* ZeroAttachmentService.swift in Sources */,
+				79E290CD2EC74D1000644784 /* HomeFeedViewModel.swift in Sources */,
 				4FE688FE9375B2FBF424146A /* TextBasedRoomTimelineViewProtocol.swift in Sources */,
 				BB784A02BADB03C820617A46 /* TextRoomTimelineItem.swift in Sources */,
 				53F1196F9C69512306A2693F /* TextRoomTimelineItemContent.swift in Sources */,

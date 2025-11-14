@@ -13,6 +13,7 @@ import SwiftUI
 
 struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
+    @ObservedObject var feedContext: HomeFeedViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
@@ -32,7 +33,7 @@ struct HomeScreen: View {
                 HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
                     .transition(.asymmetric(insertion: .opacity, removal: .opacity))
             case .feed:
-                HomeFeedContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                HomeFeedContent(context: feedContext, scrollViewAdapter: scrollViewAdapter)
                     .transition(.asymmetric(insertion: .opacity, removal: .opacity))
             case .notifications:
                 HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
@@ -53,7 +54,7 @@ struct HomeScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .track(screen: .Home)
         .sentryTrace("\(Self.self)")
-        .quickLookPreview($context.mediaPreviewItem)
+        .quickLookPreview($feedContext.mediaPreviewItem)
         .overlay(alignment: .top) {
             backToTopButton
                 .ignoresSafeArea(.container, edges: .top)
@@ -126,7 +127,7 @@ struct HomeScreen: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 showBackToTop = false
                 hideNavigationBar = false
-                context.send(viewAction: .onHomeTabChanged)
+                feedContext.send(viewAction: .onHomeTabChanged)
             }
         }
     }
@@ -148,7 +149,7 @@ struct HomeScreen: View {
         if selectedHomeTab == HomeTab.feed {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    context.send(viewAction: .searchUser)
+                    feedContext.send(viewAction: .searchUser)
                 } label: {
                     CompoundIcon(\.search)
                         .foregroundStyle(.compound.iconSecondary)
@@ -198,7 +199,7 @@ struct HomeScreen: View {
     @ViewBuilder
     private var userProfileButton: some View {
         Button {
-            context.send(viewAction: .openUserProfile)
+            feedContext.send(viewAction: .openUserProfile)
         } label: {
             Image(asset: Asset.Images.homeProfileIcon)
                 .tint(.compound.iconSecondary)
@@ -265,8 +266,8 @@ struct HomeScreen: View {
         switch selectedHomeTab {
         case .chat where context.viewState.roomListMode != .skeletons:
             return { context.send(viewAction: .startChat) }
-        case .feed where context.viewState.postListMode != .skeletons:
-            return { context.send(viewAction: .newFeed) }
+        case .feed where feedContext.viewState.postListMode != .skeletons:
+            return { feedContext.send(viewAction: .newFeed) }
         default:
             return nil
         }
@@ -280,9 +281,11 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyViewModel = viewModel(.empty)
     static let loadedViewModel = viewModel(.rooms)
     
+    static let feedLoadedViewModel = feedViewModel()
+    
     static var previews: some View {
         NavigationStack {
-            HomeScreen(context: loadingViewModel.context)
+            HomeScreen(context: loadingViewModel.context, feedContext: feedLoadedViewModel.context)
         }
         .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
             state.roomListMode == .skeletons
@@ -290,7 +293,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Loading")
         
         NavigationStack {
-            HomeScreen(context: emptyViewModel.context)
+            HomeScreen(context: emptyViewModel.context, feedContext: feedLoadedViewModel.context)
         }
         .snapshotPreferences(expect: emptyViewModel.context.$viewState.map { state in
             state.roomListMode == .empty
@@ -298,7 +301,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Empty")
         
         NavigationStack {
-            HomeScreen(context: loadedViewModel.context)
+            HomeScreen(context: loadedViewModel.context, feedContext: feedLoadedViewModel.context)
         }
         .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
             state.roomListMode == .rooms
@@ -329,5 +332,19 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
                                    analyticsService: ServiceLocator.shared.analytics,
                                    notificationManager: NotificationManagerMock(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }
+    
+    static func feedViewModel() -> HomeFeedViewModel {
+        let userID = "@alice:example.com"
+        
+        let roomSummaryProviderState: RoomSummaryProviderMockConfigurationState = .loaded([])
+        
+        let clientProxy = ClientProxyMock(.init(userID: userID,
+                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
+        
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        
+        return HomeFeedViewModel(userSession: userSession,
+                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

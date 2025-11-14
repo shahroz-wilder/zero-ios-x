@@ -15,7 +15,7 @@ enum HomePostsTab: CaseIterable {
 struct HomeFeedContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
-    @ObservedObject var context: HomeScreenViewModel.Context
+    @ObservedObject var context: HomeFeedViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
     @State private var selectedTab: HomePostsTab = .following

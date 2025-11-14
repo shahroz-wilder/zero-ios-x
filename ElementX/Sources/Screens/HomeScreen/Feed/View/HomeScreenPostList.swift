@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeScreenPostList: View {
-    @ObservedObject var context: HomeScreenViewModel.Context
+    @ObservedObject var context: HomeFeedViewModel.Context
     
     var body: some View {
         content

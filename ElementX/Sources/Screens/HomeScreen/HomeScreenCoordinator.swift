@@ -44,7 +44,9 @@ enum HomeScreenCoordinatorAction {
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
-    private var viewModel: HomeScreenViewModelProtocol
+    private var homeViewModel: HomeScreenViewModelProtocol
+    private var feedViewModel: HomeFeedViewModel
+    
     // periphery:ignore - only used in release builds
     private let bugReportService: BugReportServiceProtocol
     
@@ -56,15 +58,17 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: HomeScreenCoordinatorParameters) {
-        viewModel = HomeScreenViewModel(userSession: parameters.userSession,
+        homeViewModel = HomeScreenViewModel(userSession: parameters.userSession,
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         appSettings: parameters.appSettings,
                                         analyticsService: parameters.analyticsService,
                                         notificationManager: parameters.notificationManager,
                                         userIndicatorController: parameters.userIndicatorController)
+        feedViewModel = HomeFeedViewModel(userSession: parameters.userSession,
+                                          userIndicatorController: parameters.userIndicatorController)
         bugReportService = parameters.bugReportService
         
-        viewModel.actions
+        homeViewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 
@@ -93,24 +97,33 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentEncryptionResetScreen)
                 case .presentStartChatScreen:
                     actionsSubject.send(.presentStartChatScreen)
-                case .presentCreateFeedScreen(let feedProtocol):
-                    actionsSubject.send(.presentCreateFeedScreen(feedProtocol))
                 case .presentGlobalSearch:
                     actionsSubject.send(.presentGlobalSearch)
                 case .logout:
                     actionsSubject.send(.logout)
                 case .transferOwnership(let roomIdentifier):
                     actionsSubject.send(.transferOwnership(roomIdentifier: roomIdentifier))
-                case .postTapped(let post, let feedProtocol):
-                    actionsSubject.send(.postTapped(post, feedProtocol))
-                case .openPostUserProfile(let profile, let feedProtocol):
-                    actionsSubject.send(.openPostUserProfile(profile, feedProtocol))
                 case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
                     actionsSubject.send(.startWalletTransaction(walletTransactionProtocol, type, meowPrice))
-                case .searchUser:
-                    actionsSubject.send(.searchUser)
                 case .selectRoomAlias(let roomAlias):
                     actionsSubject.send(.selectRoomAlias(roomAlias: roomAlias))
+                }
+            }
+            .store(in: &cancellables)
+        
+        feedViewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .presentCreateFeedScreen(feedProtocol: let feedProtocol):
+                    actionsSubject.send(.presentCreateFeedScreen(feedProtocol))
+                case .postTapped(let post, feedProtocol: let feedProtocol):
+                    actionsSubject.send(.postTapped(post, feedProtocol))
+                case .openPostUserProfile(let profile, feedProtocol: let feedProtocol):
+                    actionsSubject.send(.openPostUserProfile(profile, feedProtocol))
+                case .searchUser:
+                    actionsSubject.send(.searchUser)
                 }
             }
             .store(in: &cancellables)
@@ -129,6 +142,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(HomeScreen(context: viewModel.context))
+        AnyView(HomeScreen(context: homeViewModel.context,
+                           feedContext: feedViewModel.context)
+        )
     }
 }
