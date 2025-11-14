@@ -2263,6 +2263,12 @@
 		79E290CA2EC74CEA00644784 /* HomeFeedViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290C82EC74CE200644784 /* HomeFeedViewModelProtocol.swift */; };
 		79E290CC2EC74D1000644784 /* HomeFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290CB2EC74D0B00644784 /* HomeFeedViewModel.swift */; };
 		79E290CD2EC74D1000644784 /* HomeFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290CB2EC74D0B00644784 /* HomeFeedViewModel.swift */; };
+		79E290CF2EC758AA00644784 /* HomeWalletViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290CE2EC7589F00644784 /* HomeWalletViewModelProtocol.swift */; };
+		79E290D02EC758AA00644784 /* HomeWalletViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290CE2EC7589F00644784 /* HomeWalletViewModelProtocol.swift */; };
+		79E290D22EC758AE00644784 /* HomeWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290D12EC758AD00644784 /* HomeWalletViewModel.swift */; };
+		79E290D32EC758AE00644784 /* HomeWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290D12EC758AD00644784 /* HomeWalletViewModel.swift */; };
+		79E290D52EC758B400644784 /* HomeWalletModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290D42EC758B100644784 /* HomeWalletModels.swift */; };
+		79E290D62EC758B400644784 /* HomeWalletModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E290D42EC758B100644784 /* HomeWalletModels.swift */; };
 		79EC88BC2DDDBEFF006629EE /* ThreadTimelineScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FEE625AB52042049DB9268 /* ThreadTimelineScreenCoordinator.swift */; };
 		79EC88BD2DDDBF03006629EE /* ThreadTimelineScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69AEA8755382DB34892FB7B /* ThreadTimelineScreenModels.swift */; };
 		79EC88BE2DDDBF07006629EE /* ThreadTimelineScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9ACDD96F36510C1FC0836B /* ThreadTimelineScreenViewModel.swift */; };
@@ -4069,6 +4075,9 @@
 		79E290C52EC749F800644784 /* HomeFeedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedModels.swift; sourceTree = "<group>"; };
 		79E290C82EC74CE200644784 /* HomeFeedViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedViewModelProtocol.swift; sourceTree = "<group>"; };
 		79E290CB2EC74D0B00644784 /* HomeFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedViewModel.swift; sourceTree = "<group>"; };
+		79E290CE2EC7589F00644784 /* HomeWalletViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletViewModelProtocol.swift; sourceTree = "<group>"; };
+		79E290D12EC758AD00644784 /* HomeWalletViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletViewModel.swift; sourceTree = "<group>"; };
+		79E290D42EC758B100644784 /* HomeWalletModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletModels.swift; sourceTree = "<group>"; };
 		79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
 		79F31B2C2E02EDCE0043E100 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		79F31B302E02F5EF0043E100 /* AppForceUpdateScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppForceUpdateScreen.swift; sourceTree = "<group>"; };
@@ -7660,6 +7669,9 @@
 		79E290B22EC7467600644784 /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				79E290D42EC758B100644784 /* HomeWalletModels.swift */,
+				79E290D12EC758AD00644784 /* HomeWalletViewModel.swift */,
+				79E290CE2EC7589F00644784 /* HomeWalletViewModelProtocol.swift */,
 				79E290BB2EC7470600644784 /* View */,
 			);
 			path = Wallet;
@@ -10825,6 +10837,7 @@
 				791341542D6F58E1000E497F /* Secrets.swift in Sources */,
 				79B2A78C2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */,
 				79281A7D2E6A339400D86DD6 /* ForgotPasswordScreenViewModelProtocol.swift in Sources */,
+				79E290D62EC758B400644784 /* HomeWalletModels.swift in Sources */,
 				18E9A4872C9829970082DDA4 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */,
 				18E9A4892C9829970082DDA4 /* BlockedUsersScreenViewModel.swift in Sources */,
@@ -10864,6 +10877,7 @@
 				18E9A49E2C9829970082DDA4 /* CallScreenCoordinator.swift in Sources */,
 				18E9A49F2C9829970082DDA4 /* CallScreenModels.swift in Sources */,
 				18E9A4A02C9829970082DDA4 /* CallScreenViewModel.swift in Sources */,
+				79E290D32EC758AE00644784 /* HomeWalletViewModel.swift in Sources */,
 				7903938B2D53A22F0022E293 /* TimelineMediaPreviewModifier.swift in Sources */,
 				18E9A4A12C9829970082DDA4 /* CallScreenViewModelProtocol.swift in Sources */,
 				18E9A4A22C9829970082DDA4 /* CameraPicker.swift in Sources */,
@@ -11918,6 +11932,7 @@
 				18E9A75C2C9829970082DDA4 /* WindowManagerProtocol.swift in Sources */,
 				790A474F2E6AE2F70033604D /* ResentOtpButton.swift in Sources */,
 				79C6F7342DF828F9003CEBB9 /* RoomFlowCoordinatorStateMachine.swift in Sources */,
+				79E290D02EC758AA00644784 /* HomeWalletViewModelProtocol.swift in Sources */,
 				79C6F72C2DF82753003CEBB9 /* AuthenticationStartScreenCoordinator.swift in Sources */,
 				188C87D12D37F93900A139EB /* EditRoomAddressScreenViewModel.swift in Sources */,
 			);
@@ -12464,6 +12479,7 @@
 				793899D02DEF995E00980991 /* ReferAFriendSettingsScreen.swift in Sources */,
 				9EBDC79CAC9B63A0D626E333 /* LegalInformationScreenCoordinator.swift in Sources */,
 				799E1D192DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */,
+				79E290D22EC758AE00644784 /* HomeWalletViewModel.swift in Sources */,
 				F40B097470D3110DFDB1FAAA /* LegalInformationScreenModels.swift in Sources */,
 				BDED6DA7AD1E76018C424143 /* LegalInformationScreenViewModel.swift in Sources */,
 				A9D349478F7D4A2B1E40CEF9 /* LegalInformationScreenViewModelProtocol.swift in Sources */,
@@ -12525,6 +12541,7 @@
 				C8E1E4E06B7C7A3A8246FC9B /* MediaEventsTimelineScreenCoordinator.swift in Sources */,
 				B7F58D6903F9D509EDAB9E4F /* MediaEventsTimelineScreenModels.swift in Sources */,
 				C11D4A49DC29D89CE2BB31B8 /* MediaEventsTimelineScreenViewModel.swift in Sources */,
+				79E290D52EC758B400644784 /* HomeWalletModels.swift in Sources */,
 				FD9777315A5D9CDC47458AD1 /* MediaEventsTimelineScreenViewModelProtocol.swift in Sources */,
 				BCC864190651B3A3CF51E4DF /* MediaFileHandleProxy.swift in Sources */,
 				208C19811613F9A10F8A7B75 /* MediaLoader.swift in Sources */,
@@ -12939,6 +12956,7 @@
 				2E8C6672D0EE7D5B1BEDB8E2 /* ServerConfirmationScreen.swift in Sources */,
 				795A0C872D77EBA5000928B7 /* ZeroApiProxy.swift in Sources */,
 				5894C2514400A4FBC9327632 /* ServerConfirmationScreenCoordinator.swift in Sources */,
+				79E290CF2EC758AA00644784 /* HomeWalletViewModelProtocol.swift in Sources */,
 				401BB28CD6B7DD6B4E7863E7 /* ServerConfirmationScreenModels.swift in Sources */,
 				F0A26CD502C3A5868353B0FA /* ServerConfirmationScreenViewModel.swift in Sources */,
 				FD762761C5D0C30E6255C3D8 /* ServerConfirmationScreenViewModelProtocol.swift in Sources */,

@@ -17,7 +17,7 @@ private struct WalletTabContent {
 }
 
 struct HomeWalletTabsContentView : View {
-    @ObservedObject var context: HomeScreenViewModel.Context
+    @ObservedObject var context: HomeWalletViewModel.Context
     let selectedWalletTab: HomeWalletTab
     
     var body: some View {

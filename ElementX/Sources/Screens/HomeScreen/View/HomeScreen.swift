@@ -14,6 +14,7 @@ import SwiftUI
 struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     @ObservedObject var feedContext: HomeFeedViewModel.Context
+    @ObservedObject var walletContext: HomeWalletViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
@@ -22,7 +23,7 @@ struct HomeScreen: View {
     
     @State private var showBackToTop = false
     @State private var hideNavigationBar = false
-
+    
     var body: some View {
         ZStack {
             switch selectedHomeTab {
@@ -39,12 +40,14 @@ struct HomeScreen: View {
                 HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
                     .transition(.asymmetric(insertion: .opacity, removal: .opacity))
             case .wallet:
-                HomeWalletContent(context: context)
+                HomeWalletContent(context: walletContext)
                     .transition(.asymmetric(insertion: .opacity, removal: .opacity))
             }
         }
         .animation(.easeInOut(duration: 0.2), value: selectedHomeTab)
         .alert(item: $context.alertInfo)
+        .alert(item: $feedContext.alertInfo)
+        .alert(item: $walletContext.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
@@ -89,10 +92,12 @@ struct HomeScreen: View {
                 .animation(.easeInOut(duration: 0.3), value: context.viewState.showNewUserRewardsIntimation)
         }
         .sheet(isPresented: $context.showEarningsClaimedSheet) {
-            ClaimedEarningsSheetContent(context: context)
+            ClaimedEarningsSheetContent(context: context, onViewTransaction: { transactionId, chainId in
+                walletContext.send(viewAction: .viewTransactionDetails(transactionId: transactionId, chainId: chainId))
+            })
         }
         .sheet(isPresented: $context.showStakePoolSheet) {
-            StakePoolSheetContent(context: context)
+            StakePoolSheetContent(context: walletContext)
         }
         .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { isAtTop in
             if showBackToTop == isAtTop {
@@ -282,10 +287,13 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
     static let loadedViewModel = viewModel(.rooms)
     
     static let feedLoadedViewModel = feedViewModel()
+    static let walletLoadedViewModel = walletViewModel()
     
     static var previews: some View {
         NavigationStack {
-            HomeScreen(context: loadingViewModel.context, feedContext: feedLoadedViewModel.context)
+            HomeScreen(context: loadingViewModel.context,
+                       feedContext: feedLoadedViewModel.context,
+                       walletContext: walletLoadedViewModel.context)
         }
         .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
             state.roomListMode == .skeletons
@@ -293,7 +301,9 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Loading")
         
         NavigationStack {
-            HomeScreen(context: emptyViewModel.context, feedContext: feedLoadedViewModel.context)
+            HomeScreen(context: emptyViewModel.context,
+                       feedContext: feedLoadedViewModel.context,
+                       walletContext: walletLoadedViewModel.context)
         }
         .snapshotPreferences(expect: emptyViewModel.context.$viewState.map { state in
             state.roomListMode == .empty
@@ -301,7 +311,9 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Empty")
         
         NavigationStack {
-            HomeScreen(context: loadedViewModel.context, feedContext: feedLoadedViewModel.context)
+            HomeScreen(context: loadedViewModel.context,
+                       feedContext: feedLoadedViewModel.context,
+                       walletContext: walletLoadedViewModel.context)
         }
         .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
             state.roomListMode == .rooms
@@ -346,5 +358,19 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         
         return HomeFeedViewModel(userSession: userSession,
                                  userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }
+    
+    static func walletViewModel() -> HomeWalletViewModel {
+        let userID = "@alice:example.com"
+        
+        let roomSummaryProviderState: RoomSummaryProviderMockConfigurationState = .loaded([])
+        
+        let clientProxy = ClientProxyMock(.init(userID: userID,
+                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
+        
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        
+        return HomeWalletViewModel(userSession: userSession,
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

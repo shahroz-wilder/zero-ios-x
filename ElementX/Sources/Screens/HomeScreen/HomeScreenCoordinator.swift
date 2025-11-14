@@ -46,6 +46,7 @@ enum HomeScreenCoordinatorAction {
 final class HomeScreenCoordinator: CoordinatorProtocol {
     private var homeViewModel: HomeScreenViewModelProtocol
     private var feedViewModel: HomeFeedViewModel
+    private var walletViewModel: HomeWalletViewModel
     
     // periphery:ignore - only used in release builds
     private let bugReportService: BugReportServiceProtocol
@@ -65,6 +66,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         notificationManager: parameters.notificationManager,
                                         userIndicatorController: parameters.userIndicatorController)
         feedViewModel = HomeFeedViewModel(userSession: parameters.userSession,
+                                          userIndicatorController: parameters.userIndicatorController)
+        walletViewModel = HomeWalletViewModel(userSession: parameters.userSession,
                                           userIndicatorController: parameters.userIndicatorController)
         bugReportService = parameters.bugReportService
         
@@ -103,8 +106,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.logout)
                 case .transferOwnership(let roomIdentifier):
                     actionsSubject.send(.transferOwnership(roomIdentifier: roomIdentifier))
-                case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
-                    actionsSubject.send(.startWalletTransaction(walletTransactionProtocol, type, meowPrice))
                 case .selectRoomAlias(let roomAlias):
                     actionsSubject.send(.selectRoomAlias(roomAlias: roomAlias))
                 }
@@ -127,6 +128,17 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        walletViewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
+                    actionsSubject.send(.startWalletTransaction(walletTransactionProtocol, type, meowPrice))
+                }
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -143,7 +155,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(HomeScreen(context: homeViewModel.context,
-                           feedContext: feedViewModel.context)
+                           feedContext: feedViewModel.context,
+                           walletContext: walletViewModel.context)
         )
     }
 }

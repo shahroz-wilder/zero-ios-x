@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct StakePoolSheetContent: View {
-    @ObservedObject var context: HomeScreenViewModel.Context
+    @ObservedObject var context: HomeWalletViewModel.Context
     
     var body: some View {
         if let stakePool = context.viewState.selectedStakePool {

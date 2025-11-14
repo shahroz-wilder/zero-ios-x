@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ClaimedEarningsSheetContent : View {
     @ObservedObject var context: HomeScreenViewModel.Context
+    let onViewTransaction: (String, UInt64?) -> Void
     
     var body: some View {
         ClaimedEarningsSheetView(
@@ -22,7 +23,7 @@ struct ClaimedEarningsSheetContent : View {
                 context.send(viewAction: .claimRewards(trigger: true))
             },
             onViewClaimTransaction: { transactionId in
-                context.send(viewAction: .viewTransactionDetails(transactionId: transactionId, chainId: nil))
+                onViewTransaction(transactionId, nil)
             }
         )
         .presentationDetents([.height(500)])

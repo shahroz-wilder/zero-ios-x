@@ -24,7 +24,7 @@ enum WalletAction: String, CaseIterable {
 struct HomeWalletContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
-    @ObservedObject var context: HomeScreenViewModel.Context
+    @ObservedObject var context: HomeWalletViewModel.Context
     private let scrollViewAdapter: ScrollViewAdapter = ScrollViewAdapter()
     
     private var showWalletBalance: Bool {
