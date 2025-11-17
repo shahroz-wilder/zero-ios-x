@@ -89,7 +89,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canUserLeaveRoom: Bool {
-        canLeaveRoom && !isAChannel && dmRecipientInfo == nil
+        (dmRecipientInfo != nil) || (canLeaveRoom && !isAChannel)
     }
 
     var bindings: RoomDetailsScreenViewStateBindings

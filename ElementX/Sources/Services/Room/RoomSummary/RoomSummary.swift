@@ -58,6 +58,7 @@ struct RoomSummary {
     let isMarkedUnread: Bool
     let isFavourite: Bool
     let isTombstoned: Bool
+    let isDead: Bool
     let isEncrypted: Bool
     
     var hasUnreadMessages: Bool { unreadMessagesCount > 0 }
@@ -137,6 +138,7 @@ extension RoomSummary {
         isMarkedUnread = false
         isFavourite = false
         isTombstoned = false
+        isDead = false
         isEncrypted = room.encryptionState() == .encrypted
     }
     

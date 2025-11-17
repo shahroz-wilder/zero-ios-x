@@ -150,7 +150,7 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
         // Note: bugReportService.isEnabled doesn't determine if a user has opted in to Analytics/Sentry.
         // Therefore we use lastCrashEventID as this will only be set if we have crash ID from Sentry.
         if bugReportService.crashedLastRun, bugReportService.lastCrashEventID != nil {
-            viewModel.presentCrashedLastRunAlert()
+            homeViewModel.presentCrashedLastRunAlert()
         }
         #endif
     }

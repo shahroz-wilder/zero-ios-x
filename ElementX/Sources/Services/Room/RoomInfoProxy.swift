@@ -58,6 +58,9 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var joinRule: JoinRule? { roomInfo.joinRule }
     var historyVisibility: RoomHistoryVisibility { roomInfo.historyVisibility }
     
+    var isRoomDead: Bool { roomInfo.isRoomDead }
+    var deadRoomUserId: String? { roomInfo.deadRoomUserId }
+    
     var powerLevels: RoomPowerLevelsProxyProtocol? { RoomPowerLevelsProxy(roomInfo.powerLevels) }
 }
 
@@ -84,4 +87,36 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     
     var joinRule: JoinRule? { roomPreviewInfo.joinRule }
     var membership: Membership? { roomPreviewInfo.membership }
+}
+
+extension RoomInfo {
+    var isRoomDead: Bool {
+        (isRoomPrivate ?? true) && self.joinedMembersCount <= 1 && self.activeMembersCount <= 1
+    }
+    
+    var deadRoomUserId: String? {
+        let pattern = #"(?<=was\s)[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"#
+
+        return if let roomName = self.displayName,
+                  let range = roomName.range(of: pattern, options: .regularExpression) {
+            String(roomName[range])
+        } else {
+            nil
+        }
+    }
+    
+    var isRoomPrivate: Bool? {
+        guard let joinRule = self.joinRule else {
+            return nil
+        }
+        
+        return switch joinRule {
+        case .invite, .knock, .restricted, .knockRestricted, .private:
+            true
+        case .public:
+            false
+        case .custom: // We don't know how to handle this
+            nil
+        }
+    }
 }

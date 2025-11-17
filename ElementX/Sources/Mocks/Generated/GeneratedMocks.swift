@@ -17379,6 +17379,12 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHistoryVisibility = value }
     }
     var underlyingHistoryVisibility: RoomHistoryVisibility!
+    var isRoomDead: Bool {
+        get { return underlyingIsRoomDead }
+        set(value) { underlyingIsRoomDead = value }
+    }
+    var underlyingIsRoomDead: Bool!
+    var deadRoomUserId: String?
     var powerLevels: RoomPowerLevelsProxyProtocol?
     var successor: SuccessorRoom?
     var heroes: [RoomHero] = []

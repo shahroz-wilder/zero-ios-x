@@ -16,6 +16,7 @@ enum ZeroRoomListFilter: CaseIterable {
     case primaryRooms
     case secondaryRooms
     case mutedRooms
+    case archivedRooms
     case channels
 }
 

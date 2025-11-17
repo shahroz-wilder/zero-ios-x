@@ -234,6 +234,7 @@ private extension HomeScreenRoom {
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false,
+                                  isDead: false,
                                   isEncrypted: false)
         
         return .init(summary: summary, hideUnreadMessagesBadge: false)
@@ -269,6 +270,7 @@ private extension HomeScreenRoom {
                                   isMarkedUnread: false,
                                   isFavourite: false,
                                   isTombstoned: false,
+                                  isDead: false,
                                   isEncrypted: false)
         
         return .init(summary: summary, hideUnreadMessagesBadge: false)

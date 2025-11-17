@@ -426,7 +426,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         // We need to append gated channels in the search listing as well, only when user is searching on home screen
         if context.isSearchFieldFocused, !context.searchQuery.isEmpty {
-            rooms = rooms.filter { !$0.isAChannel }
+            rooms = rooms.filter { !$0.isAChannel && !$0.isArchived }
             // append gated channels in the same list in case user is searching
             let gatedChannels = state.channels
                 .filter { $0.displayName.containsIgnoringCase(context.searchQuery) }
@@ -449,6 +449,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 rooms = rooms.filter { $0.isMuted }
             case .channels:
                 rooms = rooms.filter { $0.isAChannel }
+            case .archivedRooms:
+                rooms = rooms.filter { $0.isArchived }
+            
             }
         }
         

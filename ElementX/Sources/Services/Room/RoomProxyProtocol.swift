@@ -207,6 +207,24 @@ extension JoinedRoomProxyProtocol {
                     isDirect: infoPublisher.value.isDirect)
     }
     
+    func details(cachedUsers: [ZMatrixUser]) -> RoomDetails {
+        RoomDetails(id: id,
+                    name: infoPublisher.value.isRoomDead ? getDisplayNameForDeadRoom(userId: infoPublisher.value.deadRoomUserId ?? "", cachedUsers: cachedUsers) : infoPublisher.value.displayName,
+                    avatar: infoPublisher.value.avatar,
+                    canonicalAlias: infoPublisher.value.canonicalAlias,
+                    isEncrypted: infoPublisher.value.isEncrypted,
+                    isPublic: !(infoPublisher.value.isPrivate ?? false),
+                    isDirect: infoPublisher.value.isDirect)
+    }
+    
+    private func getDisplayNameForDeadRoom(userId: String, cachedUsers: [ZMatrixUser]) -> String {
+        if let user = cachedUsers.first(where: { $0.id.rawValue == userId }) {
+            "Empty Room (was \(user.displayName))"
+        } else {
+            "Empty Room"
+        }
+    }
+    
     var isDirectOneToOneRoom: Bool {
         infoPublisher.value.isDirect && infoPublisher.value.activeMembersCount < 3
     }

@@ -61,6 +61,9 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var joinRule: JoinRule? { get }
     var historyVisibility: RoomHistoryVisibility { get }
     
+    var isRoomDead: Bool { get }
+    var deadRoomUserId: String? { get }
+    
     var powerLevels: RoomPowerLevelsProxyProtocol? { get }
 }
 

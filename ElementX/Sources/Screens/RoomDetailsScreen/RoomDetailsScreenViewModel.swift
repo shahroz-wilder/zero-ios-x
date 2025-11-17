@@ -61,7 +61,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic, isClickable: false)
         
-        super.init(initialViewState: .init(details: roomProxy.details,
+        super.init(initialViewState: .init(details: roomProxy.details(cachedUsers: appSettings.cachedZeroUsers),
                                            isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                            isDirect: roomProxy.infoPublisher.value.isDirect,
                                            isAChannel: roomProxy.infoPublisher.value.isAChannel,
@@ -294,7 +294,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         state.joinedMembersCount = roomInfo.joinedMembersCount
         
-        state.details = roomProxy.details
+        state.details = roomProxy.details(cachedUsers: appSettings.cachedZeroUsers)
         
         let topic = attributedStringBuilder.fromPlain(roomInfo.topic, isClickable: false)
         state.topic = topic

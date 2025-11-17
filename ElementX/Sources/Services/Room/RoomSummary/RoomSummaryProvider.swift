@@ -319,11 +319,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite,
                            isTombstoned: roomInfo.successorRoom != nil,
+                           isDead: roomInfo.isRoomDead,
                            isEncrypted: roomInfo.encryptionState == .encrypted)
     }
     
     private func getDisplayNameFromRoomInfo(_ roomInfo: RoomInfo, isDirectRoom: Bool) -> String? {
-        roomInfo.displayName ?? (isDirectRoom ? roomInfo.heroes.first?.displayName : roomInfo.rawName)
+        if roomInfo.isRoomDead {
+            getDisplayNameForDeadRoom(userId: roomInfo.deadRoomUserId ?? "")
+        } else {
+            roomInfo.displayName ?? (isDirectRoom ? roomInfo.heroes.first?.displayName : roomInfo.rawName)
+        }
+    }
+    
+    private func getDisplayNameForDeadRoom(userId: String) -> String {
+        if let user = appSettings.cachedZeroUsers.first(where: { $0.id.rawValue == userId }) {
+            "Empty Room (was \(user.displayName))"
+        } else {
+            "Empty Room"
+        }
     }
     
     private func getRoomAvatarFromRoomInfo(_ roomInfo: RoomInfo, isDirectRoom: Bool) -> String? {

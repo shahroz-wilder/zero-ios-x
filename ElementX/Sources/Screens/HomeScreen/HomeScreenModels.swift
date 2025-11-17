@@ -291,6 +291,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let isTombstoned: Bool
     
+    let isArchived: Bool
+    
     let isDiscoverable: Bool
     
     var displayedLastMessage: AttributedString? {
@@ -308,15 +310,15 @@ struct HomeScreenRoom: Identifiable, Equatable {
     }
     
     var isPrimary: Bool {
-        !isAChannel && !badges.isMuteShown && isEncrypted
+        !isAChannel && !isArchived && !badges.isMuteShown && isEncrypted
     }
     
     var isSecondary: Bool {
-        !isAChannel && !badges.isMuteShown && !isEncrypted
+        !isAChannel && !isArchived && !badges.isMuteShown && !isEncrypted
     }
     
     var isMuted: Bool {
-        !isAChannel && badges.isMuteShown
+        !isAChannel && !isArchived && badges.isMuteShown
     }
     
     let isEncrypted: Bool
@@ -335,6 +337,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        avatar: .room(id: "", name: "", avatarURL: nil),
                        canonicalAlias: nil,
                        isTombstoned: false,
+                       isArchived: false,
                        isDiscoverable: false,
                        unreadNotificationsCount: 0,
                        isEncrypted: false)
@@ -390,6 +393,7 @@ extension HomeScreenRoom {
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias,
                   isTombstoned: summary.isTombstoned,
+                  isArchived: summary.isDead,
                   isDiscoverable: false,
                   unreadNotificationsCount: summary.unreadMessagesCount, // settings to unread messages count to show new messages count only
                   isEncrypted: summary.isEncrypted
@@ -424,6 +428,7 @@ extension HomeScreenChannel {
               avatar: .room(id: id, name: displayName, avatarURL: nil),
               canonicalAlias: nil,
               isTombstoned: false,
+              isArchived: false,
               isDiscoverable: false,
               unreadNotificationsCount: 0,
               isEncrypted: true)
@@ -445,6 +450,7 @@ extension RoomDirectorySearchResult {
               avatar: avatar,
               canonicalAlias: nil,
               isTombstoned: false,
+              isArchived: false,
               isDiscoverable: true,
               unreadNotificationsCount: 0,
               isEncrypted: false)

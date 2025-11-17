@@ -150,11 +150,11 @@ struct RoomDetailsScreen: View {
                 .disabled(context.viewState.pinnedEventsActionState.isLoading)
             }
             
-//            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle, icon: \.polls),
-//                    kind: .navigationLink {
-//                        context.send(viewAction: .processTapPolls)
-//                    })
-//                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle, icon: \.polls),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapPolls)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
             ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
                     kind: .navigationLink {

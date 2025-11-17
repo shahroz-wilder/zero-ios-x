@@ -318,7 +318,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
-        state.roomTitle = roomInfo.displayName ?? roomProxy.id
+        state.roomTitle = roomInfo.isRoomDead ?
+        getDisplayNameForDeadRoom(userId: roomInfo.deadRoomUserId ?? "") : (roomInfo.displayName ?? roomProxy.id)
         state.roomAvatar = roomInfo.avatar
         state.hasOngoingCall = roomInfo.hasRoomCall
         state.hasSuccessor = roomInfo.successor != nil
@@ -335,13 +336,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             state.isKnockableRoom = false
         }
-
+        
         if let powerLevels = roomInfo.powerLevels {
             state.canSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
             state.canAcceptKnocks = powerLevels.canOwnUserInvite()
             state.canDeclineKnocks = powerLevels.canOwnUserKick()
             state.canBan = powerLevels.canOwnUserBan()
+        }
+    }
+    
+    private func getDisplayNameForDeadRoom(userId: String) -> String {
+        if let user = appSettings.cachedZeroUsers.first(where: { $0.id.rawValue == userId }) {
+            "Empty Room (was \(user.displayName))"
+        } else {
+            "Empty Room"
         }
     }
     
