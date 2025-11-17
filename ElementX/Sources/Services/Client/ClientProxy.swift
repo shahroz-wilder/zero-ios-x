@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
+@preconcurrency import Combine
 import CryptoKit
 import Foundation
 import OrderedCollections
@@ -250,7 +250,7 @@ class ClientProxy: ClientProxyProtocol {
 
         loadUserAvatarURLFromCache()
         
-        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: IgnoredUsersListenerProxy { [weak self] ignoredUsers in
+        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: SDKListener { [weak self] ignoredUsers in
             self?.ignoredUsersSubject.send(ignoredUsers)
         })
         
@@ -260,7 +260,7 @@ class ClientProxy: ClientProxyProtocol {
             Task { await self?.updateVerificationState(verificationState) }
         })
         
-        sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
+        sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener { [weak self] roomID, error in
             MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
             self?.sendQueueStatusSubject.send(false)
         })
@@ -2172,10 +2172,10 @@ class ClientProxy: ClientProxyProtocol {
     }
 }
 
-private class ClientDelegateWrapper: ClientDelegate {
-    private let authErrorCallback: (Bool) -> Void
+private final class ClientDelegateWrapper: ClientDelegate {
+    private let authErrorCallback: @Sendable (Bool) -> Void
     
-    init(authErrorCallback: @escaping (Bool) -> Void) {
+    init(authErrorCallback: @escaping @Sendable (Bool) -> Void) {
         self.authErrorCallback = authErrorCallback
     }
     
@@ -2191,7 +2191,7 @@ private class ClientDelegateWrapper: ClientDelegate {
     }
 }
 
-private class ClientDecryptionErrorDelegate: UnableToDecryptDelegate {
+private final class ClientDecryptionErrorDelegate: UnableToDecryptDelegate {
     private let actionsSubject: PassthroughSubject<ClientProxyAction, Never>
     
     init(actionsSubject: PassthroughSubject<ClientProxyAction, Never>) {
@@ -2200,30 +2200,6 @@ private class ClientDecryptionErrorDelegate: UnableToDecryptDelegate {
     
     func onUtd(info: UnableToDecryptInfo) {
         actionsSubject.send(.receivedDecryptionError(info))
-    }
-}
-
-private class IgnoredUsersListenerProxy: IgnoredUsersListener {
-    private let onUpdateClosure: ([String]) -> Void
-
-    init(onUpdateClosure: @escaping ([String]) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func call(ignoredUserIds: [String]) {
-        onUpdateClosure(ignoredUserIds)
-    }
-}
-
-private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
-    private let onErrorClosure: (String, ClientError) -> Void
-    
-    init(onErrorClosure: @escaping (String, ClientError) -> Void) {
-        self.onErrorClosure = onErrorClosure
-    }
-    
-    func onError(roomId: String, error: ClientError) {
-        onErrorClosure(roomId, error)
     }
 }
 
