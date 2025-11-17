@@ -91,6 +91,7 @@ struct RoomMembersListScreenViewStateBindings {
 enum RoomMembersListScreenViewAction {
     case selectMember(RoomMemberDetails)
     case invite
+    case refresh
 }
 
 enum RoomMembersListScreenAlertType: Hashable {

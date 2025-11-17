@@ -36,7 +36,7 @@ struct SecurityAndPrivacyScreen: View {
                 }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(L10n.screenSecurityAndPrivacyTitle)
         .toolbar { toolbar }

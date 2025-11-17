@@ -48,10 +48,13 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     override func process(viewAction: RoomMembersListScreenViewAction) {
         switch viewAction {
         case .selectMember(let member):
-            //selectMember(member)
-            showMemberDetails(member)
+            selectMember(member)
         case .invite:
             actionsSubject.send(.invite)
+        case .refresh:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: { [weak self] in
+                self?.setupMembers(true)
+            })
         }
     }
     
@@ -62,9 +65,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     // MARK: - Members
     
-    private func setupMembers() {
+    private func setupMembers(_ silentRefresh: Bool = false) {
         Task {
-            showLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
+            if !silentRefresh { showLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier) }
             await roomProxy.updateMembers()
             hideLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
         }

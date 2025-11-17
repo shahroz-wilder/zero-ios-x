@@ -55,6 +55,9 @@ struct RoomMembersListScreen: View {
         .alert(item: $context.alertInfo)
         .toolbar { toolbar }
         .track(screen: .RoomMembers)
+        .onAppear {
+            context.send(viewAction: .refresh)
+        }
     }
     
     // MARK: - Private
