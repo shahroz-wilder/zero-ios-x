@@ -163,7 +163,8 @@ private extension Set<TraceLogPack> {
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
-                                                           elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
+                                                           elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL,
+                                                           appHooks: AppHooks())
     static var previews: some View {
         NavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)

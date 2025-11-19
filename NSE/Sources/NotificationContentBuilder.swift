@@ -49,7 +49,7 @@ struct NotificationContentBuilder {
         notificationContent.threadIdentifier = threadIdentifier.replacingOccurrences(of: "@", with: "")
         
         MXLog.info("isNoisy: \(notificationItem.isNoisy)")
-        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: AppSettings.isDevelopmentBuild ? "new-message.caf" : "message.caf")) : nil
+        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
         
         switch notificationItem.event {
         case .none:
@@ -109,9 +109,11 @@ struct NotificationContentBuilder {
         
         notificationContent.body = body
         
+        let name = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         await addSenderIcon(notificationContent: &notificationContent,
                             senderID: notificationItem.senderID,
-                            senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
+                            senderAvatarDisplayName: name,
+                            senderDisplayName: name,
                             icon: icon(for: notificationItem),
                             forcePlaceholder: userSession.inviteAvatarsVisibility == .off,
                             mediaProvider: mediaProvider)
@@ -126,15 +128,18 @@ struct NotificationContentBuilder {
         }
         notificationContent.categoryIdentifier = NotificationConstants.Category.message
         
-        let senderName = if let displayName = notificationItem.senderDisplayName {
-            notificationItem.hasMention ? L10n.notificationSenderMentionReply(displayName) : displayName
+        let senderAvatarDisplayName = if let displayName = notificationItem.senderDisplayName {
+            displayName
         } else {
-            notificationItem.roomDisplayName
+            notificationItem.senderID
         }
+        
+        let senderDisplayName = notificationItem.hasMention ? L10n.notificationSenderMentionReply(senderAvatarDisplayName) : senderAvatarDisplayName
         
         await addSenderIcon(notificationContent: &notificationContent,
                             senderID: notificationItem.senderID,
-                            senderName: senderName,
+                            senderAvatarDisplayName: senderAvatarDisplayName,
+                            senderDisplayName: senderDisplayName,
                             icon: icon(for: notificationItem),
                             mediaProvider: mediaProvider)
     }
@@ -160,10 +165,26 @@ struct NotificationContentBuilder {
 //            }
 //        }
         if notificationItem.isDM {
-            return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+                .init(mediaSource: notificationItem.senderAvatarMediaSource,
+                      groupInfo: .init(avatarDisplayName: notificationItem.senderDisplayName ?? notificationItem.senderID,
+                                       displayName: L10n.commonThread,
+                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
+            } else {
+                .init(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+            }
         } else {
-            return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
-                                    groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
+            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+                      groupInfo: .init(avatarDisplayName: notificationItem.roomDisplayName,
+                                       displayName: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),
+                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
+            } else {
+                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+                      groupInfo: .init(avatarDisplayName: notificationItem.roomDisplayName,
+                                       displayName: notificationItem.roomDisplayName,
+                                       id: notificationItem.roomID))
+            }
         }
     }
 
@@ -231,7 +252,8 @@ struct NotificationContentBuilder {
 
     private func addSenderIcon(notificationContent: inout UNMutableNotificationContent,
                                senderID: String,
-                               senderName: String,
+                               senderAvatarDisplayName: String,
+                               senderDisplayName: String,
                                icon: NotificationIcon,
                                forcePlaceholder: Bool = false,
                                mediaProvider: MediaProviderProtocol) async {
@@ -249,7 +271,7 @@ struct NotificationContentBuilder {
 
         if let fetchedImage {
             image = fetchedImage
-        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
+        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.avatarDisplayName ?? senderAvatarDisplayName,
                                                                  id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
         } else {
@@ -259,7 +281,7 @@ struct NotificationContentBuilder {
         let senderHandle = INPersonHandle(value: senderID, type: .unknown)
         let sender = INPerson(personHandle: senderHandle,
                               nameComponents: nil,
-                              displayName: senderName,
+                              displayName: senderDisplayName,
                               image: !icon.shouldDisplayAsGroup ? image : nil,
                               contactIdentifier: nil,
                               customIdentifier: nil)
@@ -270,7 +292,7 @@ struct NotificationContentBuilder {
         if let groupInfo = icon.groupInfo {
             let meHandle = INPersonHandle(value: notificationContent.receiverID, type: .unknown)
             let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
-            speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.name)
+            speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.displayName)
             recipients = [sender, me]
         }
 
@@ -336,7 +358,8 @@ struct NotificationContentBuilder {
 
 private struct NotificationIcon {
     struct GroupInfo {
-        let name: String
+        let avatarDisplayName: String
+        let displayName: String
         let id: String
     }
     
