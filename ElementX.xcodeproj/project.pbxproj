@@ -2169,8 +2169,8 @@
 		79B2A7962E2A856800A76430 /* UserRewardsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A7942E2A856200A76430 /* UserRewardsProtocol.swift */; };
 		79B2A7992E2A886200A76430 /* FeedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A7982E2A885700A76430 /* FeedProtocol.swift */; };
 		79B2A79A2E2A886200A76430 /* FeedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A7982E2A885700A76430 /* FeedProtocol.swift */; };
-		79B2A79C2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */; };
-		79B2A79D2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */; };
+		79B2A79C2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */; };
+		79B2A79D2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */; };
 		79B716492DA843F200A68055 /* EventTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81FD0C60175FA081EB19AD /* EventTimelineItem.swift */; };
 		79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F793C422BDACE0C60C774F4 /* UserIdentityProxyProtocol.swift */; };
 		79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8536B40F578BA7FDB23D97B1 /* UserIdentityProxyMock.swift */; };
@@ -4050,7 +4050,7 @@
 		79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimedEarningsSheetView.swift; sourceTree = "<group>"; };
 		79B2A7942E2A856200A76430 /* UserRewardsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRewardsProtocol.swift; sourceTree = "<group>"; };
 		79B2A7982E2A885700A76430 /* FeedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProtocol.swift; sourceTree = "<group>"; };
-		79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCustomEventService.swift; sourceTree = "<group>"; };
+		79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCustomLogsService.swift; sourceTree = "<group>"; };
 		79BBCD842E8C06A60043CB6A /* BadgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
 		79C25B522E25A1EE00936A5D /* FeedMediaPreFetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreFetchService.swift; sourceTree = "<group>"; };
 		79C25B552E25A21600936A5D /* FeedMediaPreFetchProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreFetchProtocol.swift; sourceTree = "<group>"; };
@@ -5604,7 +5604,7 @@
 		18C852FE2D11A127009AF206 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */,
+				79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */,
 				79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */,
 				18C852FF2D11A12E009AF206 /* WalletConnectService.swift */,
 				1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */,
@@ -11924,7 +11924,7 @@
 				790A47442E6A41A70033604D /* OtpVerificationScreenCoordinator.swift in Sources */,
 				18E9A75B2C9829970082DDA4 /* WindowManager.swift in Sources */,
 				79C6F7322DF8277D003CEBB9 /* TombstonedAvatarImage.swift in Sources */,
-				79B2A79C2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */,
+				79B2A79C2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */,
 				18E9A75C2C9829970082DDA4 /* WindowManagerProtocol.swift in Sources */,
 				790A474F2E6AE2F70033604D /* ResentOtpButton.swift in Sources */,
 				79C6F7342DF828F9003CEBB9 /* RoomFlowCoordinatorStateMachine.swift in Sources */,
@@ -12766,7 +12766,7 @@
 				E78D429F18071545BF661A52 /* RoomDetailsEditScreenCoordinator.swift in Sources */,
 				A6D4C5EEA85A6A0ABA1559D6 /* RoomDetailsEditScreenModels.swift in Sources */,
 				659E5B766F76FDEC1BF393A4 /* RoomDetailsEditScreenViewModel.swift in Sources */,
-				79B2A79D2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */,
+				79B2A79D2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */,
 				799D85842E2709F7000A362A /* UserWalletInfoView.swift in Sources */,
 				797751802DD9F8C4006CF62D /* FeedUserProfileScreenView.swift in Sources */,
 				C49FCC766673006B6D299F1C /* RoomDetailsEditScreenViewModelProtocol.swift in Sources */,

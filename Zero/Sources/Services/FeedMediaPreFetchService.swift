@@ -145,7 +145,7 @@ final class FeedMediaPreFetchService {
                         }
                     } else {
                         if case .failure(let error) = result {
-                            ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                            ZeroCustomLogsService.shared.feedScreenEvent(parameters: [
                                 "type": "Prefetch post media url",
                                 "status": "Failure",
                                 "postId" : post.id,
@@ -186,7 +186,7 @@ final class FeedMediaPreFetchService {
                         case .success(let localUrl):
                             return (postId, media.withUrl(localUrl))
                         case .failure(let error):
-                            ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                            ZeroCustomLogsService.shared.feedScreenEvent(parameters: [
                                 "type": "Download post media file",
                                 "status": "Failure",
                                 "postId" : postId,
@@ -196,7 +196,7 @@ final class FeedMediaPreFetchService {
                             return (postId, nil)
                         }
                     } catch {
-                        ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                        ZeroCustomLogsService.shared.feedScreenEvent(parameters: [
                             "type": "Download post media file",
                             "status": "Failure",
                             "postId" : postId,

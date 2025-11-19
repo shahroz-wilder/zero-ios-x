@@ -27,12 +27,6 @@ struct HomeScreenRoomList: View {
     private var content: some View {
         let roomsList = context.viewState.visibleRooms
         
-        let _ = ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-            "execution": "HomeScreenRoomList",
-            "view": "showing rooms list",
-            "roomsListCount": "\(roomsList.count)"
-        ])
-        
         if fromChannelsTabs, roomsList.isEmpty, !context.isSearchFieldFocused {
             HomeContentEmptyView(message: "No channels")
                 .task { perform?() }

@@ -19,10 +19,13 @@ struct AppRemoteConfigs: Codable {
     let maintenanceModeEnabled: Bool
     let forceUpdateEnabled: Bool
     
+    let customLogsEnabled: Bool?
+    
     enum CodingKeys: String, CodingKey {
         case appVersion = "app_version"
         case maintenanceModeEnabled = "maintenance_mode"
         case forceUpdateEnabled = "force_update"
+        case customLogsEnabled = "custom_logs"
     }
 }
 
@@ -36,6 +39,7 @@ class RemoteConfigManager: ObservableObject {
     
     @Published var forceUpdateEnabled = false
     @Published var maintenanceModeEnabled = false
+    @Published var customLogsEnabled = false
     
     private init() {
         self.remoteConfig = RemoteConfig.remoteConfig()
@@ -93,6 +97,7 @@ class RemoteConfigManager: ObservableObject {
         if let zeroRemoteConfigs = parseJSONString(jsonString, as: ZeroRemoteConfigs.self) {
             forceUpdateEnabled = zeroRemoteConfigs.iOS.forceUpdateEnabled
             maintenanceModeEnabled = zeroRemoteConfigs.iOS.maintenanceModeEnabled
+            customLogsEnabled = zeroRemoteConfigs.iOS.customLogsEnabled ?? false
         } else {
             print("Remote_Config: Failed to parse JSON string")
         }

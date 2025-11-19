@@ -186,7 +186,7 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         case .success(let transaction):
             return .success(transaction)
         case .failure(let failure):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
+            ZeroCustomLogsService.shared.walletApiEvent(parameters: [
                 "request": "claim_rewards",
                 "url": url,
                 "address": walletAddress,

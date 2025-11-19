@@ -8,11 +8,14 @@
 import Foundation
 import FirebaseFirestore
 
-class ZeroCustomEventService {
-    static let shared = ZeroCustomEventService()
+class ZeroCustomLogsService {
+    static let shared = ZeroCustomLogsService()
     
     private let db = Firestore.firestore()
-        
+    
+    private var isLoggingEnabled: Bool {
+        RemoteConfigManager.shared.customLogsEnabled
+    }
     private var userId: String? = nil
     private var userName: String? = nil
             
@@ -21,14 +24,6 @@ class ZeroCustomEventService {
     func setup(userId: String, userName: String) {
         self.userId = userId
         self.userName = userName
-    }
-    
-    func roomScreenEvent(parameters: [String: Any]) {
-        logEvent("ROOM", category: "SCREEN", parameters: parameters)
-    }
-    
-    func roomApiEvent(parameters: [String: Any]) {
-        logEvent("ROOM", category: "API", parameters: parameters)
     }
     
     func feedScreenEvent(parameters: [String: Any]) {
@@ -54,24 +49,25 @@ class ZeroCustomEventService {
     }()
     
     func logEvent(_ eventName: String, category: String, parameters: [String: Any]? = nil) {
-        if let userId = userId {
-            if userId.lowercased() != "placeholder_id" {
-                let userId = if let name = userName {
-                    "\(name)(\(userId))".trim()
-                } else {
-                    userId
-                }
-                db.collection("zero_logs")
-                    .document(userId)
-                    .collection(logId)
-                    .document(eventName)
-                    .collection(category)
-                    .addDocument(data: parameters ?? [:]) { error in
-                        if let error = error {
-                            print("❌ Failed to log event: \(error.localizedDescription)")
-                        }
-                    }
-            }
+        guard isLoggingEnabled else {
+            return  // Logging disabled from remote configs
         }
+        guard let userId = userId, userId.lowercased() != "placeholder_id" else { return }
+        
+        let mUserId = if let name = userName {
+            "\(name)(\(userId))".trim()
+        } else {
+            userId
+        }
+        db.collection("zero_logs")
+            .document(mUserId)
+            .collection(logId)
+            .document(eventName)
+            .collection(category)
+            .addDocument(data: parameters ?? [:]) { error in
+                if let error = error {
+                    print("Failed to log event: \(error.localizedDescription)")
+                }
+            }
     }
 }

@@ -76,7 +76,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUserZeroProfile = currentUser
-                ZeroCustomEventService.shared.setup(userId: currentUser.id.rawValue, userName: currentUser.displayName)
+                ZeroCustomLogsService.shared.setup(userId: currentUser.id.rawValue, userName: currentUser.displayName)
             }
             .store(in: &cancellables)
         
@@ -456,11 +456,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         
         state.rooms = rooms.uniqued(on: { $0.id })
-        ZeroCustomEventService.shared.roomScreenEvent(parameters: [
-            "execution": "updateRooms",
-            "call": "setting rooms to state.rooms",
-            "count": "\(state.rooms.count)"
-        ])
         
         applyCustomFilterToNotificationsList(.all)
         extractAllRoomUsers(matrixRoomSummaries)
