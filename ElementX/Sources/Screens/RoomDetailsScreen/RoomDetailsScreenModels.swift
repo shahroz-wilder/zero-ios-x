@@ -44,6 +44,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var isEncrypted: Bool
     var isDirect: Bool
     let isAChannel: Bool
+    var isDead: Bool
     var permalink: URL?
 
     var topic: AttributedString?
@@ -89,7 +90,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canUserLeaveRoom: Bool {
-        (dmRecipientInfo != nil) || (canLeaveRoom && !isAChannel)
+        (dmRecipientInfo != nil) || isDead || (canLeaveRoom && !isAChannel)
     }
 
     var bindings: RoomDetailsScreenViewStateBindings

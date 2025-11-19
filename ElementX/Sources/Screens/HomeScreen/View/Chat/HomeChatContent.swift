@@ -14,7 +14,7 @@ enum HomeChatTab: CaseIterable {
     case all
     case unread
     case favourite
-    case archived
+    case inactive
 }
 
 struct HomeChatContent: View {
@@ -38,8 +38,8 @@ struct HomeChatContent: View {
                     context.filtersState.activateMatrixFilter(.rooms)
                 case .favourite:
                     context.filtersState.activateMatrixFilter(.favourites)
-                case .archived:
-                    context.filtersState.activateZeroFilter(.archivedRooms)
+                case .inactive:
+                    context.filtersState.activateZeroFilter(.inactiveRooms)
                 }
             }
     }
@@ -175,7 +175,7 @@ struct HomeChatContent: View {
             case .all: return "All"
             case .unread: return "Unread"
             case .favourite: return "Favourite"
-            case .archived: return "Archived"
+            case .inactive: return "In-Active"
             }
         },
                              onTabSelected: { tab in

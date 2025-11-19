@@ -65,6 +65,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                            isDirect: roomProxy.infoPublisher.value.isDirect,
                                            isAChannel: roomProxy.infoPublisher.value.isAChannel,
+                                           isDead: roomProxy.infoPublisher.value.isRoomDead,
                                            topic: topic,
                                            topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                            joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
@@ -290,6 +291,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.isEncrypted = roomInfo.isEncrypted
         state.isDirect = roomInfo.isDirect
+        state.isDead = roomInfo.isRoomDead
         state.bindings.isFavourite = roomInfo.isFavourite
         
         state.joinedMembersCount = roomInfo.joinedMembersCount

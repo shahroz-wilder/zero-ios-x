@@ -449,7 +449,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 rooms = rooms.filter { $0.isMuted }
             case .channels:
                 rooms = rooms.filter { $0.isAChannel }
-            case .archivedRooms:
+            case .inactiveRooms:
                 rooms = rooms.filter { $0.isArchived }
             
             }
