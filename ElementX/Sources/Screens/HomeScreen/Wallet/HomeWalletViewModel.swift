@@ -45,9 +45,7 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUserZeroProfile = currentUser
-                if ZeroFlaggedFeaturesService.shared.zeroWalletEnabled() {
-                    self?.fetchWalletData()
-                }
+                self?.fetchWalletData()
             }
             .store(in: &cancellables)
     }
