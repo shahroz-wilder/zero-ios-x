@@ -168,14 +168,15 @@ struct HomeChatContent: View {
     }
     
     private var customChatFiltersView: some View {
-        SimpleTabButtonsView(tabs: HomeChatTab.allCases,
+        let homeTabs = context.viewState.shouldShowInActiveChatsTab ? HomeChatTab.allCases : [.all, .unread, .favourite]
+        return SimpleTabButtonsView(tabs: homeTabs,
                              selectedTab: selectedChatTab.wrappedValue,
                              tabTitle: { tab in
             switch tab {
             case .all: return "All"
             case .unread: return "Unread"
             case .favourite: return "Favourite"
-            case .inactive: return "In-Active"
+            case .inactive: return "Inactive"
             }
         },
                              onTabSelected: { tab in

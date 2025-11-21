@@ -160,6 +160,8 @@ struct HomeScreenViewState: BindableState {
     
     var reportRoomEnabled = false
     
+    var shouldShowInActiveChatsTab: Bool = false
+    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms
