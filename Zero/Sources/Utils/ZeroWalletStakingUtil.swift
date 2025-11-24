@@ -33,6 +33,10 @@ class ZeroWalletStakingUtil {
     private init() {
         stakePools = [meowPool, meowAvaxPool]
     }
+    
+    func poolForId(poolId: String) -> WalletStakePool? {
+        stakePools.first(where: { $0.id == poolId })
+    }
 }
 
 struct WalletStakePool: Identifiable {

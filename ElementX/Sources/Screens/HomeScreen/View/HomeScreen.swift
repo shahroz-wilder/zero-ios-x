@@ -96,7 +96,7 @@ struct HomeScreen: View {
                 walletContext.send(viewAction: .viewTransactionDetails(transactionId: transactionId, chainId: chainId))
             })
         }
-        .sheet(isPresented: $context.showStakePoolSheet) {
+        .sheet(isPresented: $walletContext.showStakePoolSheet) {
             StakePoolSheetContent(context: walletContext)
         }
         .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { isAtTop in

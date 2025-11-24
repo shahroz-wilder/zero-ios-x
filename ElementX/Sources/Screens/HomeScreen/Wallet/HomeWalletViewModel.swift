@@ -126,7 +126,9 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
             await MainActor.run {
                 if let price = newMeowPrice {
                     state.meowPrice = price
-                    fetchStakingData(userWalletAddress: walletAddress, refreshAllData: silentRefresh)
+                    fetchStakingData(stakePools: ZeroWalletStakingUtil.shared.stakePools,
+                                     userWalletAddress: walletAddress,
+                                     refreshAllData: silentRefresh)
                 }
                 if !walletTokens.0.isEmpty {
                     state.walletTokens = walletTokens.0
@@ -230,9 +232,7 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
         }
     }
     
-    private func fetchStakingData(userWalletAddress: String, refreshAllData: Bool = false) {
-        let stakePools = ZeroWalletStakingUtil.shared.stakePools
-        
+    private func fetchStakingData(stakePools: [WalletStakePool], userWalletAddress: String, refreshAllData: Bool = false) {
         Task(priority: .background) { [weak self] in
             guard let self else { return }
             
@@ -365,7 +365,9 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
     }
     
     private func claimStakeRewards() {
-        guard let selectedPool = state.selectedStakePool else { return }
+        guard let selectedPool = state.selectedStakePool,
+              let actualPool = ZeroWalletStakingUtil.shared.poolForId(poolId: selectedPool.pool.id)
+        else { return }
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
@@ -384,8 +386,10 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
                                                                          chainId: selectedPool.pool.chainId)
             switch result {
             case .success(_):
-                try? await Task.sleep(for: .seconds(1))
-                fetchStakingData(userWalletAddress: selectedPool.pool.userWalletAddress, refreshAllData: true)
+                try? await Task.sleep(for: .seconds(0.5))
+                fetchStakingData(stakePools: [actualPool],
+                                 userWalletAddress: selectedPool.pool.userWalletAddress,
+                                 refreshAllData: true)
             case .failure(let error):
                 displayError(message: error.localizedDescription)
             }

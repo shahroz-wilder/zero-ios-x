@@ -423,7 +423,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                       seenInvites: seenInvites)
             rooms.append(room)
         }
-        state.shouldShowInActiveChatsTab = rooms.contains(where: \.isArchived)
+        if !state.bindings.filtersState.isFiltering {
+            state.shouldShowInActiveChatsTab = rooms.contains(where: \.isArchived)
+        }
         
         // We need to append gated channels in the search listing as well, only when user is searching on home screen
         if context.isSearchFieldFocused, !context.searchQuery.isEmpty {

@@ -237,9 +237,6 @@ struct HomeScreenViewStateBindings {
     var leaveRoomAlertItem: LeaveRoomAlertItem?
     
     var showEarningsClaimedSheet: Bool = false
-    var showStakePoolSheet: Bool = false
-    
-    var stakePoolViewState: StakePoolViewState = .details
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
