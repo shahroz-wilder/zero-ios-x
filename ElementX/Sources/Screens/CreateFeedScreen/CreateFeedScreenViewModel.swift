@@ -42,7 +42,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        clientProxy.zeroCurrentUserPublisher
+        clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.currentUserWalletAddress = currentUser.publicWalletAddress
@@ -78,7 +78,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
                                                                   title: "Posting...",
                                                                   persistent: true))
             
-            let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
+            let postFeedResult = await clientProxy.zeroClient.postNewFeed(channelZId: defaultChannelZId,
                                                                walletAddress: userWalletAddress,
                                                                content: state.bindings.feedText,
                                                                replyToPost: nil,

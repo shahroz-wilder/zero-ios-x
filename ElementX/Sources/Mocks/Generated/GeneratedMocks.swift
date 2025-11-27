@@ -2349,36 +2349,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
     var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
-    var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
-        get { return underlyingUserRewardsPublisher }
-        set(value) { underlyingUserRewardsPublisher = value }
+    var zeroClient: ZeroClientProxyProtocol {
+        get { return underlyingZeroClient }
+        set(value) { underlyingZeroClient = value }
     }
-    var underlyingUserRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never>!
-    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> {
-        get { return underlyingShowNewUserRewardsIntimationPublisher }
-        set(value) { underlyingShowNewUserRewardsIntimationPublisher = value }
-    }
-    var underlyingShowNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never>!
-    var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> {
-        get { return underlyingMessengerInvitePublisher }
-        set(value) { underlyingMessengerInvitePublisher = value }
-    }
-    var underlyingMessengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never>!
-    var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> {
-        get { return underlyingDirectMemberZeroProfilePublisher }
-        set(value) { underlyingDirectMemberZeroProfilePublisher = value }
-    }
-    var underlyingDirectMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never>!
-    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never> {
-        get { return underlyingZeroCurrentUserPublisher }
-        set(value) { underlyingZeroCurrentUserPublisher = value }
-    }
-    var underlyingZeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never>!
-    var homeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never> {
-        get { return underlyingHomeRoomSummariesUsersPublisher }
-        set(value) { underlyingHomeRoomSummariesUsersPublisher = value }
-    }
-    var underlyingHomeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never>!
+    var underlyingZeroClient: ZeroClientProxyProtocol!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -5675,76 +5650,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return setHideInviteAvatarsReturnValue
         }
     }
-    //MARK: - verifyUserPassword
-
-    var verifyUserPasswordUnderlyingCallsCount = 0
-    var verifyUserPasswordCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return verifyUserPasswordUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = verifyUserPasswordUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                verifyUserPasswordUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    verifyUserPasswordUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var verifyUserPasswordCalled: Bool {
-        return verifyUserPasswordCallsCount > 0
-    }
-    var verifyUserPasswordReceivedPassword: String?
-    var verifyUserPasswordReceivedInvocations: [String] = []
-
-    var verifyUserPasswordUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var verifyUserPasswordReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return verifyUserPasswordUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = verifyUserPasswordUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                verifyUserPasswordUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    verifyUserPasswordUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var verifyUserPasswordClosure: ((String) async -> Result<Void, ClientProxyError>)?
-
-    func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError> {
-        verifyUserPasswordCallsCount += 1
-        verifyUserPasswordReceivedPassword = password
-        DispatchQueue.main.async {
-            self.verifyUserPasswordReceivedInvocations.append(password)
-        }
-        if let verifyUserPasswordClosure = verifyUserPasswordClosure {
-            return await verifyUserPasswordClosure(password)
-        } else {
-            return verifyUserPasswordReturnValue
-        }
-    }
     //MARK: - setRoomNotificationModeProtocol
 
     var setRoomNotificationModeProtocolUnderlyingCallsCount = 0
@@ -5826,3450 +5731,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             self.roomNotificationModeUpdatedRoomIdNotificationModeReceivedInvocations.append((roomId: roomId, notificationMode: notificationMode))
         }
         roomNotificationModeUpdatedRoomIdNotificationModeClosure?(roomId, notificationMode)
-    }
-    //MARK: - getUserRewards
-
-    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = 0
-    var getUserRewardsShouldCheckRewardsIntiamtionCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getUserRewardsShouldCheckRewardsIntiamtionCalled: Bool {
-        return getUserRewardsShouldCheckRewardsIntiamtionCallsCount > 0
-    }
-    var getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion: Bool?
-    var getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations: [Bool] = []
-
-    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var getUserRewardsShouldCheckRewardsIntiamtionReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getUserRewardsShouldCheckRewardsIntiamtionClosure: ((Bool) async -> Result<Void, ClientProxyError>)?
-
-    func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError> {
-        getUserRewardsShouldCheckRewardsIntiamtionCallsCount += 1
-        getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion = shouldCheckRewardsIntiamtion
-        DispatchQueue.main.async {
-            self.getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations.append(shouldCheckRewardsIntiamtion)
-        }
-        if let getUserRewardsShouldCheckRewardsIntiamtionClosure = getUserRewardsShouldCheckRewardsIntiamtionClosure {
-            return await getUserRewardsShouldCheckRewardsIntiamtionClosure(shouldCheckRewardsIntiamtion)
-        } else {
-            return getUserRewardsShouldCheckRewardsIntiamtionReturnValue
-        }
-    }
-    //MARK: - getZeroMeowPrice
-
-    var getZeroMeowPriceUnderlyingCallsCount = 0
-    var getZeroMeowPriceCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getZeroMeowPriceUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getZeroMeowPriceUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getZeroMeowPriceUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getZeroMeowPriceUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getZeroMeowPriceCalled: Bool {
-        return getZeroMeowPriceCallsCount > 0
-    }
-
-    var getZeroMeowPriceUnderlyingReturnValue: Result<ZeroCurrency, ClientProxyError>!
-    var getZeroMeowPriceReturnValue: Result<ZeroCurrency, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getZeroMeowPriceUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZeroCurrency, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getZeroMeowPriceUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getZeroMeowPriceUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getZeroMeowPriceUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getZeroMeowPriceClosure: (() async -> Result<ZeroCurrency, ClientProxyError>)?
-
-    func getZeroMeowPrice() async -> Result<ZeroCurrency, ClientProxyError> {
-        getZeroMeowPriceCallsCount += 1
-        if let getZeroMeowPriceClosure = getZeroMeowPriceClosure {
-            return await getZeroMeowPriceClosure()
-        } else {
-            return getZeroMeowPriceReturnValue
-        }
-    }
-    //MARK: - dismissRewardsIntimation
-
-    var dismissRewardsIntimationUnderlyingCallsCount = 0
-    var dismissRewardsIntimationCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return dismissRewardsIntimationUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = dismissRewardsIntimationUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                dismissRewardsIntimationUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    dismissRewardsIntimationUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var dismissRewardsIntimationCalled: Bool {
-        return dismissRewardsIntimationCallsCount > 0
-    }
-    var dismissRewardsIntimationClosure: (() -> Void)?
-
-    func dismissRewardsIntimation() {
-        dismissRewardsIntimationCallsCount += 1
-        dismissRewardsIntimationClosure?()
-    }
-    //MARK: - loadZeroMessengerInvite
-
-    var loadZeroMessengerInviteUnderlyingCallsCount = 0
-    var loadZeroMessengerInviteCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loadZeroMessengerInviteUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadZeroMessengerInviteUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadZeroMessengerInviteUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadZeroMessengerInviteUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var loadZeroMessengerInviteCalled: Bool {
-        return loadZeroMessengerInviteCallsCount > 0
-    }
-
-    var loadZeroMessengerInviteUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var loadZeroMessengerInviteReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return loadZeroMessengerInviteUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadZeroMessengerInviteUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadZeroMessengerInviteUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadZeroMessengerInviteUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var loadZeroMessengerInviteClosure: (() async -> Result<Void, ClientProxyError>)?
-
-    @discardableResult
-    func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError> {
-        loadZeroMessengerInviteCallsCount += 1
-        if let loadZeroMessengerInviteClosure = loadZeroMessengerInviteClosure {
-            return await loadZeroMessengerInviteClosure()
-        } else {
-            return loadZeroMessengerInviteReturnValue
-        }
-    }
-    //MARK: - isProfileCompletionRequired
-
-    var isProfileCompletionRequiredUnderlyingCallsCount = 0
-    var isProfileCompletionRequiredCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return isProfileCompletionRequiredUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = isProfileCompletionRequiredUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                isProfileCompletionRequiredUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    isProfileCompletionRequiredUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var isProfileCompletionRequiredCalled: Bool {
-        return isProfileCompletionRequiredCallsCount > 0
-    }
-
-    var isProfileCompletionRequiredUnderlyingReturnValue: Bool!
-    var isProfileCompletionRequiredReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return isProfileCompletionRequiredUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = isProfileCompletionRequiredUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                isProfileCompletionRequiredUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    isProfileCompletionRequiredUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var isProfileCompletionRequiredClosure: (() async -> Bool)?
-
-    func isProfileCompletionRequired() async -> Bool {
-        isProfileCompletionRequiredCallsCount += 1
-        if let isProfileCompletionRequiredClosure = isProfileCompletionRequiredClosure {
-            return await isProfileCompletionRequiredClosure()
-        } else {
-            return isProfileCompletionRequiredReturnValue
-        }
-    }
-    //MARK: - completeUserAccountProfile
-
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = 0
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeCalled: Bool {
-        return completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount > 0
-    }
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedArguments: (avatar: MediaInfo?, displayName: String, inviteCode: String)?
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedInvocations: [(avatar: MediaInfo?, displayName: String, inviteCode: String)] = []
-
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var completeUserAccountProfileAvatarDisplayNameInviteCodeClosure: ((MediaInfo?, String, String) async -> Result<Void, ClientProxyError>)?
-
-    func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ClientProxyError> {
-        completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount += 1
-        completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedArguments = (avatar: avatar, displayName: displayName, inviteCode: inviteCode)
-        DispatchQueue.main.async {
-            self.completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedInvocations.append((avatar: avatar, displayName: displayName, inviteCode: inviteCode))
-        }
-        if let completeUserAccountProfileAvatarDisplayNameInviteCodeClosure = completeUserAccountProfileAvatarDisplayNameInviteCodeClosure {
-            return await completeUserAccountProfileAvatarDisplayNameInviteCodeClosure(avatar, displayName, inviteCode)
-        } else {
-            return completeUserAccountProfileAvatarDisplayNameInviteCodeReturnValue
-        }
-    }
-    //MARK: - deleteUserAccount
-
-    var deleteUserAccountUnderlyingCallsCount = 0
-    var deleteUserAccountCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return deleteUserAccountUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = deleteUserAccountUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                deleteUserAccountUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    deleteUserAccountUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var deleteUserAccountCalled: Bool {
-        return deleteUserAccountCallsCount > 0
-    }
-
-    var deleteUserAccountUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var deleteUserAccountReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return deleteUserAccountUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = deleteUserAccountUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                deleteUserAccountUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    deleteUserAccountUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var deleteUserAccountClosure: (() async -> Result<Void, ClientProxyError>)?
-
-    func deleteUserAccount() async -> Result<Void, ClientProxyError> {
-        deleteUserAccountCallsCount += 1
-        if let deleteUserAccountClosure = deleteUserAccountClosure {
-            return await deleteUserAccountClosure()
-        } else {
-            return deleteUserAccountReturnValue
-        }
-    }
-    //MARK: - zeroProfile
-
-    var zeroProfileUserIdUnderlyingCallsCount = 0
-    var zeroProfileUserIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return zeroProfileUserIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = zeroProfileUserIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                zeroProfileUserIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    zeroProfileUserIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var zeroProfileUserIdCalled: Bool {
-        return zeroProfileUserIdCallsCount > 0
-    }
-    var zeroProfileUserIdReceivedUserId: String?
-    var zeroProfileUserIdReceivedInvocations: [String] = []
-    var zeroProfileUserIdClosure: ((String) async -> Void)?
-
-    func zeroProfile(userId: String) async {
-        zeroProfileUserIdCallsCount += 1
-        zeroProfileUserIdReceivedUserId = userId
-        DispatchQueue.main.async {
-            self.zeroProfileUserIdReceivedInvocations.append(userId)
-        }
-        await zeroProfileUserIdClosure?(userId)
-    }
-    //MARK: - zeroProfiles
-
-    var zeroProfilesUserIdsUnderlyingCallsCount = 0
-    var zeroProfilesUserIdsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return zeroProfilesUserIdsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = zeroProfilesUserIdsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                zeroProfilesUserIdsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    zeroProfilesUserIdsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var zeroProfilesUserIdsCalled: Bool {
-        return zeroProfilesUserIdsCallsCount > 0
-    }
-    var zeroProfilesUserIdsReceivedUserIds: Set<String>?
-    var zeroProfilesUserIdsReceivedInvocations: [Set<String>] = []
-    var zeroProfilesUserIdsClosure: ((Set<String>) async -> Void)?
-
-    func zeroProfiles(userIds: Set<String>) async {
-        zeroProfilesUserIdsCallsCount += 1
-        zeroProfilesUserIdsReceivedUserIds = userIds
-        DispatchQueue.main.async {
-            self.zeroProfilesUserIdsReceivedInvocations.append(userIds)
-        }
-        await zeroProfilesUserIdsClosure?(userIds)
-    }
-    //MARK: - checkAndLinkZeroUser
-
-    var checkAndLinkZeroUserUnderlyingCallsCount = 0
-    var checkAndLinkZeroUserCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return checkAndLinkZeroUserUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = checkAndLinkZeroUserUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                checkAndLinkZeroUserUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    checkAndLinkZeroUserUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var checkAndLinkZeroUserCalled: Bool {
-        return checkAndLinkZeroUserCallsCount > 0
-    }
-    var checkAndLinkZeroUserClosure: (() async -> Void)?
-
-    func checkAndLinkZeroUser() async {
-        checkAndLinkZeroUserCallsCount += 1
-        await checkAndLinkZeroUserClosure?()
-    }
-    //MARK: - fetchZCurrentUser
-
-    var fetchZCurrentUserUnderlyingCallsCount = 0
-    var fetchZCurrentUserCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchZCurrentUserUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchZCurrentUserUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchZCurrentUserUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchZCurrentUserUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchZCurrentUserCalled: Bool {
-        return fetchZCurrentUserCallsCount > 0
-    }
-    var fetchZCurrentUserClosure: (() -> Void)?
-
-    func fetchZCurrentUser() {
-        fetchZCurrentUserCallsCount += 1
-        fetchZCurrentUserClosure?()
-    }
-    //MARK: - fetchUserWallets
-
-    var fetchUserWalletsUnderlyingCallsCount = 0
-    var fetchUserWalletsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchUserWalletsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchUserWalletsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchUserWalletsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchUserWalletsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchUserWalletsCalled: Bool {
-        return fetchUserWalletsCallsCount > 0
-    }
-
-    var fetchUserWalletsUnderlyingReturnValue: Result<[ZWallet], ClientProxyError>!
-    var fetchUserWalletsReturnValue: Result<[ZWallet], ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchUserWalletsUnderlyingReturnValue
-            } else {
-                var returnValue: Result<[ZWallet], ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchUserWalletsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchUserWalletsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchUserWalletsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchUserWalletsClosure: (() async -> Result<[ZWallet], ClientProxyError>)?
-
-    func fetchUserWallets() async -> Result<[ZWallet], ClientProxyError> {
-        fetchUserWalletsCallsCount += 1
-        if let fetchUserWalletsClosure = fetchUserWalletsClosure {
-            return await fetchUserWalletsClosure()
-        } else {
-            return fetchUserWalletsReturnValue
-        }
-    }
-    //MARK: - deleteWallet
-
-    var deleteWalletWalletIdUnderlyingCallsCount = 0
-    var deleteWalletWalletIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return deleteWalletWalletIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = deleteWalletWalletIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                deleteWalletWalletIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    deleteWalletWalletIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var deleteWalletWalletIdCalled: Bool {
-        return deleteWalletWalletIdCallsCount > 0
-    }
-    var deleteWalletWalletIdReceivedWalletId: String?
-    var deleteWalletWalletIdReceivedInvocations: [String] = []
-
-    var deleteWalletWalletIdUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var deleteWalletWalletIdReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return deleteWalletWalletIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = deleteWalletWalletIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                deleteWalletWalletIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    deleteWalletWalletIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var deleteWalletWalletIdClosure: ((String) async -> Result<Void, ClientProxyError>)?
-
-    func deleteWallet(walletId: String) async -> Result<Void, ClientProxyError> {
-        deleteWalletWalletIdCallsCount += 1
-        deleteWalletWalletIdReceivedWalletId = walletId
-        DispatchQueue.main.async {
-            self.deleteWalletWalletIdReceivedInvocations.append(walletId)
-        }
-        if let deleteWalletWalletIdClosure = deleteWalletWalletIdClosure {
-            return await deleteWalletWalletIdClosure(walletId)
-        } else {
-            return deleteWalletWalletIdReturnValue
-        }
-    }
-    //MARK: - addWallet
-
-    var addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = 0
-    var addWalletCanAuthenticateWeb3TokenCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var addWalletCanAuthenticateWeb3TokenCalled: Bool {
-        return addWalletCanAuthenticateWeb3TokenCallsCount > 0
-    }
-    var addWalletCanAuthenticateWeb3TokenReceivedArguments: (canAuthenticate: Bool, web3Token: String)?
-    var addWalletCanAuthenticateWeb3TokenReceivedInvocations: [(canAuthenticate: Bool, web3Token: String)] = []
-
-    var addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var addWalletCanAuthenticateWeb3TokenReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var addWalletCanAuthenticateWeb3TokenClosure: ((Bool, String) async -> Result<Void, ClientProxyError>)?
-
-    func addWallet(canAuthenticate: Bool, web3Token: String) async -> Result<Void, ClientProxyError> {
-        addWalletCanAuthenticateWeb3TokenCallsCount += 1
-        addWalletCanAuthenticateWeb3TokenReceivedArguments = (canAuthenticate: canAuthenticate, web3Token: web3Token)
-        DispatchQueue.main.async {
-            self.addWalletCanAuthenticateWeb3TokenReceivedInvocations.append((canAuthenticate: canAuthenticate, web3Token: web3Token))
-        }
-        if let addWalletCanAuthenticateWeb3TokenClosure = addWalletCanAuthenticateWeb3TokenClosure {
-            return await addWalletCanAuthenticateWeb3TokenClosure(canAuthenticate, web3Token)
-        } else {
-            return addWalletCanAuthenticateWeb3TokenReturnValue
-        }
-    }
-    //MARK: - fetchZeroFeeds
-
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = 0
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipCalled: Bool {
-        return fetchZeroFeedsChannelZIdFollowingLimitSkipCallsCount > 0
-    }
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedArguments: (channelZId: String?, following: Bool, limit: Int, skip: Int)?
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedInvocations: [(channelZId: String?, following: Bool, limit: Int, skip: Int)] = []
-
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue
-            } else {
-                var returnValue: Result<[ZPost], ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchZeroFeedsChannelZIdFollowingLimitSkipClosure: ((String?, Bool, Int, Int) async -> Result<[ZPost], ClientProxyError>)?
-
-    func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
-        fetchZeroFeedsChannelZIdFollowingLimitSkipCallsCount += 1
-        fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedArguments = (channelZId: channelZId, following: following, limit: limit, skip: skip)
-        DispatchQueue.main.async {
-            self.fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedInvocations.append((channelZId: channelZId, following: following, limit: limit, skip: skip))
-        }
-        if let fetchZeroFeedsChannelZIdFollowingLimitSkipClosure = fetchZeroFeedsChannelZIdFollowingLimitSkipClosure {
-            return await fetchZeroFeedsChannelZIdFollowingLimitSkipClosure(channelZId, following, limit, skip)
-        } else {
-            return fetchZeroFeedsChannelZIdFollowingLimitSkipReturnValue
-        }
-    }
-    //MARK: - fetchFeedDetails
-
-    var fetchFeedDetailsFeedIdUnderlyingCallsCount = 0
-    var fetchFeedDetailsFeedIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedDetailsFeedIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedDetailsFeedIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedDetailsFeedIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedDetailsFeedIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedDetailsFeedIdCalled: Bool {
-        return fetchFeedDetailsFeedIdCallsCount > 0
-    }
-    var fetchFeedDetailsFeedIdReceivedFeedId: String?
-    var fetchFeedDetailsFeedIdReceivedInvocations: [String] = []
-
-    var fetchFeedDetailsFeedIdUnderlyingReturnValue: Result<ZPost, ClientProxyError>!
-    var fetchFeedDetailsFeedIdReturnValue: Result<ZPost, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedDetailsFeedIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZPost, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedDetailsFeedIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedDetailsFeedIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedDetailsFeedIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedDetailsFeedIdClosure: ((String) async -> Result<ZPost, ClientProxyError>)?
-
-    func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError> {
-        fetchFeedDetailsFeedIdCallsCount += 1
-        fetchFeedDetailsFeedIdReceivedFeedId = feedId
-        DispatchQueue.main.async {
-            self.fetchFeedDetailsFeedIdReceivedInvocations.append(feedId)
-        }
-        if let fetchFeedDetailsFeedIdClosure = fetchFeedDetailsFeedIdClosure {
-            return await fetchFeedDetailsFeedIdClosure(feedId)
-        } else {
-            return fetchFeedDetailsFeedIdReturnValue
-        }
-    }
-    //MARK: - fetchFeedReplies
-
-    var fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = 0
-    var fetchFeedRepliesFeedIdLimitSkipCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedRepliesFeedIdLimitSkipCalled: Bool {
-        return fetchFeedRepliesFeedIdLimitSkipCallsCount > 0
-    }
-    var fetchFeedRepliesFeedIdLimitSkipReceivedArguments: (feedId: String, limit: Int, skip: Int)?
-    var fetchFeedRepliesFeedIdLimitSkipReceivedInvocations: [(feedId: String, limit: Int, skip: Int)] = []
-
-    var fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
-    var fetchFeedRepliesFeedIdLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue
-            } else {
-                var returnValue: Result<[ZPost], ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedRepliesFeedIdLimitSkipClosure: ((String, Int, Int) async -> Result<[ZPost], ClientProxyError>)?
-
-    func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
-        fetchFeedRepliesFeedIdLimitSkipCallsCount += 1
-        fetchFeedRepliesFeedIdLimitSkipReceivedArguments = (feedId: feedId, limit: limit, skip: skip)
-        DispatchQueue.main.async {
-            self.fetchFeedRepliesFeedIdLimitSkipReceivedInvocations.append((feedId: feedId, limit: limit, skip: skip))
-        }
-        if let fetchFeedRepliesFeedIdLimitSkipClosure = fetchFeedRepliesFeedIdLimitSkipClosure {
-            return await fetchFeedRepliesFeedIdLimitSkipClosure(feedId, limit, skip)
-        } else {
-            return fetchFeedRepliesFeedIdLimitSkipReturnValue
-        }
-    }
-    //MARK: - addMeowsToFeed
-
-    var addMeowsToFeedFeedIdAmountUnderlyingCallsCount = 0
-    var addMeowsToFeedFeedIdAmountCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return addMeowsToFeedFeedIdAmountUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var addMeowsToFeedFeedIdAmountCalled: Bool {
-        return addMeowsToFeedFeedIdAmountCallsCount > 0
-    }
-    var addMeowsToFeedFeedIdAmountReceivedArguments: (feedId: String, amount: Int)?
-    var addMeowsToFeedFeedIdAmountReceivedInvocations: [(feedId: String, amount: Int)] = []
-
-    var addMeowsToFeedFeedIdAmountUnderlyingReturnValue: Result<ZPost, ClientProxyError>!
-    var addMeowsToFeedFeedIdAmountReturnValue: Result<ZPost, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return addMeowsToFeedFeedIdAmountUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZPost, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var addMeowsToFeedFeedIdAmountClosure: ((String, Int) async -> Result<ZPost, ClientProxyError>)?
-
-    func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError> {
-        addMeowsToFeedFeedIdAmountCallsCount += 1
-        addMeowsToFeedFeedIdAmountReceivedArguments = (feedId: feedId, amount: amount)
-        DispatchQueue.main.async {
-            self.addMeowsToFeedFeedIdAmountReceivedInvocations.append((feedId: feedId, amount: amount))
-        }
-        if let addMeowsToFeedFeedIdAmountClosure = addMeowsToFeedFeedIdAmountClosure {
-            return await addMeowsToFeedFeedIdAmountClosure(feedId, amount)
-        } else {
-            return addMeowsToFeedFeedIdAmountReturnValue
-        }
-    }
-    //MARK: - postNewFeed
-
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = 0
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCalled: Bool {
-        return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount > 0
-    }
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedArguments: (channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?)?
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedInvocations: [(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?)] = []
-
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure: ((String?, String, String, String?, URL?) async -> Result<Void, ClientProxyError>)?
-
-    func postNewFeed(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError> {
-        postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount += 1
-        postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedArguments = (channelZId: channelZId, walletAddress: walletAddress, content: content, replyToPost: replyToPost, mediaFile: mediaFile)
-        DispatchQueue.main.async {
-            self.postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedInvocations.append((channelZId: channelZId, walletAddress: walletAddress, content: content, replyToPost: replyToPost, mediaFile: mediaFile))
-        }
-        if let postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure {
-            return await postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure(channelZId, walletAddress, content, replyToPost, mediaFile)
-        } else {
-            return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReturnValue
-        }
-    }
-    //MARK: - fetchFeedUserProfile
-
-    var fetchFeedUserProfileUserZIdUnderlyingCallsCount = 0
-    var fetchFeedUserProfileUserZIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedUserProfileUserZIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedUserProfileUserZIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedUserProfileUserZIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedUserProfileUserZIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedUserProfileUserZIdCalled: Bool {
-        return fetchFeedUserProfileUserZIdCallsCount > 0
-    }
-    var fetchFeedUserProfileUserZIdReceivedUserZId: String?
-    var fetchFeedUserProfileUserZIdReceivedInvocations: [String] = []
-
-    var fetchFeedUserProfileUserZIdUnderlyingReturnValue: Result<ZPostUserProfile, ClientProxyError>!
-    var fetchFeedUserProfileUserZIdReturnValue: Result<ZPostUserProfile, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedUserProfileUserZIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZPostUserProfile, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedUserProfileUserZIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedUserProfileUserZIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedUserProfileUserZIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedUserProfileUserZIdClosure: ((String) async -> Result<ZPostUserProfile, ClientProxyError>)?
-
-    func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ClientProxyError> {
-        fetchFeedUserProfileUserZIdCallsCount += 1
-        fetchFeedUserProfileUserZIdReceivedUserZId = userZId
-        DispatchQueue.main.async {
-            self.fetchFeedUserProfileUserZIdReceivedInvocations.append(userZId)
-        }
-        if let fetchFeedUserProfileUserZIdClosure = fetchFeedUserProfileUserZIdClosure {
-            return await fetchFeedUserProfileUserZIdClosure(userZId)
-        } else {
-            return fetchFeedUserProfileUserZIdReturnValue
-        }
-    }
-    //MARK: - fetchUserFeeds
-
-    var fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = 0
-    var fetchUserFeedsUserIdLimitSkipCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchUserFeedsUserIdLimitSkipCalled: Bool {
-        return fetchUserFeedsUserIdLimitSkipCallsCount > 0
-    }
-    var fetchUserFeedsUserIdLimitSkipReceivedArguments: (userId: String, limit: Int, skip: Int)?
-    var fetchUserFeedsUserIdLimitSkipReceivedInvocations: [(userId: String, limit: Int, skip: Int)] = []
-
-    var fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
-    var fetchUserFeedsUserIdLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue
-            } else {
-                var returnValue: Result<[ZPost], ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchUserFeedsUserIdLimitSkipClosure: ((String, Int, Int) async -> Result<[ZPost], ClientProxyError>)?
-
-    func fetchUserFeeds(userId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
-        fetchUserFeedsUserIdLimitSkipCallsCount += 1
-        fetchUserFeedsUserIdLimitSkipReceivedArguments = (userId: userId, limit: limit, skip: skip)
-        DispatchQueue.main.async {
-            self.fetchUserFeedsUserIdLimitSkipReceivedInvocations.append((userId: userId, limit: limit, skip: skip))
-        }
-        if let fetchUserFeedsUserIdLimitSkipClosure = fetchUserFeedsUserIdLimitSkipClosure {
-            return await fetchUserFeedsUserIdLimitSkipClosure(userId, limit, skip)
-        } else {
-            return fetchUserFeedsUserIdLimitSkipReturnValue
-        }
-    }
-    //MARK: - fetchFeedUserFollowingStatus
-
-    var fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = 0
-    var fetchFeedUserFollowingStatusUserIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedUserFollowingStatusUserIdCalled: Bool {
-        return fetchFeedUserFollowingStatusUserIdCallsCount > 0
-    }
-    var fetchFeedUserFollowingStatusUserIdReceivedUserId: String?
-    var fetchFeedUserFollowingStatusUserIdReceivedInvocations: [String] = []
-
-    var fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue: Result<ZPostUserFollowingStatus, ClientProxyError>!
-    var fetchFeedUserFollowingStatusUserIdReturnValue: Result<ZPostUserFollowingStatus, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZPostUserFollowingStatus, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchFeedUserFollowingStatusUserIdClosure: ((String) async -> Result<ZPostUserFollowingStatus, ClientProxyError>)?
-
-    func fetchFeedUserFollowingStatus(userId: String) async -> Result<ZPostUserFollowingStatus, ClientProxyError> {
-        fetchFeedUserFollowingStatusUserIdCallsCount += 1
-        fetchFeedUserFollowingStatusUserIdReceivedUserId = userId
-        DispatchQueue.main.async {
-            self.fetchFeedUserFollowingStatusUserIdReceivedInvocations.append(userId)
-        }
-        if let fetchFeedUserFollowingStatusUserIdClosure = fetchFeedUserFollowingStatusUserIdClosure {
-            return await fetchFeedUserFollowingStatusUserIdClosure(userId)
-        } else {
-            return fetchFeedUserFollowingStatusUserIdReturnValue
-        }
-    }
-    //MARK: - followFeedUser
-
-    var followFeedUserUserIdUnderlyingCallsCount = 0
-    var followFeedUserUserIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return followFeedUserUserIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = followFeedUserUserIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                followFeedUserUserIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    followFeedUserUserIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var followFeedUserUserIdCalled: Bool {
-        return followFeedUserUserIdCallsCount > 0
-    }
-    var followFeedUserUserIdReceivedUserId: String?
-    var followFeedUserUserIdReceivedInvocations: [String] = []
-
-    var followFeedUserUserIdUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var followFeedUserUserIdReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return followFeedUserUserIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = followFeedUserUserIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                followFeedUserUserIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    followFeedUserUserIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var followFeedUserUserIdClosure: ((String) async -> Result<Void, ClientProxyError>)?
-
-    func followFeedUser(userId: String) async -> Result<Void, ClientProxyError> {
-        followFeedUserUserIdCallsCount += 1
-        followFeedUserUserIdReceivedUserId = userId
-        DispatchQueue.main.async {
-            self.followFeedUserUserIdReceivedInvocations.append(userId)
-        }
-        if let followFeedUserUserIdClosure = followFeedUserUserIdClosure {
-            return await followFeedUserUserIdClosure(userId)
-        } else {
-            return followFeedUserUserIdReturnValue
-        }
-    }
-    //MARK: - unFollowFeedUser
-
-    var unFollowFeedUserUserIdUnderlyingCallsCount = 0
-    var unFollowFeedUserUserIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return unFollowFeedUserUserIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = unFollowFeedUserUserIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                unFollowFeedUserUserIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    unFollowFeedUserUserIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var unFollowFeedUserUserIdCalled: Bool {
-        return unFollowFeedUserUserIdCallsCount > 0
-    }
-    var unFollowFeedUserUserIdReceivedUserId: String?
-    var unFollowFeedUserUserIdReceivedInvocations: [String] = []
-
-    var unFollowFeedUserUserIdUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var unFollowFeedUserUserIdReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return unFollowFeedUserUserIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = unFollowFeedUserUserIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                unFollowFeedUserUserIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    unFollowFeedUserUserIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var unFollowFeedUserUserIdClosure: ((String) async -> Result<Void, ClientProxyError>)?
-
-    func unFollowFeedUser(userId: String) async -> Result<Void, ClientProxyError> {
-        unFollowFeedUserUserIdCallsCount += 1
-        unFollowFeedUserUserIdReceivedUserId = userId
-        DispatchQueue.main.async {
-            self.unFollowFeedUserUserIdReceivedInvocations.append(userId)
-        }
-        if let unFollowFeedUserUserIdClosure = unFollowFeedUserUserIdClosure {
-            return await unFollowFeedUserUserIdClosure(userId)
-        } else {
-            return unFollowFeedUserUserIdReturnValue
-        }
-    }
-    //MARK: - fetchUserZIds
-
-    var fetchUserZIdsUnderlyingCallsCount = 0
-    var fetchUserZIdsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchUserZIdsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchUserZIdsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchUserZIdsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchUserZIdsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchUserZIdsCalled: Bool {
-        return fetchUserZIdsCallsCount > 0
-    }
-
-    var fetchUserZIdsUnderlyingReturnValue: Result<[String], ClientProxyError>!
-    var fetchUserZIdsReturnValue: Result<[String], ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchUserZIdsUnderlyingReturnValue
-            } else {
-                var returnValue: Result<[String], ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchUserZIdsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchUserZIdsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchUserZIdsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchUserZIdsClosure: (() async -> Result<[String], ClientProxyError>)?
-
-    func fetchUserZIds() async -> Result<[String], ClientProxyError> {
-        fetchUserZIdsCallsCount += 1
-        if let fetchUserZIdsClosure = fetchUserZIdsClosure {
-            return await fetchUserZIdsClosure()
-        } else {
-            return fetchUserZIdsReturnValue
-        }
-    }
-    //MARK: - joinChannel
-
-    var joinChannelRoomAliasOrIdUnderlyingCallsCount = 0
-    var joinChannelRoomAliasOrIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return joinChannelRoomAliasOrIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = joinChannelRoomAliasOrIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var joinChannelRoomAliasOrIdCalled: Bool {
-        return joinChannelRoomAliasOrIdCallsCount > 0
-    }
-    var joinChannelRoomAliasOrIdReceivedRoomAliasOrId: String?
-    var joinChannelRoomAliasOrIdReceivedInvocations: [String] = []
-
-    var joinChannelRoomAliasOrIdUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var joinChannelRoomAliasOrIdReturnValue: Result<String, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return joinChannelRoomAliasOrIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<String, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = joinChannelRoomAliasOrIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var joinChannelRoomAliasOrIdClosure: ((String) async -> Result<String, ClientProxyError>)?
-
-    func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError> {
-        joinChannelRoomAliasOrIdCallsCount += 1
-        joinChannelRoomAliasOrIdReceivedRoomAliasOrId = roomAliasOrId
-        DispatchQueue.main.async {
-            self.joinChannelRoomAliasOrIdReceivedInvocations.append(roomAliasOrId)
-        }
-        if let joinChannelRoomAliasOrIdClosure = joinChannelRoomAliasOrIdClosure {
-            return await joinChannelRoomAliasOrIdClosure(roomAliasOrId)
-        } else {
-            return joinChannelRoomAliasOrIdReturnValue
-        }
-    }
-    //MARK: - initializeThirdWebWalletForUser
-
-    var initializeThirdWebWalletForUserUnderlyingCallsCount = 0
-    var initializeThirdWebWalletForUserCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return initializeThirdWebWalletForUserUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = initializeThirdWebWalletForUserUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                initializeThirdWebWalletForUserUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    initializeThirdWebWalletForUserUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var initializeThirdWebWalletForUserCalled: Bool {
-        return initializeThirdWebWalletForUserCallsCount > 0
-    }
-
-    var initializeThirdWebWalletForUserUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var initializeThirdWebWalletForUserReturnValue: Result<Void, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return initializeThirdWebWalletForUserUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = initializeThirdWebWalletForUserUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                initializeThirdWebWalletForUserUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    initializeThirdWebWalletForUserUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var initializeThirdWebWalletForUserClosure: (() async -> Result<Void, ClientProxyError>)?
-
-    func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError> {
-        initializeThirdWebWalletForUserCallsCount += 1
-        if let initializeThirdWebWalletForUserClosure = initializeThirdWebWalletForUserClosure {
-            return await initializeThirdWebWalletForUserClosure()
-        } else {
-            return initializeThirdWebWalletForUserReturnValue
-        }
-    }
-    //MARK: - getWalletTokenBalances
-
-    var getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = 0
-    var getWalletTokenBalancesWalletAddressNextPageCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getWalletTokenBalancesWalletAddressNextPageCalled: Bool {
-        return getWalletTokenBalancesWalletAddressNextPageCallsCount > 0
-    }
-    var getWalletTokenBalancesWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: NextPageParams?)?
-    var getWalletTokenBalancesWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: NextPageParams?)] = []
-
-    var getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletTokenBalances, ClientProxyError>!
-    var getWalletTokenBalancesWalletAddressNextPageReturnValue: Result<ZWalletTokenBalances, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTokenBalances, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getWalletTokenBalancesWalletAddressNextPageClosure: ((String, NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>)?
-
-    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError> {
-        getWalletTokenBalancesWalletAddressNextPageCallsCount += 1
-        getWalletTokenBalancesWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
-        DispatchQueue.main.async {
-            self.getWalletTokenBalancesWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
-        }
-        if let getWalletTokenBalancesWalletAddressNextPageClosure = getWalletTokenBalancesWalletAddressNextPageClosure {
-            return await getWalletTokenBalancesWalletAddressNextPageClosure(walletAddress, nextPage)
-        } else {
-            return getWalletTokenBalancesWalletAddressNextPageReturnValue
-        }
-    }
-    //MARK: - getWalletNFTs
-
-    var getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = 0
-    var getWalletNFTsWalletAddressNextPageCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getWalletNFTsWalletAddressNextPageUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getWalletNFTsWalletAddressNextPageUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getWalletNFTsWalletAddressNextPageCalled: Bool {
-        return getWalletNFTsWalletAddressNextPageCallsCount > 0
-    }
-    var getWalletNFTsWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: NextPageParams?)?
-    var getWalletNFTsWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: NextPageParams?)] = []
-
-    var getWalletNFTsWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletNFTs, ClientProxyError>!
-    var getWalletNFTsWalletAddressNextPageReturnValue: Result<ZWalletNFTs, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getWalletNFTsWalletAddressNextPageUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletNFTs, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getWalletNFTsWalletAddressNextPageUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getWalletNFTsWalletAddressNextPageUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getWalletNFTsWalletAddressNextPageUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getWalletNFTsWalletAddressNextPageClosure: ((String, NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>)?
-
-    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError> {
-        getWalletNFTsWalletAddressNextPageCallsCount += 1
-        getWalletNFTsWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
-        DispatchQueue.main.async {
-            self.getWalletNFTsWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
-        }
-        if let getWalletNFTsWalletAddressNextPageClosure = getWalletNFTsWalletAddressNextPageClosure {
-            return await getWalletNFTsWalletAddressNextPageClosure(walletAddress, nextPage)
-        } else {
-            return getWalletNFTsWalletAddressNextPageReturnValue
-        }
-    }
-    //MARK: - getWalletTransactions
-
-    var getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = 0
-    var getWalletTransactionsWalletAddressNextPageCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getWalletTransactionsWalletAddressNextPageCalled: Bool {
-        return getWalletTransactionsWalletAddressNextPageCallsCount > 0
-    }
-    var getWalletTransactionsWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: TransactionNextPageParams?)?
-    var getWalletTransactionsWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: TransactionNextPageParams?)] = []
-
-    var getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletTransactions, ClientProxyError>!
-    var getWalletTransactionsWalletAddressNextPageReturnValue: Result<ZWalletTransactions, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTransactions, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getWalletTransactionsWalletAddressNextPageClosure: ((String, TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>)?
-
-    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError> {
-        getWalletTransactionsWalletAddressNextPageCallsCount += 1
-        getWalletTransactionsWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
-        DispatchQueue.main.async {
-            self.getWalletTransactionsWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
-        }
-        if let getWalletTransactionsWalletAddressNextPageClosure = getWalletTransactionsWalletAddressNextPageClosure {
-            return await getWalletTransactionsWalletAddressNextPageClosure(walletAddress, nextPage)
-        } else {
-            return getWalletTransactionsWalletAddressNextPageReturnValue
-        }
-    }
-    //MARK: - transferToken
-
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount = 0
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCalled: Bool {
-        return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount > 0
-    }
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64)?
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64)] = []
-
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>!
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTransactionResponse, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure: ((String, String, String, String, UInt64) async -> Result<ZWalletTransactionResponse, ClientProxyError>)?
-
-    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
-        transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount += 1
-        transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedArguments = (senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedInvocations.append((senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress, chainId: chainId))
-        }
-        if let transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure {
-            return await transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure(senderWalletAddress, recipientWalletAddress, amount, tokenAddress, chainId)
-        } else {
-            return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReturnValue
-        }
-    }
-    //MARK: - transferNFT
-
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = 0
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCalled: Bool {
-        return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount > 0
-    }
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String)?
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String)] = []
-
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>!
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTransactionResponse, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure: ((String, String, String, String) async -> Result<ZWalletTransactionResponse, ClientProxyError>)?
-
-    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
-        transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount += 1
-        transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedArguments = (senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress)
-        DispatchQueue.main.async {
-            self.transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedInvocations.append((senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress))
-        }
-        if let transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure {
-            return await transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure(senderWalletAddress, recipientWalletAddress, tokenId, nftAddress)
-        } else {
-            return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReturnValue
-        }
-    }
-    //MARK: - getTransactionReceipt
-
-    var getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount = 0
-    var getTransactionReceiptTransactionHashChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getTransactionReceiptTransactionHashChainIdCalled: Bool {
-        return getTransactionReceiptTransactionHashChainIdCallsCount > 0
-    }
-    var getTransactionReceiptTransactionHashChainIdReceivedArguments: (transactionHash: String, chainId: UInt64?)?
-    var getTransactionReceiptTransactionHashChainIdReceivedInvocations: [(transactionHash: String, chainId: UInt64?)] = []
-
-    var getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
-    var getTransactionReceiptTransactionHashChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getTransactionReceiptTransactionHashChainIdClosure: ((String, UInt64?) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
-
-    func getTransactionReceipt(transactionHash: String, chainId: UInt64?) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
-        getTransactionReceiptTransactionHashChainIdCallsCount += 1
-        getTransactionReceiptTransactionHashChainIdReceivedArguments = (transactionHash: transactionHash, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getTransactionReceiptTransactionHashChainIdReceivedInvocations.append((transactionHash: transactionHash, chainId: chainId))
-        }
-        if let getTransactionReceiptTransactionHashChainIdClosure = getTransactionReceiptTransactionHashChainIdClosure {
-            return await getTransactionReceiptTransactionHashChainIdClosure(transactionHash, chainId)
-        } else {
-            return getTransactionReceiptTransactionHashChainIdReturnValue
-        }
-    }
-    //MARK: - searchTransactionRecipient
-
-    var searchTransactionRecipientQueryUnderlyingCallsCount = 0
-    var searchTransactionRecipientQueryCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return searchTransactionRecipientQueryUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = searchTransactionRecipientQueryUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                searchTransactionRecipientQueryUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    searchTransactionRecipientQueryUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var searchTransactionRecipientQueryCalled: Bool {
-        return searchTransactionRecipientQueryCallsCount > 0
-    }
-    var searchTransactionRecipientQueryReceivedQuery: String?
-    var searchTransactionRecipientQueryReceivedInvocations: [String] = []
-
-    var searchTransactionRecipientQueryUnderlyingReturnValue: Result<[WalletRecipient], ClientProxyError>!
-    var searchTransactionRecipientQueryReturnValue: Result<[WalletRecipient], ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return searchTransactionRecipientQueryUnderlyingReturnValue
-            } else {
-                var returnValue: Result<[WalletRecipient], ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = searchTransactionRecipientQueryUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                searchTransactionRecipientQueryUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    searchTransactionRecipientQueryUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var searchTransactionRecipientQueryClosure: ((String) async -> Result<[WalletRecipient], ClientProxyError>)?
-
-    func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError> {
-        searchTransactionRecipientQueryCallsCount += 1
-        searchTransactionRecipientQueryReceivedQuery = query
-        DispatchQueue.main.async {
-            self.searchTransactionRecipientQueryReceivedInvocations.append(query)
-        }
-        if let searchTransactionRecipientQueryClosure = searchTransactionRecipientQueryClosure {
-            return await searchTransactionRecipientQueryClosure(query)
-        } else {
-            return searchTransactionRecipientQueryReturnValue
-        }
-    }
-    //MARK: - claimRewards
-
-    var claimRewardsUserWalletAddressUnderlyingCallsCount = 0
-    var claimRewardsUserWalletAddressCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return claimRewardsUserWalletAddressUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = claimRewardsUserWalletAddressUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                claimRewardsUserWalletAddressUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    claimRewardsUserWalletAddressUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var claimRewardsUserWalletAddressCalled: Bool {
-        return claimRewardsUserWalletAddressCallsCount > 0
-    }
-    var claimRewardsUserWalletAddressReceivedUserWalletAddress: String?
-    var claimRewardsUserWalletAddressReceivedInvocations: [String] = []
-
-    var claimRewardsUserWalletAddressUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var claimRewardsUserWalletAddressReturnValue: Result<String, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return claimRewardsUserWalletAddressUnderlyingReturnValue
-            } else {
-                var returnValue: Result<String, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = claimRewardsUserWalletAddressUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                claimRewardsUserWalletAddressUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    claimRewardsUserWalletAddressUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var claimRewardsUserWalletAddressClosure: ((String) async -> Result<String, ClientProxyError>)?
-
-    func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError> {
-        claimRewardsUserWalletAddressCallsCount += 1
-        claimRewardsUserWalletAddressReceivedUserWalletAddress = userWalletAddress
-        DispatchQueue.main.async {
-            self.claimRewardsUserWalletAddressReceivedInvocations.append(userWalletAddress)
-        }
-        if let claimRewardsUserWalletAddressClosure = claimRewardsUserWalletAddressClosure {
-            return await claimRewardsUserWalletAddressClosure(userWalletAddress)
-        } else {
-            return claimRewardsUserWalletAddressReturnValue
-        }
-    }
-    //MARK: - getTokenInfo
-
-    var getTokenInfoTokenAddressChainIdUnderlyingCallsCount = 0
-    var getTokenInfoTokenAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getTokenInfoTokenAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTokenInfoTokenAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTokenInfoTokenAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTokenInfoTokenAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getTokenInfoTokenAddressChainIdCalled: Bool {
-        return getTokenInfoTokenAddressChainIdCallsCount > 0
-    }
-    var getTokenInfoTokenAddressChainIdReceivedArguments: (tokenAddress: String, chainId: UInt64)?
-    var getTokenInfoTokenAddressChainIdReceivedInvocations: [(tokenAddress: String, chainId: UInt64)] = []
-
-    var getTokenInfoTokenAddressChainIdUnderlyingReturnValue: Result<ZWalletTokenInfo, ClientProxyError>!
-    var getTokenInfoTokenAddressChainIdReturnValue: Result<ZWalletTokenInfo, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getTokenInfoTokenAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTokenInfo, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTokenInfoTokenAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTokenInfoTokenAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTokenInfoTokenAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getTokenInfoTokenAddressChainIdClosure: ((String, UInt64) async -> Result<ZWalletTokenInfo, ClientProxyError>)?
-
-    func getTokenInfo(tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenInfo, ClientProxyError> {
-        getTokenInfoTokenAddressChainIdCallsCount += 1
-        getTokenInfoTokenAddressChainIdReceivedArguments = (tokenAddress: tokenAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getTokenInfoTokenAddressChainIdReceivedInvocations.append((tokenAddress: tokenAddress, chainId: chainId))
-        }
-        if let getTokenInfoTokenAddressChainIdClosure = getTokenInfoTokenAddressChainIdClosure {
-            return await getTokenInfoTokenAddressChainIdClosure(tokenAddress, chainId)
-        } else {
-            return getTokenInfoTokenAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getTokenBalance
-
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount = 0
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdCalled: Bool {
-        return getTokenBalanceUserWalletAddressTokenAddressChainIdCallsCount > 0
-    }
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedArguments: (userWalletAddress: String, tokenAddress: String, chainId: UInt64)?
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedInvocations: [(userWalletAddress: String, tokenAddress: String, chainId: UInt64)] = []
-
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue: Result<ZWalletTokenBalance, ClientProxyError>!
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdReturnValue: Result<ZWalletTokenBalance, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTokenBalance, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getTokenBalanceUserWalletAddressTokenAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZWalletTokenBalance, ClientProxyError>)?
-
-    func getTokenBalance(userWalletAddress: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenBalance, ClientProxyError> {
-        getTokenBalanceUserWalletAddressTokenAddressChainIdCallsCount += 1
-        getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedArguments = (userWalletAddress: userWalletAddress, tokenAddress: tokenAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedInvocations.append((userWalletAddress: userWalletAddress, tokenAddress: tokenAddress, chainId: chainId))
-        }
-        if let getTokenBalanceUserWalletAddressTokenAddressChainIdClosure = getTokenBalanceUserWalletAddressTokenAddressChainIdClosure {
-            return await getTokenBalanceUserWalletAddressTokenAddressChainIdClosure(userWalletAddress, tokenAddress, chainId)
-        } else {
-            return getTokenBalanceUserWalletAddressTokenAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getAvaxTokenPrice
-
-    var getAvaxTokenPriceTokenAddressUnderlyingCallsCount = 0
-    var getAvaxTokenPriceTokenAddressCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getAvaxTokenPriceTokenAddressUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getAvaxTokenPriceTokenAddressUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getAvaxTokenPriceTokenAddressUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getAvaxTokenPriceTokenAddressUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getAvaxTokenPriceTokenAddressCalled: Bool {
-        return getAvaxTokenPriceTokenAddressCallsCount > 0
-    }
-    var getAvaxTokenPriceTokenAddressReceivedTokenAddress: String?
-    var getAvaxTokenPriceTokenAddressReceivedInvocations: [String] = []
-
-    var getAvaxTokenPriceTokenAddressUnderlyingReturnValue: Result<ZAvaxTokenPrice, ClientProxyError>!
-    var getAvaxTokenPriceTokenAddressReturnValue: Result<ZAvaxTokenPrice, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getAvaxTokenPriceTokenAddressUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZAvaxTokenPrice, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getAvaxTokenPriceTokenAddressUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getAvaxTokenPriceTokenAddressUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getAvaxTokenPriceTokenAddressUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getAvaxTokenPriceTokenAddressClosure: ((String) async -> Result<ZAvaxTokenPrice, ClientProxyError>)?
-
-    func getAvaxTokenPrice(tokenAddress: String) async -> Result<ZAvaxTokenPrice, ClientProxyError> {
-        getAvaxTokenPriceTokenAddressCallsCount += 1
-        getAvaxTokenPriceTokenAddressReceivedTokenAddress = tokenAddress
-        DispatchQueue.main.async {
-            self.getAvaxTokenPriceTokenAddressReceivedInvocations.append(tokenAddress)
-        }
-        if let getAvaxTokenPriceTokenAddressClosure = getAvaxTokenPriceTokenAddressClosure {
-            return await getAvaxTokenPriceTokenAddressClosure(tokenAddress)
-        } else {
-            return getAvaxTokenPriceTokenAddressReturnValue
-        }
-    }
-    //MARK: - getTotalStaked
-
-    var getTotalStakedPoolAddressChainIdUnderlyingCallsCount = 0
-    var getTotalStakedPoolAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getTotalStakedPoolAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTotalStakedPoolAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTotalStakedPoolAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTotalStakedPoolAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getTotalStakedPoolAddressChainIdCalled: Bool {
-        return getTotalStakedPoolAddressChainIdCallsCount > 0
-    }
-    var getTotalStakedPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
-    var getTotalStakedPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
-
-    var getTotalStakedPoolAddressChainIdUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var getTotalStakedPoolAddressChainIdReturnValue: Result<String, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getTotalStakedPoolAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<String, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getTotalStakedPoolAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getTotalStakedPoolAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getTotalStakedPoolAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getTotalStakedPoolAddressChainIdClosure: ((String, UInt64) async -> Result<String, ClientProxyError>)?
-
-    func getTotalStaked(poolAddress: String, chainId: UInt64) async -> Result<String, ClientProxyError> {
-        getTotalStakedPoolAddressChainIdCallsCount += 1
-        getTotalStakedPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getTotalStakedPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
-        }
-        if let getTotalStakedPoolAddressChainIdClosure = getTotalStakedPoolAddressChainIdClosure {
-            return await getTotalStakedPoolAddressChainIdClosure(poolAddress, chainId)
-        } else {
-            return getTotalStakedPoolAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getStakingConfig
-
-    var getStakingConfigPoolAddressChainIdUnderlyingCallsCount = 0
-    var getStakingConfigPoolAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getStakingConfigPoolAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakingConfigPoolAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakingConfigPoolAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakingConfigPoolAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getStakingConfigPoolAddressChainIdCalled: Bool {
-        return getStakingConfigPoolAddressChainIdCallsCount > 0
-    }
-    var getStakingConfigPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
-    var getStakingConfigPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
-
-    var getStakingConfigPoolAddressChainIdUnderlyingReturnValue: Result<ZStackingConfig, ClientProxyError>!
-    var getStakingConfigPoolAddressChainIdReturnValue: Result<ZStackingConfig, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getStakingConfigPoolAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZStackingConfig, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakingConfigPoolAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakingConfigPoolAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakingConfigPoolAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getStakingConfigPoolAddressChainIdClosure: ((String, UInt64) async -> Result<ZStackingConfig, ClientProxyError>)?
-
-    func getStakingConfig(poolAddress: String, chainId: UInt64) async -> Result<ZStackingConfig, ClientProxyError> {
-        getStakingConfigPoolAddressChainIdCallsCount += 1
-        getStakingConfigPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getStakingConfigPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
-        }
-        if let getStakingConfigPoolAddressChainIdClosure = getStakingConfigPoolAddressChainIdClosure {
-            return await getStakingConfigPoolAddressChainIdClosure(poolAddress, chainId)
-        } else {
-            return getStakingConfigPoolAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getStakerStatusInfo
-
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = 0
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdCalled: Bool {
-        return getStakerStatusInfoUserWalletAddressPoolAddressChainIdCallsCount > 0
-    }
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedArguments: (userWalletAddress: String, poolAddress: String, chainId: UInt64)?
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedInvocations: [(userWalletAddress: String, poolAddress: String, chainId: UInt64)] = []
-
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue: Result<ZStakingStatus, ClientProxyError>!
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdReturnValue: Result<ZStakingStatus, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZStakingStatus, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZStakingStatus, ClientProxyError>)?
-
-    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingStatus, ClientProxyError> {
-        getStakerStatusInfoUserWalletAddressPoolAddressChainIdCallsCount += 1
-        getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedArguments = (userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedInvocations.append((userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId))
-        }
-        if let getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure = getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure {
-            return await getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure(userWalletAddress, poolAddress, chainId)
-        } else {
-            return getStakerStatusInfoUserWalletAddressPoolAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getStakeRewardsInfo
-
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = 0
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCalled: Bool {
-        return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCallsCount > 0
-    }
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedArguments: (userWalletAddress: String, poolAddress: String, chainId: UInt64)?
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedInvocations: [(userWalletAddress: String, poolAddress: String, chainId: UInt64)] = []
-
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>!
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReturnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>)?
-
-    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingUserRewardsInfo, ClientProxyError> {
-        getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCallsCount += 1
-        getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedArguments = (userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedInvocations.append((userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId))
-        }
-        if let getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure = getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure {
-            return await getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure(userWalletAddress, poolAddress, chainId)
-        } else {
-            return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getStakingToken
-
-    var getStakingTokenPoolAddressChainIdUnderlyingCallsCount = 0
-    var getStakingTokenPoolAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getStakingTokenPoolAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakingTokenPoolAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakingTokenPoolAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakingTokenPoolAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getStakingTokenPoolAddressChainIdCalled: Bool {
-        return getStakingTokenPoolAddressChainIdCallsCount > 0
-    }
-    var getStakingTokenPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
-    var getStakingTokenPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
-
-    var getStakingTokenPoolAddressChainIdUnderlyingReturnValue: Result<ZWalletStakingToken, ClientProxyError>!
-    var getStakingTokenPoolAddressChainIdReturnValue: Result<ZWalletStakingToken, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getStakingTokenPoolAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletStakingToken, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getStakingTokenPoolAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getStakingTokenPoolAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getStakingTokenPoolAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getStakingTokenPoolAddressChainIdClosure: ((String, UInt64) async -> Result<ZWalletStakingToken, ClientProxyError>)?
-
-    func getStakingToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingToken, ClientProxyError> {
-        getStakingTokenPoolAddressChainIdCallsCount += 1
-        getStakingTokenPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getStakingTokenPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
-        }
-        if let getStakingTokenPoolAddressChainIdClosure = getStakingTokenPoolAddressChainIdClosure {
-            return await getStakingTokenPoolAddressChainIdClosure(poolAddress, chainId)
-        } else {
-            return getStakingTokenPoolAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getRewardsToken
-
-    var getRewardsTokenPoolAddressChainIdUnderlyingCallsCount = 0
-    var getRewardsTokenPoolAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getRewardsTokenPoolAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getRewardsTokenPoolAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getRewardsTokenPoolAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getRewardsTokenPoolAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getRewardsTokenPoolAddressChainIdCalled: Bool {
-        return getRewardsTokenPoolAddressChainIdCallsCount > 0
-    }
-    var getRewardsTokenPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
-    var getRewardsTokenPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
-
-    var getRewardsTokenPoolAddressChainIdUnderlyingReturnValue: Result<ZWalletStakingRewardsToken, ClientProxyError>!
-    var getRewardsTokenPoolAddressChainIdReturnValue: Result<ZWalletStakingRewardsToken, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getRewardsTokenPoolAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletStakingRewardsToken, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getRewardsTokenPoolAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getRewardsTokenPoolAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getRewardsTokenPoolAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getRewardsTokenPoolAddressChainIdClosure: ((String, UInt64) async -> Result<ZWalletStakingRewardsToken, ClientProxyError>)?
-
-    func getRewardsToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingRewardsToken, ClientProxyError> {
-        getRewardsTokenPoolAddressChainIdCallsCount += 1
-        getRewardsTokenPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.getRewardsTokenPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
-        }
-        if let getRewardsTokenPoolAddressChainIdClosure = getRewardsTokenPoolAddressChainIdClosure {
-            return await getRewardsTokenPoolAddressChainIdClosure(poolAddress, chainId)
-        } else {
-            return getRewardsTokenPoolAddressChainIdReturnValue
-        }
-    }
-    //MARK: - stakeAmount
-
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount = 0
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCalled: Bool {
-        return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount > 0
-    }
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64)?
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64)] = []
-
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure: ((String, String, String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
-
-    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
-        stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount += 1
-        stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, tokenAddress: tokenAddress, amount: amount, chainId: chainId)
-        DispatchQueue.main.async {
-            self.stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, tokenAddress: tokenAddress, amount: amount, chainId: chainId))
-        }
-        if let stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure = stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure {
-            return await stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure(walletAddress, poolAddress, tokenAddress, amount, chainId)
-        } else {
-            return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReturnValue
-        }
-    }
-    //MARK: - unstakeAmount
-
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount = 0
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdCalled: Bool {
-        return unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount > 0
-    }
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, amount: String, chainId: UInt64)?
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64)] = []
-
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdClosure: ((String, String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
-
-    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
-        unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount += 1
-        unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, amount: amount, chainId: chainId)
-        DispatchQueue.main.async {
-            self.unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, amount: amount, chainId: chainId))
-        }
-        if let unstakeAmountWalletAddressPoolAddressAmountChainIdClosure = unstakeAmountWalletAddressPoolAddressAmountChainIdClosure {
-            return await unstakeAmountWalletAddressPoolAddressAmountChainIdClosure(walletAddress, poolAddress, amount, chainId)
-        } else {
-            return unstakeAmountWalletAddressPoolAddressAmountChainIdReturnValue
-        }
-    }
-    //MARK: - claimStakeRewards
-
-    var claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount = 0
-    var claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var claimStakeRewardsWalletAddressPoolAddressChainIdCalled: Bool {
-        return claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount > 0
-    }
-    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedArguments: (walletAddress: String, poolAddress: String, chainId: UInt64)?
-    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, chainId: UInt64)] = []
-
-    var claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
-    var claimStakeRewardsWalletAddressPoolAddressChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var claimStakeRewardsWalletAddressPoolAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
-
-    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
-        claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount += 1
-        claimStakeRewardsWalletAddressPoolAddressChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, chainId: chainId)
-        DispatchQueue.main.async {
-            self.claimStakeRewardsWalletAddressPoolAddressChainIdReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, chainId: chainId))
-        }
-        if let claimStakeRewardsWalletAddressPoolAddressChainIdClosure = claimStakeRewardsWalletAddressPoolAddressChainIdClosure {
-            return await claimStakeRewardsWalletAddressPoolAddressChainIdClosure(walletAddress, poolAddress, chainId)
-        } else {
-            return claimStakeRewardsWalletAddressPoolAddressChainIdReturnValue
-        }
-    }
-    //MARK: - getLinkPreviewMetaData
-
-    var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0
-    var getLinkPreviewMetaDataUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getLinkPreviewMetaDataUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getLinkPreviewMetaDataUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getLinkPreviewMetaDataUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getLinkPreviewMetaDataUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getLinkPreviewMetaDataUrlCalled: Bool {
-        return getLinkPreviewMetaDataUrlCallsCount > 0
-    }
-    var getLinkPreviewMetaDataUrlReceivedUrl: String?
-    var getLinkPreviewMetaDataUrlReceivedInvocations: [String] = []
-
-    var getLinkPreviewMetaDataUrlUnderlyingReturnValue: Result<ZLinkPreview, ClientProxyError>!
-    var getLinkPreviewMetaDataUrlReturnValue: Result<ZLinkPreview, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getLinkPreviewMetaDataUrlUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZLinkPreview, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getLinkPreviewMetaDataUrlUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getLinkPreviewMetaDataUrlUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getLinkPreviewMetaDataUrlUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getLinkPreviewMetaDataUrlClosure: ((String) async -> Result<ZLinkPreview, ClientProxyError>)?
-
-    func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
-        getLinkPreviewMetaDataUrlCallsCount += 1
-        getLinkPreviewMetaDataUrlReceivedUrl = url
-        DispatchQueue.main.async {
-            self.getLinkPreviewMetaDataUrlReceivedInvocations.append(url)
-        }
-        if let getLinkPreviewMetaDataUrlClosure = getLinkPreviewMetaDataUrlClosure {
-            return await getLinkPreviewMetaDataUrlClosure(url)
-        } else {
-            return getLinkPreviewMetaDataUrlReturnValue
-        }
-    }
-    //MARK: - getPostMediaInfo
-
-    var getPostMediaInfoMediaIdUnderlyingCallsCount = 0
-    var getPostMediaInfoMediaIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getPostMediaInfoMediaIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getPostMediaInfoMediaIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var getPostMediaInfoMediaIdCalled: Bool {
-        return getPostMediaInfoMediaIdCallsCount > 0
-    }
-    var getPostMediaInfoMediaIdReceivedMediaId: String?
-    var getPostMediaInfoMediaIdReceivedInvocations: [String] = []
-
-    var getPostMediaInfoMediaIdUnderlyingReturnValue: Result<ZPostMedia, ClientProxyError>!
-    var getPostMediaInfoMediaIdReturnValue: Result<ZPostMedia, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return getPostMediaInfoMediaIdUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZPostMedia, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getPostMediaInfoMediaIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var getPostMediaInfoMediaIdClosure: ((String) async -> Result<ZPostMedia, ClientProxyError>)?
-
-    func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError> {
-        getPostMediaInfoMediaIdCallsCount += 1
-        getPostMediaInfoMediaIdReceivedMediaId = mediaId
-        DispatchQueue.main.async {
-            self.getPostMediaInfoMediaIdReceivedInvocations.append(mediaId)
-        }
-        if let getPostMediaInfoMediaIdClosure = getPostMediaInfoMediaIdClosure {
-            return await getPostMediaInfoMediaIdClosure(mediaId)
-        } else {
-            return getPostMediaInfoMediaIdReturnValue
-        }
-    }
-    //MARK: - fetchYoutubeLinkMetaData
-
-    var fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = 0
-    var fetchYoutubeLinkMetaDataYoutubrUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchYoutubeLinkMetaDataYoutubrUrlCalled: Bool {
-        return fetchYoutubeLinkMetaDataYoutubrUrlCallsCount > 0
-    }
-    var fetchYoutubeLinkMetaDataYoutubrUrlReceivedYoutubrUrl: String?
-    var fetchYoutubeLinkMetaDataYoutubrUrlReceivedInvocations: [String] = []
-
-    var fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue: Result<ZLinkPreview, ClientProxyError>!
-    var fetchYoutubeLinkMetaDataYoutubrUrlReturnValue: Result<ZLinkPreview, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue
-            } else {
-                var returnValue: Result<ZLinkPreview, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchYoutubeLinkMetaDataYoutubrUrlClosure: ((String) async -> Result<ZLinkPreview, ClientProxyError>)?
-
-    func fetchYoutubeLinkMetaData(youtubrUrl: String) async -> Result<ZLinkPreview, ClientProxyError> {
-        fetchYoutubeLinkMetaDataYoutubrUrlCallsCount += 1
-        fetchYoutubeLinkMetaDataYoutubrUrlReceivedYoutubrUrl = youtubrUrl
-        DispatchQueue.main.async {
-            self.fetchYoutubeLinkMetaDataYoutubrUrlReceivedInvocations.append(youtubrUrl)
-        }
-        if let fetchYoutubeLinkMetaDataYoutubrUrlClosure = fetchYoutubeLinkMetaDataYoutubrUrlClosure {
-            return await fetchYoutubeLinkMetaDataYoutubrUrlClosure(youtubrUrl)
-        } else {
-            return fetchYoutubeLinkMetaDataYoutubrUrlReturnValue
-        }
-    }
-    //MARK: - loadFileFromUrl
-
-    var loadFileFromUrlKeyThrowableError: Error?
-    var loadFileFromUrlKeyUnderlyingCallsCount = 0
-    var loadFileFromUrlKeyCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loadFileFromUrlKeyUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadFileFromUrlKeyUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadFileFromUrlKeyUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadFileFromUrlKeyUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var loadFileFromUrlKeyCalled: Bool {
-        return loadFileFromUrlKeyCallsCount > 0
-    }
-    var loadFileFromUrlKeyReceivedArguments: (remoteUrl: URL, key: String)?
-    var loadFileFromUrlKeyReceivedInvocations: [(remoteUrl: URL, key: String)] = []
-
-    var loadFileFromUrlKeyUnderlyingReturnValue: Result<URL, ClientProxyError>!
-    var loadFileFromUrlKeyReturnValue: Result<URL, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return loadFileFromUrlKeyUnderlyingReturnValue
-            } else {
-                var returnValue: Result<URL, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadFileFromUrlKeyUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadFileFromUrlKeyUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadFileFromUrlKeyUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var loadFileFromUrlKeyClosure: ((URL, String) async throws -> Result<URL, ClientProxyError>)?
-
-    func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, ClientProxyError> {
-        if let error = loadFileFromUrlKeyThrowableError {
-            throw error
-        }
-        loadFileFromUrlKeyCallsCount += 1
-        loadFileFromUrlKeyReceivedArguments = (remoteUrl: remoteUrl, key: key)
-        DispatchQueue.main.async {
-            self.loadFileFromUrlKeyReceivedInvocations.append((remoteUrl: remoteUrl, key: key))
-        }
-        if let loadFileFromUrlKeyClosure = loadFileFromUrlKeyClosure {
-            return try await loadFileFromUrlKeyClosure(remoteUrl, key)
-        } else {
-            return loadFileFromUrlKeyReturnValue
-        }
-    }
-    //MARK: - loadFileFromMediaId
-
-    var loadFileFromMediaIdKeyThrowableError: Error?
-    var loadFileFromMediaIdKeyUnderlyingCallsCount = 0
-    var loadFileFromMediaIdKeyCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loadFileFromMediaIdKeyUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadFileFromMediaIdKeyUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadFileFromMediaIdKeyUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadFileFromMediaIdKeyUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var loadFileFromMediaIdKeyCalled: Bool {
-        return loadFileFromMediaIdKeyCallsCount > 0
-    }
-    var loadFileFromMediaIdKeyReceivedArguments: (mediaId: String, key: String)?
-    var loadFileFromMediaIdKeyReceivedInvocations: [(mediaId: String, key: String)] = []
-
-    var loadFileFromMediaIdKeyUnderlyingReturnValue: Result<URL, ClientProxyError>!
-    var loadFileFromMediaIdKeyReturnValue: Result<URL, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return loadFileFromMediaIdKeyUnderlyingReturnValue
-            } else {
-                var returnValue: Result<URL, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadFileFromMediaIdKeyUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadFileFromMediaIdKeyUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadFileFromMediaIdKeyUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var loadFileFromMediaIdKeyClosure: ((String, String) async throws -> Result<URL, ClientProxyError>)?
-
-    func loadFileFromMediaId(_ mediaId: String, key: String) async throws -> Result<URL, ClientProxyError> {
-        if let error = loadFileFromMediaIdKeyThrowableError {
-            throw error
-        }
-        loadFileFromMediaIdKeyCallsCount += 1
-        loadFileFromMediaIdKeyReceivedArguments = (mediaId: mediaId, key: key)
-        DispatchQueue.main.async {
-            self.loadFileFromMediaIdKeyReceivedInvocations.append((mediaId: mediaId, key: key))
-        }
-        if let loadFileFromMediaIdKeyClosure = loadFileFromMediaIdKeyClosure {
-            return try await loadFileFromMediaIdKeyClosure(mediaId, key)
-        } else {
-            return loadFileFromMediaIdKeyReturnValue
-        }
     }
 }
 class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unchecked Sendable {
@@ -24485,6 +20946,3563 @@ class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
             self.lockOrientationReceivedInvocations.append(orientation)
         }
         lockOrientationClosure?(orientation)
+    }
+}
+class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
+    var matrixUserService: ZeroMatrixUsersService {
+        get { return underlyingMatrixUserService }
+        set(value) { underlyingMatrixUserService = value }
+    }
+    var underlyingMatrixUserService: ZeroMatrixUsersService!
+    var chatApi: ZeroChatApiProtocol {
+        get { return underlyingChatApi }
+        set(value) { underlyingChatApi = value }
+    }
+    var underlyingChatApi: ZeroChatApiProtocol!
+    var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
+        get { return underlyingUserRewardsPublisher }
+        set(value) { underlyingUserRewardsPublisher = value }
+    }
+    var underlyingUserRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never>!
+    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> {
+        get { return underlyingShowNewUserRewardsIntimationPublisher }
+        set(value) { underlyingShowNewUserRewardsIntimationPublisher = value }
+    }
+    var underlyingShowNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never>!
+    var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> {
+        get { return underlyingMessengerInvitePublisher }
+        set(value) { underlyingMessengerInvitePublisher = value }
+    }
+    var underlyingMessengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never>!
+    var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> {
+        get { return underlyingDirectMemberZeroProfilePublisher }
+        set(value) { underlyingDirectMemberZeroProfilePublisher = value }
+    }
+    var underlyingDirectMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never>!
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never> {
+        get { return underlyingZeroCurrentUserPublisher }
+        set(value) { underlyingZeroCurrentUserPublisher = value }
+    }
+    var underlyingZeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never>!
+    var homeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never> {
+        get { return underlyingHomeRoomSummariesUsersPublisher }
+        set(value) { underlyingHomeRoomSummariesUsersPublisher = value }
+    }
+    var underlyingHomeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never>!
+
+    //MARK: - verifyUserPassword
+
+    var verifyUserPasswordUnderlyingCallsCount = 0
+    var verifyUserPasswordCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return verifyUserPasswordUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = verifyUserPasswordUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                verifyUserPasswordUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    verifyUserPasswordUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var verifyUserPasswordCalled: Bool {
+        return verifyUserPasswordCallsCount > 0
+    }
+    var verifyUserPasswordReceivedPassword: String?
+    var verifyUserPasswordReceivedInvocations: [String] = []
+
+    var verifyUserPasswordUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var verifyUserPasswordReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return verifyUserPasswordUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = verifyUserPasswordUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                verifyUserPasswordUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    verifyUserPasswordUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var verifyUserPasswordClosure: ((String) async -> Result<Void, ZeroClientProxyError>)?
+
+    func verifyUserPassword(_ password: String) async -> Result<Void, ZeroClientProxyError> {
+        verifyUserPasswordCallsCount += 1
+        verifyUserPasswordReceivedPassword = password
+        DispatchQueue.main.async {
+            self.verifyUserPasswordReceivedInvocations.append(password)
+        }
+        if let verifyUserPasswordClosure = verifyUserPasswordClosure {
+            return await verifyUserPasswordClosure(password)
+        } else {
+            return verifyUserPasswordReturnValue
+        }
+    }
+    //MARK: - getUserRewards
+
+    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = 0
+    var getUserRewardsShouldCheckRewardsIntiamtionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getUserRewardsShouldCheckRewardsIntiamtionCalled: Bool {
+        return getUserRewardsShouldCheckRewardsIntiamtionCallsCount > 0
+    }
+    var getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion: Bool?
+    var getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations: [Bool] = []
+
+    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var getUserRewardsShouldCheckRewardsIntiamtionReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getUserRewardsShouldCheckRewardsIntiamtionClosure: ((Bool) async -> Result<Void, ZeroClientProxyError>)?
+
+    func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ZeroClientProxyError> {
+        getUserRewardsShouldCheckRewardsIntiamtionCallsCount += 1
+        getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion = shouldCheckRewardsIntiamtion
+        DispatchQueue.main.async {
+            self.getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations.append(shouldCheckRewardsIntiamtion)
+        }
+        if let getUserRewardsShouldCheckRewardsIntiamtionClosure = getUserRewardsShouldCheckRewardsIntiamtionClosure {
+            return await getUserRewardsShouldCheckRewardsIntiamtionClosure(shouldCheckRewardsIntiamtion)
+        } else {
+            return getUserRewardsShouldCheckRewardsIntiamtionReturnValue
+        }
+    }
+    //MARK: - getZeroMeowPrice
+
+    var getZeroMeowPriceUnderlyingCallsCount = 0
+    var getZeroMeowPriceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getZeroMeowPriceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getZeroMeowPriceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getZeroMeowPriceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getZeroMeowPriceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getZeroMeowPriceCalled: Bool {
+        return getZeroMeowPriceCallsCount > 0
+    }
+
+    var getZeroMeowPriceUnderlyingReturnValue: Result<ZeroCurrency, ZeroClientProxyError>!
+    var getZeroMeowPriceReturnValue: Result<ZeroCurrency, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getZeroMeowPriceUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZeroCurrency, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getZeroMeowPriceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getZeroMeowPriceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getZeroMeowPriceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getZeroMeowPriceClosure: (() async -> Result<ZeroCurrency, ZeroClientProxyError>)?
+
+    func getZeroMeowPrice() async -> Result<ZeroCurrency, ZeroClientProxyError> {
+        getZeroMeowPriceCallsCount += 1
+        if let getZeroMeowPriceClosure = getZeroMeowPriceClosure {
+            return await getZeroMeowPriceClosure()
+        } else {
+            return getZeroMeowPriceReturnValue
+        }
+    }
+    //MARK: - dismissRewardsIntimation
+
+    var dismissRewardsIntimationUnderlyingCallsCount = 0
+    var dismissRewardsIntimationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return dismissRewardsIntimationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = dismissRewardsIntimationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                dismissRewardsIntimationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    dismissRewardsIntimationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var dismissRewardsIntimationCalled: Bool {
+        return dismissRewardsIntimationCallsCount > 0
+    }
+    var dismissRewardsIntimationClosure: (() -> Void)?
+
+    func dismissRewardsIntimation() {
+        dismissRewardsIntimationCallsCount += 1
+        dismissRewardsIntimationClosure?()
+    }
+    //MARK: - loadZeroMessengerInvite
+
+    var loadZeroMessengerInviteUnderlyingCallsCount = 0
+    var loadZeroMessengerInviteCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadZeroMessengerInviteUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadZeroMessengerInviteUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadZeroMessengerInviteUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadZeroMessengerInviteUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadZeroMessengerInviteCalled: Bool {
+        return loadZeroMessengerInviteCallsCount > 0
+    }
+
+    var loadZeroMessengerInviteUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var loadZeroMessengerInviteReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadZeroMessengerInviteUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadZeroMessengerInviteUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadZeroMessengerInviteUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadZeroMessengerInviteUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadZeroMessengerInviteClosure: (() async -> Result<Void, ZeroClientProxyError>)?
+
+    @discardableResult
+    func loadZeroMessengerInvite() async -> Result<Void, ZeroClientProxyError> {
+        loadZeroMessengerInviteCallsCount += 1
+        if let loadZeroMessengerInviteClosure = loadZeroMessengerInviteClosure {
+            return await loadZeroMessengerInviteClosure()
+        } else {
+            return loadZeroMessengerInviteReturnValue
+        }
+    }
+    //MARK: - isProfileCompletionRequired
+
+    var isProfileCompletionRequiredUnderlyingCallsCount = 0
+    var isProfileCompletionRequiredCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isProfileCompletionRequiredUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isProfileCompletionRequiredUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isProfileCompletionRequiredUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isProfileCompletionRequiredUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var isProfileCompletionRequiredCalled: Bool {
+        return isProfileCompletionRequiredCallsCount > 0
+    }
+
+    var isProfileCompletionRequiredUnderlyingReturnValue: Bool!
+    var isProfileCompletionRequiredReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isProfileCompletionRequiredUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isProfileCompletionRequiredUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isProfileCompletionRequiredUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isProfileCompletionRequiredUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var isProfileCompletionRequiredClosure: (() async -> Bool)?
+
+    func isProfileCompletionRequired() async -> Bool {
+        isProfileCompletionRequiredCallsCount += 1
+        if let isProfileCompletionRequiredClosure = isProfileCompletionRequiredClosure {
+            return await isProfileCompletionRequiredClosure()
+        } else {
+            return isProfileCompletionRequiredReturnValue
+        }
+    }
+    //MARK: - completeUserAccountProfile
+
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = 0
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeCalled: Bool {
+        return completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount > 0
+    }
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedArguments: (avatar: MediaInfo?, displayName: String, inviteCode: String)?
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedInvocations: [(avatar: MediaInfo?, displayName: String, inviteCode: String)] = []
+
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeClosure: ((MediaInfo?, String, String) async -> Result<Void, ZeroClientProxyError>)?
+
+    func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ZeroClientProxyError> {
+        completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount += 1
+        completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedArguments = (avatar: avatar, displayName: displayName, inviteCode: inviteCode)
+        DispatchQueue.main.async {
+            self.completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedInvocations.append((avatar: avatar, displayName: displayName, inviteCode: inviteCode))
+        }
+        if let completeUserAccountProfileAvatarDisplayNameInviteCodeClosure = completeUserAccountProfileAvatarDisplayNameInviteCodeClosure {
+            return await completeUserAccountProfileAvatarDisplayNameInviteCodeClosure(avatar, displayName, inviteCode)
+        } else {
+            return completeUserAccountProfileAvatarDisplayNameInviteCodeReturnValue
+        }
+    }
+    //MARK: - deleteUserAccount
+
+    var deleteUserAccountUnderlyingCallsCount = 0
+    var deleteUserAccountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deleteUserAccountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteUserAccountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteUserAccountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteUserAccountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deleteUserAccountCalled: Bool {
+        return deleteUserAccountCallsCount > 0
+    }
+
+    var deleteUserAccountUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var deleteUserAccountReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return deleteUserAccountUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteUserAccountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteUserAccountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteUserAccountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var deleteUserAccountClosure: (() async -> Result<Void, ZeroClientProxyError>)?
+
+    func deleteUserAccount() async -> Result<Void, ZeroClientProxyError> {
+        deleteUserAccountCallsCount += 1
+        if let deleteUserAccountClosure = deleteUserAccountClosure {
+            return await deleteUserAccountClosure()
+        } else {
+            return deleteUserAccountReturnValue
+        }
+    }
+    //MARK: - zeroProfile
+
+    var zeroProfileUserIdUnderlyingCallsCount = 0
+    var zeroProfileUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return zeroProfileUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = zeroProfileUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                zeroProfileUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    zeroProfileUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var zeroProfileUserIdCalled: Bool {
+        return zeroProfileUserIdCallsCount > 0
+    }
+    var zeroProfileUserIdReceivedUserId: String?
+    var zeroProfileUserIdReceivedInvocations: [String] = []
+    var zeroProfileUserIdClosure: ((String) async -> Void)?
+
+    func zeroProfile(userId: String) async {
+        zeroProfileUserIdCallsCount += 1
+        zeroProfileUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.zeroProfileUserIdReceivedInvocations.append(userId)
+        }
+        await zeroProfileUserIdClosure?(userId)
+    }
+    //MARK: - zeroProfiles
+
+    var zeroProfilesUserIdsUnderlyingCallsCount = 0
+    var zeroProfilesUserIdsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return zeroProfilesUserIdsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = zeroProfilesUserIdsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                zeroProfilesUserIdsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    zeroProfilesUserIdsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var zeroProfilesUserIdsCalled: Bool {
+        return zeroProfilesUserIdsCallsCount > 0
+    }
+    var zeroProfilesUserIdsReceivedUserIds: Set<String>?
+    var zeroProfilesUserIdsReceivedInvocations: [Set<String>] = []
+    var zeroProfilesUserIdsClosure: ((Set<String>) async -> Void)?
+
+    func zeroProfiles(userIds: Set<String>) async {
+        zeroProfilesUserIdsCallsCount += 1
+        zeroProfilesUserIdsReceivedUserIds = userIds
+        DispatchQueue.main.async {
+            self.zeroProfilesUserIdsReceivedInvocations.append(userIds)
+        }
+        await zeroProfilesUserIdsClosure?(userIds)
+    }
+    //MARK: - checkAndLinkZeroUser
+
+    var checkAndLinkZeroUserUnderlyingCallsCount = 0
+    var checkAndLinkZeroUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return checkAndLinkZeroUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = checkAndLinkZeroUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                checkAndLinkZeroUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    checkAndLinkZeroUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var checkAndLinkZeroUserCalled: Bool {
+        return checkAndLinkZeroUserCallsCount > 0
+    }
+    var checkAndLinkZeroUserClosure: (() async -> Void)?
+
+    func checkAndLinkZeroUser() async {
+        checkAndLinkZeroUserCallsCount += 1
+        await checkAndLinkZeroUserClosure?()
+    }
+    //MARK: - fetchZCurrentUser
+
+    var fetchZCurrentUserUnderlyingCallsCount = 0
+    var fetchZCurrentUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchZCurrentUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZCurrentUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZCurrentUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZCurrentUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchZCurrentUserCalled: Bool {
+        return fetchZCurrentUserCallsCount > 0
+    }
+    var fetchZCurrentUserClosure: (() -> Void)?
+
+    func fetchZCurrentUser() {
+        fetchZCurrentUserCallsCount += 1
+        fetchZCurrentUserClosure?()
+    }
+    //MARK: - fetchUserWallets
+
+    var fetchUserWalletsUnderlyingCallsCount = 0
+    var fetchUserWalletsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchUserWalletsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserWalletsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserWalletsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserWalletsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchUserWalletsCalled: Bool {
+        return fetchUserWalletsCallsCount > 0
+    }
+
+    var fetchUserWalletsUnderlyingReturnValue: Result<[ZWallet], ZeroClientProxyError>!
+    var fetchUserWalletsReturnValue: Result<[ZWallet], ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchUserWalletsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZWallet], ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserWalletsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserWalletsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserWalletsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchUserWalletsClosure: (() async -> Result<[ZWallet], ZeroClientProxyError>)?
+
+    func fetchUserWallets() async -> Result<[ZWallet], ZeroClientProxyError> {
+        fetchUserWalletsCallsCount += 1
+        if let fetchUserWalletsClosure = fetchUserWalletsClosure {
+            return await fetchUserWalletsClosure()
+        } else {
+            return fetchUserWalletsReturnValue
+        }
+    }
+    //MARK: - deleteWallet
+
+    var deleteWalletWalletIdUnderlyingCallsCount = 0
+    var deleteWalletWalletIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deleteWalletWalletIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteWalletWalletIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteWalletWalletIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteWalletWalletIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deleteWalletWalletIdCalled: Bool {
+        return deleteWalletWalletIdCallsCount > 0
+    }
+    var deleteWalletWalletIdReceivedWalletId: String?
+    var deleteWalletWalletIdReceivedInvocations: [String] = []
+
+    var deleteWalletWalletIdUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var deleteWalletWalletIdReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return deleteWalletWalletIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteWalletWalletIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteWalletWalletIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteWalletWalletIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var deleteWalletWalletIdClosure: ((String) async -> Result<Void, ZeroClientProxyError>)?
+
+    func deleteWallet(walletId: String) async -> Result<Void, ZeroClientProxyError> {
+        deleteWalletWalletIdCallsCount += 1
+        deleteWalletWalletIdReceivedWalletId = walletId
+        DispatchQueue.main.async {
+            self.deleteWalletWalletIdReceivedInvocations.append(walletId)
+        }
+        if let deleteWalletWalletIdClosure = deleteWalletWalletIdClosure {
+            return await deleteWalletWalletIdClosure(walletId)
+        } else {
+            return deleteWalletWalletIdReturnValue
+        }
+    }
+    //MARK: - addWallet
+
+    var addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = 0
+    var addWalletCanAuthenticateWeb3TokenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addWalletCanAuthenticateWeb3TokenCalled: Bool {
+        return addWalletCanAuthenticateWeb3TokenCallsCount > 0
+    }
+    var addWalletCanAuthenticateWeb3TokenReceivedArguments: (canAuthenticate: Bool, web3Token: String)?
+    var addWalletCanAuthenticateWeb3TokenReceivedInvocations: [(canAuthenticate: Bool, web3Token: String)] = []
+
+    var addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var addWalletCanAuthenticateWeb3TokenReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addWalletCanAuthenticateWeb3TokenClosure: ((Bool, String) async -> Result<Void, ZeroClientProxyError>)?
+
+    func addWallet(canAuthenticate: Bool, web3Token: String) async -> Result<Void, ZeroClientProxyError> {
+        addWalletCanAuthenticateWeb3TokenCallsCount += 1
+        addWalletCanAuthenticateWeb3TokenReceivedArguments = (canAuthenticate: canAuthenticate, web3Token: web3Token)
+        DispatchQueue.main.async {
+            self.addWalletCanAuthenticateWeb3TokenReceivedInvocations.append((canAuthenticate: canAuthenticate, web3Token: web3Token))
+        }
+        if let addWalletCanAuthenticateWeb3TokenClosure = addWalletCanAuthenticateWeb3TokenClosure {
+            return await addWalletCanAuthenticateWeb3TokenClosure(canAuthenticate, web3Token)
+        } else {
+            return addWalletCanAuthenticateWeb3TokenReturnValue
+        }
+    }
+    //MARK: - fetchZeroFeeds
+
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = 0
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipCalled: Bool {
+        return fetchZeroFeedsChannelZIdFollowingLimitSkipCallsCount > 0
+    }
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedArguments: (channelZId: String?, following: Bool, limit: Int, skip: Int)?
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedInvocations: [(channelZId: String?, following: Bool, limit: Int, skip: Int)] = []
+
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue: Result<[ZPost], ZeroClientProxyError>!
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipReturnValue: Result<[ZPost], ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZPost], ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchZeroFeedsChannelZIdFollowingLimitSkipClosure: ((String?, Bool, Int, Int) async -> Result<[ZPost], ZeroClientProxyError>)?
+
+    func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ZeroClientProxyError> {
+        fetchZeroFeedsChannelZIdFollowingLimitSkipCallsCount += 1
+        fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedArguments = (channelZId: channelZId, following: following, limit: limit, skip: skip)
+        DispatchQueue.main.async {
+            self.fetchZeroFeedsChannelZIdFollowingLimitSkipReceivedInvocations.append((channelZId: channelZId, following: following, limit: limit, skip: skip))
+        }
+        if let fetchZeroFeedsChannelZIdFollowingLimitSkipClosure = fetchZeroFeedsChannelZIdFollowingLimitSkipClosure {
+            return await fetchZeroFeedsChannelZIdFollowingLimitSkipClosure(channelZId, following, limit, skip)
+        } else {
+            return fetchZeroFeedsChannelZIdFollowingLimitSkipReturnValue
+        }
+    }
+    //MARK: - fetchFeedDetails
+
+    var fetchFeedDetailsFeedIdUnderlyingCallsCount = 0
+    var fetchFeedDetailsFeedIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedDetailsFeedIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedDetailsFeedIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedDetailsFeedIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedDetailsFeedIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedDetailsFeedIdCalled: Bool {
+        return fetchFeedDetailsFeedIdCallsCount > 0
+    }
+    var fetchFeedDetailsFeedIdReceivedFeedId: String?
+    var fetchFeedDetailsFeedIdReceivedInvocations: [String] = []
+
+    var fetchFeedDetailsFeedIdUnderlyingReturnValue: Result<ZPost, ZeroClientProxyError>!
+    var fetchFeedDetailsFeedIdReturnValue: Result<ZPost, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedDetailsFeedIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPost, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedDetailsFeedIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedDetailsFeedIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedDetailsFeedIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedDetailsFeedIdClosure: ((String) async -> Result<ZPost, ZeroClientProxyError>)?
+
+    func fetchFeedDetails(feedId: String) async -> Result<ZPost, ZeroClientProxyError> {
+        fetchFeedDetailsFeedIdCallsCount += 1
+        fetchFeedDetailsFeedIdReceivedFeedId = feedId
+        DispatchQueue.main.async {
+            self.fetchFeedDetailsFeedIdReceivedInvocations.append(feedId)
+        }
+        if let fetchFeedDetailsFeedIdClosure = fetchFeedDetailsFeedIdClosure {
+            return await fetchFeedDetailsFeedIdClosure(feedId)
+        } else {
+            return fetchFeedDetailsFeedIdReturnValue
+        }
+    }
+    //MARK: - fetchFeedReplies
+
+    var fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = 0
+    var fetchFeedRepliesFeedIdLimitSkipCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedRepliesFeedIdLimitSkipCalled: Bool {
+        return fetchFeedRepliesFeedIdLimitSkipCallsCount > 0
+    }
+    var fetchFeedRepliesFeedIdLimitSkipReceivedArguments: (feedId: String, limit: Int, skip: Int)?
+    var fetchFeedRepliesFeedIdLimitSkipReceivedInvocations: [(feedId: String, limit: Int, skip: Int)] = []
+
+    var fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue: Result<[ZPost], ZeroClientProxyError>!
+    var fetchFeedRepliesFeedIdLimitSkipReturnValue: Result<[ZPost], ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZPost], ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedRepliesFeedIdLimitSkipClosure: ((String, Int, Int) async -> Result<[ZPost], ZeroClientProxyError>)?
+
+    func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ZeroClientProxyError> {
+        fetchFeedRepliesFeedIdLimitSkipCallsCount += 1
+        fetchFeedRepliesFeedIdLimitSkipReceivedArguments = (feedId: feedId, limit: limit, skip: skip)
+        DispatchQueue.main.async {
+            self.fetchFeedRepliesFeedIdLimitSkipReceivedInvocations.append((feedId: feedId, limit: limit, skip: skip))
+        }
+        if let fetchFeedRepliesFeedIdLimitSkipClosure = fetchFeedRepliesFeedIdLimitSkipClosure {
+            return await fetchFeedRepliesFeedIdLimitSkipClosure(feedId, limit, skip)
+        } else {
+            return fetchFeedRepliesFeedIdLimitSkipReturnValue
+        }
+    }
+    //MARK: - addMeowsToFeed
+
+    var addMeowsToFeedFeedIdAmountUnderlyingCallsCount = 0
+    var addMeowsToFeedFeedIdAmountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addMeowsToFeedFeedIdAmountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addMeowsToFeedFeedIdAmountCalled: Bool {
+        return addMeowsToFeedFeedIdAmountCallsCount > 0
+    }
+    var addMeowsToFeedFeedIdAmountReceivedArguments: (feedId: String, amount: Int)?
+    var addMeowsToFeedFeedIdAmountReceivedInvocations: [(feedId: String, amount: Int)] = []
+
+    var addMeowsToFeedFeedIdAmountUnderlyingReturnValue: Result<ZPost, ZeroClientProxyError>!
+    var addMeowsToFeedFeedIdAmountReturnValue: Result<ZPost, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return addMeowsToFeedFeedIdAmountUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPost, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addMeowsToFeedFeedIdAmountClosure: ((String, Int) async -> Result<ZPost, ZeroClientProxyError>)?
+
+    func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ZeroClientProxyError> {
+        addMeowsToFeedFeedIdAmountCallsCount += 1
+        addMeowsToFeedFeedIdAmountReceivedArguments = (feedId: feedId, amount: amount)
+        DispatchQueue.main.async {
+            self.addMeowsToFeedFeedIdAmountReceivedInvocations.append((feedId: feedId, amount: amount))
+        }
+        if let addMeowsToFeedFeedIdAmountClosure = addMeowsToFeedFeedIdAmountClosure {
+            return await addMeowsToFeedFeedIdAmountClosure(feedId, amount)
+        } else {
+            return addMeowsToFeedFeedIdAmountReturnValue
+        }
+    }
+    //MARK: - postNewFeed
+
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = 0
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCalled: Bool {
+        return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount > 0
+    }
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedArguments: (channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?)?
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedInvocations: [(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?)] = []
+
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure: ((String?, String, String, String?, URL?) async -> Result<Void, ZeroClientProxyError>)?
+
+    func postNewFeed(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ZeroClientProxyError> {
+        postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileCallsCount += 1
+        postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedArguments = (channelZId: channelZId, walletAddress: walletAddress, content: content, replyToPost: replyToPost, mediaFile: mediaFile)
+        DispatchQueue.main.async {
+            self.postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReceivedInvocations.append((channelZId: channelZId, walletAddress: walletAddress, content: content, replyToPost: replyToPost, mediaFile: mediaFile))
+        }
+        if let postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure = postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure {
+            return await postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileClosure(channelZId, walletAddress, content, replyToPost, mediaFile)
+        } else {
+            return postNewFeedChannelZIdWalletAddressContentReplyToPostMediaFileReturnValue
+        }
+    }
+    //MARK: - fetchFeedUserProfile
+
+    var fetchFeedUserProfileUserZIdUnderlyingCallsCount = 0
+    var fetchFeedUserProfileUserZIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserProfileUserZIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserProfileUserZIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserProfileUserZIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserProfileUserZIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserProfileUserZIdCalled: Bool {
+        return fetchFeedUserProfileUserZIdCallsCount > 0
+    }
+    var fetchFeedUserProfileUserZIdReceivedUserZId: String?
+    var fetchFeedUserProfileUserZIdReceivedInvocations: [String] = []
+
+    var fetchFeedUserProfileUserZIdUnderlyingReturnValue: Result<ZPostUserProfile, ZeroClientProxyError>!
+    var fetchFeedUserProfileUserZIdReturnValue: Result<ZPostUserProfile, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserProfileUserZIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPostUserProfile, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserProfileUserZIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserProfileUserZIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserProfileUserZIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserProfileUserZIdClosure: ((String) async -> Result<ZPostUserProfile, ZeroClientProxyError>)?
+
+    func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ZeroClientProxyError> {
+        fetchFeedUserProfileUserZIdCallsCount += 1
+        fetchFeedUserProfileUserZIdReceivedUserZId = userZId
+        DispatchQueue.main.async {
+            self.fetchFeedUserProfileUserZIdReceivedInvocations.append(userZId)
+        }
+        if let fetchFeedUserProfileUserZIdClosure = fetchFeedUserProfileUserZIdClosure {
+            return await fetchFeedUserProfileUserZIdClosure(userZId)
+        } else {
+            return fetchFeedUserProfileUserZIdReturnValue
+        }
+    }
+    //MARK: - fetchUserFeeds
+
+    var fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = 0
+    var fetchUserFeedsUserIdLimitSkipCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchUserFeedsUserIdLimitSkipCalled: Bool {
+        return fetchUserFeedsUserIdLimitSkipCallsCount > 0
+    }
+    var fetchUserFeedsUserIdLimitSkipReceivedArguments: (userId: String, limit: Int, skip: Int)?
+    var fetchUserFeedsUserIdLimitSkipReceivedInvocations: [(userId: String, limit: Int, skip: Int)] = []
+
+    var fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue: Result<[ZPost], ZeroClientProxyError>!
+    var fetchUserFeedsUserIdLimitSkipReturnValue: Result<[ZPost], ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZPost], ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchUserFeedsUserIdLimitSkipClosure: ((String, Int, Int) async -> Result<[ZPost], ZeroClientProxyError>)?
+
+    func fetchUserFeeds(userId: String, limit: Int, skip: Int) async -> Result<[ZPost], ZeroClientProxyError> {
+        fetchUserFeedsUserIdLimitSkipCallsCount += 1
+        fetchUserFeedsUserIdLimitSkipReceivedArguments = (userId: userId, limit: limit, skip: skip)
+        DispatchQueue.main.async {
+            self.fetchUserFeedsUserIdLimitSkipReceivedInvocations.append((userId: userId, limit: limit, skip: skip))
+        }
+        if let fetchUserFeedsUserIdLimitSkipClosure = fetchUserFeedsUserIdLimitSkipClosure {
+            return await fetchUserFeedsUserIdLimitSkipClosure(userId, limit, skip)
+        } else {
+            return fetchUserFeedsUserIdLimitSkipReturnValue
+        }
+    }
+    //MARK: - fetchFeedUserFollowingStatus
+
+    var fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = 0
+    var fetchFeedUserFollowingStatusUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserFollowingStatusUserIdCalled: Bool {
+        return fetchFeedUserFollowingStatusUserIdCallsCount > 0
+    }
+    var fetchFeedUserFollowingStatusUserIdReceivedUserId: String?
+    var fetchFeedUserFollowingStatusUserIdReceivedInvocations: [String] = []
+
+    var fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue: Result<ZPostUserFollowingStatus, ZeroClientProxyError>!
+    var fetchFeedUserFollowingStatusUserIdReturnValue: Result<ZPostUserFollowingStatus, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPostUserFollowingStatus, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserFollowingStatusUserIdClosure: ((String) async -> Result<ZPostUserFollowingStatus, ZeroClientProxyError>)?
+
+    func fetchFeedUserFollowingStatus(userId: String) async -> Result<ZPostUserFollowingStatus, ZeroClientProxyError> {
+        fetchFeedUserFollowingStatusUserIdCallsCount += 1
+        fetchFeedUserFollowingStatusUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.fetchFeedUserFollowingStatusUserIdReceivedInvocations.append(userId)
+        }
+        if let fetchFeedUserFollowingStatusUserIdClosure = fetchFeedUserFollowingStatusUserIdClosure {
+            return await fetchFeedUserFollowingStatusUserIdClosure(userId)
+        } else {
+            return fetchFeedUserFollowingStatusUserIdReturnValue
+        }
+    }
+    //MARK: - followFeedUser
+
+    var followFeedUserUserIdUnderlyingCallsCount = 0
+    var followFeedUserUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return followFeedUserUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = followFeedUserUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                followFeedUserUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    followFeedUserUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var followFeedUserUserIdCalled: Bool {
+        return followFeedUserUserIdCallsCount > 0
+    }
+    var followFeedUserUserIdReceivedUserId: String?
+    var followFeedUserUserIdReceivedInvocations: [String] = []
+
+    var followFeedUserUserIdUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var followFeedUserUserIdReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return followFeedUserUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = followFeedUserUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                followFeedUserUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    followFeedUserUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var followFeedUserUserIdClosure: ((String) async -> Result<Void, ZeroClientProxyError>)?
+
+    func followFeedUser(userId: String) async -> Result<Void, ZeroClientProxyError> {
+        followFeedUserUserIdCallsCount += 1
+        followFeedUserUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.followFeedUserUserIdReceivedInvocations.append(userId)
+        }
+        if let followFeedUserUserIdClosure = followFeedUserUserIdClosure {
+            return await followFeedUserUserIdClosure(userId)
+        } else {
+            return followFeedUserUserIdReturnValue
+        }
+    }
+    //MARK: - unFollowFeedUser
+
+    var unFollowFeedUserUserIdUnderlyingCallsCount = 0
+    var unFollowFeedUserUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unFollowFeedUserUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unFollowFeedUserUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unFollowFeedUserUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unFollowFeedUserUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var unFollowFeedUserUserIdCalled: Bool {
+        return unFollowFeedUserUserIdCallsCount > 0
+    }
+    var unFollowFeedUserUserIdReceivedUserId: String?
+    var unFollowFeedUserUserIdReceivedInvocations: [String] = []
+
+    var unFollowFeedUserUserIdUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var unFollowFeedUserUserIdReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return unFollowFeedUserUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unFollowFeedUserUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unFollowFeedUserUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unFollowFeedUserUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var unFollowFeedUserUserIdClosure: ((String) async -> Result<Void, ZeroClientProxyError>)?
+
+    func unFollowFeedUser(userId: String) async -> Result<Void, ZeroClientProxyError> {
+        unFollowFeedUserUserIdCallsCount += 1
+        unFollowFeedUserUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.unFollowFeedUserUserIdReceivedInvocations.append(userId)
+        }
+        if let unFollowFeedUserUserIdClosure = unFollowFeedUserUserIdClosure {
+            return await unFollowFeedUserUserIdClosure(userId)
+        } else {
+            return unFollowFeedUserUserIdReturnValue
+        }
+    }
+    //MARK: - fetchUserZIds
+
+    var fetchUserZIdsUnderlyingCallsCount = 0
+    var fetchUserZIdsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchUserZIdsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserZIdsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserZIdsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserZIdsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchUserZIdsCalled: Bool {
+        return fetchUserZIdsCallsCount > 0
+    }
+
+    var fetchUserZIdsUnderlyingReturnValue: Result<[String], ZeroClientProxyError>!
+    var fetchUserZIdsReturnValue: Result<[String], ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchUserZIdsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[String], ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserZIdsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserZIdsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserZIdsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchUserZIdsClosure: (() async -> Result<[String], ZeroClientProxyError>)?
+
+    func fetchUserZIds() async -> Result<[String], ZeroClientProxyError> {
+        fetchUserZIdsCallsCount += 1
+        if let fetchUserZIdsClosure = fetchUserZIdsClosure {
+            return await fetchUserZIdsClosure()
+        } else {
+            return fetchUserZIdsReturnValue
+        }
+    }
+    //MARK: - joinChannel
+
+    var joinChannelRoomAliasOrIdUnderlyingCallsCount = 0
+    var joinChannelRoomAliasOrIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinChannelRoomAliasOrIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinChannelRoomAliasOrIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var joinChannelRoomAliasOrIdCalled: Bool {
+        return joinChannelRoomAliasOrIdCallsCount > 0
+    }
+    var joinChannelRoomAliasOrIdReceivedRoomAliasOrId: String?
+    var joinChannelRoomAliasOrIdReceivedInvocations: [String] = []
+
+    var joinChannelRoomAliasOrIdUnderlyingReturnValue: Result<String, ZeroClientProxyError>!
+    var joinChannelRoomAliasOrIdReturnValue: Result<String, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return joinChannelRoomAliasOrIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<String, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinChannelRoomAliasOrIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var joinChannelRoomAliasOrIdClosure: ((String) async -> Result<String, ZeroClientProxyError>)?
+
+    func joinChannel(roomAliasOrId: String) async -> Result<String, ZeroClientProxyError> {
+        joinChannelRoomAliasOrIdCallsCount += 1
+        joinChannelRoomAliasOrIdReceivedRoomAliasOrId = roomAliasOrId
+        DispatchQueue.main.async {
+            self.joinChannelRoomAliasOrIdReceivedInvocations.append(roomAliasOrId)
+        }
+        if let joinChannelRoomAliasOrIdClosure = joinChannelRoomAliasOrIdClosure {
+            return await joinChannelRoomAliasOrIdClosure(roomAliasOrId)
+        } else {
+            return joinChannelRoomAliasOrIdReturnValue
+        }
+    }
+    //MARK: - initializeThirdWebWalletForUser
+
+    var initializeThirdWebWalletForUserUnderlyingCallsCount = 0
+    var initializeThirdWebWalletForUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return initializeThirdWebWalletForUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = initializeThirdWebWalletForUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                initializeThirdWebWalletForUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    initializeThirdWebWalletForUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var initializeThirdWebWalletForUserCalled: Bool {
+        return initializeThirdWebWalletForUserCallsCount > 0
+    }
+
+    var initializeThirdWebWalletForUserUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var initializeThirdWebWalletForUserReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return initializeThirdWebWalletForUserUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = initializeThirdWebWalletForUserUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                initializeThirdWebWalletForUserUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    initializeThirdWebWalletForUserUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var initializeThirdWebWalletForUserClosure: (() async -> Result<Void, ZeroClientProxyError>)?
+
+    func initializeThirdWebWalletForUser() async -> Result<Void, ZeroClientProxyError> {
+        initializeThirdWebWalletForUserCallsCount += 1
+        if let initializeThirdWebWalletForUserClosure = initializeThirdWebWalletForUserClosure {
+            return await initializeThirdWebWalletForUserClosure()
+        } else {
+            return initializeThirdWebWalletForUserReturnValue
+        }
+    }
+    //MARK: - getWalletTokenBalances
+
+    var getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = 0
+    var getWalletTokenBalancesWalletAddressNextPageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getWalletTokenBalancesWalletAddressNextPageCalled: Bool {
+        return getWalletTokenBalancesWalletAddressNextPageCallsCount > 0
+    }
+    var getWalletTokenBalancesWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: NextPageParams?)?
+    var getWalletTokenBalancesWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: NextPageParams?)] = []
+
+    var getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletTokenBalances, ZeroClientProxyError>!
+    var getWalletTokenBalancesWalletAddressNextPageReturnValue: Result<ZWalletTokenBalances, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTokenBalances, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getWalletTokenBalancesWalletAddressNextPageClosure: ((String, NextPageParams?) async -> Result<ZWalletTokenBalances, ZeroClientProxyError>)?
+
+    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ZeroClientProxyError> {
+        getWalletTokenBalancesWalletAddressNextPageCallsCount += 1
+        getWalletTokenBalancesWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
+        DispatchQueue.main.async {
+            self.getWalletTokenBalancesWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
+        }
+        if let getWalletTokenBalancesWalletAddressNextPageClosure = getWalletTokenBalancesWalletAddressNextPageClosure {
+            return await getWalletTokenBalancesWalletAddressNextPageClosure(walletAddress, nextPage)
+        } else {
+            return getWalletTokenBalancesWalletAddressNextPageReturnValue
+        }
+    }
+    //MARK: - getWalletNFTs
+
+    var getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = 0
+    var getWalletNFTsWalletAddressNextPageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getWalletNFTsWalletAddressNextPageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletNFTsWalletAddressNextPageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getWalletNFTsWalletAddressNextPageCalled: Bool {
+        return getWalletNFTsWalletAddressNextPageCallsCount > 0
+    }
+    var getWalletNFTsWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: NextPageParams?)?
+    var getWalletNFTsWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: NextPageParams?)] = []
+
+    var getWalletNFTsWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletNFTs, ZeroClientProxyError>!
+    var getWalletNFTsWalletAddressNextPageReturnValue: Result<ZWalletNFTs, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getWalletNFTsWalletAddressNextPageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletNFTs, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletNFTsWalletAddressNextPageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletNFTsWalletAddressNextPageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletNFTsWalletAddressNextPageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getWalletNFTsWalletAddressNextPageClosure: ((String, NextPageParams?) async -> Result<ZWalletNFTs, ZeroClientProxyError>)?
+
+    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ZeroClientProxyError> {
+        getWalletNFTsWalletAddressNextPageCallsCount += 1
+        getWalletNFTsWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
+        DispatchQueue.main.async {
+            self.getWalletNFTsWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
+        }
+        if let getWalletNFTsWalletAddressNextPageClosure = getWalletNFTsWalletAddressNextPageClosure {
+            return await getWalletNFTsWalletAddressNextPageClosure(walletAddress, nextPage)
+        } else {
+            return getWalletNFTsWalletAddressNextPageReturnValue
+        }
+    }
+    //MARK: - getWalletTransactions
+
+    var getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = 0
+    var getWalletTransactionsWalletAddressNextPageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getWalletTransactionsWalletAddressNextPageCalled: Bool {
+        return getWalletTransactionsWalletAddressNextPageCallsCount > 0
+    }
+    var getWalletTransactionsWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: TransactionNextPageParams?)?
+    var getWalletTransactionsWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: TransactionNextPageParams?)] = []
+
+    var getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletTransactions, ZeroClientProxyError>!
+    var getWalletTransactionsWalletAddressNextPageReturnValue: Result<ZWalletTransactions, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactions, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getWalletTransactionsWalletAddressNextPageClosure: ((String, TransactionNextPageParams?) async -> Result<ZWalletTransactions, ZeroClientProxyError>)?
+
+    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ZeroClientProxyError> {
+        getWalletTransactionsWalletAddressNextPageCallsCount += 1
+        getWalletTransactionsWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
+        DispatchQueue.main.async {
+            self.getWalletTransactionsWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
+        }
+        if let getWalletTransactionsWalletAddressNextPageClosure = getWalletTransactionsWalletAddressNextPageClosure {
+            return await getWalletTransactionsWalletAddressNextPageClosure(walletAddress, nextPage)
+        } else {
+            return getWalletTransactionsWalletAddressNextPageReturnValue
+        }
+    }
+    //MARK: - transferToken
+
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount = 0
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCalled: Bool {
+        return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount > 0
+    }
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64)?
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64)] = []
+
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue: Result<ZWalletTransactionResponse, ZeroClientProxyError>!
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReturnValue: Result<ZWalletTransactionResponse, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionResponse, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure: ((String, String, String, String, UInt64) async -> Result<ZWalletTransactionResponse, ZeroClientProxyError>)?
+
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionResponse, ZeroClientProxyError> {
+        transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount += 1
+        transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedArguments = (senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedInvocations.append((senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress, chainId: chainId))
+        }
+        if let transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure {
+            return await transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure(senderWalletAddress, recipientWalletAddress, amount, tokenAddress, chainId)
+        } else {
+            return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReturnValue
+        }
+    }
+    //MARK: - transferNFT
+
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = 0
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCalled: Bool {
+        return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount > 0
+    }
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String)?
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String)] = []
+
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue: Result<ZWalletTransactionResponse, ZeroClientProxyError>!
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReturnValue: Result<ZWalletTransactionResponse, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionResponse, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure: ((String, String, String, String) async -> Result<ZWalletTransactionResponse, ZeroClientProxyError>)?
+
+    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ZeroClientProxyError> {
+        transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount += 1
+        transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedArguments = (senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress)
+        DispatchQueue.main.async {
+            self.transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedInvocations.append((senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress))
+        }
+        if let transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure {
+            return await transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure(senderWalletAddress, recipientWalletAddress, tokenId, nftAddress)
+        } else {
+            return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReturnValue
+        }
+    }
+    //MARK: - getTransactionReceipt
+
+    var getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount = 0
+    var getTransactionReceiptTransactionHashChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTransactionReceiptTransactionHashChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getTransactionReceiptTransactionHashChainIdCalled: Bool {
+        return getTransactionReceiptTransactionHashChainIdCallsCount > 0
+    }
+    var getTransactionReceiptTransactionHashChainIdReceivedArguments: (transactionHash: String, chainId: UInt64?)?
+    var getTransactionReceiptTransactionHashChainIdReceivedInvocations: [(transactionHash: String, chainId: UInt64?)] = []
+
+    var getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>!
+    var getTransactionReceiptTransactionHashChainIdReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getTransactionReceiptTransactionHashChainIdClosure: ((String, UInt64?) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError>)?
+
+    func getTransactionReceipt(transactionHash: String, chainId: UInt64?) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError> {
+        getTransactionReceiptTransactionHashChainIdCallsCount += 1
+        getTransactionReceiptTransactionHashChainIdReceivedArguments = (transactionHash: transactionHash, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getTransactionReceiptTransactionHashChainIdReceivedInvocations.append((transactionHash: transactionHash, chainId: chainId))
+        }
+        if let getTransactionReceiptTransactionHashChainIdClosure = getTransactionReceiptTransactionHashChainIdClosure {
+            return await getTransactionReceiptTransactionHashChainIdClosure(transactionHash, chainId)
+        } else {
+            return getTransactionReceiptTransactionHashChainIdReturnValue
+        }
+    }
+    //MARK: - searchTransactionRecipient
+
+    var searchTransactionRecipientQueryUnderlyingCallsCount = 0
+    var searchTransactionRecipientQueryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return searchTransactionRecipientQueryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = searchTransactionRecipientQueryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                searchTransactionRecipientQueryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    searchTransactionRecipientQueryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var searchTransactionRecipientQueryCalled: Bool {
+        return searchTransactionRecipientQueryCallsCount > 0
+    }
+    var searchTransactionRecipientQueryReceivedQuery: String?
+    var searchTransactionRecipientQueryReceivedInvocations: [String] = []
+
+    var searchTransactionRecipientQueryUnderlyingReturnValue: Result<[WalletRecipient], ZeroClientProxyError>!
+    var searchTransactionRecipientQueryReturnValue: Result<[WalletRecipient], ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return searchTransactionRecipientQueryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[WalletRecipient], ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = searchTransactionRecipientQueryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                searchTransactionRecipientQueryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    searchTransactionRecipientQueryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var searchTransactionRecipientQueryClosure: ((String) async -> Result<[WalletRecipient], ZeroClientProxyError>)?
+
+    func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ZeroClientProxyError> {
+        searchTransactionRecipientQueryCallsCount += 1
+        searchTransactionRecipientQueryReceivedQuery = query
+        DispatchQueue.main.async {
+            self.searchTransactionRecipientQueryReceivedInvocations.append(query)
+        }
+        if let searchTransactionRecipientQueryClosure = searchTransactionRecipientQueryClosure {
+            return await searchTransactionRecipientQueryClosure(query)
+        } else {
+            return searchTransactionRecipientQueryReturnValue
+        }
+    }
+    //MARK: - claimRewards
+
+    var claimRewardsUserWalletAddressUnderlyingCallsCount = 0
+    var claimRewardsUserWalletAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return claimRewardsUserWalletAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimRewardsUserWalletAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimRewardsUserWalletAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimRewardsUserWalletAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var claimRewardsUserWalletAddressCalled: Bool {
+        return claimRewardsUserWalletAddressCallsCount > 0
+    }
+    var claimRewardsUserWalletAddressReceivedUserWalletAddress: String?
+    var claimRewardsUserWalletAddressReceivedInvocations: [String] = []
+
+    var claimRewardsUserWalletAddressUnderlyingReturnValue: Result<String, ZeroClientProxyError>!
+    var claimRewardsUserWalletAddressReturnValue: Result<String, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return claimRewardsUserWalletAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<String, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimRewardsUserWalletAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimRewardsUserWalletAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimRewardsUserWalletAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var claimRewardsUserWalletAddressClosure: ((String) async -> Result<String, ZeroClientProxyError>)?
+
+    func claimRewards(userWalletAddress: String) async -> Result<String, ZeroClientProxyError> {
+        claimRewardsUserWalletAddressCallsCount += 1
+        claimRewardsUserWalletAddressReceivedUserWalletAddress = userWalletAddress
+        DispatchQueue.main.async {
+            self.claimRewardsUserWalletAddressReceivedInvocations.append(userWalletAddress)
+        }
+        if let claimRewardsUserWalletAddressClosure = claimRewardsUserWalletAddressClosure {
+            return await claimRewardsUserWalletAddressClosure(userWalletAddress)
+        } else {
+            return claimRewardsUserWalletAddressReturnValue
+        }
+    }
+    //MARK: - getTokenInfo
+
+    var getTokenInfoTokenAddressChainIdUnderlyingCallsCount = 0
+    var getTokenInfoTokenAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getTokenInfoTokenAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTokenInfoTokenAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTokenInfoTokenAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTokenInfoTokenAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getTokenInfoTokenAddressChainIdCalled: Bool {
+        return getTokenInfoTokenAddressChainIdCallsCount > 0
+    }
+    var getTokenInfoTokenAddressChainIdReceivedArguments: (tokenAddress: String, chainId: UInt64)?
+    var getTokenInfoTokenAddressChainIdReceivedInvocations: [(tokenAddress: String, chainId: UInt64)] = []
+
+    var getTokenInfoTokenAddressChainIdUnderlyingReturnValue: Result<ZWalletTokenInfo, ZeroClientProxyError>!
+    var getTokenInfoTokenAddressChainIdReturnValue: Result<ZWalletTokenInfo, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getTokenInfoTokenAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTokenInfo, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTokenInfoTokenAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTokenInfoTokenAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTokenInfoTokenAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getTokenInfoTokenAddressChainIdClosure: ((String, UInt64) async -> Result<ZWalletTokenInfo, ZeroClientProxyError>)?
+
+    func getTokenInfo(tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenInfo, ZeroClientProxyError> {
+        getTokenInfoTokenAddressChainIdCallsCount += 1
+        getTokenInfoTokenAddressChainIdReceivedArguments = (tokenAddress: tokenAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getTokenInfoTokenAddressChainIdReceivedInvocations.append((tokenAddress: tokenAddress, chainId: chainId))
+        }
+        if let getTokenInfoTokenAddressChainIdClosure = getTokenInfoTokenAddressChainIdClosure {
+            return await getTokenInfoTokenAddressChainIdClosure(tokenAddress, chainId)
+        } else {
+            return getTokenInfoTokenAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getTokenBalance
+
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount = 0
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdCalled: Bool {
+        return getTokenBalanceUserWalletAddressTokenAddressChainIdCallsCount > 0
+    }
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedArguments: (userWalletAddress: String, tokenAddress: String, chainId: UInt64)?
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedInvocations: [(userWalletAddress: String, tokenAddress: String, chainId: UInt64)] = []
+
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue: Result<ZWalletTokenBalance, ZeroClientProxyError>!
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdReturnValue: Result<ZWalletTokenBalance, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTokenBalance, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTokenBalanceUserWalletAddressTokenAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getTokenBalanceUserWalletAddressTokenAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZWalletTokenBalance, ZeroClientProxyError>)?
+
+    func getTokenBalance(userWalletAddress: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenBalance, ZeroClientProxyError> {
+        getTokenBalanceUserWalletAddressTokenAddressChainIdCallsCount += 1
+        getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedArguments = (userWalletAddress: userWalletAddress, tokenAddress: tokenAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getTokenBalanceUserWalletAddressTokenAddressChainIdReceivedInvocations.append((userWalletAddress: userWalletAddress, tokenAddress: tokenAddress, chainId: chainId))
+        }
+        if let getTokenBalanceUserWalletAddressTokenAddressChainIdClosure = getTokenBalanceUserWalletAddressTokenAddressChainIdClosure {
+            return await getTokenBalanceUserWalletAddressTokenAddressChainIdClosure(userWalletAddress, tokenAddress, chainId)
+        } else {
+            return getTokenBalanceUserWalletAddressTokenAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getAvaxTokenPrice
+
+    var getAvaxTokenPriceTokenAddressUnderlyingCallsCount = 0
+    var getAvaxTokenPriceTokenAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getAvaxTokenPriceTokenAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getAvaxTokenPriceTokenAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getAvaxTokenPriceTokenAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getAvaxTokenPriceTokenAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getAvaxTokenPriceTokenAddressCalled: Bool {
+        return getAvaxTokenPriceTokenAddressCallsCount > 0
+    }
+    var getAvaxTokenPriceTokenAddressReceivedTokenAddress: String?
+    var getAvaxTokenPriceTokenAddressReceivedInvocations: [String] = []
+
+    var getAvaxTokenPriceTokenAddressUnderlyingReturnValue: Result<ZAvaxTokenPrice, ZeroClientProxyError>!
+    var getAvaxTokenPriceTokenAddressReturnValue: Result<ZAvaxTokenPrice, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getAvaxTokenPriceTokenAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZAvaxTokenPrice, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getAvaxTokenPriceTokenAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getAvaxTokenPriceTokenAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getAvaxTokenPriceTokenAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getAvaxTokenPriceTokenAddressClosure: ((String) async -> Result<ZAvaxTokenPrice, ZeroClientProxyError>)?
+
+    func getAvaxTokenPrice(tokenAddress: String) async -> Result<ZAvaxTokenPrice, ZeroClientProxyError> {
+        getAvaxTokenPriceTokenAddressCallsCount += 1
+        getAvaxTokenPriceTokenAddressReceivedTokenAddress = tokenAddress
+        DispatchQueue.main.async {
+            self.getAvaxTokenPriceTokenAddressReceivedInvocations.append(tokenAddress)
+        }
+        if let getAvaxTokenPriceTokenAddressClosure = getAvaxTokenPriceTokenAddressClosure {
+            return await getAvaxTokenPriceTokenAddressClosure(tokenAddress)
+        } else {
+            return getAvaxTokenPriceTokenAddressReturnValue
+        }
+    }
+    //MARK: - getTotalStaked
+
+    var getTotalStakedPoolAddressChainIdUnderlyingCallsCount = 0
+    var getTotalStakedPoolAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getTotalStakedPoolAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTotalStakedPoolAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTotalStakedPoolAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTotalStakedPoolAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getTotalStakedPoolAddressChainIdCalled: Bool {
+        return getTotalStakedPoolAddressChainIdCallsCount > 0
+    }
+    var getTotalStakedPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
+    var getTotalStakedPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
+
+    var getTotalStakedPoolAddressChainIdUnderlyingReturnValue: Result<String, ZeroClientProxyError>!
+    var getTotalStakedPoolAddressChainIdReturnValue: Result<String, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getTotalStakedPoolAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<String, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTotalStakedPoolAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTotalStakedPoolAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTotalStakedPoolAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getTotalStakedPoolAddressChainIdClosure: ((String, UInt64) async -> Result<String, ZeroClientProxyError>)?
+
+    func getTotalStaked(poolAddress: String, chainId: UInt64) async -> Result<String, ZeroClientProxyError> {
+        getTotalStakedPoolAddressChainIdCallsCount += 1
+        getTotalStakedPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getTotalStakedPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
+        }
+        if let getTotalStakedPoolAddressChainIdClosure = getTotalStakedPoolAddressChainIdClosure {
+            return await getTotalStakedPoolAddressChainIdClosure(poolAddress, chainId)
+        } else {
+            return getTotalStakedPoolAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getStakingConfig
+
+    var getStakingConfigPoolAddressChainIdUnderlyingCallsCount = 0
+    var getStakingConfigPoolAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getStakingConfigPoolAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakingConfigPoolAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakingConfigPoolAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakingConfigPoolAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getStakingConfigPoolAddressChainIdCalled: Bool {
+        return getStakingConfigPoolAddressChainIdCallsCount > 0
+    }
+    var getStakingConfigPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
+    var getStakingConfigPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
+
+    var getStakingConfigPoolAddressChainIdUnderlyingReturnValue: Result<ZStackingConfig, ZeroClientProxyError>!
+    var getStakingConfigPoolAddressChainIdReturnValue: Result<ZStackingConfig, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getStakingConfigPoolAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZStackingConfig, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakingConfigPoolAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakingConfigPoolAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakingConfigPoolAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getStakingConfigPoolAddressChainIdClosure: ((String, UInt64) async -> Result<ZStackingConfig, ZeroClientProxyError>)?
+
+    func getStakingConfig(poolAddress: String, chainId: UInt64) async -> Result<ZStackingConfig, ZeroClientProxyError> {
+        getStakingConfigPoolAddressChainIdCallsCount += 1
+        getStakingConfigPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getStakingConfigPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
+        }
+        if let getStakingConfigPoolAddressChainIdClosure = getStakingConfigPoolAddressChainIdClosure {
+            return await getStakingConfigPoolAddressChainIdClosure(poolAddress, chainId)
+        } else {
+            return getStakingConfigPoolAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getStakerStatusInfo
+
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = 0
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdCalled: Bool {
+        return getStakerStatusInfoUserWalletAddressPoolAddressChainIdCallsCount > 0
+    }
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedArguments: (userWalletAddress: String, poolAddress: String, chainId: UInt64)?
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedInvocations: [(userWalletAddress: String, poolAddress: String, chainId: UInt64)] = []
+
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue: Result<ZStakingStatus, ZeroClientProxyError>!
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdReturnValue: Result<ZStakingStatus, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZStakingStatus, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakerStatusInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZStakingStatus, ZeroClientProxyError>)?
+
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingStatus, ZeroClientProxyError> {
+        getStakerStatusInfoUserWalletAddressPoolAddressChainIdCallsCount += 1
+        getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedArguments = (userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getStakerStatusInfoUserWalletAddressPoolAddressChainIdReceivedInvocations.append((userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId))
+        }
+        if let getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure = getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure {
+            return await getStakerStatusInfoUserWalletAddressPoolAddressChainIdClosure(userWalletAddress, poolAddress, chainId)
+        } else {
+            return getStakerStatusInfoUserWalletAddressPoolAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getStakeRewardsInfo
+
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = 0
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCalled: Bool {
+        return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCallsCount > 0
+    }
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedArguments: (userWalletAddress: String, poolAddress: String, chainId: UInt64)?
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedInvocations: [(userWalletAddress: String, poolAddress: String, chainId: UInt64)] = []
+
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue: Result<ZStakingUserRewardsInfo, ZeroClientProxyError>!
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReturnValue: Result<ZStakingUserRewardsInfo, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZStakingUserRewardsInfo, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakeRewardsInfoUserWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZStakingUserRewardsInfo, ZeroClientProxyError>)?
+
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingUserRewardsInfo, ZeroClientProxyError> {
+        getStakeRewardsInfoUserWalletAddressPoolAddressChainIdCallsCount += 1
+        getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedArguments = (userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReceivedInvocations.append((userWalletAddress: userWalletAddress, poolAddress: poolAddress, chainId: chainId))
+        }
+        if let getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure = getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure {
+            return await getStakeRewardsInfoUserWalletAddressPoolAddressChainIdClosure(userWalletAddress, poolAddress, chainId)
+        } else {
+            return getStakeRewardsInfoUserWalletAddressPoolAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getStakingToken
+
+    var getStakingTokenPoolAddressChainIdUnderlyingCallsCount = 0
+    var getStakingTokenPoolAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getStakingTokenPoolAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakingTokenPoolAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakingTokenPoolAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakingTokenPoolAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getStakingTokenPoolAddressChainIdCalled: Bool {
+        return getStakingTokenPoolAddressChainIdCallsCount > 0
+    }
+    var getStakingTokenPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
+    var getStakingTokenPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
+
+    var getStakingTokenPoolAddressChainIdUnderlyingReturnValue: Result<ZWalletStakingToken, ZeroClientProxyError>!
+    var getStakingTokenPoolAddressChainIdReturnValue: Result<ZWalletStakingToken, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getStakingTokenPoolAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletStakingToken, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getStakingTokenPoolAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getStakingTokenPoolAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getStakingTokenPoolAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getStakingTokenPoolAddressChainIdClosure: ((String, UInt64) async -> Result<ZWalletStakingToken, ZeroClientProxyError>)?
+
+    func getStakingToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingToken, ZeroClientProxyError> {
+        getStakingTokenPoolAddressChainIdCallsCount += 1
+        getStakingTokenPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getStakingTokenPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
+        }
+        if let getStakingTokenPoolAddressChainIdClosure = getStakingTokenPoolAddressChainIdClosure {
+            return await getStakingTokenPoolAddressChainIdClosure(poolAddress, chainId)
+        } else {
+            return getStakingTokenPoolAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getRewardsToken
+
+    var getRewardsTokenPoolAddressChainIdUnderlyingCallsCount = 0
+    var getRewardsTokenPoolAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRewardsTokenPoolAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRewardsTokenPoolAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRewardsTokenPoolAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRewardsTokenPoolAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getRewardsTokenPoolAddressChainIdCalled: Bool {
+        return getRewardsTokenPoolAddressChainIdCallsCount > 0
+    }
+    var getRewardsTokenPoolAddressChainIdReceivedArguments: (poolAddress: String, chainId: UInt64)?
+    var getRewardsTokenPoolAddressChainIdReceivedInvocations: [(poolAddress: String, chainId: UInt64)] = []
+
+    var getRewardsTokenPoolAddressChainIdUnderlyingReturnValue: Result<ZWalletStakingRewardsToken, ZeroClientProxyError>!
+    var getRewardsTokenPoolAddressChainIdReturnValue: Result<ZWalletStakingRewardsToken, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getRewardsTokenPoolAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletStakingRewardsToken, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRewardsTokenPoolAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRewardsTokenPoolAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRewardsTokenPoolAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getRewardsTokenPoolAddressChainIdClosure: ((String, UInt64) async -> Result<ZWalletStakingRewardsToken, ZeroClientProxyError>)?
+
+    func getRewardsToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingRewardsToken, ZeroClientProxyError> {
+        getRewardsTokenPoolAddressChainIdCallsCount += 1
+        getRewardsTokenPoolAddressChainIdReceivedArguments = (poolAddress: poolAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.getRewardsTokenPoolAddressChainIdReceivedInvocations.append((poolAddress: poolAddress, chainId: chainId))
+        }
+        if let getRewardsTokenPoolAddressChainIdClosure = getRewardsTokenPoolAddressChainIdClosure {
+            return await getRewardsTokenPoolAddressChainIdClosure(poolAddress, chainId)
+        } else {
+            return getRewardsTokenPoolAddressChainIdReturnValue
+        }
+    }
+    //MARK: - stakeAmount
+
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount = 0
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCalled: Bool {
+        return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount > 0
+    }
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64)?
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64)] = []
+
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>!
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure: ((String, String, String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError>)?
+
+    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError> {
+        stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount += 1
+        stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, tokenAddress: tokenAddress, amount: amount, chainId: chainId)
+        DispatchQueue.main.async {
+            self.stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, tokenAddress: tokenAddress, amount: amount, chainId: chainId))
+        }
+        if let stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure = stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure {
+            return await stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure(walletAddress, poolAddress, tokenAddress, amount, chainId)
+        } else {
+            return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReturnValue
+        }
+    }
+    //MARK: - unstakeAmount
+
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount = 0
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdCalled: Bool {
+        return unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount > 0
+    }
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, amount: String, chainId: UInt64)?
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64)] = []
+
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>!
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdClosure: ((String, String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError>)?
+
+    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError> {
+        unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount += 1
+        unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, amount: amount, chainId: chainId)
+        DispatchQueue.main.async {
+            self.unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, amount: amount, chainId: chainId))
+        }
+        if let unstakeAmountWalletAddressPoolAddressAmountChainIdClosure = unstakeAmountWalletAddressPoolAddressAmountChainIdClosure {
+            return await unstakeAmountWalletAddressPoolAddressAmountChainIdClosure(walletAddress, poolAddress, amount, chainId)
+        } else {
+            return unstakeAmountWalletAddressPoolAddressAmountChainIdReturnValue
+        }
+    }
+    //MARK: - claimStakeRewards
+
+    var claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount = 0
+    var claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var claimStakeRewardsWalletAddressPoolAddressChainIdCalled: Bool {
+        return claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount > 0
+    }
+    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedArguments: (walletAddress: String, poolAddress: String, chainId: UInt64)?
+    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, chainId: UInt64)] = []
+
+    var claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>!
+    var claimStakeRewardsWalletAddressPoolAddressChainIdReturnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var claimStakeRewardsWalletAddressPoolAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError>)?
+
+    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ZeroClientProxyError> {
+        claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount += 1
+        claimStakeRewardsWalletAddressPoolAddressChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, chainId: chainId)
+        DispatchQueue.main.async {
+            self.claimStakeRewardsWalletAddressPoolAddressChainIdReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, chainId: chainId))
+        }
+        if let claimStakeRewardsWalletAddressPoolAddressChainIdClosure = claimStakeRewardsWalletAddressPoolAddressChainIdClosure {
+            return await claimStakeRewardsWalletAddressPoolAddressChainIdClosure(walletAddress, poolAddress, chainId)
+        } else {
+            return claimStakeRewardsWalletAddressPoolAddressChainIdReturnValue
+        }
+    }
+    //MARK: - getLinkPreviewMetaData
+
+    var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0
+    var getLinkPreviewMetaDataUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getLinkPreviewMetaDataUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLinkPreviewMetaDataUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLinkPreviewMetaDataUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLinkPreviewMetaDataUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getLinkPreviewMetaDataUrlCalled: Bool {
+        return getLinkPreviewMetaDataUrlCallsCount > 0
+    }
+    var getLinkPreviewMetaDataUrlReceivedUrl: String?
+    var getLinkPreviewMetaDataUrlReceivedInvocations: [String] = []
+
+    var getLinkPreviewMetaDataUrlUnderlyingReturnValue: Result<ZLinkPreview, ZeroClientProxyError>!
+    var getLinkPreviewMetaDataUrlReturnValue: Result<ZLinkPreview, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getLinkPreviewMetaDataUrlUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZLinkPreview, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLinkPreviewMetaDataUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLinkPreviewMetaDataUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLinkPreviewMetaDataUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getLinkPreviewMetaDataUrlClosure: ((String) async -> Result<ZLinkPreview, ZeroClientProxyError>)?
+
+    func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ZeroClientProxyError> {
+        getLinkPreviewMetaDataUrlCallsCount += 1
+        getLinkPreviewMetaDataUrlReceivedUrl = url
+        DispatchQueue.main.async {
+            self.getLinkPreviewMetaDataUrlReceivedInvocations.append(url)
+        }
+        if let getLinkPreviewMetaDataUrlClosure = getLinkPreviewMetaDataUrlClosure {
+            return await getLinkPreviewMetaDataUrlClosure(url)
+        } else {
+            return getLinkPreviewMetaDataUrlReturnValue
+        }
+    }
+    //MARK: - getPostMediaInfo
+
+    var getPostMediaInfoMediaIdUnderlyingCallsCount = 0
+    var getPostMediaInfoMediaIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getPostMediaInfoMediaIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getPostMediaInfoMediaIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getPostMediaInfoMediaIdCalled: Bool {
+        return getPostMediaInfoMediaIdCallsCount > 0
+    }
+    var getPostMediaInfoMediaIdReceivedMediaId: String?
+    var getPostMediaInfoMediaIdReceivedInvocations: [String] = []
+
+    var getPostMediaInfoMediaIdUnderlyingReturnValue: Result<ZPostMedia, ZeroClientProxyError>!
+    var getPostMediaInfoMediaIdReturnValue: Result<ZPostMedia, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getPostMediaInfoMediaIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPostMedia, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getPostMediaInfoMediaIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getPostMediaInfoMediaIdClosure: ((String) async -> Result<ZPostMedia, ZeroClientProxyError>)?
+
+    func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ZeroClientProxyError> {
+        getPostMediaInfoMediaIdCallsCount += 1
+        getPostMediaInfoMediaIdReceivedMediaId = mediaId
+        DispatchQueue.main.async {
+            self.getPostMediaInfoMediaIdReceivedInvocations.append(mediaId)
+        }
+        if let getPostMediaInfoMediaIdClosure = getPostMediaInfoMediaIdClosure {
+            return await getPostMediaInfoMediaIdClosure(mediaId)
+        } else {
+            return getPostMediaInfoMediaIdReturnValue
+        }
+    }
+    //MARK: - fetchYoutubeLinkMetaData
+
+    var fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = 0
+    var fetchYoutubeLinkMetaDataYoutubrUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchYoutubeLinkMetaDataYoutubrUrlCalled: Bool {
+        return fetchYoutubeLinkMetaDataYoutubrUrlCallsCount > 0
+    }
+    var fetchYoutubeLinkMetaDataYoutubrUrlReceivedYoutubrUrl: String?
+    var fetchYoutubeLinkMetaDataYoutubrUrlReceivedInvocations: [String] = []
+
+    var fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue: Result<ZLinkPreview, ZeroClientProxyError>!
+    var fetchYoutubeLinkMetaDataYoutubrUrlReturnValue: Result<ZLinkPreview, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZLinkPreview, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchYoutubeLinkMetaDataYoutubrUrlClosure: ((String) async -> Result<ZLinkPreview, ZeroClientProxyError>)?
+
+    func fetchYoutubeLinkMetaData(youtubrUrl: String) async -> Result<ZLinkPreview, ZeroClientProxyError> {
+        fetchYoutubeLinkMetaDataYoutubrUrlCallsCount += 1
+        fetchYoutubeLinkMetaDataYoutubrUrlReceivedYoutubrUrl = youtubrUrl
+        DispatchQueue.main.async {
+            self.fetchYoutubeLinkMetaDataYoutubrUrlReceivedInvocations.append(youtubrUrl)
+        }
+        if let fetchYoutubeLinkMetaDataYoutubrUrlClosure = fetchYoutubeLinkMetaDataYoutubrUrlClosure {
+            return await fetchYoutubeLinkMetaDataYoutubrUrlClosure(youtubrUrl)
+        } else {
+            return fetchYoutubeLinkMetaDataYoutubrUrlReturnValue
+        }
+    }
+    //MARK: - loadFileFromUrl
+
+    var loadFileFromUrlKeyThrowableError: Error?
+    var loadFileFromUrlKeyUnderlyingCallsCount = 0
+    var loadFileFromUrlKeyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromUrlKeyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromUrlKeyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromUrlKeyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromUrlKeyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromUrlKeyCalled: Bool {
+        return loadFileFromUrlKeyCallsCount > 0
+    }
+    var loadFileFromUrlKeyReceivedArguments: (remoteUrl: URL, key: String)?
+    var loadFileFromUrlKeyReceivedInvocations: [(remoteUrl: URL, key: String)] = []
+
+    var loadFileFromUrlKeyUnderlyingReturnValue: Result<URL, ZeroClientProxyError>!
+    var loadFileFromUrlKeyReturnValue: Result<URL, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromUrlKeyUnderlyingReturnValue
+            } else {
+                var returnValue: Result<URL, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromUrlKeyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromUrlKeyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromUrlKeyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromUrlKeyClosure: ((URL, String) async throws -> Result<URL, ZeroClientProxyError>)?
+
+    func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, ZeroClientProxyError> {
+        if let error = loadFileFromUrlKeyThrowableError {
+            throw error
+        }
+        loadFileFromUrlKeyCallsCount += 1
+        loadFileFromUrlKeyReceivedArguments = (remoteUrl: remoteUrl, key: key)
+        DispatchQueue.main.async {
+            self.loadFileFromUrlKeyReceivedInvocations.append((remoteUrl: remoteUrl, key: key))
+        }
+        if let loadFileFromUrlKeyClosure = loadFileFromUrlKeyClosure {
+            return try await loadFileFromUrlKeyClosure(remoteUrl, key)
+        } else {
+            return loadFileFromUrlKeyReturnValue
+        }
+    }
+    //MARK: - loadFileFromMediaId
+
+    var loadFileFromMediaIdKeyThrowableError: Error?
+    var loadFileFromMediaIdKeyUnderlyingCallsCount = 0
+    var loadFileFromMediaIdKeyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromMediaIdKeyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromMediaIdKeyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromMediaIdKeyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromMediaIdKeyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromMediaIdKeyCalled: Bool {
+        return loadFileFromMediaIdKeyCallsCount > 0
+    }
+    var loadFileFromMediaIdKeyReceivedArguments: (mediaId: String, key: String)?
+    var loadFileFromMediaIdKeyReceivedInvocations: [(mediaId: String, key: String)] = []
+
+    var loadFileFromMediaIdKeyUnderlyingReturnValue: Result<URL, ZeroClientProxyError>!
+    var loadFileFromMediaIdKeyReturnValue: Result<URL, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromMediaIdKeyUnderlyingReturnValue
+            } else {
+                var returnValue: Result<URL, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromMediaIdKeyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromMediaIdKeyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromMediaIdKeyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromMediaIdKeyClosure: ((String, String) async throws -> Result<URL, ZeroClientProxyError>)?
+
+    func loadFileFromMediaId(_ mediaId: String, key: String) async throws -> Result<URL, ZeroClientProxyError> {
+        if let error = loadFileFromMediaIdKeyThrowableError {
+            throw error
+        }
+        loadFileFromMediaIdKeyCallsCount += 1
+        loadFileFromMediaIdKeyReceivedArguments = (mediaId: mediaId, key: key)
+        DispatchQueue.main.async {
+            self.loadFileFromMediaIdKeyReceivedInvocations.append((mediaId: mediaId, key: key))
+        }
+        if let loadFileFromMediaIdKeyClosure = loadFileFromMediaIdKeyClosure {
+            return try await loadFileFromMediaIdKeyClosure(mediaId, key)
+        } else {
+            return loadFileFromMediaIdKeyReturnValue
+        }
     }
 }
 // swiftlint:enable all

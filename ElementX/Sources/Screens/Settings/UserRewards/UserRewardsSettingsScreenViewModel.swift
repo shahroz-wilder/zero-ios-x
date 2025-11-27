@@ -13,13 +13,13 @@ class UserRewardsSettingsScreenViewModel:
             )
         )
         
-        userSession.clientProxy.userRewardsPublisher
+        userSession.clientProxy.zeroClient.userRewardsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.bindings.userRewards, on: self)
             .store(in: &cancellables)
         
         Task {
-            await userSession.clientProxy.getUserRewards(shouldCheckRewardsIntiamtion: false)
+            await userSession.clientProxy.zeroClient.getUserRewards(shouldCheckRewardsIntiamtion: false)
         }
     }
 }

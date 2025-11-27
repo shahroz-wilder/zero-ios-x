@@ -113,7 +113,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         }
         
         do {
-            let verifyPasswordResult = await clientProxy.verifyUserPassword(password)
+            let verifyPasswordResult = await clientProxy.zeroClient.verifyUserPassword(password)
             switch verifyPasswordResult {
             case .success:
                 try await identityResetHandle.reset(auth: .password(passwordDetails: .init(identifier: clientProxy.userID, password: password)))

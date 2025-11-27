@@ -74,7 +74,7 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
     private func updateUserProfile() {
         startLoading()
         Task {
-            switch await clientProxy.completeUserAccountProfile(avatar: state.localMedia,
+            switch await clientProxy.zeroClient.completeUserAccountProfile(avatar: state.localMedia,
                                                                 displayName: state.bindings.name,
                                                                 inviteCode: state.inviteCode) {
             case .success:
@@ -100,7 +100,7 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
-    private func handleError(error: ClientProxyError) {
+    private func handleError(error: ZeroClientProxyError) {
         userIndicatorController.alertInfo = AlertInfo(id: UUID())
     }
 }

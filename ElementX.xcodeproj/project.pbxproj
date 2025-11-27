@@ -2068,6 +2068,10 @@
 		797751862DDB2522006CF62D /* ZPostUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797751842DDB251B006CF62D /* ZPostUserProfile.swift */; };
 		7977518E2DDB4780006CF62D /* FeedUserProfileDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977518D2DDB4777006CF62D /* FeedUserProfileDetailsView.swift */; };
 		7977518F2DDB4780006CF62D /* FeedUserProfileDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977518D2DDB4777006CF62D /* FeedUserProfileDetailsView.swift */; };
+		798006962ED831140040BB69 /* ZeroClientProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798006952ED8310A0040BB69 /* ZeroClientProxyProtocol.swift */; };
+		798006972ED831140040BB69 /* ZeroClientProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798006952ED8310A0040BB69 /* ZeroClientProxyProtocol.swift */; };
+		798006992ED8311E0040BB69 /* ZeroClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798006982ED8311A0040BB69 /* ZeroClientProxy.swift */; };
+		7980069A2ED8311E0040BB69 /* ZeroClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798006982ED8311A0040BB69 /* ZeroClientProxy.swift */; };
 		798457582D5FDEF60039623F /* ZPostMeowAmountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */; };
 		798457592D5FDEF60039623F /* ZPostMeowAmountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */; };
 		7984575B2D6084710039623F /* HomeScreenPostFooterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */; };
@@ -4020,6 +4024,8 @@
 		797751812DDB2499006CF62D /* ZeroPostUserApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPostUserApi.swift; sourceTree = "<group>"; };
 		797751842DDB251B006CF62D /* ZPostUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPostUserProfile.swift; sourceTree = "<group>"; };
 		7977518D2DDB4777006CF62D /* FeedUserProfileDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUserProfileDetailsView.swift; sourceTree = "<group>"; };
+		798006952ED8310A0040BB69 /* ZeroClientProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroClientProxyProtocol.swift; sourceTree = "<group>"; };
+		798006982ED8311A0040BB69 /* ZeroClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroClientProxy.swift; sourceTree = "<group>"; };
 		798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPostMeowAmountResponse.swift; sourceTree = "<group>"; };
 		7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostFooterItem.swift; sourceTree = "<group>"; };
 		7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostMeowButton.swift; sourceTree = "<group>"; };
@@ -5625,6 +5631,7 @@
 		18C852FE2D11A127009AF206 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				798006942ED830E70040BB69 /* Client */,
 				79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */,
 				79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */,
 				18C852FF2D11A12E009AF206 /* WalletConnectService.swift */,
@@ -7603,6 +7610,15 @@
 				7977517E2DD9F8C1006CF62D /* FeedUserProfileScreenView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		798006942ED830E70040BB69 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				798006982ED8311A0040BB69 /* ZeroClientProxy.swift */,
+				798006952ED8310A0040BB69 /* ZeroClientProxyProtocol.swift */,
+			);
+			path = Client;
 			sourceTree = "<group>";
 		};
 		799D856F2E270302000A362A /* Receive */ = {
@@ -10886,6 +10902,7 @@
 				18E9A4992C9829970082DDA4 /* CallInviteRoomTimelineItem.swift in Sources */,
 				79A49F702D917196005D365D /* TraceLogPack.swift in Sources */,
 				18E9A49A2C9829970082DDA4 /* CallInviteRoomTimelineView.swift in Sources */,
+				798006962ED831140040BB69 /* ZeroClientProxyProtocol.swift in Sources */,
 				18E9A49B2C9829970082DDA4 /* CallNotificationRoomTimelineItem.swift in Sources */,
 				18E9A49C2C9829970082DDA4 /* CallNotificationRoomTimelineView.swift in Sources */,
 				18E9A49D2C9829970082DDA4 /* CallScreen.swift in Sources */,
@@ -11117,6 +11134,7 @@
 				18E9A5362C9829970082DDA4 /* ImageRoomTimelineItemContent.swift in Sources */,
 				79C6BB272D47B73B00FC3CBF /* RoomMembershipDetailsProxyProtocol.swift in Sources */,
 				790922392E1DC8CF00833940 /* ZFinaliseCreateAccount.swift in Sources */,
+				798006992ED8311E0040BB69 /* ZeroClientProxy.swift in Sources */,
 				7909223A2E1DC8CF00833940 /* ZWalletTransferNFT.swift in Sources */,
 				7909223B2E1DC8CF00833940 /* ZPostMeowAmount.swift in Sources */,
 				7909223C2E1DC8CF00833940 /* ZCreateAccount.swift in Sources */,
@@ -12745,6 +12763,7 @@
 				46A261AA898344A1F3C406B1 /* ReportContentScreenModels.swift in Sources */,
 				42A5A42ACF063EEE6B1980D2 /* ReportContentScreenViewModel.swift in Sources */,
 				8285FF4B2C2331758C437FF7 /* ReportContentScreenViewModelProtocol.swift in Sources */,
+				798006972ED831140040BB69 /* ZeroClientProxyProtocol.swift in Sources */,
 				790AB7A42E1BE16700555B1F /* ZeroProSubcriptionScreenCoordinator.swift in Sources */,
 				9CCF6711DD50BFF8B5ACE9CF /* ReportRoomScreen.swift in Sources */,
 				1C598D3B785645AAC7B35760 /* ReportRoomScreenCoordinator.swift in Sources */,
@@ -13163,6 +13182,7 @@
 				6EB46C92ECFEAE71959D91D2 /* TimelineReplyView.swift in Sources */,
 				FD439E183A48BE871AEEFAEA /* TimelineScrollToBottomButton.swift in Sources */,
 				9FBE1FB20171012260A32492 /* TimelineSenderAvatarView.swift in Sources */,
+				7980069A2ED8311E0040BB69 /* ZeroClientProxy.swift in Sources */,
 				C4FE0E11A907C8999F92D5A8 /* TimelineStartRoomTimelineItem.swift in Sources */,
 				790922502E1DCC2600833940 /* TransferTokenCoordinator.swift in Sources */,
 				785613C0C092B532198EB3BB /* TimelineStartRoomTimelineView.swift in Sources */,

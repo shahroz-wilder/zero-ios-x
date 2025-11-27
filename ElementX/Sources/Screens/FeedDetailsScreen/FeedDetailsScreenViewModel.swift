@@ -45,7 +45,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         }),
                                                                  clientProxy: userSession.clientProxy)
         
-        userSession.clientProxy.userRewardsPublisher
+        userSession.clientProxy.zeroClient.userRewardsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userRewards, on: self)
             .store(in: &cancellables)
@@ -55,7 +55,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        clientProxy.zeroCurrentUserPublisher
+        clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.currentUserWalletAddress = currentUser.publicWalletAddress
@@ -100,7 +100,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     
     private func fetchFeed(_ feedId: String) {
         Task {
-            let feedResult = await clientProxy.fetchFeedDetails(feedId: feedId)
+            let feedResult = await clientProxy.zeroClient.fetchFeedDetails(feedId: feedId)
             switch feedResult {
             case .success(let feed):
                 let homePost = HomeScreenPost.init(loggedInUserId: clientProxy.userID, post: feed)
@@ -122,7 +122,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             
             state.repliesListMode = state.feedReplies.isEmpty ? .skeletons : .replies
             let skipItems = isForceRefresh ? 0 : state.feedReplies.count
-            let repliesResult = await clientProxy.fetchFeedReplies(feedId: feedId, limit: POST_REPLIES_PAGE_COUNT,
+            let repliesResult = await clientProxy.zeroClient.fetchFeedReplies(feedId: feedId, limit: POST_REPLIES_PAGE_COUNT,
                                                                    skip: skipItems)
             switch repliesResult {
             case .success(let replies):
@@ -186,7 +186,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         }
         
         Task(priority: .background) {
-            let result = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            let result = await clientProxy.zeroClient.addMeowsToFeed(feedId: postId, amount: amount)
             switch result {
             case .success(let post):
                 let homePost = HomeScreenPost(loggedInUserId: clientProxy.userID, post: post, rewardsDecimalPlaces: state.userRewards.decimals)
@@ -236,7 +236,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: "Posting...",
                                                                   persistent: true))
-            let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
+            let postFeedResult = await clientProxy.zeroClient.postNewFeed(channelZId: defaultChannelZId,
                                                                walletAddress: userWalletAddress,
                                                                content: state.bindings.myPostReply,
                                                                replyToPost: state.bindings.feed.id,
@@ -277,7 +277,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 guard let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText) else { continue }
                 group.addTask {
                     if let previewResult = await withTimeout(seconds: 5, operation: {
-                        await self.clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
+                        await self.clientProxy.zeroClient.fetchYoutubeLinkMetaData(youtubrUrl: url)
                     }), case let .success(preview) = previewResult {
                         return (post.id, preview)
                     }
@@ -305,7 +305,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             }
             
             do {
-                if case let .success(localUrl) = try await clientProxy.loadFileFromMediaId(mediaId, key: state.bindings.feed.id) {
+                if case let .success(localUrl) = try await clientProxy.zeroClient.loadFileFromMediaId(mediaId, key: state.bindings.feed.id) {
                     state.bindings.mediaPreviewItem = localUrl
                 }
             } catch {

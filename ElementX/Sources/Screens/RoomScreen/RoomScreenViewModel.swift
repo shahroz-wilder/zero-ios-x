@@ -456,7 +456,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 return
             }
             
-            clientProxy.directMemberZeroProfilePublisher
+            clientProxy.zeroClient.directMemberZeroProfilePublisher
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] directMember in
                     guard let self else { return }
@@ -467,7 +467,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
                 .store(in: &cancellables)
             
-            await clientProxy.zeroProfile(userId: otherMemberId)
+            await clientProxy.zeroClient.zeroProfile(userId: otherMemberId)
         }
     }
 }

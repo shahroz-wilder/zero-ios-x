@@ -61,7 +61,7 @@ final class FeedMediaPreFetchService {
         let loadedCount = following ? loadedFollowingPostsCount : loadedAllPostsCount
         if loadedCount - currentCount > FEED_LOAD_OFFSET { return }
 
-        let result = await clientProxy.fetchZeroFeeds(channelZId: nil,
+        let result = await clientProxy.zeroClient.fetchZeroFeeds(channelZId: nil,
                                                       following: following,
                                                       limit: FEED_LOAD_SIZE,
                                                       skip: loadedCount)
@@ -83,7 +83,7 @@ final class FeedMediaPreFetchService {
         }
         if loadedFeedRepliesCount - currentCount > FEED_LOAD_OFFSET { return }
 
-        let result = await clientProxy.fetchFeedReplies(feedId: postId,
+        let result = await clientProxy.zeroClient.fetchFeedReplies(feedId: postId,
                                                         limit: FEED_LOAD_SIZE,
                                                         skip: loadedFeedRepliesCount)
         guard case .success(let posts) = result else {
@@ -99,7 +99,7 @@ final class FeedMediaPreFetchService {
         }
         if loadedUserFeedsCount - currentCount > FEED_LOAD_OFFSET { return }
 
-        let result = await clientProxy.fetchUserFeeds(userId: userId,
+        let result = await clientProxy.zeroClient.fetchUserFeeds(userId: userId,
                                                       limit: FEED_LOAD_SIZE,
                                                       skip: loadedUserFeedsCount)
         guard case .success(let posts) = result else {
@@ -113,7 +113,7 @@ final class FeedMediaPreFetchService {
         guard let mediaInfo = post.mediaInfo else { return }
         
         Task.detached {
-            let file = try await self.clientProxy.loadFileFromMediaId(mediaInfo.id, key: post.id)
+            let file = try await self.clientProxy.zeroClient.loadFileFromMediaId(mediaInfo.id, key: post.id)
             if case .success(let url) = file {
                 onMediaReloaded(mediaInfo.withUpdatedUrl(mediaUrl: url))
             }
@@ -132,7 +132,7 @@ final class FeedMediaPreFetchService {
             for post in mediaPosts {
                 group.addTask {
                     let result = await withTimeout(seconds: 10) {
-                        await self.clientProxy.getPostMediaInfo(mediaId: post.mediaInfo!.id)
+                        await self.clientProxy.zeroClient.getPostMediaInfo(mediaId: post.mediaInfo!.id)
                     }
                     if case .success(let media) = result, let remoteUrl = URL(string: media.signedUrl) {
                         let fileName = remoteUrl.sanitizedFileName(key: post.id)
@@ -181,7 +181,7 @@ final class FeedMediaPreFetchService {
                     guard let url = URL(string: media.signedUrl) else { return (postId, nil) }
 
                     do {
-                        let fileResult = try await self.clientProxy.loadFileFromUrl(url, key: postId)
+                        let fileResult = try await self.clientProxy.zeroClient.loadFileFromUrl(url, key: postId)
                         switch fileResult {
                         case .success(let localUrl):
                             return (postId, media.withUrl(localUrl))

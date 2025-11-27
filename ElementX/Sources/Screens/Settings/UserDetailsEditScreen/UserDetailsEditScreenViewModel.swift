@@ -58,7 +58,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             }
             .store(in: &cancellables)
         
-        clientProxy.zeroCurrentUserPublisher
+        clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 guard let self else { return }
@@ -167,7 +167,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     
     private func fetchUserZIds() {
         Task {
-            let result = await clientProxy.fetchUserZIds()
+            let result = await clientProxy.zeroClient.fetchUserZIds()
             switch result {
             case .success(let zIds):
                 var userZIds: [String] = zIds

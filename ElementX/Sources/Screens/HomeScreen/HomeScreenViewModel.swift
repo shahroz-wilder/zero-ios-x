@@ -72,7 +72,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.zeroCurrentUserPublisher
+        userSession.clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUserZeroProfile = currentUser
@@ -116,12 +116,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
             .store(in: &cancellables)
         
-        userSession.clientProxy.userRewardsPublisher
+        userSession.clientProxy.zeroClient.userRewardsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userRewards, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.showNewUserRewardsIntimationPublisher
+        userSession.clientProxy.zeroClient.showNewUserRewardsIntimationPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.showNewUserRewardsIntimation, on: self)
             .store(in: &cancellables)
@@ -154,7 +154,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.homeRoomSummariesUsersPublisher
+        userSession.clientProxy.zeroClient.homeRoomSummariesUsersPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] users in
@@ -663,7 +663,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func loadUserRewards() {
         Task.detached {
             try await Task.sleep(for: .seconds(2))
-            _ = await self.userSession.clientProxy.getUserRewards(shouldCheckRewardsIntiamtion: true)
+            _ = await self.userSession.clientProxy.zeroClient.getUserRewards(shouldCheckRewardsIntiamtion: true)
         }
     }
     
@@ -680,7 +680,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         toggleSyncing()
         
         Task.detached {
-            async let checkUser: () = self.userSession.clientProxy.checkAndLinkZeroUser()
+            async let checkUser: () = self.userSession.clientProxy.zeroClient.checkAndLinkZeroUser()
             async let channels: () = self.fetchChannels()
 //            async let posts: () = fetchPosts()
             _ = await (checkUser, channels)
@@ -695,12 +695,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func checkAndLinkZeroUser() async {
-        await userSession.clientProxy.checkAndLinkZeroUser()
+        await userSession.clientProxy.zeroClient.checkAndLinkZeroUser()
     }
     
     private func fetchChannels(isForceRefresh: Bool = false) async {
         state.channelsListMode = .skeletons
-        let channelsResult = await userSession.clientProxy.fetchUserZIds()
+        let channelsResult = await userSession.clientProxy.zeroClient.fetchUserZIds()
         switch channelsResult {
         case .success(let zIds):
             if zIds.isEmpty {
@@ -741,7 +741,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 getRoomInfoFromAlias(channel.id)
             case .failure(let error):
                 MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
-                let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channel.id)
+                let joinChannelResult = await userSession.clientProxy.zeroClient.joinChannel(roomAliasOrId: channel.id)
                 switch joinChannelResult {
                 case .success(let roomId):
                     actionsSubject.send(.presentRoom(roomIdentifier: roomId))
@@ -824,7 +824,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 // Add current logged-in user as well
                 await userIds.insert(self.userSession.clientProxy.userID)
                 
-                await self.userSession.clientProxy.zeroProfiles(userIds: userIds)
+                await self.userSession.clientProxy.zeroClient.zeroProfiles(userIds: userIds)
             }
         }
     }
@@ -917,7 +917,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             state.bindings.showEarningsClaimedSheet = true
             state.claimableUserRewards = state.userRewards
             Task {
-                let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
+                let result = await userSession.clientProxy.zeroClient.claimRewards(userWalletAddress: walletAddress)
                 switch result {
                 case .success(let transactionHash):
                     state.claimRewardsState = .success(transactionHash)
