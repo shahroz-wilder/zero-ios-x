@@ -14,16 +14,16 @@ struct RoomMembersListScreen: View {
     
     var body: some View {
         ScrollView {
-            if context.viewState.canBanUsers, context.viewState.bannedMembersCount > 0 {
-                Picker("", selection: $context.mode) {
-                    Text(L10n.screenRoomMemberListModeMembers)
-                        .tag(RoomMembersListScreenMode.members)
-                    Text(L10n.screenRoomMemberListModeBanned)
-                        .tag(RoomMembersListScreenMode.banned)
-                }
-                .pickerStyle(.segmented)
-                .padding(ListRowPadding.insets)
-            }
+//            if context.viewState.canBanUsers, context.viewState.bannedMembersCount > 0 {
+//                Picker("", selection: $context.mode) {
+//                    Text(L10n.screenRoomMemberListModeMembers)
+//                        .tag(RoomMembersListScreenMode.members)
+//                    Text(L10n.screenRoomMemberListModeBanned)
+//                        .tag(RoomMembersListScreenMode.banned)
+//                }
+//                .pickerStyle(.segmented)
+//                .padding(ListRowPadding.insets)
+//            }
             
             if context.viewState.shouldShowEmptyState {
                 emptySearchView
@@ -38,7 +38,7 @@ struct RoomMembersListScreen: View {
                 }
             }
         }
-        .compoundList()
+        .zeroList()
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .searchable(text: $context.searchQuery,
                     placement: .navigationBarDrawer(displayMode: .always),

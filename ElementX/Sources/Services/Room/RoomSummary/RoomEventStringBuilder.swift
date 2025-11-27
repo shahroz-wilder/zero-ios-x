@@ -22,10 +22,15 @@ struct RoomEventStringBuilder {
     }
     
     func buildAttributedString(for content: TimelineItemContent, sender: TimelineItemSender, isOutgoing: Bool) -> AttributedString? {
-        let displayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
+//        let displayName = if shouldDisambiguateDisplayNames {
+//            sender.disambiguatedDisplayName ?? sender.id
+//        } else {
+//            lastMessageSender?.displayName ?? sender.displayName ?? sender.id
+//        }
+        let displayName = if isOutgoing {
+            L10n.commonYou
         } else {
-            lastMessageSender?.displayName ?? sender.displayName ?? sender.id
+            sender.displayName ?? sender.id
         }
         
         switch content {

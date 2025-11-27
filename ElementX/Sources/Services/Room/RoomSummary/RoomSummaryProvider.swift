@@ -232,12 +232,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         return updatedItems
     }
-    
-    struct RoomDetails {
-        var roomInfo: RoomInfo?
-        var latestEvent: EventTimelineItem?
-        var lastMessageSenderProfile: UserProfile?
-    }
 
     private func fetchRoomDetails(from room: Room) -> (roomInfo: RoomInfo?, latestEvent: LatestEventValue?) {
         class FetchResult {
@@ -246,7 +240,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         let semaphore = DispatchSemaphore(value: 0)
-        var roomDetails = RoomDetails()
+        let result = FetchResult()
         
         Task {
             do {
@@ -258,8 +252,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             semaphore.signal()
         }
         semaphore.wait()
-        
-        return roomDetails
+        return (result.roomInfo, result.latestEvent)
     }
     
     private func buildRoomSummary(from room: Room) -> RoomSummary {

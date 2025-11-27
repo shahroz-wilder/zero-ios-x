@@ -33,7 +33,7 @@ struct RoomPollsHistoryScreen: View {
         }
         .alert(item: $context.alertInfo)
         .scrollContentBackground(.hidden)
-        .background(.compound.bgSubtleSecondaryLevel0)
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(context.viewState.title)
         .navigationBarTitleDisplayMode(.inline)
     }
