@@ -239,10 +239,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var lastMessageSenderProfile: UserProfile?
     }
 
-    private func fetchRoomDetails(from room: Room) -> RoomDetails {
+    private func fetchRoomDetails(from room: Room) -> (roomInfo: RoomInfo?, latestEvent: LatestEventValue?) {
         class FetchResult {
             var roomInfo: RoomInfo?
-            var latestEvent: EventTimelineItem?
+            var latestEvent: LatestEventValue?
         }
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -250,8 +250,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         Task {
             do {
-                roomDetails.latestEvent = await room.latestEvent()
-                roomDetails.roomInfo = try await room.roomInfo()
+                result.latestEvent = await room.newLatestEvent()
+                result.roomInfo = try await room.roomInfo()
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
             }
@@ -273,9 +273,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var lastMessageDate: Date?
         
         if let latestRoomMessage = roomDetails.latestEvent {
-            let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, uniqueID: .init("0"))
-            lastMessageDate = lastMessage.timestamp
-            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage, lastMessageSender: roomDetails.lastMessageSenderProfile)
+            switch latestRoomMessage {
+            case .local(let timestamp, let senderID, let profile, let content, _):
+                let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true)
+                lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+            case .remote(let timestamp, let senderID, let isOwn, let profile, let content):
+                let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
+                lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+            case .none:
+                break
+            }
         }
         
         var inviterProxy: RoomMemberProxyProtocol?

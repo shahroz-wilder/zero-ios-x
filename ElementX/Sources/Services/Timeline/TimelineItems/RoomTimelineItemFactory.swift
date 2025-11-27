@@ -816,7 +816,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .pending:
             return .loading
         case .ready(let content, let senderID, let senderProfile, _, _):
-            let sender = buildTimelineItemSender(senderID: senderID, senderProfile: senderProfile)
+            let sender = TimelineItemSender(senderID: senderID, senderProfile: senderProfile)
             
             let latestEventContent: TimelineEventContent = switch content {
             case .msgLike(let messageLikeContent):
@@ -956,7 +956,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .pending:
             return .init(details: .loading(eventID: details.eventId()), isThreaded: isThreaded)
         case let .ready(timelineItem, senderID, senderProfile, _, _):
-            let sender = buildTimelineItemSender(senderID: senderID, senderProfile: senderProfile)
+            let sender = TimelineItemSender(senderID: senderID, senderProfile: senderProfile)
             
             let replyContent: TimelineEventContent
             
@@ -1007,21 +1007,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     // MARK: - Helpers
-    
-    private func buildTimelineItemSender(senderID: String, senderProfile: ProfileDetails?) -> TimelineItemSender {
-        switch senderProfile {
-        case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
-            return TimelineItemSender(id: senderID,
-                                      displayName: displayName,
-                                      isDisplayNameAmbiguous: isDisplayNameAmbiguous,
-                                      avatarURL: avatarUrl.flatMap(URL.init(string:)))
-        default:
-            return TimelineItemSender(id: senderID,
-                                      displayName: nil,
-                                      isDisplayNameAmbiguous: false,
-                                      avatarURL: nil)
-        }
-    }
     
     private func buildMessageTimelineItemContent(messageType: MessageType?, senderID: String, senderDisplayName: String?) -> EventBasedMessageTimelineItemContentType {
         switch messageType {
