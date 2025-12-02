@@ -284,6 +284,9 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let lastMessage: AttributedString?
     
+    enum LastMessageState { case sending, failed }
+    let lastMessageState: LastMessageState?
+    
     let avatar: RoomAvatar
     
     let canonicalAlias: String?
@@ -295,11 +298,13 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let isDiscoverable: Bool
     
     var displayedLastMessage: AttributedString? {
-        // If the room is tombstoned, show a specific message, regardless of any last message.
-        guard !isTombstoned else {
-            return AttributedString(L10n.screenRoomlistTombstonedRoomDescription)
+        if isTombstoned {
+            AttributedString(L10n.screenRoomlistTombstonedRoomDescription)
+        } else if lastMessageState == .failed {
+            AttributedString(L10n.commonMessageFailedToSend)
+        } else {
+            lastMessage
         }
-        return lastMessage
     }
     
     let unreadNotificationsCount: UInt
@@ -333,6 +338,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        isFavourite: false,
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
+                       lastMessageState: nil,
                        avatar: .room(id: "", name: "", avatarURL: nil),
                        canonicalAlias: nil,
                        isTombstoned: false,
@@ -389,6 +395,7 @@ extension HomeScreenRoom {
                   isFavourite: summary.isFavourite,
                   timestamp: summary.lastMessageDate?.formattedMinimal(),
                   lastMessage: summary.lastMessage,
+                  lastMessageState: summary.homeScreenLastMessageState,
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias,
                   isTombstoned: summary.isTombstoned,
@@ -424,6 +431,7 @@ extension HomeScreenChannel {
               isFavourite: false,
               timestamp: nil,
               lastMessage: nil,
+              lastMessageState: nil,
               avatar: .room(id: id, name: displayName, avatarURL: nil),
               canonicalAlias: nil,
               isTombstoned: false,
@@ -446,6 +454,7 @@ extension RoomDirectorySearchResult {
               isFavourite: false,
               timestamp: nil,
               lastMessage: nil,
+              lastMessageState: nil,
               avatar: avatar,
               canonicalAlias: nil,
               isTombstoned: false,
@@ -453,5 +462,19 @@ extension RoomDirectorySearchResult {
               isDiscoverable: true,
               unreadNotificationsCount: 0,
               isEncrypted: false)
+    }
+}
+
+private extension RoomSummary {
+    var homeScreenLastMessageState: HomeScreenRoom.LastMessageState? {
+        if isTombstoned {
+            nil
+        } else {
+            switch lastMessageState {
+            case .sending: .sending
+            case .failed: .failed
+            case .none: .none
+            }
+        }
     }
 }

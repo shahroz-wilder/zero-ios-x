@@ -64,7 +64,6 @@ final class AppSettings {
         case threadsEnabled
         case developerOptionsEnabled
         case linkPreviewsEnabled
-        case latestEventSorterEnabled
         case spaceSettingsEnabled
         case focusEventOnNotificationTap
         
@@ -405,9 +404,6 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.latestEventSorterEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var latestEventSorterEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled

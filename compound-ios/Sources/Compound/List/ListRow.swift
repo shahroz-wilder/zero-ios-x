@@ -123,12 +123,12 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
             Button(action: action) {
                 RowContent(details: details, accessory: .selection(isSelected)) { label }
             }
-            .isToggle()
+            .accessibilityAddTraits(.isToggle)
         case .multiSelection(let isSelected, let action):
             Button(action: action) {
                 RowContent(details: details, accessory: .multiSelection(isSelected)) { label }
             }
-            .isToggle()
+            .accessibilityAddTraits(.isToggle)
         case .textField(let text, let axis):
             TextField(text: text, axis: axis) {
                 Text(label.title ?? "")
@@ -218,12 +218,24 @@ private struct RowContent<Label: View, DetailsIcon: View>: View {
     let label: () -> Label
     
     var body: some View {
-        HStack(spacing: ListRowTrailingSectionSpacing.horizontal) {
-            label()
-                .frame(maxWidth: .infinity)
+        // If not custom, the label() content usually includes a leading `ListRowPadding.horizontal`
+        // that's why the external `HStack` has 0 spacing.
+        HStack(spacing: 0) {
+            // We should always have multi selection shown on the leading side
+            if let accessory, accessory.kind.isMultiSelection {
+                accessory
+                    .padding(.leading, ListRowPadding.horizontal)
+            }
             
-            if details != nil || accessory != nil {
-                ListRowTrailingSection(details, accessory: accessory)
+            HStack(spacing: ListRowTrailingSectionSpacing.horizontal) {
+                label()
+                    .frame(maxWidth: .infinity)
+                
+                if details != nil || accessory != nil {
+                    ListRowTrailingSection(details,
+                                           // Prevent multi selection to appear on the trailing side
+                                           accessory: accessory?.kind.isMultiSelection == true ? nil : accessory)
+                }
             }
         }
         .frame(maxHeight: .infinity)
@@ -243,17 +255,6 @@ private extension TextField {
             self.init(text: text, axis: axis, label: label)
         } else {
             self.init(text: text, label: label)
-        }
-    }
-}
-
-private extension Button {
-    /// Adds the `isToggle` accessibility trait on iOS 17+
-    @ViewBuilder func isToggle() -> some View {
-        if #available(iOS 17.0, *) {
-            accessibilityAddTraits(.isToggle)
-        } else {
-            self
         }
     }
 }

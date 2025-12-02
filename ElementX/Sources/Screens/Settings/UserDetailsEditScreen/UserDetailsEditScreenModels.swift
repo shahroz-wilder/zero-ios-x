@@ -9,6 +9,7 @@
 import Foundation
 
 enum UserDetailsEditScreenViewModelAction {
+    case dismiss
     case displayCameraPicker
     case displayMediaPicker
     case displayFilePicker
@@ -57,9 +58,16 @@ struct UserDetailsEditScreenViewStateBindings {
     var userZeroIds: [String] = []
     var showMediaSheet = false
     var showZIdsSheet = false
+    
+    var alertInfo: AlertInfo<UserDetailsEditScreenAlertType>?
+}
+
+enum UserDetailsEditScreenAlertType {
+    case unsavedChanges
 }
 
 enum UserDetailsEditScreenViewAction {
+    case cancel
     case save
     case presentMediaSource
     case displayCameraPicker

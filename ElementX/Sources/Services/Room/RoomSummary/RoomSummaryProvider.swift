@@ -94,7 +94,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         do {
             listUpdatesSubscriptionResult = try roomList.entriesWithDynamicAdaptersWith(pageSize: UInt32(roomListPageSize),
-                                                                                    enableLatestEventSorter: appSettings.latestEventSorterEnabled,
+                                                                                    enableLatestEventSorter: true,
                                                                                     listener: SDKListener { [weak self] updates in
                                                                                         guard let self else { return }
                                                                                         diffsPublisher.send(updates)
@@ -122,14 +122,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
-        let baseFilter: [RoomListEntriesDynamicFilterKind] = if #available(iOS 18.0, *) {
-            [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
-                            .all(filters: [.space, .invite])]),
-             .deduplicateVersions]
-        } else {
-            // Don't show space invites on iOS 17 given that the tab bar is disabled due to glitches on iPad.
-            [.nonLeft, .nonSpace, .deduplicateVersions]
-        }
+        let baseFilter: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
+                                                                             .all(filters: [.space, .invite])]),
+                                                              .deduplicateVersions]
         
         switch filter {
         case .excludeAll:
@@ -264,13 +259,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         var attributedLastMessage: AttributedString?
         var lastMessageDate: Date?
+        var lastMessageState: RoomSummary.LastMessageState?
         
         if let latestRoomMessage = roomDetails.latestEvent {
             switch latestRoomMessage {
-            case .local(let timestamp, let senderID, let profile, let content, _):
+            case .local(let timestamp, let senderID, let profile, let content, let isSending):
                 let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
                 attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true)
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+                lastMessageState = isSending ? .sending : .failed // No need to worry about sent for .local: https://github.com/matrix-org/matrix-rust-sdk/issues/3941
             case .remote(let timestamp, let senderID, let isOwn, let profile, let content):
                 let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
                 attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
@@ -311,6 +308,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            activeMembersCount: UInt(roomInfo.activeMembersCount),
                            lastMessage: attributedLastMessage,
                            lastMessageDate: lastMessageDate,
+                           lastMessageState: lastMessageState,
                            unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
                            unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
                            unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
