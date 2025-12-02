@@ -20990,6 +20990,47 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingHomeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never>!
 
+    //MARK: - setDelegate
+
+    var setDelegateUnderlyingCallsCount = 0
+    var setDelegateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setDelegateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setDelegateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setDelegateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setDelegateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setDelegateCalled: Bool {
+        return setDelegateCallsCount > 0
+    }
+    var setDelegateReceivedDelegate: ZeroClientProxyDelegate?
+    var setDelegateReceivedInvocations: [ZeroClientProxyDelegate] = []
+    var setDelegateClosure: ((ZeroClientProxyDelegate) -> Void)?
+
+    func setDelegate(_ delegate: ZeroClientProxyDelegate) {
+        setDelegateCallsCount += 1
+        setDelegateReceivedDelegate = delegate
+        DispatchQueue.main.async {
+            self.setDelegateReceivedInvocations.append(delegate)
+        }
+        setDelegateClosure?(delegate)
+    }
     //MARK: - verifyUserPassword
 
     var verifyUserPasswordUnderlyingCallsCount = 0

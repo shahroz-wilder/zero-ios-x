@@ -17,6 +17,8 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
     private let zeroApiProxy: ZeroApiProxyProtocol
     private let client: ClientProtocol
     
+    private var delegate: ZeroClientProxyDelegate?
+    
     var matrixUserService: ZeroMatrixUsersService {
         zeroApiProxy.matrixUsersService
     }
@@ -69,6 +71,10 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
         
         let allCachedUsers = matrixUserService.getAllCachedUsers()
         homeRoomSummariesUsersSubject.send(allCachedUsers)
+    }
+    
+    func setDelegate(_ delegate: ZeroClientProxyDelegate) {
+        self.delegate = delegate
     }
     
     func zeroProfile(userId: String) async {
@@ -185,11 +191,11 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
             try await withThrowingTaskGroup(of: Void.self) { group in
                 group.addTask {
                     if let localMedia = avatar {
-                        // TODO: try await self.setUserAvatar(media: localMedia).get()
+                        try await self.delegate?.setUserAvatar(media: localMedia).get()
                     }
                 }
                 group.addTask {
-                    // TODO: try await self.setUserInfo(displayName, primaryZId: nil).get()
+                    try await self.delegate?.setUserInfo(displayName, primaryZId: nil).get()
                 }
                 try await group.waitForAll()
             }
@@ -200,10 +206,10 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
             switch result {
             case .success(let user):
                 /// create a room with the user who invited
-                // TODO: _ = await createDirectRoom(with: user.inviter.matrixId, expectedRoomName: user.inviter.displayName)
+                _ = await delegate?.createDirectRoom(with: user.inviter.matrixId, expectedRoomName: user.inviter.displayName)
                 return .success(())
                 
-            case .failure(let failure):
+            case .failure(_):
                 return .failure(.failedCompletingUserProfile)
             }
         } catch {
@@ -484,7 +490,7 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
             let joinChannelResult = try await zeroApiProxy.channelsApi.joinChannel(roomAliasOrId: roomAliasOrId)
             switch joinChannelResult {
             case .success(let roomId):
-                // TODO: _ = await joinRoom(roomAliasOrId, via: [])
+                _ = await delegate?.joinRoom(roomAliasOrId, via: [])
                 return .success(roomId)
             case .failure(let error):
                 return .failure(.zeroError(error))

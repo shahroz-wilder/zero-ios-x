@@ -13,7 +13,7 @@ import OrderedCollections
 
 import MatrixRustSDK
 
-class ClientProxy: ClientProxyProtocol {
+class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
     private let client: ClientProtocol
     private let networkMonitor: NetworkMonitorProtocol
     private let appSettings: AppSettings
@@ -263,6 +263,7 @@ class ClientProxy: ClientProxyProtocol {
             mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
         
+        setupZeroClientDelegate()
         _ = await zeroClient.loadZeroMessengerInvite()
     }
     
@@ -360,6 +361,10 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed checking hasDevicesToVerifyAgainst with error: \(error)")
             return .failure(.sdkError(error))
         }
+    }
+    
+    func setupZeroClientDelegate() {
+        zeroClient.setDelegate(self)
     }
 
     func startSync() {

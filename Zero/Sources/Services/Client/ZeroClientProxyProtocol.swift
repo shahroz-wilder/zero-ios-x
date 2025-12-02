@@ -24,6 +24,8 @@ protocol ZeroClientProxyProtocol: AnyObject {
     
     var chatApi: ZeroChatApiProtocol { get }
     
+    func setDelegate(_ delegate: ZeroClientProxyDelegate)
+    
     func verifyUserPassword(_ password: String) async -> Result<Void, ZeroClientProxyError>
     
     // MARK: - ZERO REWARDS

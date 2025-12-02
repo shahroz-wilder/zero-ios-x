@@ -2238,6 +2238,8 @@
 		79C6F7322DF8277D003CEBB9 /* TombstonedAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D353E10A64172D863769BF /* TombstonedAvatarImage.swift */; };
 		79C6F7332DF827BC003CEBB9 /* HorizontalHighlightGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4F0AB250EFA7B71FB2BDB2 /* HorizontalHighlightGradient.swift */; };
 		79C6F7342DF828F9003CEBB9 /* RoomFlowCoordinatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407C8DD85179D2DB896FC0FA /* RoomFlowCoordinatorStateMachine.swift */; };
+		79C7CB252EDF0FD90057A9AE /* ZeroClientProxyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C7CB242EDF0FD50057A9AE /* ZeroClientProxyDelegate.swift */; };
+		79C7CB262EDF0FD90057A9AE /* ZeroClientProxyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C7CB242EDF0FD50057A9AE /* ZeroClientProxyDelegate.swift */; };
 		79C9BA8D2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79C9BA8E2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79CD97772EA249C400F489D9 /* HomeScreenBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */; };
@@ -4073,6 +4075,7 @@
 		79C25B552E25A21600936A5D /* FeedMediaPreFetchProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreFetchProtocol.swift; sourceTree = "<group>"; };
 		79C25B582E25AACE00936A5D /* PostImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageViewer.swift; sourceTree = "<group>"; };
 		79C25B5B2E25AB2500936A5D /* PostVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVideoPlayer.swift; sourceTree = "<group>"; };
+		79C7CB242EDF0FD50057A9AE /* ZeroClientProxyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroClientProxyDelegate.swift; sourceTree = "<group>"; };
 		79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWalletQRCode.swift; sourceTree = "<group>"; };
 		79CD97762EA249C100F489D9 /* HomeScreenBottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenBottomBar.swift; sourceTree = "<group>"; };
 		79D5985B2E8A3F07008F54E0 /* OnboardingContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainer.swift; sourceTree = "<group>"; };
@@ -7616,6 +7619,7 @@
 			isa = PBXGroup;
 			children = (
 				798006982ED8311A0040BB69 /* ZeroClientProxy.swift */,
+				79C7CB242EDF0FD50057A9AE /* ZeroClientProxyDelegate.swift */,
 				798006952ED8310A0040BB69 /* ZeroClientProxyProtocol.swift */,
 			);
 			path = Client;
@@ -10787,6 +10791,7 @@
 				18E9A44D2C9829970082DDA4 /* AppLockSetupFlowCoordinator.swift in Sources */,
 				18E9A44E2C9829970082DDA4 /* AppLockSetupPINScreen.swift in Sources */,
 				18E9A44F2C9829970082DDA4 /* AppLockSetupPINScreenCoordinator.swift in Sources */,
+				79C7CB262EDF0FD90057A9AE /* ZeroClientProxyDelegate.swift in Sources */,
 				18E9A4502C9829970082DDA4 /* AppLockSetupPINScreenModels.swift in Sources */,
 				799D85812E2706E1000A362A /* WalletTransactionType.swift in Sources */,
 				18E9A4512C9829970082DDA4 /* AppLockSetupPINScreenViewModel.swift in Sources */,
@@ -12907,6 +12912,7 @@
 				8358D145F9BF94F412BEDCA8 /* RoomRolesAndPermissionsScreenModels.swift in Sources */,
 				69B3C6010B42010F591FC3CB /* RoomRolesAndPermissionsScreenViewModel.swift in Sources */,
 				F8F47CE757EE656905F01F2C /* RoomRolesAndPermissionsScreenViewModelProtocol.swift in Sources */,
+				79C7CB252EDF0FD90057A9AE /* ZeroClientProxyDelegate.swift in Sources */,
 				C55A44C99F64A479ABA85B46 /* RoomScreen.swift in Sources */,
 				A851635B3255C6DC07034A12 /* RoomScreenCoordinator.swift in Sources */,
 				E8C65C19F7C40EE545172DD6 /* RoomScreenFooterView.swift in Sources */,
