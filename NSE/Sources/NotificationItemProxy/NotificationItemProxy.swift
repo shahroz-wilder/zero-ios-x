@@ -42,6 +42,10 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     var isRoomOneToOne: Bool {
         isRoomDirect || roomJoinedMembers <= 2
     }
+    
+    var isRoomSpace: Bool {
+        notificationItem.roomInfo.isSpace
+    }
 
     var isRoomDirect: Bool {
         notificationItem.roomInfo.isDirect
@@ -113,6 +117,8 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
 
     var isNoisy: Bool { false }
 
+    var isRoomSpace: Bool { false }
+    
     var isRoomDirect: Bool { false }
     
     var isRoomPrivate: Bool { false }

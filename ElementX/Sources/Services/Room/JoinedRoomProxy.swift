@@ -97,7 +97,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                                          filter: .eventTypeFilter(filter: excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
-                                                                                                         trackReadReceipts: true,
+                                                                                                         trackReadReceipts: .messageLikeEvents,
                                                                                                          reportUtds: true)),
                                            roomId: room.id(),
                                            kind: .live,
@@ -166,7 +166,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
-                                                                                            trackReadReceipts: false,
+                                                                                            trackReadReceipts: .disabled,
                                                                                             reportUtds: true))
             
             return .success(TimelineProxy(timeline: sdkTimeline,
@@ -198,7 +198,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
-                                                                                            trackReadReceipts: true,
+                                                                                            trackReadReceipts: .messageLikeEvents,
                                                                                             reportUtds: true))
             
             let timeline = TimelineProxy(timeline: sdkTimeline, roomId: room.id(), kind: .thread(rootEventID: eventID), isRoomChannel: room.isAChannel(), zeroChatApi: zeroChatApi)
@@ -245,7 +245,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             filter: .onlyMessage(types: rustMessageTypes),
                                                                                             internalIdPrefix: nil,
                                                                                             dateDividerMode: .monthly,
-                                                                                            trackReadReceipts: false,
+                                                                                            trackReadReceipts: .disabled,
                                                                                             reportUtds: true))
             
             let timeline = TimelineProxy(timeline: sdkTimeline,
@@ -280,7 +280,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                                     filter: .all,
                                                                                                     internalIdPrefix: nil,
                                                                                                     dateDividerMode: .daily,
-                                                                                                    trackReadReceipts: false,
+                                                                                                    trackReadReceipts: .disabled,
                                                                                                     reportUtds: true))
                     
                     let timeline = TimelineProxy(timeline: sdkTimeline,

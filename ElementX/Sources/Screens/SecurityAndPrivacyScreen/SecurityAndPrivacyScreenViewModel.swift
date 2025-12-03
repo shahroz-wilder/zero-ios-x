@@ -81,8 +81,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         case .selectedSpaceMembersAccess:
             handleSelectedSpaceMembersAccess()
         case .manageSpaces:
-            // TODO: Implement multiple space selection
-            break
+            displayManageAuthorizedSpacesScreen()
         }
     }
     
@@ -236,15 +235,39 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func handleSelectedSpaceMembersAccess() {
-        switch context.viewState.spaceSelection {
-        case .singleJoined(let joinedParent):
-            context.desiredSettings.accessType = .spaceUsers(spaceIDs: [joinedParent.id])
-        case .singleUnknown(let id):
-            context.desiredSettings.accessType = .spaceUsers(spaceIDs: [id])
-        case .multiple:
-            // TODO: Implement multiple space selection
-            break
+        guard !state.bindings.desiredSettings.accessType.isSpaceUsers else {
+            // If the user is tapping the space members access again we do nothing
+            return
         }
+        
+        switch state.spaceSelection {
+        case .singleJoined(let joinedParent):
+            state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [joinedParent.id])
+        case .singleUnknown(let id):
+            state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: [id])
+        case .empty:
+            break // Very edge case. We do nothing in this case.
+        case .multiple:
+            displayManageAuthorizedSpacesScreen()
+        }
+    }
+    
+    private func displayManageAuthorizedSpacesScreen() {
+        let joinedParentSpaces = state.joinedParentSpaces
+        let unknownSpaceIDs = state.currentSettings.accessType.spaceIDs.filter { id in
+            !joinedParentSpaces.contains { $0.id == id }
+        }
+        let selectedIDs = Set(state.bindings.desiredSettings.accessType.spaceIDs)
+        let authorizedSpacesSelection = AuthorizedSpacesSelection(joinedParentSpaces: joinedParentSpaces,
+                                                                  unknownSpacesIDs: unknownSpaceIDs,
+                                                                  initialSelectedIDs: selectedIDs)
+        authorizedSpacesSelection.selectedIDs
+            .sink { [weak self] desiredSelectedIDs in
+                self?.state.bindings.desiredSettings.accessType = .spaceUsers(spaceIDs: desiredSelectedIDs.sorted())
+            }
+            .store(in: &cancellables)
+        
+        actionsSubject.send(.displayManageAuthorizedSpacesScreen(authorizedSpacesSelection))
     }
     
     private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"
