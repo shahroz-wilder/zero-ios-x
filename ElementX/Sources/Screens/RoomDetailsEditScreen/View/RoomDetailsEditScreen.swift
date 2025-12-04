@@ -95,7 +95,7 @@ struct RoomDetailsEditScreen: View {
                 })
             }
         } header: {
-            Text(L10n.commonRoomName)
+            Text(L10n.commonName)
                 .compoundListSectionHeader()
         }
     }
