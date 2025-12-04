@@ -264,12 +264,34 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         if let latestRoomMessage = roomDetails.latestEvent {
             switch latestRoomMessage {
             case .local(let timestamp, let senderID, let profile, let content, let isSending):
-                let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                let sender: TimelineItemSender
+                if case .ready(let displayName, _, _) = profile, displayName != nil {
+                    sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                } else if let cachedUser = zeroUsersService.userFromCache(senderID) {
+                    sender = TimelineItemSender(
+                        id: senderID,
+                        displayName: cachedUser.displayName,
+                        avatarURL: cachedUser.profileImageURL
+                    )
+                } else {
+                    sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                }
                 attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true)
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 lastMessageState = isSending ? .sending : .failed // No need to worry about sent for .local: https://github.com/matrix-org/matrix-rust-sdk/issues/3941
             case .remote(let timestamp, let senderID, let isOwn, let profile, let content):
-                let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                let sender: TimelineItemSender
+                if case .ready(let displayName, _, _) = profile, displayName != nil {
+                    sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                } else if let cachedUser = zeroUsersService.userFromCache(senderID) {
+                    sender = TimelineItemSender(
+                        id: senderID,
+                        displayName: cachedUser.displayName,
+                        avatarURL: cachedUser.profileImageURL
+                    )
+                } else {
+                    sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                }
                 attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
             case .none:
