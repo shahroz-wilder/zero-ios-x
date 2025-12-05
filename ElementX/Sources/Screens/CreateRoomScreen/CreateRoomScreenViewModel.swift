@@ -193,6 +193,13 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 }
             }
             .store(in: &cancellables)
+        
+        userSession.clientProxy.zeroClient.zeroCurrentUserPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] currentUser in
+                self?.state.isCurrentUserZeroProSubscriber = currentUser.subscriptions.zeroPro
+            }
+            .store(in: &cancellables)
     }
     
     private func updateParameters(state: CreateRoomScreenViewState) {
@@ -200,7 +207,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         parameters.topic = state.bindings.roomTopic
         parameters.isRoomPrivate = state.bindings.isRoomPrivate
         parameters.isKnockingOnly = state.bindings.isKnockingOnly
-        if state.isKnockingFeatureEnabled, !state.aliasLocalPart.isEmpty {
+        if state.isCurrentUserZeroProSubscriber, !state.aliasLocalPart.isEmpty {
             parameters.aliasLocalPart = state.aliasLocalPart
         } else {
             parameters.aliasLocalPart = nil

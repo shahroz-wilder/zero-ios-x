@@ -46,6 +46,7 @@ struct RoomDetailsScreenViewState: BindableState {
     let isAChannel: Bool
     var isDead: Bool
     var permalink: URL?
+    var isCurrentUserZeroProSubscriber: Bool = false
 
     var topic: AttributedString?
     var topicSummary: AttributedString?

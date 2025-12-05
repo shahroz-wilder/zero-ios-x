@@ -43,6 +43,8 @@ struct CreateRoomScreenViewState: BindableState {
             nil
         }
     }
+    
+    var isCurrentUserZeroProSubscriber: Bool = false
 }
 
 struct CreateRoomScreenViewStateBindings {
