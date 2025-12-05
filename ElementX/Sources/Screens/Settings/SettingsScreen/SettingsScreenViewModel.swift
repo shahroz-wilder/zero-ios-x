@@ -45,7 +45,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.zeroCurrentUserPublisher
+        userSession.clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.primaryZeroId = currentUser.zIdOrPublicAddressDisplayText
@@ -87,12 +87,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.showBlockedUsers, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.userRewardsPublisher
+        userSession.clientProxy.zeroClient.userRewardsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userRewards, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.showNewUserRewardsIntimationPublisher
+        userSession.clientProxy.zeroClient.showNewUserRewardsIntimationPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.showNewUserRewardsIntimation, on: self)
             .store(in: &cancellables)
@@ -157,6 +157,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     }
     
     private func dismissRewardsIntimation(_ clientProxy: ClientProxyProtocol) {
-        clientProxy.dismissRewardsIntimation()
+        clientProxy.zeroClient.dismissRewardsIntimation()
     }
 }

@@ -54,14 +54,14 @@ class HomeFeedViewModel: HomeFeedViewModelType, HomeFeedViewModelProtocol, FeedP
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.zeroCurrentUserPublisher
+        userSession.clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUserZeroProfile = currentUser
             }
             .store(in: &cancellables)
         
-        userSession.clientProxy.userRewardsPublisher
+        userSession.clientProxy.zeroClient.userRewardsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userRewards, on: self)
             .store(in: &cancellables)
@@ -138,7 +138,7 @@ class HomeFeedViewModel: HomeFeedViewModelType, HomeFeedViewModelProtocol, FeedP
         
         state.postListMode = state.posts.isEmpty ? .skeletons : .posts
         let skipItems = isForceRefresh ? 0 : state.posts.count
-        let postsResult = await userSession.clientProxy.fetchZeroFeeds(channelZId: nil,
+        let postsResult = await userSession.clientProxy.zeroClient.fetchZeroFeeds(channelZId: nil,
                                                                        following: followingOnly,
                                                                        limit: HOME_SCREEN_POST_PAGE_COUNT,
                                                                        skip: skipItems)
@@ -196,7 +196,7 @@ class HomeFeedViewModel: HomeFeedViewModelType, HomeFeedViewModelProtocol, FeedP
         state.posts[postIndex] = originalPost.withUpdatedMeowCount(amount)
         
         Task(priority: .background) {
-            let addMeowResult = await userSession.clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            let addMeowResult = await userSession.clientProxy.zeroClient.addMeowsToFeed(feedId: postId, amount: amount)
             switch addMeowResult {
             case .success(let post):
                 let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
@@ -239,7 +239,7 @@ class HomeFeedViewModel: HomeFeedViewModelType, HomeFeedViewModelProtocol, FeedP
                 guard let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText) else { continue }
                 group.addTask {
                     if let previewResult = await withTimeout(seconds: 5, operation: {
-                        await self.userSession.clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
+                        await self.userSession.clientProxy.zeroClient.fetchYoutubeLinkMetaData(youtubrUrl: url)
                     }), case let .success(preview) = previewResult {
                         return (post.id, preview)
                     }
@@ -263,7 +263,7 @@ class HomeFeedViewModel: HomeFeedViewModelType, HomeFeedViewModelProtocol, FeedP
             }
             
             do {
-                if case let .success(localUrl) = try await userSession.clientProxy.loadFileFromMediaId(mediaId, key: key) {
+                if case let .success(localUrl) = try await userSession.clientProxy.zeroClient.loadFileFromMediaId(mediaId, key: key) {
                     state.bindings.mediaPreviewItem = localUrl
                 }
             } catch {

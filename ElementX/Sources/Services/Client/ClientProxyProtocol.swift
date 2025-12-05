@@ -32,7 +32,6 @@ enum ClientProxyLoadingState {
 enum ClientProxyError: Error {
     case sdkError(Error)
     case forbiddenAccess
-    case zeroError(Error)
         
     case invalidMedia
     case invalidServerName
@@ -43,11 +42,6 @@ enum ClientProxyError: Error {
     case failedResolvingRoomAlias
     case roomNotInLocalStore
     case invalidInvite
-    
-    case failedCompletingUserProfile
-    
-    case insufficientGasBalance
-    case insufficientMeowBalance
 }
 
 enum SlidingSyncConstants {
@@ -252,143 +246,12 @@ protocol ClientProxyProtocol: AnyObject {
     
     func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError>
     func setHideInviteAvatars(_ value: Bool) async -> Result<Void, ClientProxyError>
-    
-    func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError>
-    
+        
     func setRoomNotificationModeProtocol(_ listener: RoomNotificationModeUpdatedProtocol)
     
     func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy)
     
-    // MARK: - ZERO REWARDS
+    // MARK: - ZERO
     
-    var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> { get }
-    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> { get }
-    
-    func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError>
-    
-    func getZeroMeowPrice() async -> Result<ZeroCurrency, ClientProxyError>
-    
-    func dismissRewardsIntimation()
-    
-    // MARK: - ZERO MESSENGER INVITE
-    
-    var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> { get }
-    
-    @discardableResult func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError>
-    
-    // MARK: - ZERO CREATE ACCOUNT
-    
-    func isProfileCompletionRequired() async -> Bool
-    
-    func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ClientProxyError>
-    
-    func deleteUserAccount() async -> Result<Void, ClientProxyError>
-    
-    // MARK: - ZERO USER
-    
-    var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> { get }
-    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never> { get }
-    var homeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never> { get }
-        
-    func zeroProfile(userId: String) async
-    
-    func zeroProfiles(userIds: Set<String>) async
-    
-    func checkAndLinkZeroUser() async
-    
-    func fetchZCurrentUser()
-    
-    func fetchUserWallets() async -> Result<[ZWallet], ClientProxyError>
-    
-    func deleteWallet(walletId: String) async -> Result<Void, ClientProxyError>
-    
-    func addWallet(canAuthenticate: Bool, web3Token: String) async -> Result<Void, ClientProxyError>
-    
-    // MARK: - ZERO FEED
-    
-    func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
-    
-    func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError>
-    
-    func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
-    
-    func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError>
-    
-    func postNewFeed(channelZId: String?, walletAddress: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError>
-    
-    // MARK: - ZERO FEED USER
-    
-    func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ClientProxyError>
-    
-    func fetchUserFeeds(userId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
-    
-    func fetchFeedUserFollowingStatus(userId: String) async -> Result<ZPostUserFollowingStatus, ClientProxyError>
-    
-    func followFeedUser(userId: String) async -> Result<Void, ClientProxyError>
-    
-    func unFollowFeedUser(userId: String) async -> Result<Void, ClientProxyError>
-    
-    // MARK: - ZERO CHANNEL
-    
-    func fetchUserZIds() async -> Result<[String], ClientProxyError>
-    
-    func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError>
-    
-    // MARK: - ZERO WALLET
-    
-    func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
-    
-    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>
-    
-    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>
-    
-    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>
-    
-    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionResponse, ClientProxyError>
-    
-    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError>
-    
-    func getTransactionReceipt(transactionHash: String, chainId: UInt64?) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
-    
-    func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError>
-    
-    func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError>
-    
-    func getTokenInfo(tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenInfo, ClientProxyError>
-    
-    func getTokenBalance(userWalletAddress: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTokenBalance, ClientProxyError>
-    
-    func getAvaxTokenPrice(tokenAddress: String) async -> Result<ZAvaxTokenPrice, ClientProxyError>
-    
-    // MARK: - ZERO STAKING
-    
-    func getTotalStaked(poolAddress: String, chainId: UInt64) async -> Result<String, ClientProxyError>
-    
-    func getStakingConfig(poolAddress: String, chainId: UInt64) async -> Result<ZStackingConfig, ClientProxyError>
-    
-    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingStatus, ClientProxyError>
-    
-    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>
-    
-    func getStakingToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingToken, ClientProxyError>
-    
-    func getRewardsToken(poolAddress: String, chainId: UInt64) async -> Result<ZWalletStakingRewardsToken, ClientProxyError>
-    
-    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
-    
-    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
-    
-    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
-    
-    // MARK: - ZERO METADATA
-    
-    func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>
-    
-    func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError>
-    
-    func fetchYoutubeLinkMetaData(youtubrUrl: String) async -> Result<ZLinkPreview, ClientProxyError>
-    
-    func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, ClientProxyError>
-    
-    func loadFileFromMediaId(_ mediaId: String, key: String) async throws -> Result<URL, ClientProxyError>
+    var zeroClient: ZeroClientProxyProtocol { get }
 }

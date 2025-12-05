@@ -829,7 +829,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         if let textContent = (item as? TextRoomTimelineItem)?.content,
            let firstAvailableLink = LinkPreviewUtil.shared.firstNonMatrixLink(from: textContent.body) {
             Task {
-                let linkPreviewResult = await userSession.clientProxy.getLinkPreviewMetaData(url: firstAvailableLink)
+                let linkPreviewResult = await userSession.clientProxy.zeroClient.getLinkPreviewMetaData(url: firstAvailableLink)
                 switch linkPreviewResult {
                 case .success(let linkPreview):
                     state.linkPreviewsMap[item.id] = linkPreview

@@ -13,13 +13,13 @@ class InviteFriendSettingsScreenViewModel:
             )
         )
         
-        userSession.clientProxy.messengerInvitePublisher
+        userSession.clientProxy.zeroClient.messengerInvitePublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.bindings.messengerInvite, on: self)
             .store(in: &cancellables)
         
         Task {
-            await userSession.clientProxy.loadZeroMessengerInvite()
+            await userSession.clientProxy.zeroClient.loadZeroMessengerInvite()
         }
     }
     

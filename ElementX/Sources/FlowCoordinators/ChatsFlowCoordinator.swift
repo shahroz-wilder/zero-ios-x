@@ -1024,7 +1024,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     func runDeleteAccountFlow() {
         showLoadingIndicator()
         Task {
-            let deleteAccountResult = await userSession.clientProxy.deleteUserAccount()
+            let deleteAccountResult = await userSession.clientProxy.zeroClient.deleteUserAccount()
             switch deleteAccountResult {
             case .success:
                 self.hideLoadingIndicator()

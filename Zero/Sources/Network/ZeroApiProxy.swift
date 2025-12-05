@@ -39,7 +39,7 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
     let postUserApi: ZeroPostUserApiProtocol
     let stakingApi: ZeroStakingApiProtocol
     
-    init(client: ClientProtocol, appSettings: AppSettings) {
+    init(appSettings: AppSettings) {
         /// Configure Zero Utlils, Services and APIs
         let zeroUsersApi = ZeroUserApi(appSettings: appSettings)
         matrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,

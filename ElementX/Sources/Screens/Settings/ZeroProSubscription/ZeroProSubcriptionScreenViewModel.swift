@@ -31,7 +31,7 @@ class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, 
             initialViewState: .init(bindings: .init())
         )
         
-        userSession.clientProxy.zeroCurrentUserPublisher
+        userSession.clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUser = currentUser
@@ -92,7 +92,7 @@ class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, 
                 }
                 let result = try await storeService.purchase(zeroProSubscriptionProduct, options: options)
                 if case .success(_) = result.0 {
-                    clientProxy.fetchZCurrentUser()
+                    clientProxy.zeroClient.fetchZCurrentUser()
                 }
                 syncStoreKit()
             } catch {

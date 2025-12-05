@@ -89,7 +89,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
         
-        userSession.clientProxy.directMemberZeroProfilePublisher
+        userSession.clientProxy.zeroClient.directMemberZeroProfilePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] directMember in
                 guard let self else { return }

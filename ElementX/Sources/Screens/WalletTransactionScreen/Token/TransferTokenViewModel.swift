@@ -41,7 +41,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        clientProxy.zeroCurrentUserPublisher
+        clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUser = currentUser
@@ -94,7 +94,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         } else {
             Task {
                 state.recipientsListMode = .skeletons
-                let result = await clientProxy.searchTransactionRecipient(query: query)
+                let result = await clientProxy.zeroClient.searchTransactionRecipient(query: query)
                 switch result {
                 case .success(let recipients):
                     if recipients.isEmpty {
@@ -119,7 +119,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
     private func loadWalletTokenBalances() {
         if let walletAddress = state.currentUser?.publicWalletAddress {
             Task {
-                let result = await clientProxy.getWalletTokenBalances(walletAddress: walletAddress,
+                let result = await clientProxy.zeroClient.getWalletTokenBalances(walletAddress: walletAddress,
                                                                       nextPage: state.walletTokenNextPageParams)
                 if case .success(let walletTokenBalances) = result {
                     _walletTokenAssets = walletTokenBalances.tokens
@@ -144,7 +144,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
            let token = state.tokenAsset {
             Task {
                 setFlowState(.inProgress)
-                let result = await clientProxy.transferToken(senderWalletAddress: currentUserAddress,
+                let result = await clientProxy.zeroClient.transferToken(senderWalletAddress: currentUserAddress,
                                                              recipientWalletAddress: recipient.publicAddress,
                                                              amount:  state.bindings.transferAmount,
                                                              tokenAddress: token.tokenAddress,
@@ -170,7 +170,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
     
     private func getTransactionReceipt(_ transactionHash: String, chainId: UInt64) {
         Task.detached {
-            if case .success(let receipt) = await self.clientProxy.getTransactionReceipt(transactionHash: transactionHash, chainId: chainId) {
+            if case .success(let receipt) = await self.clientProxy.zeroClient.getTransactionReceipt(transactionHash: transactionHash, chainId: chainId) {
                 await MainActor.run {
                     self.completedTransactionReceipt = receipt
                 }

@@ -28,7 +28,7 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
         
         fetchUserWallets()
         
-        userSession.clientProxy.zeroCurrentUserPublisher
+        userSession.clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.userZeroWalletAddress = currentUser.publicWalletAddress
@@ -76,12 +76,12 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
             showLoadingIndicator()
             defer { hideLoadingIndicator() }
             
-            let result = await clientProxy.fetchUserWallets()
+            let result = await clientProxy.zeroClient.fetchUserWallets()
             switch result {
             case .success(let wallets):
                 state.wallets = wallets.map(ZeroWallet.init)
                 state.connectedWalletAddress = state.firstSelfCustodyWallet?.address
-                clientProxy.fetchZCurrentUser()
+                clientProxy.zeroClient.fetchZCurrentUser()
             case .failure(let error):
                 displayError(message: error.localizedDescription)
             }
@@ -120,7 +120,7 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
             showLoadingIndicator()
             defer { hideLoadingIndicator() }
             
-            let result = await clientProxy.addWallet(canAuthenticate: enableLoggingIn, web3Token: token)
+            let result = await clientProxy.zeroClient.addWallet(canAuthenticate: enableLoggingIn, web3Token: token)
             switch result {
             case .success:
                 fetchUserWallets()
@@ -135,7 +135,7 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
             showLoadingIndicator()
             defer { hideLoadingIndicator() }
             
-            let result = await clientProxy.deleteWallet(walletId: wallet.id)
+            let result = await clientProxy.zeroClient.deleteWallet(walletId: wallet.id)
             switch result {
             case .success:
                 fetchUserWallets()
@@ -145,7 +145,7 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
         }
     }
     
-    private func parseRemoveWalletError(_ error: ClientProxyError) {
+    private func parseRemoveWalletError(_ error: ZeroClientProxyError) {
         if case .zeroError(let error) = error {
             if let apiError = (error as? APIErrorResponse) {
                 let message = switch apiError.code {

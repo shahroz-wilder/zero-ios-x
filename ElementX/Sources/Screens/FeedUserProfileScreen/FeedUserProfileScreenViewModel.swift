@@ -52,7 +52,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         }),
                                                                  clientProxy: clientProxy)
         
-        clientProxy.userRewardsPublisher
+        clientProxy.zeroClient.userRewardsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userRewards, on: self)
             .store(in: &cancellables)
@@ -102,7 +102,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     
     private func fetchUserProfile() async {
         if let zid = state.userProfile.primaryZIdOrAddress, !zid.isEmpty {
-            let result = await clientProxy.fetchFeedUserProfile(userZId: zid)
+            let result = await clientProxy.zeroClient.fetchFeedUserProfile(userZId: zid)
             switch result {
             case .success(let userProfile):
                 state.userProfile = userProfile.withFallbackValues(state.userProfile)
@@ -116,7 +116,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
     
     private func fetchUserFollowStatus() async {
-        let result = await clientProxy.fetchFeedUserFollowingStatus(userId: state.userID)
+        let result = await clientProxy.zeroClient.fetchFeedUserFollowingStatus(userId: state.userID)
         switch result {
         case .success(let isFollowing):
             state.userFollowStatus = isFollowing
@@ -134,7 +134,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             
 //            state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
             let skipItems = isForceRefresh ? 0 : state.userFeeds.count
-            let feedsResult = await clientProxy.fetchUserFeeds(userId: userId,
+            let feedsResult = await clientProxy.zeroClient.fetchUserFeeds(userId: userId,
                                                                  limit: FEEDS_PAGE_COUNT,
                                                                  skip: skipItems)
             switch feedsResult {
@@ -189,7 +189,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         state.userFeeds[postIndex] = originalPost.withUpdatedMeowCount(amount)
         
         Task {
-            let addMeowResult = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            let addMeowResult = await clientProxy.zeroClient.addMeowsToFeed(feedId: postId, amount: amount)
             switch addMeowResult {
             case .success(let post):
                 let homePost = HomeScreenPost(loggedInUserId: clientProxy.userID, post: post, rewardsDecimalPlaces: state.userRewards.decimals)
@@ -237,7 +237,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 guard let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText) else { continue }
                 group.addTask {
                     if let previewResult = await withTimeout(seconds: 5, operation: {
-                        await self.clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
+                        await self.clientProxy.zeroClient.fetchYoutubeLinkMetaData(youtubrUrl: url)
                     }), case let .success(preview) = previewResult {
                         return (post.id, preview)
                     }
@@ -265,9 +265,9 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             // update state locally
             state.userFollowStatus = .init(isFollowing: !isFollowed)
             let result = if isFollowed {
-                await clientProxy.unFollowFeedUser(userId: state.userID)
+                await clientProxy.zeroClient.unFollowFeedUser(userId: state.userID)
             } else {
-                await clientProxy.followFeedUser(userId: state.userID)
+                await clientProxy.zeroClient.followFeedUser(userId: state.userID)
             }
             switch result {
             case .success:
@@ -341,7 +341,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             }
             
             do {
-                if case let .success(localUrl) = try await clientProxy.loadFileFromMediaId(mediaId, key: key) {
+                if case let .success(localUrl) = try await clientProxy.zeroClient.loadFileFromMediaId(mediaId, key: key) {
                     state.bindings.feedMediaPreviewItem = localUrl
                 }
             } catch {

@@ -26,7 +26,7 @@ class ReceiveTransactionViewModel: ReceiveTransactionViewModelType, ReceiveTrans
             initialViewState: .init(bindings: .init())
         )
         
-        clientProxy.zeroCurrentUserPublisher
+        clientProxy.zeroClient.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUser = currentUser
