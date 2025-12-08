@@ -40,10 +40,12 @@ struct CreateRoomScreen: View {
             roomSection
             // topicSection
             securitySection
-            if context.viewState.isKnockingFeatureEnabled,
-               !context.isRoomPrivate {
-                roomAccessSection
-                roomAliasSection
+            // if context.viewState.isKnockingFeatureEnabled, !context.isRoomPrivate {
+            //     roomAccessSection
+            //     roomAliasSection
+            // }
+            if !context.isRoomPrivate {
+                ZeroListRow(label: .plain(title: "Visible in public rooms directory"), kind: .toggle($context.visibleInPublicRoomDirectory))
             }
         }
         .zeroList()

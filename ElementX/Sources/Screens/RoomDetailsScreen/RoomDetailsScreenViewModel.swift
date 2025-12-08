@@ -100,13 +100,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
         
-        userSession.clientProxy.zeroClient.zeroCurrentUserPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] currentUser in
-                self?.state.isCurrentUserZeroProSubscriber = currentUser.subscriptions.zeroPro
-            }
-            .store(in: &cancellables)
-        
         Task {
             if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                 state.permalink = permalinkURL
@@ -326,7 +319,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
             state.canLeaveRoom = powerLevels.canUserLeaveRoom(userID: roomProxy.ownUserID)
             state.canEditRolesOrPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
-            state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy() && state.isCurrentUserZeroProSubscriber
+            state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy()
         }
     }
     

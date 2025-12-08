@@ -43,8 +43,6 @@ struct CreateRoomScreenViewState: BindableState {
             nil
         }
     }
-    
-    var isCurrentUserZeroProSubscriber: Bool = false
 }
 
 struct CreateRoomScreenViewStateBindings {
@@ -52,6 +50,8 @@ struct CreateRoomScreenViewStateBindings {
     var isRoomPrivate: Bool
     var isKnockingOnly: Bool
     var showAttachmentConfirmationDialog = false
+    
+    var visibleInPublicRoomDirectory: Bool = false
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<CreateRoomScreenErrorType>?
