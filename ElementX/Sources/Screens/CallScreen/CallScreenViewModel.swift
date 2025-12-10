@@ -213,7 +213,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             
             timeoutTask = Task { [weak self] in
-                try? await Task.sleep(for: .seconds(10))
+                try? await Task.sleep(for: .seconds(20))
                 guard !Task.isCancelled, let self else { return }
                 MXLog.error("Failed to join Element Call: Timeout")
                 state.bindings.alertInfo = .init(id: UUID(),

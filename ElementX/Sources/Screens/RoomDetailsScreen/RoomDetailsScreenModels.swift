@@ -100,9 +100,9 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var shortcuts: [RoomDetailsScreenViewShortcut] {
         var shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
-//        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
-//            shortcuts.append(.call)
-//        }
+        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
+            shortcuts.append(.call)
+        }
         if dmRecipientInfo == nil, canInviteUsers {
             shortcuts.append(.invite)
         }
