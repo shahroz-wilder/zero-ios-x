@@ -143,6 +143,7 @@ extension ClientProxyMock {
         
         underlyingIsReportRoomSupported = true
         underlyingIsLiveKitRTCSupported = true
+        underlyingIsLoginWithQRCodeSupported = true
         
         underlyingTimelineMediaVisibilityPublisher = CurrentValueSubject<TimelineMediaVisibility, Never>(configuration.timelineMediaVisibility).asCurrentValuePublisher()
         underlyingHideInviteAvatarsPublisher = CurrentValueSubject<Bool, Never>(configuration.hideInviteAvatars).asCurrentValuePublisher()

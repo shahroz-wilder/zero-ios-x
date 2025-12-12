@@ -324,6 +324,17 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         }
     }
     
+    var isLoginWithQRCodeSupported: Bool {
+        get async {
+            do {
+                return try await client.isLoginWithQrCodeSupported()
+            } catch {
+                MXLog.error("Failed checking QR code support with error: \(error)")
+                return false
+            }
+        }
+    }
+    
     var maxMediaUploadSize: Result<UInt, ClientProxyError> {
         get async {
             do {

@@ -319,7 +319,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
             state.canLeaveRoom = powerLevels.canUserLeaveRoom(userID: roomProxy.ownUserID)
             state.canEditRolesOrPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
-            state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy()
+            state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy(isSpace: roomInfo.isSpace,
+                                                                                           joinRule: roomInfo.joinRule)
         }
     }
     
