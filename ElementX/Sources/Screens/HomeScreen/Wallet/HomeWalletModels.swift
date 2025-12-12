@@ -62,7 +62,7 @@ struct HomeWalletViewState: BindableState {
     var walletTokens: [HomeScreenWalletContent] = []
     var walletTransactions: [HomeScreenWalletContent] = []
     var walletNFTs: [HomeScreenWalletContent] = []
-    var walletStakings: [HomeScreenWalletStakingContent] = []
+    var walletStakings: [String: HomeScreenWalletStakingContent] = [:]
     
     var walletTokenNextPageParams: NextPageParams? = nil
     var walletNFTsNextPageParams: NextPageParams? = nil
@@ -96,7 +96,7 @@ struct HomeWalletViewState: BindableState {
                 HomeScreenWalletStakingContent.placeholder()
             }
         }
-        return walletStakings
+        return walletStakings.map({ $0.value })
     }
     
     var bindings: HomeWalletViewStateBindings

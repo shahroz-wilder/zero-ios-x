@@ -302,7 +302,9 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
             
             // Update state once on main actor
             await MainActor.run {
-                self.state.walletStakings = stakingContents
+                let existingStakings = self.state.walletStakings
+                let newStakings = Dictionary(uniqueKeysWithValues: stakingContents.map { ($0.id, $0) })
+                self.state.walletStakings = existingStakings.merging(newStakings) { (_, new) in new }
                 if refreshAllData {
                     for stakingContent in stakingContents {
                         self.fetchStakeDataOfPool(stakingContent, silentRefresh: refreshAllData)
