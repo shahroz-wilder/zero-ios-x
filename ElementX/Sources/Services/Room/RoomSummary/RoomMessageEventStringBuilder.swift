@@ -102,10 +102,24 @@ struct RoomMessageEventStringBuilder {
             let newText = regex.stringByReplacingMatches(in: plainText,
                                                          range: NSRange(plainText.startIndex..., in: plainText),
                                                          withTemplate: "@$1")
-            return newText
+            return simplified(newText)
         } catch {
-            return plainText
+            return simplified(plainText)
         }
+    }
+    
+    private func simplified(_ text: String) -> String {
+        let regex = try! NSRegularExpression(
+            pattern: #"^> <@[0-9a-fA-F\-]{36}:[^>]+>.*?\n\n(.*)"#,
+            options: [.dotMatchesLineSeparators]
+        )
+        let range = NSRange(text.startIndex..., in: text)
+        guard let match = regex.firstMatch(in: text, range: range),
+              let resultRange = Range(match.range(at: 1), in: text)
+        else {
+            return text
+        }
+        return String(text[resultRange])
     }
 
     private func buildMessage(for destination: Destination, caption: String?, type: String) -> AttributedString {
