@@ -54,7 +54,10 @@ extension ClientBuilder {
                 .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
         } else {
             builder = builder
-                .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
+            // Setting this to .allDevices to auto retry sending failed messages due to unsigned deive errors
+            // Link: https://github.com/element-hq/element-x-ios/issues/4048#issuecomment-3004728851
+                .roomKeyRecipientStrategy(strategy: .allDevices)
+                // .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
                 .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
         }
         

@@ -1435,7 +1435,6 @@
 		441857143FC100E0A7DE42A8 /* RoomPowerLevelProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D635709C1D6D37C225AD40E /* RoomPowerLevelProxyProtocol.swift */; };
 		446BCD2D0AE27E0CFD1BDC8F /* ImageMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF584D757E768EA7776A532 /* ImageMediaEventsTimelineView.swift */; };
 		44BDD670FF9095ACE240A3A2 /* VoiceMessageMediaManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4F10BDD56FA77FEC742333 /* VoiceMessageMediaManagerTests.swift */; };
-		44F0E1B576C7599DF8022071 /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */; };
 		454311EAC17D778E19F46592 /* NotificationPermissionsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91868EB98818044E6FEBE532 /* NotificationPermissionsScreenCoordinator.swift */; };
 		454F8DDC4442C0DE54094902 /* LABiometryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F219838588C62198E726E3 /* LABiometryType.swift */; };
 		45D6DC594816288983627484 /* UITestsScreenIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEBE5EA91E8691EDF364EC2 /* UITestsScreenIdentifier.swift */; };
@@ -2192,6 +2191,11 @@
 		79B2A79A2E2A886200A76430 /* FeedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A7982E2A885700A76430 /* FeedProtocol.swift */; };
 		79B2A79C2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */; };
 		79B2A79D2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */; };
+		79B714882EEBCE9E00EBD34C /* LinkNewDeviceScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA49F233E193590274FD19F /* LinkNewDeviceScreenCoordinator.swift */; };
+		79B714892EEBCEA200EBD34C /* LinkNewDeviceScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D09290C6791D6EF04F569E /* LinkNewDeviceScreenModels.swift */; };
+		79B7148A2EEBCEA600EBD34C /* LinkNewDeviceScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3DA6959C041E212A718DD3 /* LinkNewDeviceScreenViewModel.swift */; };
+		79B7148B2EEBCEAA00EBD34C /* LinkNewDeviceScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED096460D7F26F10168FA33B /* LinkNewDeviceScreenViewModelProtocol.swift */; };
+		79B7148C2EEBCEB100EBD34C /* LinkNewDeviceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C4A2D279386A811BDC6DAE /* LinkNewDeviceScreen.swift */; };
 		79B716492DA843F200A68055 /* EventTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81FD0C60175FA081EB19AD /* EventTimelineItem.swift */; };
 		79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F793C422BDACE0C60C774F4 /* UserIdentityProxyProtocol.swift */; };
 		79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8536B40F578BA7FDB23D97B1 /* UserIdentityProxyMock.swift */; };
@@ -2303,7 +2307,6 @@
 		79EF67122E2FB19700D86B0F /* TestablePreviewsDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA723686F23EF45E2B398FBC /* TestablePreviewsDictionary.swift */; };
 		79EF67132E2FB1E300D86B0F /* PillViewOnBubblePreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2005B4AD70A792340E2694F1 /* PillViewOnBubblePreviews.swift */; };
 		79EF67152E2FB41F00D86B0F /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0724EBDFE8BB4C9E5547C57D /* Client.swift */; };
-		79EF67172E2FB46500D86B0F /* Mutex in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF67162E2FB46500D86B0F /* Mutex */; };
 		79F31B212E02BB140043E100 /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */; };
 		79F31B222E02BB140043E100 /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */; };
 		79F31B292E02BE930043E100 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 79F31B282E02BE930043E100 /* FirebaseCore */; };
@@ -4886,7 +4889,6 @@
 				18E9A7822C9829970082DDA4 /* Version in Frameworks */,
 				18E9A7832C9829970082DDA4 /* CryptoSwift in Frameworks */,
 				18E9A7842C9829970082DDA4 /* Tagged in Frameworks */,
-				79EF67172E2FB46500D86B0F /* Mutex in Frameworks */,
 				790AB7B12E1D316300555B1F /* StoreKitPlus in Frameworks */,
 				18E9A7862C9829970082DDA4 /* Emojibase in Frameworks */,
 				18E9A7882C9829970082DDA4 /* SwiftOGG in Frameworks */,
@@ -5029,7 +5031,6 @@
 				36AD4DD4C798E22584ED3200 /* SentrySwiftUI in Frameworks */,
 				36CD6E11B37396E14F032CB6 /* Version in Frameworks */,
 				A0D7E5BD0298A97DCBDCE40B /* Emojibase in Frameworks */,
-				44F0E1B576C7599DF8022071 /* WysiwygComposer in Frameworks */,
 				A93661C962B12942C08864B6 /* SwiftOGG in Frameworks */,
 				37E47F5101C0C036289D3807 /* SwiftSoup in Frameworks */,
 				4610C57A4785FFF5E67F0C6D /* DSWaveformImageViews in Frameworks */,
@@ -9787,7 +9788,6 @@
 				79F31B2A2E02BE9E0043E100 /* FirebaseRemoteConfig */,
 				790AB7B02E1D316300555B1F /* StoreKitPlus */,
 				796146CE2E2E63AA00ECDE0A /* FirebaseFirestore */,
-				79EF67162E2FB46500D86B0F /* Mutex */,
 				790282012E784DA00049DA63 /* SwiftSoup */,
 			);
 			productName = ElementX;
@@ -10850,6 +10850,7 @@
 				18E9A44F2C9829970082DDA4 /* AppLockSetupPINScreenCoordinator.swift in Sources */,
 				79C7CB262EDF0FD90057A9AE /* ZeroClientProxyDelegate.swift in Sources */,
 				18E9A4502C9829970082DDA4 /* AppLockSetupPINScreenModels.swift in Sources */,
+				79B7148A2EEBCEA600EBD34C /* LinkNewDeviceScreenViewModel.swift in Sources */,
 				799D85812E2706E1000A362A /* WalletTransactionType.swift in Sources */,
 				18E9A4512C9829970082DDA4 /* AppLockSetupPINScreenViewModel.swift in Sources */,
 				188C87D42D37F98E00A139EB /* EditRoomAddressListRow.swift in Sources */,
@@ -10886,6 +10887,7 @@
 				18E9A4612C9829970082DDA4 /* Array.swift in Sources */,
 				79281A742E6A243900D86DD6 /* OnLoginScreen.swift in Sources */,
 				18E9A4622C9829970082DDA4 /* Assets.swift in Sources */,
+				79B7148B2EEBCEAA00EBD34C /* LinkNewDeviceScreenViewModelProtocol.swift in Sources */,
 				18E9A4632C9829970082DDA4 /* AsyncSequence.swift in Sources */,
 				18E9A4642C9829970082DDA4 /* AttributedString.swift in Sources */,
 				18E9A4652C9829970082DDA4 /* AttributedStringBuilder.swift in Sources */,
@@ -10919,6 +10921,7 @@
 				790A47482E6ADBFE0033604D /* OtpFormView.swift in Sources */,
 				18B9B8BF2CE3F5F100DDD64D /* StackedAvatarsView.swift in Sources */,
 				18E9A4852C9829970082DDA4 /* BlankFormCoordinator.swift in Sources */,
+				79B7148C2EEBCEB100EBD34C /* LinkNewDeviceScreen.swift in Sources */,
 				18E9A4862C9829970082DDA4 /* BlockedUsersScreen.swift in Sources */,
 				79C6F7302DF82764003CEBB9 /* AuthenticationStartScreen.swift in Sources */,
 				792E928F2E5CEBD600C88D7B /* SearchUserScreenModels.swift in Sources */,
@@ -11042,6 +11045,7 @@
 				7977518E2DDB4780006CF62D /* FeedUserProfileDetailsView.swift in Sources */,
 				79E290C92EC74CEA00644784 /* HomeFeedViewModelProtocol.swift in Sources */,
 				793849382DF85D7C00316004 /* RoomScreenHook.swift in Sources */,
+				79B714882EEBCE9E00EBD34C /* LinkNewDeviceScreenCoordinator.swift in Sources */,
 				18E9A4D92C9829970082DDA4 /* ElementCallConfiguration.swift in Sources */,
 				185454DD2CFF0DDD003CA957 /* CompleteProfileScreenCoordinator.swift in Sources */,
 				18E9A4DA2C9829970082DDA4 /* ElementCallService.swift in Sources */,
@@ -11761,6 +11765,7 @@
 				18E9A6A32C9829970082DDA4 /* SecureBackupScreen.swift in Sources */,
 				18E9A6A42C9829970082DDA4 /* SecureBackupScreenCoordinator.swift in Sources */,
 				18E9A6A52C9829970082DDA4 /* SecureBackupScreenModels.swift in Sources */,
+				79B714892EEBCEA200EBD34C /* LinkNewDeviceScreenModels.swift in Sources */,
 				18E9A6A62C9829970082DDA4 /* SecureBackupScreenViewModel.swift in Sources */,
 				79343C812E5CA7F600ED9976 /* ZeroContants.swift in Sources */,
 				18E9A6A72C9829970082DDA4 /* SecureBackupScreenViewModelProtocol.swift in Sources */,
@@ -15222,11 +15227,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */;
 			productName = StoreKitPlus;
-		};
-		79EF67162E2FB46500D86B0F /* Mutex */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 91740346377FEBEAF7AD32FC /* XCRemoteSwiftPackageReference "swift-mutex" */;
-			productName = Mutex;
 		};
 		79F31B242E02BE5A0043E100 /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
