@@ -772,6 +772,10 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
             return .failure(.sdkError(error))
         }
     }
+    
+    func linkNewDeviceService() -> LinkNewDeviceService {
+        LinkNewDeviceService(handler: client.newGrantLoginWithQrCodeHandler())
+    }
 
     func logout() async {
         do {
