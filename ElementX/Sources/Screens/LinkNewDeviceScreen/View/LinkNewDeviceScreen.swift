@@ -12,7 +12,7 @@ struct LinkNewDeviceScreen: View {
     @Bindable var context: LinkNewDeviceScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: 24) {
+        FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
             mainContent
         } bottomContent: {
             buttons
@@ -28,33 +28,14 @@ struct LinkNewDeviceScreen: View {
     var mainContent: some View {
         switch context.viewState.mode {
         case .loading, .readyToLink:
-            VStack(spacing: 16) {
-                BigIcon(icon: \.computer, style: .default)
-                
-                Text(L10n.screenLinkNewDeviceRootTitle)
-                    .font(.compound.headingMDBold)
-                    .foregroundColor(.compound.textPrimary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.horizontal, 8)
+            TitleAndIcon(title: L10n.screenLinkNewDeviceRootTitle,
+                         icon: \.computer,
+                         iconStyle: .default)
         case .notSupported:
-            VStack(spacing: 16) {
-                BigIcon(icon: \.errorSolid, style: .alertSolid)
-                
-                VStack(spacing: 8) {
-                    Text(L10n.screenLinkNewDeviceErrorNotSupportedTitle)
-                        .font(.compound.headingMDBold)
-                        .foregroundColor(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(L10n.screenLinkNewDeviceErrorNotSupportedSubtitle)
-                        .font(.compound.bodyMD)
-                        .foregroundColor(.compound.textSecondary)
-                        .multilineTextAlignment(.center)
-                }
-            }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 40)
+            TitleAndIcon(title: L10n.screenLinkNewDeviceErrorNotSupportedTitle,
+                         subtitle: L10n.screenLinkNewDeviceErrorNotSupportedSubtitle,
+                         icon: \.errorSolid,
+                         iconStyle: .alertSolid)
         }
     }
     
