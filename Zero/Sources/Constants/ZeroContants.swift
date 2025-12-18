@@ -26,14 +26,14 @@ protocol AppServer {
 }
 
 struct DevServer: AppServer {
-    let matrixHomeServerUrl = "https://zero-synapse-development-db365bf96189.herokuapp.com"
+    let matrixHomeServerUrl = "https://synapse-dev.zero.tech"
     let matrixHomeServerPostfix = "zero-synapse-development.zer0.io"
     let zeroRootUrl = "https://zos-api-development-fb2c513ffa60.herokuapp.com/"
     let walletConnectProjectId = ZeroSecrets.walletConnectProjectId
 }
 
 struct ProdServer: AppServer {
-    let matrixHomeServerUrl = "https://zos-home-2-e24b9412096f.herokuapp.com"
+    let matrixHomeServerUrl = "https://synapse.zero.tech"
     let matrixHomeServerPostfix = "zos-home-2.zero.tech"
     let zeroRootUrl = "https://zosapi.zero.tech/"
     let walletConnectProjectId = ZeroSecrets.walletConnectProjectId
