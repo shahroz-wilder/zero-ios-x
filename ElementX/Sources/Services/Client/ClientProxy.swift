@@ -879,6 +879,24 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         }
     }
     
+    func optimizeStores() async -> Result<Void, ClientProxyError> {
+        do {
+            return try await .success(client.optimizeStores())
+        } catch {
+            MXLog.error("Failed optimizing client stores with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func storeSizes() async -> Result<StoreSizes, ClientProxyError> {
+        do {
+            return try await .success(client.getStoreSizes())
+        } catch {
+            MXLog.error("Failed optimizing client stores with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError> {
         do {
             let config = try await client.fetchMediaPreviewConfig()
