@@ -27,13 +27,15 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var rolesSection: some View {
         Section {
-            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
-                                        icon: \.admin),
-                        details: administratorDetails,
-                        kind: .navigationLink {
-                            context.send(viewAction: .editRoles(.administrators))
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+            if context.viewState.ownPowerLevel.role == .creator {
+                ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
+                                            icon: \.admin),
+                            details: administratorDetails,
+                            kind: .navigationLink {
+                    context.send(viewAction: .editRoles(.administrators))
+                })
+                .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+            }
             
             ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
                                         icon: \.chatProblem),
@@ -43,7 +45,15 @@ struct RoomRolesAndPermissionsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
             
-            if context.viewState.ownRole != .creator {
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
+                                    icon: \.chatProblem),
+                    details: moderatorDetails,
+                    kind: .navigationLink {
+                        context.send(viewAction: .editRoles(.moderators))
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
+            
+            if context.viewState.ownPowerLevel.role != .creator {
                 ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
                                         icon: \.edit),
                         kind: .button {

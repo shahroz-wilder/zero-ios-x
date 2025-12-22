@@ -58,6 +58,13 @@ struct SpaceScreen: View {
                            showProSubscriptionBadge: false,
                            isRoomDirect: false,
                            mediaProvider: context.mediaProvider)
+                .contentShape(.rect)
+                .onTapGesture {
+                    if context.viewState.isSpaceManagementEnabled,
+                       let roomProxy = context.viewState.roomProxy {
+                        context.send(viewAction: .spaceSettings(roomProxy: roomProxy))
+                    }
+                }
         }
         
         // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
