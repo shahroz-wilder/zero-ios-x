@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mhdhejazi/Dynamic",
       "state" : {
-        "revision" : "ab9a2570862d54aed2663691bb767f881226a12f",
-        "version" : "1.2.0"
+        "revision" : "23dfe6ff2ed232c58df3e62bc15b96f1ed643c5b",
+        "version" : "1.0.0"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "3e2571a11f611761114038225ef368dd9ac83805",
-        "version" : "0.16.0-rc.4"
+        "revision" : "6fd94d696cc2118fa2180d2e3216020cfa83d3cc",
+        "version" : "0.16.3"
       }
     },
     {

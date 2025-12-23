@@ -13716,7 +13716,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.25.3;
+				MARKETING_VERSION = 0.25.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13752,7 +13752,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.25.3;
+				MARKETING_VERSION = 0.25.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -14686,7 +14686,7 @@
 			repositoryURL = "https://github.com/mhdhejazi/Dynamic";
 			requirement = {
 				kind = exactVersion;
-				version = 1.2;
+				version = 1.0.0;
 			};
 		};
 		790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */ = {
@@ -14710,7 +14710,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "0.16.0-rc.4";
+				version = 0.16.3;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {

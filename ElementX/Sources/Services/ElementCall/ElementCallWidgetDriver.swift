@@ -93,7 +93,8 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
                                                                                 rageshakeSubmitUrl: rageshakeURL,
                                                                                 sentryDsn: analyticsConfiguration?.sentryDSN,
                                                                                 sentryEnvironment: nil),
-                                                                   config: .init(intent: intent))
+                                                                   config: .init(intent: intent,
+                                                                                 skipLobby: true))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
