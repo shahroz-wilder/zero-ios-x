@@ -9,10 +9,11 @@
 import Combine
 import Foundation
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 extension SpaceServiceProxyMock {
     struct Configuration {
-        var joinedSpaces: [SpaceRoomProxyProtocol] = []
+        var topLevelSpaces: [SpaceRoomProxyProtocol] = []
         var joinedParentSpaces: [SpaceRoomProxyProtocol] = []
         var spaceRoomLists: [String: SpaceRoomListProxyMock] = [:]
         var leaveSpaceRooms: [LeaveSpaceRoom] = []
@@ -21,7 +22,7 @@ extension SpaceServiceProxyMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        joinedSpacesPublisher = .init(configuration.joinedSpaces)
+        topLevelSpacesPublisher = .init(configuration.topLevelSpaces)
         joinedParentsChildIDReturnValue = .success(configuration.joinedParentSpaces)
         spaceRoomListSpaceIDClosure = { spaceID in
             if let spaceRoomList = configuration.spaceRoomLists[spaceID] {
@@ -35,7 +36,7 @@ extension SpaceServiceProxyMock {
                                            leaveHandle: LeaveSpaceHandleSDKMock(.init(rooms: configuration.leaveSpaceRooms))))
         }
         spaceForIdentifierSpaceIDClosure = { spaceID in
-            .success(configuration.joinedSpaces.first { $0.id == spaceID })
+            .success(configuration.topLevelSpaces.first { $0.id == spaceID })
         }
     }
 }
@@ -49,6 +50,6 @@ extension SpaceServiceProxyMock.Configuration {
             ($0.id, SpaceRoomListProxyMock(.init(spaceRoomProxy: $0, initialSpaceRooms: .mockSingleRoom)))
         }
         
-        return .init(joinedSpaces: .mockJoinedSpaces, spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists))
+        return .init(topLevelSpaces: .mockJoinedSpaces, spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists))
     }
 }

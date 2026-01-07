@@ -8,6 +8,7 @@
 
 @testable import ElementX
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 import Combine
 import XCTest
@@ -550,6 +551,38 @@ class RoomScreenViewModelTests: XCTestCase {
 
         self.viewModel = viewModel
 
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
+        try await deferred.fulfill()
+    }
+    
+    func testHistoryVisibleBannerDoesNotAppearIfCannotSendMessages() async throws {
+        ServiceLocator.shared.settings.enableKeyShareOnInvite = true
+        ServiceLocator.shared.settings.acknowledgedHistoryVisibleRooms = Set()
+        
+        let powerlevels = RoomPowerLevelsProxyMockConfiguration(
+            canUserSendMessage: false
+        )
+        
+        let configuration = JoinedRoomProxyMockConfiguration(id: "$room:example.com", isEncrypted: true, powerLevelsConfiguration: powerlevels)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.historyVisibility = .shared
+        
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        
+        self.viewModel = viewModel
+        
         let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { $0.footerDetails != nil }
         try await deferred.fulfill()
     }

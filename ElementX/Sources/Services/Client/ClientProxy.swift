@@ -176,7 +176,7 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
-        spaceService = SpaceServiceProxy(spaceService: client.spaceService())
+        spaceService = await SpaceServiceProxy(spaceService: client.spaceService())
         
         let userId = try client.userId()
         zeroClient = ZeroClientProxy(userID: userId, client: client, appSettings: appSettings)

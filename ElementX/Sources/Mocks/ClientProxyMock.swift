@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDKMocks
 
 struct ClientProxyMockConfiguration {
     var homeserver = ""
@@ -120,7 +121,7 @@ extension ClientProxyMock {
                     roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                     return .joined(roomProxy)
                 }
-            } else if let spaceRoomProxy = configuration.spaceServiceConfiguration.joinedSpaces.first(where: { $0.id == identifier }) {
+            } else if let spaceRoomProxy = configuration.spaceServiceConfiguration.topLevelSpaces.first(where: { $0.id == identifier }) {
                 let roomProxy = await JoinedRoomProxyMock(.init(id: spaceRoomProxy.id, name: spaceRoomProxy.name, isSpace: spaceRoomProxy.isSpace))
                 roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)

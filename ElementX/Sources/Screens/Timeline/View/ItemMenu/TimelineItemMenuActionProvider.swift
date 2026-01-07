@@ -92,6 +92,7 @@ struct TimelineItemMenuActionProvider {
 
         if item.isCopyable {
             actions.append(.copy)
+            actions.append(.translate)
         } else if item.hasMediaCaption {
             actions.append(.copyCaption)
         }
