@@ -163,11 +163,11 @@ struct HomeWalletContent: View {
                             .font(.zero.bodyMD)
                             .foregroundColor(.compound.textSecondary)
                         
-                        CompoundIcon(showWalletBalance ? \.visibilityOn : \.visibilityOff, size: .custom(16), relativeTo: .body)
-                            .foregroundStyle(.compound.textSecondary)
-                            .onTapGesture {
-                                context.send(viewAction: .toggleWalletBalance(show: !showWalletBalance))
-                            }
+//                        CompoundIcon(showWalletBalance ? \.visibilityOn : \.visibilityOff, size: .custom(16), relativeTo: .body)
+//                            .foregroundStyle(.compound.textSecondary)
+//                            .onTapGesture {
+//                                context.send(viewAction: .toggleWalletBalance(show: !showWalletBalance))
+//                            }
                     }
                     
                     Text(context.viewState.userWalletBalance)
