@@ -46,13 +46,14 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
                 return
             }
             
-            do {
-                let data = try metadataObject.qrBinaryValue
-                scanResult = data
-                MXLog.info("Scanned data")
-            } catch {
-                MXLog.error("Invalid QR code: \(error)")
-            }
+            //TODO: uncomment this block once the issue on develop-copy is resolved from elementX
+//            do {
+//                let data = try metadataObject.qrBinaryValue
+//                scanResult = data
+//                MXLog.info("Scanned data")
+//            } catch {
+//                MXLog.error("Invalid QR code: \(error)")
+//            }
         }
     }
 }

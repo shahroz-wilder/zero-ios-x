@@ -943,7 +943,6 @@
 		18E9A6802C9829970082DDA4 /* RoomTimelineItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F2F8998E5632668B0AD848 /* RoomTimelineItemView.swift */; };
 		18E9A6812C9829970082DDA4 /* RoomTimelineItemViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C2D52E36AD614B3C003EF6 /* RoomTimelineItemViewState.swift */; };
 		18E9A6852C9829970082DDA4 /* RoundedCornerShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839E2C35DF3F9C7B54C3CE49 /* RoundedCornerShape.swift */; };
-		18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F079B5DBD0D85FEA687AAE /* SDKGeneratedMocks.swift */; };
 		18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEB5FF7A09B79B0C6B528F7C /* SFNumberedListView.swift */; };
 		18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A37E2FACFD041CE466223CD /* SceneDelegate.swift */; };
 		18E9A68E2C9829970082DDA4 /* ScreenTrackerViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196004E7695FBA292A7944AF /* ScreenTrackerViewModifier.swift */; };
@@ -2233,6 +2232,7 @@
 		79C5C10B2EB4BC290016DC6C /* CreateRoomScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD1CFB730C7417925264F17 /* CreateRoomScreen.swift */; };
 		79C5C10C2EB4BC930016DC6C /* SpaceSettingsFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE3EDEA7E64D68FEB828F83 /* SpaceSettingsFlowCoordinator.swift */; };
 		79C5C10D2EB4BC9B0016DC6C /* SpaceSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9475FD81B13D50103E5290EB /* SpaceSettingsScreen.swift */; };
+		79C6124D2F0ECC2F0062AA63 /* libMatrixRustSDKMocks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73F3153AB9D628110878E24F /* libMatrixRustSDKMocks.a */; };
 		79C6BB252D47B6E700FC3CBF /* RoomPreviewProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739077686814E4EA339B1C83 /* RoomPreviewProxyProtocol.swift */; };
 		79C6BB262D47B6F400FC3CBF /* RoomPreviewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D94852AD5BB376CBCC3544 /* RoomPreviewProxy.swift */; };
 		79C6BB272D47B73B00FC3CBF /* RoomMembershipDetailsProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1434D5169F0EE319E226DA7F /* RoomMembershipDetailsProxyProtocol.swift */; };
@@ -3138,6 +3138,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = C0FAEB81CFD9776CD78CE489;
 			remoteInfo = ElementX;
+		};
+		79C6124E2F0ECC2F0062AA63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC22997D58D612146053154D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 676A87694F0F247B2AF1A142;
+			remoteInfo = MatrixRustSDKMocks;
 		};
 		79EF67072E2FA8A800D86B0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4921,6 +4928,7 @@
 				18E9A7892C9829970082DDA4 /* DSWaveformImageViews in Frameworks */,
 				79F31B292E02BE930043E100 /* FirebaseCore in Frameworks */,
 				18C8530A2D11AE4B009AF206 /* Starscream in Frameworks */,
+				79C6124D2F0ECC2F0062AA63 /* libMatrixRustSDKMocks.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9802,6 +9810,7 @@
 			dependencies = (
 				18E9A3E02C9829970082DDA4 /* PBXTargetDependency */,
 				18C8531F2D121361009AF206 /* PBXTargetDependency */,
+				79C6124F2F0ECC2F0062AA63 /* PBXTargetDependency */,
 			);
 			name = Zero;
 			packageProductDependencies = (
@@ -11821,7 +11830,6 @@
 				798D991C2E4C9A5600164028 /* ZWalletStakingApprovalResponse.swift in Sources */,
 				18D5D9A72CEB577300107940 /* ZeroRewardApi.swift in Sources */,
 				18525CF82CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */,
-				18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */,
 				18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */,
 				79C5C10B2EB4BC290016DC6C /* CreateRoomScreen.swift in Sources */,
 				790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */,
@@ -13593,6 +13601,11 @@
 			target = 19F0C845D67E9BEA4BE7133E /* ShareExtension */;
 			targetProxy = 52A426E590105174D83B9532 /* PBXContainerItemProxy */;
 		};
+		79C6124F2F0ECC2F0062AA63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 676A87694F0F247B2AF1A142 /* MatrixRustSDKMocks */;
+			targetProxy = 79C6124E2F0ECC2F0062AA63 /* PBXContainerItemProxy */;
+		};
 		856923B8570E40A97E26EEDE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C0FAEB81CFD9776CD78CE489 /* ElementX */;
@@ -13785,20 +13798,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		2DFF6BC8513E455947420CEA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_NAME = MatrixRustSDKMocks;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		18E9A7902C9829970082DDA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -13867,6 +13866,20 @@
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2DFF6BC8513E455947420CEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_NAME = MatrixRustSDKMocks;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -13956,9 +13969,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				OTHER_SWIFT_FLAGS = (
-					"-DIS_MAIN_APP",
-				);
+				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(APP_NAME)";
@@ -13988,9 +13999,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				OTHER_SWIFT_FLAGS = (
-					"-DIS_MAIN_APP",
-				);
+				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(APP_NAME)";
@@ -14384,20 +14393,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4272AFBE93EEF7B03D9B9ECD /* Build configuration list for PBXNativeTarget "MatrixRustSDKMocks" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				53B6D5892165E771A8489F9D /* Debug */,
-				2DFF6BC8513E455947420CEA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		18E9A78F2C9829970082DDA4 /* Build configuration list for PBXNativeTarget "Zero" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18E9A7902C9829970082DDA4 /* Debug */,
 				18E9A7912C9829970082DDA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4272AFBE93EEF7B03D9B9ECD /* Build configuration list for PBXNativeTarget "MatrixRustSDKMocks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				53B6D5892165E771A8489F9D /* Debug */,
+				2DFF6BC8513E455947420CEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
