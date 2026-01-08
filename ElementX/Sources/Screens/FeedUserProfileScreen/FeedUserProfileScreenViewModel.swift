@@ -280,7 +280,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
     
     private func openDirectChat() {
-        guard let userId = state.userID.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) else {
+        guard let userId = state.userID.toMatrixUserIdFormat(ZeroConstants.appServer.matrixHomeServerPostfix) else {
             return
         }
         Task {

@@ -932,7 +932,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func startUserProfileWithFeedFlow(userID: String?, profile: ZPostUserProfile?, feedProtocol: FeedProtocol?) {
-        guard let userId = userID ?? profile?.userId.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) else {
+        guard let userId = userID ?? profile?.userId.toMatrixUserIdFormat(ZeroConstants.appServer.matrixHomeServerPostfix) else {
             return
         }
         let navigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)

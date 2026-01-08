@@ -47,7 +47,7 @@ extension ZPostUserProfile {
     
     var zIdOrPublicAddressDisplayText: String? {
         if let id = primaryZid ?? publicAddress {
-            if id.hasPrefix(ZeroContants.ZERO_WALLET_ADDRESS_PREFIX) {
+            if id.hasPrefix(ZeroConstants.ZERO_WALLET_ADDRESS_PREFIX) {
                 return displayFormattedAddress(id)
             } else {
                 return id

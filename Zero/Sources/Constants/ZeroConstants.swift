@@ -1,10 +1,10 @@
 import Foundation
 
-enum ZeroContants {
+enum ZeroConstants {
     /// Change app environment here and respective values will be applied everywhere .i.e. `DevServer()` or `ProdServer()`
     static let appServer: AppServer = ProdServer()
     
-    static let accountProvider: String = ZeroContants.appServer.matrixHomeServerUrl.replacingOccurrences(of: "https://", with: "")
+    static let accountProvider: String = ZeroConstants.appServer.matrixHomeServerUrl.replacingOccurrences(of: "https://", with: "")
     static let ZERO_APP_STORE_APP_ID = "6476882926"
     
     /// Channel Constants
@@ -23,6 +23,7 @@ protocol AppServer {
     var matrixHomeServerPostfix: String { get }
     var zeroRootUrl: String { get }
     var walletConnectProjectId: String { get }
+    var pushGateway: String { get }
 }
 
 struct DevServer: AppServer {
@@ -30,6 +31,7 @@ struct DevServer: AppServer {
     let matrixHomeServerPostfix = "zero-synapse-development.zer0.io"
     let zeroRootUrl = "https://zos-api-development-fb2c513ffa60.herokuapp.com/"
     let walletConnectProjectId = ZeroSecrets.walletConnectProjectId
+    let pushGateway = "https://push-gateway-dev.zero.tech"
 }
 
 struct ProdServer: AppServer {
@@ -37,4 +39,5 @@ struct ProdServer: AppServer {
     let matrixHomeServerPostfix = "zos-home-2.zero.tech"
     let zeroRootUrl = "https://zosapi.zero.tech/"
     let walletConnectProjectId = ZeroSecrets.walletConnectProjectId
+    let pushGateway = "https://push-gateway.zero.tech"
 }

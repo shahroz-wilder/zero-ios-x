@@ -61,6 +61,6 @@ extension ZeroWallet {
     }
     
     var zcanLiveUrl: URL? {
-        URL(string: "\(ZeroContants.ZERO_WALLET_ZSCAN_LIVE_URL)address/\(address)")
+        URL(string: "\(ZeroConstants.ZERO_WALLET_ZSCAN_LIVE_URL)address/\(address)")
     }
 }

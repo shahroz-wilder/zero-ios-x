@@ -216,7 +216,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             // check whether a room is selected or channel
-            let isAChannel = roomIdentifier.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
+            let isAChannel = roomIdentifier.starts(with: ZeroConstants.ZERO_CHANNEL_PREFIX)
             if isAChannel {
                 if let channel = state.channels.first(where: { $0.channelFullName == roomIdentifier }) {
                     joinZeroChannel(channel)

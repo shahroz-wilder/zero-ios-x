@@ -178,7 +178,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     // MARK: - Constants
     
     private enum MetaDataEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let linkPreviewEndPoint = "\(hostURL)linkPreviews"
         static let feedMediaEndPoint = "\(hostURL)api/media"

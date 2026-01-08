@@ -310,7 +310,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let unreadNotificationsCount: UInt
     
     var isAChannel: Bool {
-        name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
+        name.starts(with: ZeroConstants.ZERO_CHANNEL_PREFIX)
     }
     
     var isPrimary: Bool {
@@ -410,8 +410,8 @@ extension HomeScreenRoom {
 extension HomeScreenChannel {
     init(channelZId: String) {
         let channelDisplayName = String((channelZId.split(separator: ".").first ?? ""))
-        let rootChannelName = channelDisplayName.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
-        let channelId = "#\(rootChannelName):\(ZeroContants.appServer.matrixHomeServerPostfix)"
+        let rootChannelName = channelDisplayName.replacingOccurrences(of: ZeroConstants.ZERO_CHANNEL_PREFIX, with: "")
+        let channelId = "#\(rootChannelName):\(ZeroConstants.appServer.matrixHomeServerPostfix)"
         
         self.init(
             id: channelId,

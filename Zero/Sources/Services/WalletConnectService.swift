@@ -22,7 +22,7 @@ class WalletConnectService {
     private var isZeroAppAlive: Bool = true
 
     func configureWalletConnect() {
-        let projectId: String = ZeroContants.appServer.walletConnectProjectId
+        let projectId: String = ZeroConstants.appServer.walletConnectProjectId
         
         Task {
             /// App Meta Data

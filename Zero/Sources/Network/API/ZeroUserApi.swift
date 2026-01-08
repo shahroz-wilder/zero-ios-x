@@ -111,7 +111,7 @@ class ZeroUserApi: ZeroUserApiProtocol {
     // MARK: - Constants
     
     private enum UserEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let matrixUsersEndPoint = "\(hostURL)matrix/users/zero"
         static let matrixSearchUsersEndPoint = "\(hostURL)api/v2/users/searchInNetworksByName"

@@ -51,7 +51,7 @@ struct AppForceUpdateScreen: View {
     }
     
     private func openAppStore() {
-        if let url = URL(string: "itms-apps://itunes.apple.com/app/\(ZeroContants.ZERO_APP_STORE_APP_ID)") {
+        if let url = URL(string: "itms-apps://itunes.apple.com/app/\(ZeroConstants.ZERO_APP_STORE_APP_ID)") {
             UIApplication.shared.open(url)
         }
     }

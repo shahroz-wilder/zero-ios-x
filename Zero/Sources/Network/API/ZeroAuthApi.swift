@@ -160,7 +160,7 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     // MARK: - Private
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
-        let homeAddress = ZeroContants.appServer.matrixHomeServerUrl
+        let homeAddress = ZeroConstants.appServer.matrixHomeServerUrl
         let url = "\(homeAddress)/\(AuthEndPoints.matrixSessionEndPoint)"
         var host = ""
         if let range = homeAddress.range(of: "https://") {
@@ -275,7 +275,7 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     // MARK: - Constants
     
     private enum AuthEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let loginEndPoint = "\(hostURL)api/v2/accounts/login"
         static let ssoTokenEndPoint = "\(hostURL)accounts/ssoToken"

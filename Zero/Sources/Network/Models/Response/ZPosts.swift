@@ -64,10 +64,10 @@ struct ZPost: Codable, Identifiable {
 extension ZPost {
     var worldZIdDisplayText: String? {
         if let zid = worldZid {
-            if zid.starts(with: ZeroContants.ZERO_WALLET_ADDRESS_PREFIX) {
+            if zid.starts(with: ZeroConstants.ZERO_WALLET_ADDRESS_PREFIX) {
                 return displayFormattedAddress(zid)
             } else {
-                return "\(ZeroContants.ZERO_CHANNEL_PREFIX)\(zid)"
+                return "\(ZeroConstants.ZERO_CHANNEL_PREFIX)\(zid)"
             }
         }
         return nil

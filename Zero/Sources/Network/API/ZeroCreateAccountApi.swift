@@ -101,7 +101,7 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
     // MARK: - Constants
     
     private enum CreateAccountEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let validateInviteCodeEndPoint = "\(hostURL)invite/\(CreateAccountConstants.invite_code_path_param)/validate"
         static let authenticateNonceEndPoint = "\(hostURL)authentication/nonce"

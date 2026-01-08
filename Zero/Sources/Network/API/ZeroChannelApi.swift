@@ -52,7 +52,7 @@ class ZeroChannelApi: ZeroChannelApiProtocol {
     // MARK: - Constants
     
     private enum ChannelEndPoints {
-        static let zidsEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/users/zids"
-        static let joinChannelEndPoint = "\(ZeroContants.appServer.zeroRootUrl)matrix/room/join"
+        static let zidsEndPoint = "\(ZeroConstants.appServer.zeroRootUrl)api/v2/users/zids"
+        static let joinChannelEndPoint = "\(ZeroConstants.appServer.zeroRootUrl)matrix/room/join"
     }
 }

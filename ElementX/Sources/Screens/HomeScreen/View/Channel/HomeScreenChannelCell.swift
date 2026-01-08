@@ -15,7 +15,7 @@ struct HomeScreenChannelCell: View {
     var attributedDisplayName: AttributedString {
         var channelAttributedName = AttributedString(channel.displayName)
         if channel.notificationsCount > 0 {
-            if let prefixRange = channelAttributedName.range(of: ZeroContants.ZERO_CHANNEL_PREFIX) {
+            if let prefixRange = channelAttributedName.range(of: ZeroConstants.ZERO_CHANNEL_PREFIX) {
                 channelAttributedName[prefixRange].foregroundColor = .compound.textSecondary
             }
         }

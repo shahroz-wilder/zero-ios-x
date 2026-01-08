@@ -199,7 +199,7 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
     // MARK: - Constants
     
     private enum StakingEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let totalStaked = "\(hostURL)api/staking/\(StakingApiConstants.stake_pool_address)/total-staked"
         static let config = "\(hostURL)api/staking/\(StakingApiConstants.stake_pool_address)/config"

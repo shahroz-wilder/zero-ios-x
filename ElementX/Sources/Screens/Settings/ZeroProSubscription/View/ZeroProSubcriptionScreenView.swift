@@ -117,7 +117,7 @@ struct ZeroProSubcriptionScreenView: View {
                         .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                     
-                    Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD) / month")
+                    Text("$\(ZeroConstants.ZERO_PRO_SUBSCRIPTION_USD) / month")
                         .font(.zero.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
                 }
@@ -156,12 +156,12 @@ private struct ZeroSubscriptionModalView : View {
                     
                     Spacer()
                     
-                    Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD.formatToThousandSeparatedString()) / month")
+                    Text("$\(ZeroConstants.ZERO_PRO_SUBSCRIPTION_USD.formatToThousandSeparatedString()) / month")
                         .font(.compound.bodyMD)
                         .foregroundColor(.compound.textPrimary)
                 }
                 
-                Text("$\((ZeroContants.ZERO_PRO_SUBSCRIPTION_USD * 12).formatToThousandSeparatedString()) per year, billed monthly")
+                Text("$\((ZeroConstants.ZERO_PRO_SUBSCRIPTION_USD * 12).formatToThousandSeparatedString()) per year, billed monthly")
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }

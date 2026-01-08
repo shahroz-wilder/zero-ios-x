@@ -32,7 +32,7 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var isEncrypted: Bool { roomInfo.encryptionState == .encrypted }
     
     var isDirect: Bool { roomInfo.isDirect }
-    var isAChannel: Bool { displayName?.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) == true }
+    var isAChannel: Bool { displayName?.starts(with: ZeroConstants.ZERO_CHANNEL_PREFIX) == true }
     var isSpace: Bool { roomInfo.isSpace }
     
     var successor: SuccessorRoom? { roomInfo.successorRoom }

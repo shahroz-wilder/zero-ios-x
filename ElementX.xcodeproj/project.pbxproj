@@ -151,8 +151,8 @@
 		180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
 		180EE5D82CB01D5800891BBC /* MediaProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65E4BB9E82EB8373207CF8 /* MediaProviderMock.swift */; };
 		180EE5DD2CB01F7000891BBC /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = 180EE5DC2CB01F7000891BBC /* WysiwygComposer */; };
-		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
-		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
+		18115E532CAEA4D9001A8F4A /* ZeroConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroConstants.swift */; };
+		18115E542CAEB318001A8F4A /* ZeroConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroConstants.swift */; };
 		1812FEE72CF48C530098241C /* MatrixRustSDK in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A3E22C9829970082DDA4 /* MatrixRustSDK */; };
 		1812FEE82CF48CA70098241C /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1812FEEB2CF48CEC0098241C /* KnockRequestsListEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A8B5E798CC778C363655E /* KnockRequestsListEmptyStateView.swift */; };
@@ -1955,8 +1955,8 @@
 		792E92AD2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */; };
 		792E92AE2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */; };
 		7930F8F52EF41D5600493495 /* QRCodeErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3082001D373607455CB08A1 /* QRCodeErrorView.swift */; };
-		79343C812E5CA7F600ED9976 /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
-		79343C832E5CAA0B00ED9976 /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
+		79343C812E5CA7F600ED9976 /* ZeroConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroConstants.swift */; };
+		79343C832E5CAA0B00ED9976 /* ZeroConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroConstants.swift */; };
 		79343C842E5CAA1300ED9976 /* ZeroSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDDF962D15735E00CBB04E /* ZeroSecrets.swift */; };
 		79343C852E5CAA3700ED9976 /* MapTilerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1F2AAA3F0F2B72D2FFE4D0 /* MapTilerConfiguration.swift */; };
 		79343C862E5CAA5500ED9976 /* SpaceFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDE826EAB1BAB80C1104980 /* SpaceFlowCoordinator.swift */; };
@@ -3369,7 +3369,7 @@
 		17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxyMock.swift; sourceTree = "<group>"; };
 		17BAE25A0E9E9F2F1BBA8930 /* DeactivateAccountScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeactivateAccountScreenViewModel.swift; sourceTree = "<group>"; };
 		180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSearchedUser.swift; sourceTree = "<group>"; };
-		18115E512CAEA4D4001A8F4A /* ZeroContants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroContants.swift; sourceTree = "<group>"; };
+		18115E512CAEA4D4001A8F4A /* ZeroConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroConstants.swift; sourceTree = "<group>"; };
 		181CF280BC8E3F335AFCB4B8 /* RemotePreferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePreferenceTests.swift; sourceTree = "<group>"; };
 		1828CE432D010108002FF640 /* ZCurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZCurrentUser.swift; sourceTree = "<group>"; };
 		1828CE462D011492002FF640 /* CreateAccountHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountHelper.swift; sourceTree = "<group>"; };
@@ -5374,7 +5374,7 @@
 		18115E502CAEA4C0001A8F4A /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				18115E512CAEA4D4001A8F4A /* ZeroContants.swift */,
+				18115E512CAEA4D4001A8F4A /* ZeroConstants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -10647,7 +10647,7 @@
 				68C3AF257678F6E7BB238C3F /* AppAppearance.swift in Sources */,
 				A2172B5A26976F9174228B8A /* AppHooks.swift in Sources */,
 				E1DE8A5422643F759385290F /* AppSettings.swift in Sources */,
-				18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */,
+				18115E542CAEB318001A8F4A /* ZeroConstants.swift in Sources */,
 				F253AAB4C8F06208173C9C4A /* Assets.swift in Sources */,
 				484202C5D50983442D24D061 /* AttributedString.swift in Sources */,
 				CDCA8A559E098503DDE29477 /* AttributedStringBuilder.swift in Sources */,
@@ -11877,7 +11877,7 @@
 				18E9A6A52C9829970082DDA4 /* SecureBackupScreenModels.swift in Sources */,
 				79B714892EEBCEA200EBD34C /* LinkNewDeviceScreenModels.swift in Sources */,
 				18E9A6A62C9829970082DDA4 /* SecureBackupScreenViewModel.swift in Sources */,
-				79343C812E5CA7F600ED9976 /* ZeroContants.swift in Sources */,
+				79343C812E5CA7F600ED9976 /* ZeroConstants.swift in Sources */,
 				18E9A6A72C9829970082DDA4 /* SecureBackupScreenViewModelProtocol.swift in Sources */,
 				18E9A6A82C9829970082DDA4 /* SeparatorRoomTimelineItem.swift in Sources */,
 				7947A70F2EE05EF7006B8836 /* ManageAuthorizedSpacesScreenViewModelProtocol.swift in Sources */,
@@ -12194,7 +12194,7 @@
 				6F76F34F4CAD400F5015EC5C /* RemoteSettingsHook.swift in Sources */,
 				1C4CB9009E50E6535883D5B2 /* RestorationToken.swift in Sources */,
 				9C11138F7D8C291494BB0B20 /* Secrets.swift in Sources */,
-				79343C832E5CAA0B00ED9976 /* ZeroContants.swift in Sources */,
+				79343C832E5CAA0B00ED9976 /* ZeroConstants.swift in Sources */,
 				B6B62437B92B6CA4083AA899 /* SessionDirectories.swift in Sources */,
 				18525D0B2CF5EEDF0055C5E8 /* ZMessengerInvite.swift in Sources */,
 				18FFCECC2CEC8748002F2647 /* ZMatrixUserProfile.swift in Sources */,
@@ -12721,7 +12721,7 @@
 				D46C33F8B61B55F0C8C2D15F /* LocationRoomTimelineItem.swift in Sources */,
 				185454EC2CFFAD09003CA957 /* ZInviter.swift in Sources */,
 				854E82E064BA53CD0BC45600 /* LocationRoomTimelineItemContent.swift in Sources */,
-				18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
+				18115E532CAEA4D9001A8F4A /* ZeroConstants.swift in Sources */,
 				973C48F9E4EFB808F61BE401 /* LocationRoomTimelineView.swift in Sources */,
 				29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */,
 				5EDBDE802761B5ECB54E6787 /* LogLevel.swift in Sources */,
@@ -13821,7 +13821,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.25.6;
+				MARKETING_VERSION = 0.25.7;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13857,7 +13857,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.25.6;
+				MARKETING_VERSION = 0.25.7;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

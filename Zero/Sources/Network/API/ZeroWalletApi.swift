@@ -289,7 +289,7 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
     // MARK: - Constants
     
     private enum WalletEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let initializeWalletEndPoint = "\(hostURL)thirdweb/initialize-wallet"
         

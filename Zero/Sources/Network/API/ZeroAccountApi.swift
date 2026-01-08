@@ -93,7 +93,7 @@ class ZeroAccountApi: ZeroAccountApiProtocol {
     // MARK: - Constants
     
     private enum AccountEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let deleteAccountEndPoint = "\(hostURL)api/v2/accounts/delete"
         static let listWalletsEndPoint = "\(hostURL)api/v2/accounts/wallets"

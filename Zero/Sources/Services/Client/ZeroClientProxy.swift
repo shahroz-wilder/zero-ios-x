@@ -396,7 +396,7 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
     
     func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ZeroClientProxyError> {
         do {
-            let cleanedUserZId = userZId.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
+            let cleanedUserZId = userZId.replacingOccurrences(of: ZeroConstants.ZERO_CHANNEL_PREFIX, with: "")
             let result = try await zeroApiProxy.postUserApi.fetchUserProfile(userZId: cleanedUserZId)
             switch result {
             case .success(let profile):

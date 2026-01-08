@@ -138,7 +138,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     func loginWithWeb3(web3Token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        await _ = configure(for: ZeroContants.appServer.matrixHomeServerUrl, flow: .login)
+        await _ = configure(for: ZeroConstants.appServer.matrixHomeServerUrl, flow: .login)
         return await proceedPostSSOLoginFlow(ssoBlock: {
             try await self.zeroAuthApiProxy.authApi.loginWithWeb3(web3Token: web3Token)
         },
@@ -147,7 +147,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     func loginWithSocialAuth(token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        await _ = configure(for: ZeroContants.appServer.matrixHomeServerUrl, flow: .login)
+        await _ = configure(for: ZeroConstants.appServer.matrixHomeServerUrl, flow: .login)
         return await proceedPostSSOLoginFlow(
             ssoBlock: {
                 try await self.zeroAuthApiProxy.authApi.zeroSocialLogin(token: token)
@@ -340,7 +340,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                             walletSignature: String,
                                             initialDeviceName: String?,
                                             deviceID: String?) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
-        await _ = configure(for: ZeroContants.appServer.matrixHomeServerUrl, flow: .login)
+        await _ = configure(for: ZeroConstants.appServer.matrixHomeServerUrl, flow: .login)
         return await proceedPostSSOLoginFlow(ssoBlock: {
             try await self.zeroAuthApiProxy.authApi.requestAuthenticationAuthorization(challenge: authChallenge,
                                                                                        walletSignature: walletSignature)

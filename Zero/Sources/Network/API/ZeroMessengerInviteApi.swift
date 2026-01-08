@@ -28,7 +28,7 @@ class ZeroMessengerInviteApi: ZeroMessengerInviteApiProtocol {
     }
     
     private enum MessengerInviteEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
 
         static let invite = "\(hostURL)invite"
     }

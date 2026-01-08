@@ -133,7 +133,7 @@ class ZeroPostApi: ZeroPostApiProtocol {
             parameters["mediaId"] = mediaId
         }
         
-        let requestUrl = if let requestChannelZId = channelZId?.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") {
+        let requestUrl = if let requestChannelZId = channelZId?.replacingOccurrences(of: ZeroConstants.ZERO_CHANNEL_PREFIX, with: "") {
             FeedEndPoints.newPostEndPoint.appending("/\(requestChannelZId)")
         } else {
             FeedEndPoints.newPostEndPoint.appending("/\(walletAddress)")
@@ -174,7 +174,7 @@ class ZeroPostApi: ZeroPostApiProtocol {
     // MARK: - Constants
     
     private enum FeedEndPoints {
-        private static let hostUrl = ZeroContants.appServer.zeroRootUrl
+        private static let hostUrl = ZeroConstants.appServer.zeroRootUrl
         static let postsEndPoint = "\(hostUrl)api/v2/posts"
         static let postDetailsEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)"
         static let postRepliesEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)/replies"

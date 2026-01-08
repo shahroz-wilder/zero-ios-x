@@ -49,7 +49,7 @@ class ZeroRewardApi: ZeroRewardApiProtocol {
     // MARK: - Constants
 
     private enum RewardEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
 
         static let myRewardsEndPoint = "\(hostURL)rewards/mine"
         static let zeroCurrenyEndPoint = "\(hostURL)api/tokens/meow"

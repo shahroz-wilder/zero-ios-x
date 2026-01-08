@@ -187,7 +187,7 @@ final class AppSettings {
     ///
     /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
     /// match the last part of the user ID. For example `example.com` and not `https://matrix.example.com`.
-    private(set) var accountProviders = [ZeroContants.accountProvider]
+    private(set) var accountProviders = [ZeroConstants.accountProvider]
     /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
     private(set) var allowOtherAccountProviders = true
     /// Whether the components surrounding the app brand/logo should be hidden or not
@@ -270,7 +270,7 @@ final class AppSettings {
         InfoPlistReader.main.baseBundleIdentifier
     }
     
-    var pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
+    var pushGatewayBaseURL: URL = URL(string: "\(ZeroConstants.appServer.pushGateway)/_matrix/push/v1/notify")!
     var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL }
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
@@ -438,3 +438,4 @@ final class AppSettings {
 }
 
 extension AppSettings: CommonSettingsProtocol { }
+

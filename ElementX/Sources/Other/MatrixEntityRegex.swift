@@ -74,7 +74,7 @@ enum MatrixEntityRegex: String {
                 // Extract the matched range for the capture group (substring after "user:")
                 if let range = Range(match.range(at: 1), in: inputString) {
                     let extractedSubstring = String(inputString[range])
-                    return "@\(extractedSubstring):\(ZeroContants.appServer.matrixHomeServerPostfix)"
+                    return "@\(extractedSubstring):\(ZeroConstants.appServer.matrixHomeServerPostfix)"
                 } else {
                     return inputString
                 }

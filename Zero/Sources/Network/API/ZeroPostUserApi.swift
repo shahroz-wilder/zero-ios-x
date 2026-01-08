@@ -49,7 +49,7 @@ class ZeroPostUserApi : ZeroPostUserApiProtocol {
     }
     
     private func isUserZIdAnAddress(_ userZId: String) -> Bool {
-        return userZId.hasPrefix(ZeroContants.ZERO_WALLET_ADDRESS_PREFIX)
+        return userZId.hasPrefix(ZeroConstants.ZERO_WALLET_ADDRESS_PREFIX)
     }
     
     func fetchUserFollowingStatus(userId: String) async throws -> Result<ZPostUserFollowingStatus, any Error> {
@@ -107,7 +107,7 @@ class ZeroPostUserApi : ZeroPostUserApiProtocol {
     // MARK: - Constants
     
     private enum PostUserEndPoints {
-        private static let hostURL = ZeroContants.appServer.zeroRootUrl
+        private static let hostURL = ZeroConstants.appServer.zeroRootUrl
         
         static let userProfileEndPoint = "\(hostURL)api/v2/users/profile/"
         static let userFollowsEndPoint = "\(hostURL)api/v2/user-follows/\(PostUserConstants.user_id_path_param)"

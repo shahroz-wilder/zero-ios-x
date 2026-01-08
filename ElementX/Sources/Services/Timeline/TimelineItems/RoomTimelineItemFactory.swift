@@ -568,7 +568,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     func convertTextToHTML(text: String, htmlBody: String?) -> String {
         // Constants
         let baseUrl = "https://matrix.to/#/@"
-        let domain = ":\(ZeroContants.appServer.matrixHomeServerPostfix)"
+        let domain = ":\(ZeroConstants.appServer.matrixHomeServerPostfix)"
         
         // Check if htmlBody is already properly formatted with mentions
         if let htmlBody = htmlBody, !htmlBody.isEmpty {

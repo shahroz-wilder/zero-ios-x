@@ -850,6 +850,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
 
 extension RoomProtocol {
     public func isAChannel() -> Bool {
-        displayName()?.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) == true
+        displayName()?.starts(with: ZeroConstants.ZERO_CHANNEL_PREFIX) == true
     }
 }
