@@ -87,6 +87,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     
     private func setupSubscriptions() {
         context.$viewState
+            .drop { $0.isSpace || !$0.canEditHistoryVisibility }
             .map(\.availableVisibilityOptions)
             .removeDuplicates()
             // To allow the view to update properly
@@ -97,6 +98,20 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 let desiredHistoryVisibility = state.bindings.desiredSettings.historyVisibility
                 if !availableVisibilityOptions.contains(desiredHistoryVisibility) {
                     state.bindings.desiredSettings.historyVisibility = desiredHistoryVisibility.fallbackOption
+                }
+            }
+            .store(in: &cancellables)
+        
+        context.$viewState
+            .drop { !$0.canEditAddress }
+            .map(\.bindings.desiredSettings.accessType)
+            .removeDuplicates()
+            // To allow the view to update properly
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] accessType in
+                guard let self else { return }
+                if state.bindings.desiredSettings.isVisibileInRoomDirectory == true, !accessType.isAddressRequired {
+                    state.bindings.desiredSettings.isVisibileInRoomDirectory = false
                 }
             }
             .store(in: &cancellables)
