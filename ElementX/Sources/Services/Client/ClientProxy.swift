@@ -773,7 +773,7 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         }
     }
     
-    func linkNewDeviceService() -> LinkNewDeviceService {
+    func linkNewDeviceService() -> LinkNewDeviceServiceProtocol {
         LinkNewDeviceService(handler: client.newGrantLoginWithQrCodeHandler())
     }
 
