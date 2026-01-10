@@ -63,6 +63,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        OSLogger.shared.debug("\(tag) [CALL-DEBUG] NSE: Step 1: didReceive notification")
         Task { await handle(request, withContentHandler: contentHandler) }
     }
     
@@ -80,6 +81,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return contentHandler(request.content)
         }
         
+        OSLogger.shared.debug("\(tag) [CALL-DEBUG] NSE: Step 2: passing to content handler")
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: settings)
         
@@ -94,12 +96,14 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
         
         do {
+            OSLogger.shared.debug("\(tag) [CALL-DEBUG] NSE: Step 3: setting up user session")
             let userSession = try await NSEUserSession(credentials: credentials,
                                                        roomID: roomID,
                                                        clientSessionDelegate: keychainController,
                                                        appHooks: appHooks,
                                                        appSettings: settings)
             
+            OSLogger.shared.debug("\(tag) [CALL-DEBUG] NSE: Step 4: setting up notification handler")
             notificationHandler = NotificationHandler(userSession: userSession,
                                                       settings: settings,
                                                       contentHandler: contentHandler,
@@ -107,10 +111,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                                                       tag: tag)
             
             ExtensionLogger.logMemory(with: tag)
-            MXLog.info("\(tag) Configured user session")
+            OSLogger.shared.debug("\(tag) Configured user session")
             
+            OSLogger.shared.debug("\(tag) [CALL-DEBUG] NSE: Step 5: process event")
             await notificationHandler?.processEvent(eventID, roomID: roomID)
         } catch {
+            OSLogger.shared.debug("\(tag) [CALL-DEBUG] NSE: ERROR: processing notification error: \(error)")
             MXLog.error("Failed creating user session with error: \(error)")
         }
     }

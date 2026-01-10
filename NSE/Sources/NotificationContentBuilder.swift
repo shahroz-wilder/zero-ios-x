@@ -26,14 +26,17 @@ struct NotificationContentBuilder {
     func process(notificationContent: inout UNMutableNotificationContent,
                  notificationItem: NotificationItemProxyProtocol,
                  mediaProvider: MediaProviderProtocol) async {
+        OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 1: Processing notification: \(notificationItem)")
         notificationContent.receiverID = notificationItem.receiverID
         notificationContent.roomID = notificationItem.roomID
         notificationContent.threadRootEventID = notificationItem.threadRootEventID
         
         switch notificationItem.event {
         case .timeline(let event):
+            OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 2: Notification event type: .timeline")
             notificationContent.eventID = event.eventId()
         case .invite, .none:
+            OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 2: Notification event type: \(notificationItem.event)")
             notificationContent.eventID = nil
         }
         
@@ -49,38 +52,48 @@ struct NotificationContentBuilder {
         notificationContent.threadIdentifier = threadIdentifier.replacingOccurrences(of: "@", with: "")
         
         MXLog.info("isNoisy: \(notificationItem.isNoisy)")
+        OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 3: Notification is Noisy: \(notificationItem.isNoisy)")
         notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
         
         switch notificationItem.event {
         case .none:
+            OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing empty notification")
             processEmpty(&notificationContent)
         case .invite:
+            OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing invite notification")
             await processInvited(notificationContent: &notificationContent,
                                  notificationItem: notificationItem,
                                  mediaProvider: mediaProvider)
         case .timeline(let event):
             guard case let .messageLike(messageContent) = try? event.content() else {
+                OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing empty notification in timeline")
                 processEmpty(&notificationContent)
                 return
             }
             
+            OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing message like notification")
             await processMessageLike(notificationContent: &notificationContent,
                                      notificationItem: notificationItem,
                                      mediaProvider: mediaProvider)
             
             switch messageContent {
             case .roomMessage(let messageType, _):
+                OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing room message notification")
                 await processRoomMessage(notificationContent: &notificationContent,
                                          notificationItem: notificationItem,
                                          messageType: messageType,
                                          mediaProvider: mediaProvider)
             case .poll(let question):
+                OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing poll notification")
                 notificationContent.body = L10n.commonPollSummary(question)
             case .callInvite:
+                OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing call invite notification")
                 notificationContent.body = L10n.commonUnsupportedCall
             case .rtcNotification:
+                OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing incoming call notification")
                 notificationContent.body = L10n.notificationIncomingCall
             default:
+                OSLogger.shared.debug("[CALL-DEBUG] NCB: Step 4: Processing empty notification in default")
                 processEmpty(&notificationContent)
             }
         }

@@ -89,11 +89,15 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         super.init()
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] ElementCallService init: Setting up PKPushRegistry...")
         pushRegistry.delegate = self
         pushRegistry.desiredPushTypes = [.voIP]
-        
+        OSLogger.shared.debug("[CALL-DEBUG] ElementCallService init: PKPushRegistry configured for VoIP")
+
         self.callProvider.setDelegate(self, queue: nil)
+        OSLogger.shared.debug("[CALL-DEBUG] ElementCallService init: CXProvider delegate set")
+        OSLogger.shared.debug("[CALL-DEBUG] ElementCallService init: Ready to receive VoIP pushes!")
     }
     
     func setClientProxy(_ clientProxy: any ClientProxyProtocol) {
@@ -127,7 +131,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // do {
         //     try await callController.request(CXTransaction(action: startCallAction))
         // } catch {
-        //     MXLog.error("Failed requesting start call action with error: \(error)")
+        //     OSLogger.shared.debug("Failed requesting start call action with error: \(error)")
         // }
     }
     
@@ -137,19 +141,19 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func setAudioEnabled(_ enabled: Bool, roomID: String) {
         guard let ongoingCallID else {
-            MXLog.error("Failed toggling call microphone, no calls running")
+            OSLogger.shared.debug("Failed toggling call microphone, no calls running")
             return
         }
         
         guard ongoingCallID.roomID == roomID else {
-            MXLog.error("Failed toggling call microphone, rooms don't match: \(ongoingCallID.roomID) != \(roomID)")
+            OSLogger.shared.debug("Failed toggling call microphone, rooms don't match: \(ongoingCallID.roomID) != \(roomID)")
             return
         }
         
         let transaction = CXTransaction(action: CXSetMutedCallAction(call: ongoingCallID.callKitID, muted: !enabled))
         callController.request(transaction) { error in
             if let error {
-                MXLog.error("Failed toggling call microphone with error: \(error)")
+                OSLogger.shared.debug("Failed toggling call microphone with error: \(error)")
             }
         }
     }
@@ -159,64 +163,95 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) { }
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 1: pushRegistry didReceiveIncomingPushWith called!")
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 1: payload = \(payload.dictionaryPayload)")
+
         guard let roomID = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomID.rawValue] as? String else {
-            MXLog.error("Something went wrong, missing room identifier for incoming voip call: \(payload)")
+            OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 2: FAILED - Missing room identifier")
+            OSLogger.shared.debug("[CALL-DEBUG] MainApp: Full payload: \(payload.dictionaryPayload)")
+            completion()
             return
         }
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 2: Got roomID = \(roomID)")
+
         guard let rtcNotificationID = payload.dictionaryPayload[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] as? String else {
-            MXLog.error("Something went wrong, missing rtc notification event identifier for incoming voip call: \(payload)")
+            OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 2: FAILED - Missing rtc notification event identifier")
+            completion()
             return
         }
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 2: Got rtcNotificationID = \(rtcNotificationID)")
+
         guard ongoingCallID?.roomID != roomID else {
-            MXLog.warning("Call already ongoing for room \(roomID), ignoring incoming push")
+            OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 3: Call already ongoing for room \(roomID), ignoring")
+            completion()
             return
         }
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 3: No ongoing call, proceeding...")
+
         let callID = CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: rtcNotificationID)
         incomingCallID = callID
-        
-        guard let expirationDate = (payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationDate.rawValue] as? Date) else {
-            MXLog.error("Something went wrong, missing expiration timestamp for incoming voip call: \(payload)")
+
+        // expirationDate is passed as TimeInterval from NSE to survive IPC serialization
+        guard let expirationTimeInterval = payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationDate.rawValue] as? TimeInterval else {
+            OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 4: FAILED - Missing or invalid expiration timestamp")
+            OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 4: expirationDate value = \(String(describing: payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationDate.rawValue]))")
+            completion()
             return
         }
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 4: Got expirationTimeInterval = \(expirationTimeInterval)")
+
+        let expirationDate = Date(timeIntervalSince1970: expirationTimeInterval)
         let nowDate = timeProvider.now()
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 4: expirationDate = \(expirationDate), nowDate = \(nowDate)")
+
         guard nowDate < expirationDate else {
-            MXLog.warning("Call expired for room \(roomID), ignoring incoming push")
+            OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 5: FAILED - Call expired, nowDate >= expirationDate")
+            completion()
             return
         }
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 5: Call not expired, proceeding...")
+
         let ringDuration: Duration = .seconds(min(expirationDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970, 90))
-        
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 5: ringDuration = \(ringDuration)")
+
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
-        
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 5: roomDisplayName = \(roomDisplayName ?? "nil")")
+
         let update = CXCallUpdate()
         update.hasVideo = true
         update.localizedCallerName = roomDisplayName
-        // https://stackoverflow.com/a/41230020/730924
         update.remoteHandle = .init(type: .generic, value: roomID)
-        
+
+        OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 6: Calling callProvider.reportNewIncomingCall...")
+
         callProvider.reportNewIncomingCall(with: callID.callKitID, update: update) { [weak self] error in
             if let error {
-                MXLog.error("Failed reporting new incoming call with error: \(error)")
+                OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 6: FAILED - reportNewIncomingCall error: \(error)")
+            } else {
+                OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 6: SUCCESS - reportNewIncomingCall completed!")
+                OSLogger.shared.debug("[CALL-DEBUG] MainApp Step 7: CallKit should now show incoming call UI!")
             }
-            
+
             self?.actionsSubject.send(.receivedIncomingCallRequest)
-            
+
             completion()
         }
-        
+
         endUnansweredCallTask = Task { [weak self] in
             try? await self?.timeProvider.clock.sleep(for: ringDuration)
-            
+
             guard let self, !Task.isCancelled else {
                 return
             }
-            
+
             if let incomingCallID, incomingCallID.callKitID == callID.callKitID {
+                OSLogger.shared.debug("[CALL-DEBUG] MainApp: Call unanswered, ending call")
                 callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .unanswered)
             }
         }
@@ -225,20 +260,20 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     // MARK: - CXProviderDelegate
     
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
-        MXLog.info("Call provider did activate audio session")
+        OSLogger.shared.debug("Call provider did activate audio session")
     }
     
     func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
-        MXLog.info("Call provider did deactivate audio session")
+        OSLogger.shared.debug("Call provider did deactivate audio session")
     }
     
     func providerDidReset(_ provider: CXProvider) {
-        MXLog.info("Call provider did reset: \(provider)")
+        OSLogger.shared.debug("Call provider did reset: \(provider)")
     }
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         guard let incomingCallID else {
-            MXLog.error("Failed answering incoming call, missing incomingCallID")
+            OSLogger.shared.debug("Failed answering incoming call, missing incomingCallID")
             return
         }
         
@@ -275,7 +310,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         if let ongoingCallID {
             actionsSubject.send(.setAudioEnabled(!action.isMuted, roomID: ongoingCallID.roomID))
         } else {
-            MXLog.error("Failed muting/unmuting call, missing ongoingCallID")
+            OSLogger.shared.debug("Failed muting/unmuting call, missing ongoingCallID")
         }
         
         action.fulfill()
@@ -309,7 +344,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             let transaction = CXTransaction(action: CXEndCallAction(call: ongoingCallID.callKitID))
             callController.request(transaction) { error in
                 if let error {
-                    MXLog.error("Failed transaction with error: \(error)")
+                    OSLogger.shared.debug("Failed transaction with error: \(error)")
                 }
             }
         }
@@ -319,17 +354,17 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private func sendDeclineCallEvent(_ incomingCallID: CallID) async {
         guard let rtcNotificationID = incomingCallID.rtcNotificationID else {
-            MXLog.info("No rtc notification event to decline.")
+            OSLogger.shared.debug("No rtc notification event to decline.")
             return
         }
         
         guard let clientProxy else {
-            MXLog.warning("A ClientProxy is needed to fetch the room.")
+            OSLogger.shared.debug("A ClientProxy is needed to fetch the room.")
             return
         }
         
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
-            MXLog.warning("Failed to fetch a joined room for the incoming call.")
+            OSLogger.shared.debug("Failed to fetch a joined room for the incoming call.")
             return
         }
         
@@ -340,17 +375,17 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         incomingCallRoomInfoCancellable = nil
         
         guard let incomingCallID else {
-            MXLog.info("No incoming call to observe for.")
+            OSLogger.shared.debug("No incoming call to observe for.")
             return
         }
         
         guard let clientProxy else {
-            MXLog.warning("A ClientProxy is needed to fetch the room.")
+            OSLogger.shared.debug("A ClientProxy is needed to fetch the room.")
             return
         }
         
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
-            MXLog.warning("Failed to fetch a joined room for the incoming call.")
+            OSLogger.shared.debug("Failed to fetch a joined room for the incoming call.")
             return
         }
         
@@ -371,20 +406,20 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                 let participants: [String] = activeRoomCallParticipants
                 
                 if !hasOngoingCall {
-                    MXLog.info("Call cancelled by remote")
+                    OSLogger.shared.debug("Call cancelled by remote")
                     reportEndedCall(incomingCallID: incomingCallID, reason: .remoteEnded)
                 } else if participants.contains(roomProxy.ownUserID) {
-                    MXLog.info("Call answered elsewhere")
+                    OSLogger.shared.debug("Call answered elsewhere")
                     reportEndedCall(incomingCallID: incomingCallID, reason: .answeredElsewhere)
                 }
             }
         
         guard let rtcNotificationID = incomingCallID.rtcNotificationID else {
-            MXLog.warning("Decline: No RTC notification ID found for the incoming call.")
+            OSLogger.shared.debug("Decline: No RTC notification ID found for the incoming call.")
             return
         }
         
-        MXLog.info("Observe decline events for notification \(rtcNotificationID)")
+        OSLogger.shared.debug("Observe decline events for notification \(rtcNotificationID)")
         
         let listener: CallDeclineListener = SDKListener { [weak self] senderID in
             guard let self else { return }
@@ -399,7 +434,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         guard case let .success(handle) = roomProxy.subscribeToCallDeclineEvents(rtcNotificationEventID: rtcNotificationID, listener: listener) else {
-            MXLog.error("Unable to listen for decline events.")
+            OSLogger.shared.debug("Unable to listen for decline events.")
             return
         }
         

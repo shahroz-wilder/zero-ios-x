@@ -2013,6 +2013,9 @@
 		794A32602E8E9BC900688144 /* WalletChainIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A325E2E8E9BC100688144 /* WalletChainIcon.swift */; };
 		794A75522E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */; };
 		794A75532E741C0100ED9DDB /* ZAvaxTokenPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */; };
+		794D8F6C2F14C57A0078EE13 /* OSLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794D8F6B2F14C5780078EE13 /* OSLogger.swift */; };
+		794D8F6D2F14C57A0078EE13 /* OSLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794D8F6B2F14C5780078EE13 /* OSLogger.swift */; };
+		794D8F6E2F14C68F0078EE13 /* OSLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794D8F6B2F14C5780078EE13 /* OSLogger.swift */; };
 		794E2AEB2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */; };
 		794E2AEC2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */; };
 		794F08A92D6CFF5B008B575F /* ZChannelRoomId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */; };
@@ -4059,6 +4062,7 @@
 		7946147D2EA65102000D5A20 /* HomeUserRewardsTooltip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserRewardsTooltip.swift; sourceTree = "<group>"; };
 		794A325E2E8E9BC100688144 /* WalletChainIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletChainIcon.swift; sourceTree = "<group>"; };
 		794A75512E741BFC00ED9DDB /* ZAvaxTokenPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAvaxTokenPrice.swift; sourceTree = "<group>"; };
+		794D8F6B2F14C5780078EE13 /* OSLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogger.swift; sourceTree = "<group>"; };
 		794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletApi.swift; sourceTree = "<group>"; };
 		794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZChannelRoomId.swift; sourceTree = "<group>"; };
 		795A0C852D77EB94000928B7 /* ZeroApiProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroApiProxy.swift; sourceTree = "<group>"; };
@@ -5626,6 +5630,7 @@
 		1882EB982C91B9F6001DA2A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				794D8F6B2F14C5780078EE13 /* OSLogger.swift */,
 				79BBCD842E8C06A60043CB6A /* BadgeManager.swift */,
 				79AD2F7B2E937EFC00B38AF3 /* AppStateManager.swift */,
 				795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */,
@@ -10697,6 +10702,7 @@
 				18D5D9AE2CEB6E6100107940 /* String+Extensions.swift in Sources */,
 				761EA50B2619307AB30891B8 /* PhishingDetector.swift in Sources */,
 				5DFC2A889D3B39DD47AC63A8 /* PillUtilities.swift in Sources */,
+				794D8F6E2F14C68F0078EE13 /* OSLogger.swift in Sources */,
 				7921F0EB2EA0C017000349B1 /* ImageDataCache.swift in Sources */,
 				55CDD3968D95D1A820B5491E /* PlaceholderAvatarImage.swift in Sources */,
 				F12F6BED7B6D7EE4BEE55039 /* PlainMentionBuilder.swift in Sources */,
@@ -11237,6 +11243,7 @@
 				18E9A5052C9829970082DDA4 /* ExpiringTaskRunner.swift in Sources */,
 				18AF615D2CF85E3200921644 /* ZeroListRowButtonStyle.swift in Sources */,
 				79C524162DA3820900B61378 /* CompoundHook.swift in Sources */,
+				794D8F6D2F14C57A0078EE13 /* OSLogger.swift in Sources */,
 				18E9A5062C9829970082DDA4 /* FileManager.swift in Sources */,
 				18E9A5082C9829970082DDA4 /* FileRoomTimelineItem.swift in Sources */,
 				79621A4F2DA78E120006C391 /* ManageRoomMemberSheetView.swift in Sources */,
@@ -13453,6 +13460,7 @@
 				2932570AA418974979D16DED /* UserPreference.swift in Sources */,
 				80DEA2A4B20F9E279EAE6B2B /* UserProfile+Mock.swift in Sources */,
 				790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */,
+				794D8F6C2F14C57A0078EE13 /* OSLogger.swift in Sources */,
 				ED90A59F068FD0CA27E602ED /* UserProfileListRow.swift in Sources */,
 				798D991D2E4C9A5600164028 /* ZWalletStakingApprovalResponse.swift in Sources */,
 				185454DF2CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */,
