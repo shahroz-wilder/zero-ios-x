@@ -126,8 +126,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.showSettingsScreen)
             }
             settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-        case .call(let roomID):
-            Task { await presentCallScreen(roomID: roomID) }
+        case .call(let roomID, let isVoiceCall):
+            Task { await presentCallScreen(roomID: roomID, isVoiceCall: isVoiceCall) }
         case .genericCallLink(let url):
             presentCallScreen(genericCallLink: url)
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
@@ -204,8 +204,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
-                case .showCallScreen(let roomProxy):
-                    presentCallScreen(roomProxy: roomProxy)
+                case .showCallScreen(let roomProxy, let isVoiceCall):
+                    presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
                 case .hideCallScreenOverlay:
                     hideCallScreenOverlay()
                 case .logout:
@@ -219,7 +219,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .presentCallScreen(let roomProxy):
-                    presentCallScreen(roomProxy: roomProxy)
+                    presentCallScreen(roomProxy: roomProxy, isVoiceCall: true)
                 case .verifyUser(let userID):
                     presentSessionVerificationScreen(flow: .userInitiator(userID: userID))
                 case .showSettings:
@@ -411,29 +411,30 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Calls
     
     private func presentCallScreen(genericCallLink url: URL) {
-        presentCallScreen(configuration: .init(genericCallLink: url))
+        presentCallScreen(configuration: .init(genericCallLink: url), isVoiceCall: true)
     }
     
-    private func presentCallScreen(roomID: String) async {
+    private func presentCallScreen(roomID: String, isVoiceCall: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
-        presentCallScreen(roomProxy: roomProxy)
+        presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
     }
     
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) {
         let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
                                                clientID: InfoPlistReader.main.bundleIdentifier,
                                                elementCallBaseURL: flowParameters.appSettings.elementCallBaseURL,
                                                elementCallBaseURLOverride: flowParameters.appSettings.elementCallBaseURLOverride,
-                                               colorScheme: colorScheme))
+                                               colorScheme: colorScheme),
+                          isVoiceCall: isVoiceCall)
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
-    private func presentCallScreen(configuration: ElementCallConfiguration) {
+    private func presentCallScreen(configuration: ElementCallConfiguration, isVoiceCall: Bool) {
         guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
             callScreenPictureInPictureController?.stopPictureInPicture()
@@ -445,7 +446,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             allowPictureInPicture: true,
                                                                             appSettings: flowParameters.appSettings,
                                                                             appHooks: flowParameters.appHooks,
-                                                                            analytics: flowParameters.analytics))
+                                                                            analytics: flowParameters.analytics,
+                                                                            isVoiceCall: isVoiceCall))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in

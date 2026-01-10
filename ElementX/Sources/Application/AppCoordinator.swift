@@ -165,8 +165,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 switch action {
-                case .startCall(let roomID):
-                    self?.handleAppRoute(.call(roomID: roomID))
+                case .startCall(let roomID, let isVoiceCall):
+                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall))
                 case .receivedIncomingCallRequest:
                     // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
                     // the UIApplication states don't change and syncing is neither started nor ran on
@@ -301,7 +301,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         MXLog.info("Starting call in room: \(roomIdentifier)")
-        handleAppRoute(AppRoute.call(roomID: roomIdentifier))
+        handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: true))
     }
     
     // MARK: - AuthenticationFlowCoordinatorDelegate
@@ -831,7 +831,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                             allowPictureInPicture: false,
                                                                             appSettings: appSettings,
                                                                             appHooks: appHooks,
-                                                                            analytics: ServiceLocator.shared.analytics))
+                                                                            analytics: ServiceLocator.shared.analytics,
+                                                                            isVoiceCall: true))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in

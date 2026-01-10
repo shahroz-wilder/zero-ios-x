@@ -66,7 +66,7 @@ struct UserProfileScreen: View {
             
             if let roomID = context.viewState.dmRoomID {
                 Button {
-                    context.send(viewAction: .startCall(roomID: roomID))
+                    context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: true))
                 } label: {
                     CompoundIcon(\.videoCall)
                 }

@@ -20,6 +20,7 @@ struct CallScreenViewState: BindableState {
     let script: String?
     var url: URL?
     let isGenericCallLink: Bool
+    let isVoiceCall: Bool
     
     let certificateValidator: CertificateValidatorHookProtocol
     

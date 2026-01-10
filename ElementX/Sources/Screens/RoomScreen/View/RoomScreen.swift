@@ -183,6 +183,12 @@ struct RoomScreen: View {
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             ToolbarItem(placement: .primaryAction) {
                 if context.viewState.shouldShowCallButton {
+                    voiceCallButton
+                        .disabled(!context.viewState.canJoinCall)
+                }
+            }
+            ToolbarItem(placement: .primaryAction) {
+                if context.viewState.shouldShowCallButton {
                     callButton
                         .disabled(!context.viewState.canJoinCall)
                 }
@@ -207,6 +213,29 @@ struct RoomScreen: View {
                 context.send(viewAction: .displayCall)
             } label: {
                 CompoundIcon(\.videoCallSolid)
+            }
+            .accessibilityLabel(L10n.a11yStartCall)
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
+        }
+    }
+    
+    @ViewBuilder
+    private var voiceCallButton: some View {
+        if context.viewState.hasOngoingCall {
+            Button {
+                context.send(viewAction: .displayVoiceCall)
+            } label: {
+                Label(L10n.actionJoin, icon: \.voiceCallSolid)
+                    .labelStyle(.titleAndIcon)
+            }
+            .buttonStyle(ElementCallButtonStyle())
+            .accessibilityLabel(L10n.a11yJoinCall)
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
+        } else {
+            Button {
+                context.send(viewAction: .displayVoiceCall)
+            } label: {
+                CompoundIcon(\.voiceCallSolid)
             }
             .accessibilityLabel(L10n.a11yStartCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)

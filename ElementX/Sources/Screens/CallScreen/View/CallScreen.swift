@@ -215,6 +215,14 @@ private struct CallView: UIViewRepresentable {
             
             viewModelContext?.send(viewAction: .mediaCapturePermissionGranted)
             return .grant
+//            switch type {
+//            case .microphone:
+//                return .grant
+//            case .camera, .cameraAndMicrophone:
+//                return .deny
+//            @unknown default:
+//                return .deny
+//            }
         }
         
         // MARK: - WKNavigationDelegate
@@ -355,7 +363,8 @@ struct CallScreen_Previews: PreviewProvider {
                                    allowPictureInPicture: false,
                                    appHooks: AppHooks(),
                                    appSettings: ServiceLocator.shared.settings,
-                                   analyticsService: ServiceLocator.shared.analytics)
+                                   analyticsService: ServiceLocator.shared.analytics,
+                                   isVoiceCall: true)
     }()
     
     static var previews: some View {

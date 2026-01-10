@@ -21,6 +21,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let analyticsService: AnalyticsService
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
+    private let isVoiceCall: Bool
     
     private let actionsSubject: PassthroughSubject<CallScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<CallScreenViewModelAction, Never> {
@@ -41,11 +42,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
          allowPictureInPicture: Bool,
          appHooks: AppHooks,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsService,
+         isVoiceCall: Bool) {
         self.elementCallService = elementCallService
         self.configuration = configuration
         self.appSettings = appSettings
         self.analyticsService = analyticsService
+        self.isVoiceCall = isVoiceCall
         isPictureInPictureAllowed = allowPictureInPicture
         
         var isGenericCallLink = false
@@ -60,6 +63,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         
         super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript,
                                                          isGenericCallLink: isGenericCallLink,
+                                                         isVoiceCall: isVoiceCall,
                                                          certificateValidator: appHooks.certificateValidatorHook))
         
         elementCallService.actions
@@ -157,8 +161,26 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
            decodedMessage.hasLoaded {
             // This means that the call room was joined succesfully, we can stop the timeout task
             timeoutTask = nil
+            
+            if self.isVoiceCall {
+                try? await Task.sleep(for: .seconds(1))
+                await setVideoEnabled(false)
+                await setAudioEnabled(true)
+                await selectEarpieceAsDefault()
+            }
         }
         await widgetDriver.handleMessage(message)
+    }
+    
+    private func selectEarpieceAsDefault() async {
+        // Use controls.setAudioDevice to switch to earpiece
+        let javaScript = "window.controls.setAudioDevice('\(Self.earpieceID)')"
+        do {
+            _ = try await state.bindings.javaScriptEvaluator?(javaScript)
+            MXLog.info("Set audio device to earpiece via controls.setAudioDevice")
+        } catch {
+            MXLog.error("Failed to set audio device: \(error)")
+        }
     }
     
     private func setupCall() {
@@ -254,6 +276,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         let message = ElementCallWidgetMessage(direction: .toWidget,
                                                action: .mediaState,
                                                data: .init(audioEnabled: enabled),
+                                               widgetId: widgetDriver.widgetID)
+        await postMessageToWidget(message)
+    }
+    
+    private func setVideoEnabled(_ enabled: Bool) async {
+        let message = ElementCallWidgetMessage(direction: .toWidget,
+                                               action: .mediaState,
+                                               data: .init(audioEnabled: nil, videoEnabled: enabled),
                                                widgetId: widgetDriver.widgetID)
         await postMessageToWidget(message)
     }

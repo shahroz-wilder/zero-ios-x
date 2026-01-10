@@ -17,6 +17,7 @@ struct CallScreenCoordinatorParameters {
     let appSettings: AppSettings
     let appHooks: AppHooks
     let analytics: AnalyticsService
+    let isVoiceCall: Bool
 }
 
 enum CallScreenCoordinatorAction {
@@ -48,7 +49,8 @@ final class CallScreenCoordinator: CoordinatorProtocol {
                                         allowPictureInPicture: parameters.allowPictureInPicture,
                                         appHooks: parameters.appHooks,
                                         appSettings: parameters.appSettings,
-                                        analyticsService: parameters.analytics)
+                                        analyticsService: parameters.analytics,
+                                        isVoiceCall: parameters.isVoiceCall)
     }
     
     func start() {

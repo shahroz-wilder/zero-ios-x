@@ -266,7 +266,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             // Then end the and call rely on `setupCallSession` to create a new one
             provider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
             
-            self.actionsSubject.send(.startCall(roomID: incomingCallID.roomID))
+            self.actionsSubject.send(.startCall(roomID: incomingCallID.roomID, isVoiceCall: true))
             self.endUnansweredCallTask?.cancel()
         }
     }
