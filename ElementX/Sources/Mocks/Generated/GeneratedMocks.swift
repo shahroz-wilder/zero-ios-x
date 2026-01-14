@@ -2852,15 +2852,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - createRoom
 
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = 0
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCallsCount: Int {
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = 0
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount
+                return createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount
+                    returnValue = createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2868,29 +2868,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = newValue
+                createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = newValue
+                    createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCalled: Bool {
-        return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCallsCount > 0
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled: Bool {
+        return createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCount > 0
     }
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedArguments: (name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)?
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedInvocations: [(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)] = []
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments: (name: String, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)?
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocations: [(name: String, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)] = []
 
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue: Result<String, ClientProxyError>! {
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue: Result<String, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue
+                return createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue
             } else {
                 var returnValue: Result<String, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue
+                    returnValue = createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2898,26 +2898,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue = newValue
+                createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue = newValue
+                    createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure: ((String, String?, Bool, Bool, [String], URL?, String?) async -> Result<String, ClientProxyError>)?
+    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure: ((String, String?, CreateRoomAccessType, Bool, [String], URL?, String?) async -> Result<String, ClientProxyError>)?
 
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCallsCount += 1
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedArguments = (name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart)
+    func createRoom(name: String, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
+        createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCount += 1
+        createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments = (name: name, topic: topic, accessType: accessType, isSpace: isSpace, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart)
         DispatchQueue.main.async {
-            self.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedInvocations.append((name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart))
+            self.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocations.append((name: name, topic: topic, accessType: accessType, isSpace: isSpace, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart))
         }
-        if let createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure {
-            return await createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure(name, topic, isRoomPrivate, isKnockingOnly, userIDs, avatarURL, aliasLocalPart)
+        if let createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure = createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure {
+            return await createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure(name, topic, accessType, isSpace, userIDs, avatarURL, aliasLocalPart)
         } else {
-            return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue
+            return createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue
         }
     }
     //MARK: - joinRoom
@@ -17040,16 +17040,16 @@ class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var spaceRoomProxyPublisher: CurrentValuePublisher<SpaceRoomProxyProtocol, Never> {
-        get { return underlyingSpaceRoomProxyPublisher }
-        set(value) { underlyingSpaceRoomProxyPublisher = value }
+    var spaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoomProtocol, Never> {
+        get { return underlyingSpaceServiceRoomPublisher }
+        set(value) { underlyingSpaceServiceRoomPublisher = value }
     }
-    var underlyingSpaceRoomProxyPublisher: CurrentValuePublisher<SpaceRoomProxyProtocol, Never>!
-    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+    var underlyingSpaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoomProtocol, Never>!
+    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {
         get { return underlyingSpaceRoomsPublisher }
         set(value) { underlyingSpaceRoomsPublisher = value }
     }
-    var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
+    var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never>!
     var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> {
         get { return underlyingPaginationStatePublisher }
         set(value) { underlyingPaginationStatePublisher = value }
@@ -17092,55 +17092,12 @@ class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
         await paginateClosure?()
     }
 }
-class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
-    var id: String {
-        get { return underlyingId }
-        set(value) { underlyingId = value }
-    }
-    var underlyingId: String!
-    var name: String {
-        get { return underlyingName }
-        set(value) { underlyingName = value }
-    }
-    var underlyingName: String!
-    var rawName: String?
-    var avatarURL: URL?
-    var isSpace: Bool {
-        get { return underlyingIsSpace }
-        set(value) { underlyingIsSpace = value }
-    }
-    var underlyingIsSpace: Bool!
-    var isDirect: Bool?
-    var childrenCount: Int {
-        get { return underlyingChildrenCount }
-        set(value) { underlyingChildrenCount = value }
-    }
-    var underlyingChildrenCount: Int!
-    var joinedMembersCount: Int {
-        get { return underlyingJoinedMembersCount }
-        set(value) { underlyingJoinedMembersCount = value }
-    }
-    var underlyingJoinedMembersCount: Int!
-    var heroes: [UserProfileProxy] = []
-    var topic: String?
-    var canonicalAlias: String?
-    var joinRule: JoinRule?
-    var worldReadable: Bool?
-    var guestCanJoin: Bool {
-        get { return underlyingGuestCanJoin }
-        set(value) { underlyingGuestCanJoin = value }
-    }
-    var underlyingGuestCanJoin: Bool!
-    var state: Membership?
-    var via: [String] = []
-
-}
 class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
-    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+    var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {
         get { return underlyingTopLevelSpacesPublisher }
         set(value) { underlyingTopLevelSpacesPublisher = value }
     }
-    var underlyingTopLevelSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
+    var underlyingTopLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never>!
 
     //MARK: - spaceRoomList
 
@@ -17244,13 +17201,13 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     var spaceForIdentifierSpaceIDReceivedSpaceID: String?
     var spaceForIdentifierSpaceIDReceivedInvocations: [String] = []
 
-    var spaceForIdentifierSpaceIDUnderlyingReturnValue: Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError>!
-    var spaceForIdentifierSpaceIDReturnValue: Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError>! {
+    var spaceForIdentifierSpaceIDUnderlyingReturnValue: Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>!
+    var spaceForIdentifierSpaceIDReturnValue: Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>! {
         get {
             if Thread.isMainThread {
                 return spaceForIdentifierSpaceIDUnderlyingReturnValue
             } else {
-                var returnValue: Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError>? = nil
+                var returnValue: Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = spaceForIdentifierSpaceIDUnderlyingReturnValue
                 }
@@ -17268,9 +17225,9 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var spaceForIdentifierSpaceIDClosure: ((String) async -> Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError>)?
+    var spaceForIdentifierSpaceIDClosure: ((String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError>)?
 
-    func spaceForIdentifier(spaceID: String) async -> Result<SpaceRoomProxyProtocol?, SpaceServiceProxyError> {
+    func spaceForIdentifier(spaceID: String) async -> Result<SpaceServiceRoomProtocol?, SpaceServiceProxyError> {
         spaceForIdentifierSpaceIDCallsCount += 1
         spaceForIdentifierSpaceIDReceivedSpaceID = spaceID
         DispatchQueue.main.async {
@@ -17384,13 +17341,13 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     var joinedParentsChildIDReceivedChildID: String?
     var joinedParentsChildIDReceivedInvocations: [String] = []
 
-    var joinedParentsChildIDUnderlyingReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>!
-    var joinedParentsChildIDReturnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>! {
+    var joinedParentsChildIDUnderlyingReturnValue: Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>!
+    var joinedParentsChildIDReturnValue: Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>! {
         get {
             if Thread.isMainThread {
                 return joinedParentsChildIDUnderlyingReturnValue
             } else {
-                var returnValue: Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>? = nil
+                var returnValue: Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = joinedParentsChildIDUnderlyingReturnValue
                 }
@@ -17408,9 +17365,9 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var joinedParentsChildIDClosure: ((String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError>)?
+    var joinedParentsChildIDClosure: ((String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError>)?
 
-    func joinedParents(childID: String) async -> Result<[SpaceRoomProxyProtocol], SpaceServiceProxyError> {
+    func joinedParents(childID: String) async -> Result<[SpaceServiceRoomProtocol], SpaceServiceProxyError> {
         joinedParentsChildIDCallsCount += 1
         joinedParentsChildIDReceivedChildID = childID
         DispatchQueue.main.async {
@@ -17422,6 +17379,49 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             return joinedParentsChildIDReturnValue
         }
     }
+}
+class SpaceServiceRoomMock: SpaceServiceRoomProtocol, @unchecked Sendable {
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
+    }
+    var underlyingId: String!
+    var name: String {
+        get { return underlyingName }
+        set(value) { underlyingName = value }
+    }
+    var underlyingName: String!
+    var rawName: String?
+    var avatarURL: URL?
+    var isSpace: Bool {
+        get { return underlyingIsSpace }
+        set(value) { underlyingIsSpace = value }
+    }
+    var underlyingIsSpace: Bool!
+    var isDirect: Bool?
+    var childrenCount: Int {
+        get { return underlyingChildrenCount }
+        set(value) { underlyingChildrenCount = value }
+    }
+    var underlyingChildrenCount: Int!
+    var joinedMembersCount: Int {
+        get { return underlyingJoinedMembersCount }
+        set(value) { underlyingJoinedMembersCount = value }
+    }
+    var underlyingJoinedMembersCount: Int!
+    var heroes: [UserProfileProxy] = []
+    var topic: String?
+    var canonicalAlias: String?
+    var joinRule: JoinRule?
+    var worldReadable: Bool?
+    var guestCanJoin: Bool {
+        get { return underlyingGuestCanJoin }
+        set(value) { underlyingGuestCanJoin = value }
+    }
+    var underlyingGuestCanJoin: Bool!
+    var state: Membership?
+    var via: [String] = []
+
 }
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {

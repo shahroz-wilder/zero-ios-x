@@ -130,6 +130,8 @@ internal enum L10n {
   internal static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
   /// Add caption
   internal static var actionAddCaption: String { return L10n.tr("Localizable", "action_add_caption") }
+  /// Add existing rooms
+  internal static var actionAddExistingRooms: String { return L10n.tr("Localizable", "action_add_existing_rooms") }
   /// Add to timeline
   internal static var actionAddToTimeline: String { return L10n.tr("Localizable", "action_add_to_timeline") }
   /// Back
@@ -248,6 +250,8 @@ internal enum L10n {
   internal static var actionManageAccount: String { return L10n.tr("Localizable", "action_manage_account") }
   /// Manage devices
   internal static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
+  /// Manage rooms
+  internal static var actionManageRooms: String { return L10n.tr("Localizable", "action_manage_rooms") }
   /// Message
   internal static var actionMessage: String { return L10n.tr("Localizable", "action_message") }
   /// Minimise
@@ -789,6 +793,14 @@ internal enum L10n {
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
   internal static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
+  }
+  /// %1$@ (%2$@) shared this message since you were not in the room when it was sent.
+  internal static func cryptoEventKeyForwardedKnownProfileDialogContent(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "crypto_event_key_forwarded_known_profile_dialog_content", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ shared this message since you were not in the room when it was sent.
+  internal static func cryptoEventKeyForwardedUnknownProfileDialogContent(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "crypto_event_key_forwarded_unknown_profile_dialog_content", String(describing: p1))
   }
   /// This room has been configured so that new members can read history. %1$@
   internal static func cryptoHistoryVisible(_ p1: Any) -> String {
@@ -1567,6 +1579,10 @@ internal enum L10n {
   internal static var screenCreateRoomErrorCreatingRoom: String { return L10n.tr("Localizable", "screen_create_room_error_creating_room") }
   /// The space could not be created because of an unknown error. Try again later.
   internal static var screenCreateRoomErrorCreatingSpace: String { return L10n.tr("Localizable", "screen_create_room_error_creating_space") }
+  /// Add name…
+  internal static var screenCreateRoomNamePlaceholder: String { return L10n.tr("Localizable", "screen_create_room_name_placeholder") }
+  /// New room
+  internal static var screenCreateRoomNewRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_new_room_title") }
   /// New space
   internal static var screenCreateRoomNewSpaceTitle: String { return L10n.tr("Localizable", "screen_create_room_new_space_title") }
   /// Only people invited can join.
@@ -1580,32 +1596,30 @@ internal enum L10n {
   internal static var screenCreateRoomPublicOptionShortDescription: String { return L10n.tr("Localizable", "screen_create_room_public_option_short_description") }
   /// Public
   internal static var screenCreateRoomPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_public_option_title") }
-  /// Anyone can join.
-  internal static var screenCreateRoomRoomAccessSectionAnyoneOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_anyone_option_description") }
-  /// Anyone
-  internal static var screenCreateRoomRoomAccessSectionAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_anyone_option_title") }
-  /// Room Access
-  internal static var screenCreateRoomRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_header") }
   /// Anyone can ask to join but an administrator or a moderator must accept the request.
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_description") }
-  /// Ask to join
+  /// Allow ask to join
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_title") }
+  /// Only people invited can join.
+  internal static var screenCreateRoomRoomAccessSectionPrivateOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_private_option_description") }
+  /// Private
+  internal static var screenCreateRoomRoomAccessSectionPrivateOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_private_option_title") }
+  /// Anyone can join.
+  internal static var screenCreateRoomRoomAccessSectionPublicOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_public_option_description") }
+  /// Public
+  internal static var screenCreateRoomRoomAccessSectionPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_public_option_title") }
   /// Who has access
   internal static var screenCreateRoomRoomAccessSectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_title") }
-  /// In order for this room to be visible in the public room directory, you will need a room address.
+  /// You’ll need an address in order to make it visible in the public directory.
   internal static var screenCreateRoomRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_footer") }
-  /// Room address
+  /// Address
   internal static var screenCreateRoomRoomAddressSectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_title") }
-  /// Room name
-  internal static var screenCreateRoomRoomNameLabel: String { return L10n.tr("Localizable", "screen_create_room_room_name_label") }
   /// Room visibility
   internal static var screenCreateRoomRoomVisibilitySectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_visibility_section_title") }
-  /// Create a room
-  internal static var screenCreateRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_title") }
-  /// New space
-  internal static var screenCreateRoomTitleNewSpace: String { return L10n.tr("Localizable", "screen_create_room_title_new_space") }
   /// Topic (optional)
   internal static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
+  /// Add description…
+  internal static var screenCreateRoomTopicPlaceholder: String { return L10n.tr("Localizable", "screen_create_room_topic_placeholder") }
   /// Please confirm that you want to deactivate your account. This action cannot be undone.
   internal static var screenDeactivateAccountConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_deactivate_account_confirmation_dialog_content") }
   /// Delete all my messages
@@ -2542,7 +2556,7 @@ internal enum L10n {
   internal static var screenRoomDetailsRequestsToJoinTitle: String { return L10n.tr("Localizable", "screen_room_details_requests_to_join_title") }
   /// Roles & permissions
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
-  /// Room name
+  /// Name
   internal static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
   /// Security & privacy
   internal static var screenRoomDetailsSecurityAndPrivacyTitle: String { return L10n.tr("Localizable", "screen_room_details_security_and_privacy_title") }
@@ -3107,6 +3121,8 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Have you saved your recovery key?
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
+  /// Adding a room will not affect the room access. To change the access go to Room info > Privacy & security.
+  internal static var screenSpaceAddRoomsRoomAccessDescription: String { return L10n.tr("Localizable", "screen_space_add_rooms_room_access_description") }
   /// View spaces you've created or joined
   internal static var screenSpaceAnnouncementItem1: String { return L10n.tr("Localizable", "screen_space_announcement_item1") }
   /// Accept or decline invites to spaces

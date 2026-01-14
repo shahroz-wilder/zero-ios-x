@@ -73,7 +73,7 @@ extension ClientProxyMock {
         canDeactivateAccount = false
         directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         canJoinRoomWithReturnValue = true
         joinRoomViaClosure = { roomID, _ in
             configuration.overrides.joinedRoomIDs.insert(roomID)
@@ -122,8 +122,8 @@ extension ClientProxyMock {
                     roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                     return .joined(roomProxy)
                 }
-            } else if let spaceRoomProxy = configuration.spaceServiceConfiguration.topLevelSpaces.first(where: { $0.id == identifier }) {
-                let roomProxy = await JoinedRoomProxyMock(.init(id: spaceRoomProxy.id, name: spaceRoomProxy.name, isSpace: spaceRoomProxy.isSpace))
+            } else if let spaceServiceRoom = configuration.spaceServiceConfiguration.topLevelSpaces.first(where: { $0.id == identifier }) {
+                let roomProxy = await JoinedRoomProxyMock(.init(id: spaceServiceRoom.id, name: spaceServiceRoom.name, isSpace: spaceServiceRoom.isSpace))
                 roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)
             } else {

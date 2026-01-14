@@ -597,7 +597,7 @@ class MockScreen: Identifiable {
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(topLevelSpaces: .mockSingleRoom),
-                                                    roomPreviews: [SpaceRoomProxyProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
+                                                    roomPreviews: [SpaceServiceRoomProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
             
             // The tab bar remains hidden for the non-spaces tests as we don't supply any mock spaces.
             let spaceServiceProxy = SpaceServiceProxyMock(id == .userSessionSpacesFlow ? .populated : .init())
@@ -651,14 +651,16 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .startChatFlow:
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-            clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .success("!new-room:client.com")
+            clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue =
+                .success("!new-room:client.com")
             clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID, members: []))) }
             
             let userDiscoveryService = UserDiscoveryServiceMock()
             userDiscoveryService.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
             
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let flowCoordinator = StartChatFlowCoordinator(userDiscoveryService: userDiscoveryService,
+            let flowCoordinator = StartChatFlowCoordinator(isSpace: false,
+                                                           userDiscoveryService: userDiscoveryService,
                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                            flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                                                 bugReportService: BugReportServiceMock(.init()),
