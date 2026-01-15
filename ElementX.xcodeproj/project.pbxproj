@@ -1913,7 +1913,6 @@
 		792441702DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */; };
 		79281A672E6723C900D86DD6 /* SpaceServiceProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A56746AD99ABDA97189E1 /* SpaceServiceProxy.swift */; };
 		79281A682E6723EB00D86DD6 /* SpaceRoomListProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2B564CA6570E1487A7C7CC /* SpaceRoomListProxy.swift */; };
-		79281A692E67240400D86DD6 /* SpaceRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355C8C46DA9C0B45F1B7FC4F /* SpaceRoomProxy.swift */; };
 		79281A6E2E69A1D200D86DD6 /* OnLandingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A6D2E69A1AB00D86DD6 /* OnLandingScreen.swift */; };
 		79281A6F2E69A1D200D86DD6 /* OnLandingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A6D2E69A1AB00D86DD6 /* OnLandingScreen.swift */; };
 		79281A712E69A3B700D86DD6 /* LandingScreenTabPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79281A702E69A3AD00D86DD6 /* LandingScreenTabPager.swift */; };
@@ -2049,11 +2048,9 @@
 		7968A43C2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */; };
 		7968A43D2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */; };
 		796CD4342E535FE1000D6078 /* SpaceServiceProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57DB49B8426AA721BF85D83 /* SpaceServiceProxyProtocol.swift */; };
-		796CD4352E535FEC000D6078 /* SpaceRoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01F2E9FD8FF95AB89A345E6 /* SpaceRoomProxyProtocol.swift */; };
 		796CD4362E535FEF000D6078 /* SpaceRoomListProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACD4855BDAD0799FD86B7B5 /* SpaceRoomListProxyProtocol.swift */; };
 		796CD4372E536021000D6078 /* SpaceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AAC314A877DBDB6EBE1170 /* SpaceHeaderView.swift */; };
 		796CD4382E536056000D6078 /* SpaceRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E7B059E84E7E374D3322A2 /* SpaceRoomCell.swift */; };
-		796CD4392E5360A2000D6078 /* SpaceRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF771312D208C8002A2F05C4 /* SpaceRoomProxyMock.swift */; };
 		796CD43A2E5360D9000D6078 /* SpaceServiceProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF36FC3DE25B20B7FA91F1FD /* SpaceServiceProxyMock.swift */; };
 		796CD43B2E5360DE000D6078 /* SpaceRoomListProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB2A5FF1E68BA580A20D405 /* SpaceRoomListProxyMock.swift */; };
 		796CD43C2E536103000D6078 /* SpaceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646B50583A2CE6DA67F7739A /* SpaceScreen.swift */; };
@@ -2188,6 +2185,9 @@
 		79ADA9662DC5137D00C895F1 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327E3B3C58BEB0E65F4CF98 /* Observable.swift */; };
 		79B04C422DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */; };
 		79B04C432DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */; };
+		79B148CA2F17835500B75058 /* SpaceServiceRoomProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5416FE342A1E6A1B6D028999 /* SpaceServiceRoomProtocol.swift */; };
+		79B148CB2F1783BF00B75058 /* SpaceServiceRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAA1B97A17A750AC706B112 /* SpaceServiceRoom.swift */; };
+		79B148CC2F1784C100B75058 /* SpaceRoomInfoMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530D3541C8832D858EB755A /* SpaceRoomInfoMock.swift */; };
 		79B2A78C2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */; };
 		79B2A78D2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */; };
 		79B2A78F2E28FAA000A76430 /* ClaimedEarningsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */; };
@@ -11520,6 +11520,7 @@
 				790393882D53A1A30022E293 /* TimelineControllerFactoryMock.swift in Sources */,
 				18E9A5B32C9829970082DDA4 /* NotificationSettingsChatType.swift in Sources */,
 				18E9A5B42C9829970082DDA4 /* NotificationSettingsEditScreen.swift in Sources */,
+				79B148CC2F1784C100B75058 /* SpaceRoomInfoMock.swift in Sources */,
 				18E9A5B52C9829970082DDA4 /* NotificationSettingsEditScreenCoordinator.swift in Sources */,
 				18E9A5B62C9829970082DDA4 /* NotificationSettingsEditScreenModels.swift in Sources */,
 				18E9A5B72C9829970082DDA4 /* NotificationSettingsEditScreenRoomCell.swift in Sources */,
@@ -11530,6 +11531,7 @@
 				7944A7662D589F4900B75DAC /* CreateFeedScreenViewModel.swift in Sources */,
 				18E9A5BA2C9829970082DDA4 /* NotificationSettingsProxy.swift in Sources */,
 				18E9A5BB2C9829970082DDA4 /* NotificationSettingsProxyMock.swift in Sources */,
+				79B148CA2F17835500B75058 /* SpaceServiceRoomProtocol.swift in Sources */,
 				18E9A5BC2C9829970082DDA4 /* NotificationSettingsProxyProtocol.swift in Sources */,
 				79C5C10C2EB4BC930016DC6C /* SpaceSettingsFlowCoordinator.swift in Sources */,
 				18E9A5BD2C9829970082DDA4 /* NotificationSettingsScreen.swift in Sources */,
@@ -11651,7 +11653,6 @@
 				18E9A6062C9829970082DDA4 /* ReadReceiptsSummaryView.swift in Sources */,
 				79C6F7222DF82440003CEBB9 /* AdvancedSettingsScreenCoordinator.swift in Sources */,
 				18E9A6072C9829970082DDA4 /* ReadableFrameModifier.swift in Sources */,
-				796CD4352E535FEC000D6078 /* SpaceRoomProxyProtocol.swift in Sources */,
 				796CD4362E535FEF000D6078 /* SpaceRoomListProxyProtocol.swift in Sources */,
 				795A0C862D77EBA5000928B7 /* ZeroApiProxy.swift in Sources */,
 				18E9A6082C9829970082DDA4 /* RedactedRoomTimelineItem.swift in Sources */,
@@ -11681,6 +11682,7 @@
 				18E9A61A2C9829970082DDA4 /* RoomChangePermissionsScreenViewModel.swift in Sources */,
 				18E9A61B2C9829970082DDA4 /* RoomChangePermissionsScreenViewModelProtocol.swift in Sources */,
 				79C25B572E25A21E00936A5D /* FeedMediaPreFetchProtocol.swift in Sources */,
+				79B148CB2F1783BF00B75058 /* SpaceServiceRoom.swift in Sources */,
 				18E9A61C2C9829970082DDA4 /* RoomChangeRolesScreen.swift in Sources */,
 				18E9A61D2C9829970082DDA4 /* RoomChangeRolesScreenCoordinator.swift in Sources */,
 				18E9A61E2C9829970082DDA4 /* RoomChangeRolesScreenModels.swift in Sources */,
@@ -11826,7 +11828,6 @@
 				18E9A67D2C9829970082DDA4 /* RoomTimelineItemFixtures.swift in Sources */,
 				18FFCED72CEC8F7E002F2647 /* RoomSelectionScreen.swift in Sources */,
 				18E9A67E2C9829970082DDA4 /* RoomTimelineItemProperties.swift in Sources */,
-				79281A692E67240400D86DD6 /* SpaceRoomProxy.swift in Sources */,
 				18E9A67F2C9829970082DDA4 /* RoomTimelineItemProtocol.swift in Sources */,
 				18E9A6802C9829970082DDA4 /* RoomTimelineItemView.swift in Sources */,
 				18E9A6812C9829970082DDA4 /* RoomTimelineItemViewState.swift in Sources */,
@@ -11962,7 +11963,6 @@
 				7996162D2E09EDF8008E73C4 /* RoomPowerLevelsProxy.swift in Sources */,
 				79C6F7242DF8244A003CEBB9 /* AdvancedSettingsScreenViewModelProtocol.swift in Sources */,
 				18D467B22D10A0B000861AA6 /* SecurityAndPrivacyScreenModels.swift in Sources */,
-				796CD4392E5360A2000D6078 /* SpaceRoomProxyMock.swift in Sources */,
 				18E9A6DC2C9829970082DDA4 /* StickerRoomTimelineView.swift in Sources */,
 				18E9A6DD2C9829970082DDA4 /* String.swift in Sources */,
 				18E9A6DE2C9829970082DDA4 /* Strings+SAS.swift in Sources */,
@@ -13829,7 +13829,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.25.8;
+				MARKETING_VERSION = 0.25.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13865,7 +13865,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.25.8;
+				MARKETING_VERSION = 0.25.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

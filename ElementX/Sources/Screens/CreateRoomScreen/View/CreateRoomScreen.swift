@@ -44,7 +44,7 @@ struct CreateRoomScreen: View {
             //     roomAccessSection
             //     roomAliasSection
             // }
-            if !context.isRoomPrivate {
+            if !context.selectedAccessType.isPrivate {
                 ZeroListRow(label: .plain(title: "Visible in public rooms directory"), kind: .toggle($context.visibleInPublicRoomDirectory))
             }
         }
@@ -152,12 +152,12 @@ struct CreateRoomScreen: View {
                                         description: "Encrypted Groups are ideal for more focused, intimate conversations and are encrypted by default. Check this box if you are creating a room intended for smaller groups.",
                                         icon: \.lock,
                                         iconAlignment: .top),
-                        kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
+                        kind: .selection(isSelected: context.selectedAccessType.isPrivate) { context.selectedAccessType = .private })
             ZeroListRow(label: .default(title: "Super Group",
                                         description: "Super Groups are designed to accommodate larger communities and are not encrypted by default. Check this box if you are creating a room intended for larger groups (10+ people).",
                                         icon: \.public,
                                         iconAlignment: .top),
-                        kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
+                        kind: .selection(isSelected: !context.selectedAccessType.isPrivate) { context.selectedAccessType = .public })
         } header: {
             Text("Group Type")
                 .compoundListSectionHeader()
@@ -165,18 +165,18 @@ struct CreateRoomScreen: View {
     }
     
     private var roomAccessSection: some View {
-        Section {
-            ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
-                                      description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
-                        kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
-            ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
-                                      description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
-                        kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
-        } header: {
-            Text(L10n.screenCreateRoomRoomAccessSectionTitle)
-                .compoundListSectionHeader()
+            Section {
+                ForEach(context.viewState.availableAccessTypes, id: \.self) { accessType in
+                    CreateRoomAccessRow(access: accessType,
+                                        isSelected: context.selectedAccessType == accessType) {
+                        context.selectedAccessType = accessType
+                    }
+                }
+            } header: {
+                Text(L10n.screenCreateRoomRoomAccessSectionTitle)
+                    .compoundListSectionHeader()
+            }
         }
-    }
     
     private var roomAliasSection: some View {
         Section {
@@ -253,7 +253,7 @@ private struct CreateRoomAccessRow: View {
     }
     
     var body: some View {
-        ListRow(label: .default(title: title,
+        ZeroListRow(label: .default(title: title,
                                 description: description,
                                 icon: icon,
                                 iconAlignment: .top),

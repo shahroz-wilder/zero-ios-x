@@ -145,19 +145,19 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                //if room.badges.isCallShown {
-                //    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
-                //        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
-                //}
+                if room.badges.isCallShown {
+                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
+                }
                 
                 if room.badges.isMuteShown {
                     CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
                         .accessibilityLabel(L10n.a11yNotificationsMuted)
                 }
                 
-//                if room.badges.isMentionShown {
-//                    mentionIcon
-//                }
+                if room.badges.isMentionShown {
+                    mentionIcon
+                }
                 
                 if room.badges.isDotShown {
                     Circle()

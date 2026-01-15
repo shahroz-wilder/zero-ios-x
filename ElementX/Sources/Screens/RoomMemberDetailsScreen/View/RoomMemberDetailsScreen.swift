@@ -101,14 +101,14 @@ struct RoomMemberDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
             }
             
-//            if let roomID = context.viewState.dmRoomID {
-//                Button {
-//                    context.send(viewAction: .startCall(roomID: roomID))
-//                } label: {
-//                    CompoundIcon(\.videoCall)
-//                }
-//                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
-//            }
+            if let roomID = context.viewState.dmRoomID {
+                Button {
+                    context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: true))
+                } label: {
+                    CompoundIcon(\.voiceCall)
+                }
+                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+            }
             
 //            if let permalink = context.viewState.memberDetails?.permalink {
 //                ShareLink(item: permalink) {

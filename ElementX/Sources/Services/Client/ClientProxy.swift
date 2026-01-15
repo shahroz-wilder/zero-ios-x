@@ -506,8 +506,8 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
                                                   preset: accessType.preset,
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
-                                                  powerLevelContentOverride: isKnockingOnly ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
-                                                  joinRuleOverride: isKnockingOnly ? .knock : (aliasLocalPart == nil) ? .invite : nil,
+                                                  powerLevelContentOverride: accessType == .askToJoin ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
+                                                  joinRuleOverride: accessType == .askToJoin ? .knock : (aliasLocalPart == nil) ? .invite : nil,
                                                   historyVisibilityOverride: accessType.historyVisibilityOverride,
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
                                                   canonicalAlias: aliasLocalPart,

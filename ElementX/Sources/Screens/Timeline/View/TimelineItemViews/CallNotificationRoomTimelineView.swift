@@ -32,7 +32,7 @@ struct CallNotificationRoomTimelineView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Label(title: { Text(L10n.commonCallStarted) },
-                      icon: { CompoundIcon(\.videoCallSolid, size: .medium, relativeTo: .compound.bodyMD) })
+                      icon: { CompoundIcon(\.voiceCallSolid, size: .medium, relativeTo: .compound.bodyMD) })
                     .font(.zero.bodyMD)
                     .foregroundColor(.compound.textSecondary)
                     .labelStyle(.custom(spacing: 4))

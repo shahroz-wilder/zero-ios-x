@@ -94,7 +94,7 @@ struct RoomDetailsScreen: View {
                     Button {
                         context.send(viewAction: .processTapCall)
                     } label: {
-                        CompoundIcon(\.videoCall)
+                        CompoundIcon(\.voiceCall)
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
                 case .invite:
