@@ -659,7 +659,7 @@ class MockScreen: Identifiable {
             userDiscoveryService.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
             
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let flowCoordinator = StartChatFlowCoordinator(isSpace: false,
+            let flowCoordinator = StartChatFlowCoordinator(entryPoint: .startChat,
                                                            userDiscoveryService: userDiscoveryService,
                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                            flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
@@ -804,21 +804,21 @@ class MockScreen: Identifiable {
                                                         mediaProvider: MediaProviderMock(configuration: .init()),
                                                         appSettings: ServiceLocator.shared.settings)
             
-            let flowCoordinator = ChatsFlowCoordinator(isNewLogin: false,
-                                                       navigationSplitCoordinator: navigationSplitCoordinator,
-                                                       flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                                                            bugReportService: BugReportServiceMock(.init()),
-                                                                                            elementCallService: ElementCallServiceMock(.init()),
-                                                                                            timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
-                                                                                            emojiProvider: EmojiProvider(appSettings: appSettings),
-                                                                                            linkMetadataProvider: LinkMetadataProvider(),
-                                                                                            appMediator: AppMediatorMock.default,
-                                                                                            appSettings: appSettings,
-                                                                                            appHooks: AppHooks(),
-                                                                                            analytics: ServiceLocator.shared.analytics,
-                                                                                            userIndicatorController: UserIndicatorControllerMock(),
-                                                                                            notificationManager: NotificationManagerMock(),
-                                                                                            stateMachineFactory: StateMachineFactory()))
+            let flowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
+                                                          navigationSplitCoordinator: navigationSplitCoordinator,
+                                                          flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                                                               bugReportService: BugReportServiceMock(.init()),
+                                                                                               elementCallService: ElementCallServiceMock(.init()),
+                                                                                               timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
+                                                                                               emojiProvider: EmojiProvider(appSettings: appSettings),
+                                                                                               linkMetadataProvider: LinkMetadataProvider(),
+                                                                                               appMediator: AppMediatorMock.default,
+                                                                                               appSettings: appSettings,
+                                                                                               appHooks: AppHooks(),
+                                                                                               analytics: ServiceLocator.shared.analytics,
+                                                                                               userIndicatorController: UserIndicatorControllerMock(),
+                                                                                               notificationManager: NotificationManagerMock(),
+                                                                                               stateMachineFactory: StateMachineFactory()))
 
             flowCoordinator.start()
             

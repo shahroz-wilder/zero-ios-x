@@ -6,41 +6,40 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-// periphery:ignore:all - this is just a spaceList remove this comment once generating the final file
-
 import Combine
 import SwiftUI
 
-struct SpaceListScreenCoordinatorParameters {
+struct SpacesScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let selectedSpacePublisher: CurrentValuePublisher<String?, Never>
     let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum SpaceListScreenCoordinatorAction {
+enum SpacesScreenCoordinatorAction {
     case selectSpace(SpaceRoomListProxyProtocol)
     case showSettings
+    case showCreateSpace
 }
 
-final class SpaceListScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SpaceListScreenCoordinatorParameters
-    private let viewModel: SpaceListScreenViewModelProtocol
+final class SpacesScreenCoordinator: CoordinatorProtocol {
+    private let parameters: SpacesScreenCoordinatorParameters
+    private let viewModel: SpacesScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
  
-    private let actionsSubject: PassthroughSubject<SpaceListScreenCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<SpaceListScreenCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<SpacesScreenCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<SpacesScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: SpaceListScreenCoordinatorParameters) {
+    init(parameters: SpacesScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SpaceListScreenViewModel(userSession: parameters.userSession,
-                                             selectedSpacePublisher: parameters.selectedSpacePublisher,
-                                             appSettings: parameters.appSettings,
-                                             userIndicatorController: parameters.userIndicatorController)
+        viewModel = SpacesScreenViewModel(userSession: parameters.userSession,
+                                          selectedSpacePublisher: parameters.selectedSpacePublisher,
+                                          appSettings: parameters.appSettings,
+                                          userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
@@ -53,12 +52,14 @@ final class SpaceListScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.selectSpace(spaceRoomListProxy))
             case .showSettings:
                 actionsSubject.send(.showSettings)
+            case .showCreateSpace:
+                actionsSubject.send(.showCreateSpace)
             }
         }
         .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {
-        AnyView(SpaceListScreen(context: viewModel.context))
+        AnyView(SpacesScreen(context: viewModel.context))
     }
 }

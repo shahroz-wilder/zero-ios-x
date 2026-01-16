@@ -8,12 +8,13 @@
 
 import Foundation
 
-enum SpaceListScreenViewModelAction {
+enum SpacesScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
     case showSettings
+    case showCreateSpace
 }
 
-struct SpaceListScreenViewState: BindableState {
+struct SpacesScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
     var userAvatarURL: URL?
@@ -23,14 +24,14 @@ struct SpaceListScreenViewState: BindableState {
     
     var isCreateSpaceEnabled: Bool
     
-    var bindings: SpaceListScreenViewStateBindings
+    var bindings: SpacesScreenViewStateBindings
 }
 
-struct SpaceListScreenViewStateBindings {
+struct SpacesScreenViewStateBindings {
     var isPresentingFeatureAnnouncement = false
 }
 
-enum SpaceListScreenViewAction {
+enum SpacesScreenViewAction {
     case spaceAction(SpaceRoomCell.Action)
     case showSettings
     case screenAppeared

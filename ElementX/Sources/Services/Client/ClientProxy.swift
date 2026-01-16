@@ -69,7 +69,7 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
               ban: nil,
               kick: nil,
               redact: nil,
-              invite: nil,
+              invite: Int32(0),
               notifications: nil,
               users: [:],
               events: [
@@ -92,6 +92,32 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
                   "m.call.member": Int32(0),
                   "org.matrix.msc3401.call.member": Int32(0)
               ])
+    }
+    
+    private static var standardSpaceCreationPowerLevelOverrides: PowerLevels {
+        .init(usersDefault: nil,
+              eventsDefault: Int32(100),
+              stateDefault: nil,
+              ban: nil,
+              kick: nil,
+              redact: nil,
+              invite: Int32(50),
+              notifications: nil,
+              users: [:],
+              events: [:])
+    }
+    
+    private static var publicSpaceCreationPowerLevelOverrides: PowerLevels {
+        .init(usersDefault: nil,
+              eventsDefault: Int32(100),
+              stateDefault: nil,
+              ban: nil,
+              kick: nil,
+              redact: nil,
+              invite: Int32(0),
+              notifications: nil,
+              users: [:],
+              events: [:])
     }
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
@@ -498,6 +524,20 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
                     avatarURL: URL?,
                     aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
         do {
+            let powerLevelContentOverride = if isSpace {
+                if accessType == .public {
+                    Self.publicSpaceCreationPowerLevelOverrides
+                } else {
+                    Self.standardSpaceCreationPowerLevelOverrides
+                }
+            } else {
+                if accessType == .askToJoin {
+                    Self.knockingRoomCreationPowerLevelOverrides
+                } else {
+                    Self.roomCreationPowerLevelOverrides
+                }
+            }
+            
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
                                                   isEncrypted: accessType.isEncrypted,
@@ -506,7 +546,7 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
                                                   preset: accessType.preset,
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
-                                                  powerLevelContentOverride: accessType == .askToJoin ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
+                                                  powerLevelContentOverride: powerLevelContentOverride,
                                                   joinRuleOverride: accessType == .askToJoin ? .knock : (aliasLocalPart == nil) ? .invite : nil,
                                                   historyVisibilityOverride: accessType.historyVisibilityOverride,
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
@@ -942,20 +982,35 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         }
     }
     
-    func recentlyVisitedRooms() async -> Result<[String], ClientProxyError> {
-        do {
-            let result = try await client.getRecentlyVisitedRooms()
-            return .success(result)
-        } catch {
-            MXLog.error("Failed retrieving recently visited rooms with error: \(error)")
-            return .failure(.sdkError(error))
+    func recentlyVisitedRooms(filter: (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
+        let maxResultsToReturn = 5
+        
+        guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
+            return []
         }
+        
+        var rooms: [JoinedRoomProxyProtocol] = []
+        
+        for roomID in roomIdentifiers {
+            guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
+                  filter(roomProxy) else {
+                continue
+            }
+            
+            rooms.append(roomProxy)
+            
+            if rooms.count >= maxResultsToReturn {
+                return rooms
+            }
+        }
+        
+        return rooms
     }
     
     func recentConversationCounterparts() async -> [UserProfileProxy] {
         let maxResultsToReturn = 5
         
-        guard case let .success(roomIdentifiers) = await recentlyVisitedRooms() else {
+        guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
             return []
         }
         
@@ -980,6 +1035,16 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         }
         
         return users.elements
+    }
+    
+    private func recentlyVisitedRoomIDs() async -> Result<[String], ClientProxyError> {
+        do {
+            let result = try await client.getRecentlyVisitedRooms()
+            return .success(result)
+        } catch {
+            MXLog.error("Failed retrieving recently visited rooms with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
     
     // MARK: Moderation & Safety

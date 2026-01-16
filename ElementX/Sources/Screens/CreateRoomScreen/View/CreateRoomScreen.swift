@@ -58,9 +58,19 @@ struct CreateRoomScreen: View {
         .shouldScrollOnKeyboardDidShow(focus == .alias, to: Focus.alias)
     }
     
+    private var nameTextFieldShape: AnyShape {
+        if #available(iOS 26, *) {
+            AnyShape(ConcentricRectangle(corners: .concentric(minimum: 26)))
+        } else {
+            AnyShape(RoundedRectangle(cornerRadius: 12))
+        }
+    }
+    
     private var roomSection: some View {
         Section {
-            VStack(alignment: .center, spacing: 16) {
+            EmptyView()
+        } header: {
+            HStack(alignment: .center, spacing: 16) {
                 roomAvatarButton
                 let nameLabel = if #available(iOS 26, *) {
                     L10n.commonName
@@ -84,11 +94,11 @@ struct CreateRoomScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(.horizontal, ZeroListRowPadding.horizontal)
                         .padding(.vertical, ZeroListRowPadding.vertical)
-                        .background(.zero.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
+                        .background(.zero.bgCanvasDefault, in: nameTextFieldShape)
                 }
             }
             .listRowInsets(.init())
-            .listRowBackground(Color.clear)
+            .padding(.top, 16)
         }
     }
     
@@ -105,15 +115,27 @@ struct CreateRoomScreen: View {
                 } placeholder: {
                     ProgressView()
                 }
-                .scaledFrame(size: 120)
-                .clipShape(Circle())
+                .scaledFrame(size: 70, relativeTo: .title)
+                .clipShape(context.viewState.isSpace ? AnyShape(RoundedRectangle(cornerRadius: 16)) : AnyShape(Circle()))
+                .overlay(alignment: .bottomTrailing) {
+                    editAvatarBadge
+                        .scaledOffset(x: 12, y: 4, relativeTo: .title)
+                        .accessibilityHidden(true)
+                }
             } else {
-                CompoundIcon(\.takePhoto, size: .custom(36), relativeTo: .title)
-                    .foregroundColor(.compound.iconSecondary)
-                    .scaledFrame(size: 120, relativeTo: .title)
-                    .background(.compound.bgSubtlePrimary, in: Circle())
+                CompoundIcon(\.takePhoto, size: .medium, relativeTo: .title)
+                    .foregroundColor(.compound.iconPrimary)
+                    .scaledFrame(size: 50, relativeTo: .title)
+                    .background(.compound.bgCanvasDefault, in: Circle())
+                    .overlay {
+                        Circle()
+                            .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
+                    }
+                    .padding(10)
+                    .accessibilityHidden(true)
             }
         }
+        .accessibilityLabel(L10n.a11yEditAvatar)
         .buttonStyle(.plain)
         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomAvatar)
         .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
@@ -131,6 +153,23 @@ struct CreateRoomScreen: View {
                 }
             }
         }
+    }
+    
+    private var editAvatarBadge: some View {
+        CompoundIcon(\.edit, size: .small, relativeTo: .body)
+            .foregroundStyle(.compound.iconPrimary)
+            .scaledPadding(5, relativeTo: .title)
+            .background {
+                Circle()
+                    .fill(Color.compound.bgCanvasDefault)
+                    .overlay {
+                        Circle()
+                            .inset(by: 0.5)
+                            .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
+                    }
+            }
+            .scaledPadding(3.5, relativeTo: .title)
+            .background(.compound.bgSubtleSecondaryLevel0, in: Circle())
     }
     
     private var topicSection: some View {
@@ -202,9 +241,18 @@ struct CreateRoomScreen: View {
         }
     }
     
+    @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
+        if context.viewState.shouldShowCancelButton {
+            ToolbarItem(placement: .topBarLeading) {
+                ToolbarButton(role: .cancel) {
+                    context.send(viewAction: .dismiss)
+                }
+            }
+        }
+        
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionCreate) {
+            ToolbarButton(role: .confirm(title: L10n.actionCreate)) {
                 focus = nil
                 context.send(viewAction: .createRoom)
             }
@@ -269,26 +317,55 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         return CreateRoomScreenViewModel(isSpace: false,
+                                         shouldShowCancelButton: false,
                                          userSession: userSession,
                                          analytics: ServiceLocator.shared.analytics,
                                          userIndicatorController: UserIndicatorControllerMock(),
                                          appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let avatarViewModel = {
+        AppSettings.resetAllSettings()
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg")!)
+        return viewModel
     }()
     
     static let spaceViewModel = {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         return CreateRoomScreenViewModel(isSpace: true,
+                                         shouldShowCancelButton: true,
                                          userSession: userSession,
                                          analytics: ServiceLocator.shared.analytics,
                                          userIndicatorController: UserIndicatorControllerMock(),
                                          appSettings: ServiceLocator.shared.settings)
     }()
     
+    static let spaceWithAvatarViewModel = {
+        AppSettings.resetAllSettings()
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let viewModel = CreateRoomScreenViewModel(isSpace: true,
+                                                  shouldShowCancelButton: true,
+                                                  userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
+        viewModel.updateAvatar(fileURL: Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg")!)
+        return viewModel
+    }()
+    
     static let publicRoomViewModel = {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -303,6 +380,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         appSettings.knockingEnabled = true
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -315,6 +393,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         AppSettings.resetAllSettings()
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -330,6 +409,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         let viewModel = CreateRoomScreenViewModel(isSpace: false,
+                                                  shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: ServiceLocator.shared.analytics,
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -346,9 +426,21 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Create Room")
         
         NavigationStack {
+            CreateRoomScreen(context: avatarViewModel.context)
+        }
+        .previewDisplayName("Create Room with avatar")
+        .snapshotPreferences(expect: avatarViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
+        
+        NavigationStack {
             CreateRoomScreen(context: spaceViewModel.context)
         }
         .previewDisplayName("Create Space")
+        
+        NavigationStack {
+            CreateRoomScreen(context: spaceWithAvatarViewModel.context)
+        }
+        .previewDisplayName("Create Space with avatar")
+        .snapshotPreferences(expect: spaceWithAvatarViewModel.context.$viewState.map { $0.avatarMediaInfo != nil })
         
         NavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)

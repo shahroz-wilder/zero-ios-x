@@ -941,6 +941,18 @@ extension PreviewTests {
         }
     }
 
+    func testSpaceAddRoomsScreenSelectedItem() async throws {
+        for (index, preview) in SpaceAddRoomsScreenSelectedItem_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    func testSpaceAddRoomsScreen() async throws {
+        for (index, preview) in SpaceAddRoomsScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testSpaceHeaderTopicSheetView() async throws {
         for (index, preview) in SpaceHeaderTopicSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -949,12 +961,6 @@ extension PreviewTests {
 
     func testSpaceHeaderView() async throws {
         for (index, preview) in SpaceHeaderView_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    func testSpaceListScreen() async throws {
-        for (index, preview) in SpaceListScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
@@ -979,6 +985,12 @@ extension PreviewTests {
 
     func testSpacesAnnouncementSheetView() async throws {
         for (index, preview) in SpacesAnnouncementSheetView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    func testSpacesScreen() async throws {
+        for (index, preview) in SpacesScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
