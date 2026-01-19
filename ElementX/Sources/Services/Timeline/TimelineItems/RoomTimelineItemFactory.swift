@@ -154,7 +154,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                deliveryStatus: eventItemProxy.deliveryStatus,
                                                orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                               encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildCustomImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -198,7 +199,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -222,7 +224,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildAudioTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -246,7 +249,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildVoiceTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -269,7 +273,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                        deliveryStatus: eventItemProxy.deliveryStatus,
                                                        orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                       encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                       encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                       encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildFileTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -293,7 +298,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                deliveryStatus: eventItemProxy.deliveryStatus,
                                                orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                               encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildNoticeTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -316,7 +322,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                  reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                  deliveryStatus: eventItemProxy.deliveryStatus,
                                                  orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                 encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                 encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                 encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildEmoteTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -339,7 +346,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildLocationTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -362,7 +370,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                    deliveryStatus: eventItemProxy.deliveryStatus,
                                                    orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                   encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                   encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                   encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildGalleryTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -386,7 +395,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                deliveryStatus: eventItemProxy.deliveryStatus,
                                                orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                               encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildStickerTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -413,7 +423,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                          reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                          deliveryStatus: eventItemProxy.deliveryStatus,
                                                          orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                         encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                         encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                         encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildPollTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -474,7 +485,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                       reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                       deliveryStatus: eventItemProxy.deliveryStatus,
                                                       orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
-                                                      encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+                                                      encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                      encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildRedactedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,

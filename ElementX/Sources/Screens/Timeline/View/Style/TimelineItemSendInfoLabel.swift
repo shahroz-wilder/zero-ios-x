@@ -15,7 +15,8 @@ extension View {
                               adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
                               context: TimelineViewModel.Context) -> some View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
-                                                              adjustedDeliveryStatus: adjustedDeliveryStatus),
+                                                              adjustedDeliveryStatus: adjustedDeliveryStatus,
+                                                              enableKeyShareOnInvite: context.viewState.enableKeyShareOnInvite),
                                               context: context))
     }
 }
@@ -60,7 +61,8 @@ private struct TimelineItemSendInfoLabel: View {
         switch sendInfo.status {
         case .sendingFailed: \.errorSolid
         case .encryptionAuthenticity(let authenticity): nil
-        // case .encryptionAuthenticity(let authenticity): authenticity.icon
+        //case .encryptionAuthenticity(let authenticity): authenticity.icon
+        case .encryptionForwarder: \.info
         case .none: nil
         }
     }
@@ -69,6 +71,7 @@ private struct TimelineItemSendInfoLabel: View {
         switch sendInfo.status {
         case .sendingFailed: L10n.commonSendingFailed
         case .encryptionAuthenticity(let authenticity): authenticity.message
+        case .encryptionForwarder(let forwarder): forwarder.message
         case .none: nil
         }
     }
@@ -112,7 +115,11 @@ private struct TimelineItemSendInfoLabel: View {
 
 /// All the data needed to render a timeline item's send info label.
 private struct TimelineItemSendInfo {
-    enum Status { case sendingFailed, encryptionAuthenticity(EncryptionAuthenticity) }
+    enum Status {
+        case sendingFailed
+        case encryptionAuthenticity(EncryptionAuthenticity)
+        case encryptionForwarder(TimelineItemKeyForwarder)
+    }
     
     /// Describes how the content and the send info should be arranged inside a bubble
     enum LayoutType {
@@ -127,20 +134,22 @@ private struct TimelineItemSendInfo {
     let layoutType: LayoutType
     
     var foregroundStyle: Color {
-//        switch status {
-//        case .sendingFailed:
-//            .compound.textCriticalPrimary
-//        case .encryptionAuthenticity(let authenticity):
-//            authenticity.foregroundStyle
-//        case .none:
-//            .compound.textSecondary
-//        }
+        //switch status {
+        //case .sendingFailed:
+        //    .compound.textCriticalPrimary
+        //case .encryptionAuthenticity(let authenticity):
+        //   authenticity.foregroundStyle
+        //case .encryptionForwarder:
+        //    .compound.textSecondary
+        //case .none:
+        //    .compound.textSecondary
+        //}
         .compound.textSecondary
     }
 }
 
 private extension TimelineItemSendInfo {
-    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?) {
+    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?, enableKeyShareOnInvite: Bool) {
         itemID = timelineItem.id
         localizedString = timelineItem.localizedSendInfo
         
@@ -148,6 +157,8 @@ private extension TimelineItemSendInfo {
             .sendingFailed
         } else if let authenticity = timelineItem.properties.encryptionAuthenticity {
             .encryptionAuthenticity(authenticity)
+        } else if enableKeyShareOnInvite, let forwarder = timelineItem.properties.encryptionForwarder {
+            .encryptionForwarder(forwarder)
         } else {
             nil
         }
@@ -186,6 +197,12 @@ private extension EncryptionAuthenticity {
     }
 }
 
+private extension TimelineItemKeyForwarder {
+    static var test: TimelineItemKeyForwarder {
+        TimelineItemKeyForwarder(id: "@alice:matrix.org", displayName: "alice")
+    }
+}
+
 // MARK: - Previews
 
 struct TimelineItemSendInfoLabel_Previews: PreviewProvider, TestablePreview {
@@ -209,6 +226,10 @@ struct TimelineItemSendInfoLabel_Previews: PreviewProvider, TestablePreview {
             TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
                                                       localizedString: "09:47 AM",
                                                       status: .encryptionAuthenticity(.sentInClear(color: .red)),
+                                                      layoutType: .horizontal()))
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
+                                                      localizedString: "09:47 AM",
+                                                      status: .encryptionForwarder(.test),
                                                       layoutType: .horizontal()))
         }
     }
