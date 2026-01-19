@@ -172,12 +172,9 @@ struct RoomScreen: View {
                            showProSubscriptionBadge: context.viewState.showProSubscriptionBadge,
                            isRoomDirect: context.viewState.isRoomDirect,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
-                           mediaProvider: context.mediaProvider)
-                // Using a button stops it from getting truncated in the navigation bar
-                .contentShape(.rect)
-                .onTapGesture {
-                    context.send(viewAction: .displayRoomDetails)
-                }
+                           mediaProvider: context.mediaProvider) {
+                context.send(viewAction: .displayRoomDetails)
+            }
         }
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
@@ -193,14 +190,9 @@ struct RoomScreen: View {
     @ViewBuilder
     private var callButton: some View {
         if context.viewState.hasOngoingCall {
-            Button {
+            JoinCallButton {
                 context.send(viewAction: .displayCall)
-            } label: {
-                Label(L10n.actionJoin, icon: \.videoCallSolid)
-                    .labelStyle(.titleAndIcon)
             }
-            .buttonStyle(ElementCallButtonStyle())
-            .accessibilityLabel(L10n.a11yJoinCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             HStack {

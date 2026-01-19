@@ -643,6 +643,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "SpaceHeaderView_Previews")
     }
 
+    func testSpaceRemoveChildrenConfirmationView() async throws {
+        try await performAccessibilityAudit(named: "SpaceRemoveChildrenConfirmationView_Previews")
+    }
+
     func testSpaceRoomCell() async throws {
         try await performAccessibilityAudit(named: "SpaceRoomCell_Previews")
     }
@@ -753,10 +757,6 @@ extension AccessibilityTests {
 
     func testTimelineThreadSummaryView() async throws {
         try await performAccessibilityAudit(named: "TimelineThreadSummaryView_Previews")
-    }
-
-    func testTimelineView() async throws {
-        try await performAccessibilityAudit(named: "TimelineView_Previews")
     }
 
     func testTombstonedAvatarImage() async throws {

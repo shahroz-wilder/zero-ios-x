@@ -12,19 +12,37 @@ import SwiftUI
 struct SpaceScreen: View {
     @Bindable var context: SpaceScreenViewModel.Context
     
+    private var isEditModeActive: Bool { context.viewState.editMode != .inactive }
+    
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                SpaceHeaderView(spaceServiceRoom: context.viewState.space,
-                                mediaProvider: context.mediaProvider)
+                if !isEditModeActive {
+                    SpaceHeaderView(spaceServiceRoom: context.viewState.space,
+                                    mediaProvider: context.mediaProvider)
+                }
+                
                 rooms
             }
         }
+        .environment(\.editMode, .constant(context.viewState.editMode))
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .toolbarRole(RoomHeaderView.toolbarRole)
+        .toolbarRole(isEditModeActive ? .automatic : RoomHeaderView.toolbarRole)
         .navigationTitle(context.viewState.space.name)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbar }
+        .navigationBarBackButtonHidden(isEditModeActive)
+        .toolbar {
+            if isEditModeActive {
+                editModeToolbar
+            } else {
+                toolbar
+            }
+        }
+        .sheet(isPresented: $context.isPresentingRemoveChildrenConfirmation) {
+            SpaceRemoveChildrenConfirmationView(spaceName: context.viewState.space.name) {
+                context.send(viewAction: .confirmRemoveSelectedChildren)
+            }
+        }
         .sheet(item: $context.leaveSpaceViewModel) { leaveSpaceViewModel in
             LeaveSpaceView(context: leaveSpaceViewModel.context)
         }
@@ -32,9 +50,9 @@ struct SpaceScreen: View {
     
     @ViewBuilder
     var rooms: some View {
-        ForEach(context.viewState.rooms, id: \.id) { spaceServiceRoom in
+        ForEach(context.viewState.visibleRooms, id: \.id) { spaceServiceRoom in
             SpaceRoomCell(spaceServiceRoom: spaceServiceRoom,
-                          isSelected: spaceServiceRoom.id == context.viewState.selectedSpaceRoomID,
+                          isSelected: context.viewState.isSpaceIDSelected(spaceServiceRoom.id),
                           isJoining: context.viewState.joiningRoomIDs.contains(spaceServiceRoom.id),
                           mediaProvider: context.mediaProvider) { action in
                 context.send(viewAction: .spaceAction(action))
@@ -57,14 +75,12 @@ struct SpaceScreen: View {
                            roomAvatar: context.viewState.space.avatar,
                            showProSubscriptionBadge: false,
                            isRoomDirect: false,
-                           mediaProvider: context.mediaProvider)
-                .contentShape(.rect)
-                .onTapGesture {
-                    if context.viewState.isSpaceManagementEnabled,
-                       let roomProxy = context.viewState.roomProxy {
-                        context.send(viewAction: .spaceSettings(roomProxy: roomProxy))
-                    }
+                           mediaProvider: context.mediaProvider) {
+                if context.viewState.isSpaceManagementEnabled,
+                   let roomProxy = context.viewState.roomProxy {
+                    context.send(viewAction: .spaceSettings(roomProxy: roomProxy))
                 }
+            }
         }
         
         // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
@@ -103,20 +119,46 @@ struct SpaceScreen: View {
             }
         }
     }
+    
+    @ToolbarContentBuilder
+    var editModeToolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(L10n.actionCancel, role: .cancel) {
+                context.send(viewAction: .finishManagingChildren)
+            }
+        }
+        
+        ToolbarItem(placement: .principal) {
+            Text(L10n.commonSelectedCount(context.viewState.editModeSelectedIDs.count))
+        }
+        
+        ToolbarItem(placement: .primaryAction) {
+            ToolbarButton(role: .destructive(title: L10n.actionRemove)) {
+                context.send(viewAction: .removeSelectedChildren)
+            }
+            .disabled(context.viewState.editModeSelectedIDs.isEmpty)
+        }
+    }
 }
 
 // MARK: - Previews
 
 struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
+    static let managingViewModel = makeViewModel(isManagingRooms: true)
     
     static var previews: some View {
         NavigationStack {
             SpaceScreen(context: viewModel.context)
         }
+        
+        NavigationStack {
+            SpaceScreen(context: managingViewModel.context)
+        }
+        .previewDisplayName("Managing")
     }
     
-    static func makeViewModel() -> SpaceScreenViewModel {
+    static func makeViewModel(isManagingRooms: Bool = false) -> SpaceScreenViewModel {
         let spaceServiceRoom = SpaceServiceRoomMock(.init(id: "!eng-space:matrix.org",
                                                           name: "Engineering Team",
                                                           isSpace: true,
@@ -141,6 +183,12 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                              userSession: userSession,
                                              appSettings: AppSettings(),
                                              userIndicatorController: UserIndicatorControllerMock())
+        
+        if isManagingRooms {
+            viewModel.state.editMode = .transient
+            viewModel.state.editModeSelectedIDs = [viewModel.state.visibleRooms[0].id]
+        }
+        
         return viewModel
     }
 }

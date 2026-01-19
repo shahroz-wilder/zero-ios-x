@@ -319,7 +319,9 @@ struct JoinRoomScreen: View {
                                    roomAvatar: avatar,
                                    showProSubscriptionBadge: false,
                                    isRoomDirect: false,
-                                   mediaProvider: context.mediaProvider)
+                                   mediaProvider: context.mediaProvider) {
+                        // There is no action but the iOS 26 designs have it looking like a button.
+                    }
                 }
             }
         }

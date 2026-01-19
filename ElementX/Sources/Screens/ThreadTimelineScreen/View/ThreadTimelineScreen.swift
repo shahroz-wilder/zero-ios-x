@@ -67,9 +67,9 @@ struct ThreadTimelineScreen: View {
                            showProSubscriptionBadge: false,
                            isRoomDirect: false,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
-                           mediaProvider: context.mediaProvider)
-                // Using a button stops it from getting truncated in the navigation bar
-                .contentShape(.rect)
+                           mediaProvider: context.mediaProvider) {
+                // There is no action but the iOS 26 designs have it looking like a button.
+            }
         }
     }
     
