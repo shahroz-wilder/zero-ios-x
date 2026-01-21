@@ -24,20 +24,22 @@ struct RoomHeaderView: View {
     
     var body: some View {
         if #available(iOS 26.0, *) {
-            Button(action: action) {
-                // On iOS 26+ we use the toolbarRole(.editor) to leading align.
-                content
-            }
-            .backportButtonStyleGlass()
+            // On iOS 26+ we use the toolbarRole(.editor) to leading align.
+            content
+                // Not using a Button here so that we get our custom padding around the avatar. This also
+                // helps fix a bug where the top pixel was being clipped during the push/pop animation as
+                // the Button styling results in a view that is slightly taller than a bar item should be.
+                .padding(6)
+                .padding(.trailing, 6)
+                .glassEffect(.regular.interactive())
+                .roomHeaderAction(action)
         } else {
             // On iOS 18 and lower, the editor role causes an animation glitch with the back button whenever
             // you push a screen whilst the large title is visible on the room screen.
             content
                 // So take up as much space as possible, with a leading alignment for use in the default principal toolbar position
                 .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
-                // Using a button stops it from getting truncated in the navigation bar
-                .contentShape(.rect)
-                .onTapGesture(perform: action)
+                .roomHeaderAction(action)
         }
     }
     
@@ -70,7 +72,7 @@ struct RoomHeaderView: View {
                 }
             }
                 if let dmRecipientVerificationState {
-                    VerificationBadge(verificationState: dmRecipientVerificationState)
+                    VerificationBadge(verificationState: dmRecipientVerificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
                 }
             }
         }
@@ -94,6 +96,17 @@ extension RoomHeaderView {
         }
     }
 }
+
+private extension View {
+    func roomHeaderAction(_ action: @escaping () -> Void) -> some View {
+        // Using a button stops it from getting truncated in the navigation bar
+        contentShape(.rect)
+            .onTapGesture(perform: action)
+            .accessibilityAddTraits(.isButton)
+    }
+}
+
+// MARK: - Previews
 
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
