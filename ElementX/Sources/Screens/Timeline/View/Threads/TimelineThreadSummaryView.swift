@@ -12,7 +12,7 @@ import SwiftUI
 struct TimelineThreadSummaryView: View {
     let threadSummary: TimelineItemThreadSummary
     var onTap: (() -> Void)?
-
+    
     var body: some View {
         Button {
             onTap?()
@@ -95,12 +95,6 @@ struct TimelineThreadSummaryView: View {
                            plainBody: L10n.commonMessageRemoved,
                            formattedBody: nil,
                            numberOfReplies: numberOfReplies)
-            case .encrypted:
-                ThreadView(senderID: senderID,
-                           sender: sender,
-                           plainBody: L10n.commonWaitingForDecryptionKey,
-                           formattedBody: nil,
-                           numberOfReplies: numberOfReplies)
             }
         default:
             LoadingThreadView()
@@ -121,44 +115,35 @@ struct TimelineThreadSummaryView: View {
     
     private struct ThreadView: View {
         @EnvironmentObject private var context: TimelineViewModel.Context
-
+        
         let senderID: String
         let sender: TimelineItemSender?
         let plainBody: String
         let formattedBody: AttributedString?
         let numberOfReplies: Int
-
-        private let threadBorderWidth: CGFloat = 3
-
-        /// Background color based on room encryption status
-        private var backgroundColor: Color {
-            context.viewState.isEncryptedRoom
-                ? .zero.bgChatBubbleOutgoing
-                : .zero.bgChatBubbleOutgoingSecondary
-        }
-
+        
         var body: some View {
             HStack(spacing: 4) {
                 CompoundIcon(\.threads, size: .xSmall, relativeTo: .compound.bodyXS)
-                    .foregroundColor(.zero.threadAccentColor)
+                    .foregroundColor(.compound.iconSecondary)
                     .accessibilityLabel(L10n.commonThread)
-
+                
                 Text(L10n.commonReplies(numberOfReplies))
                     .font(.compound.bodyXSSemibold)
                     .foregroundColor(.compound.textPrimary)
-
+                
                 LoadableAvatarImage(url: sender?.avatarURL,
                                     name: sender?.displayName,
                                     contentID: senderID,
                                     avatarSize: .user(on: .threadSummary),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityHidden(true)
-
+                
                 Text(sender?.disambiguatedDisplayName ?? senderID)
                     .font(.compound.bodyXSSemibold)
                     .foregroundColor(.compound.textPrimary)
                     .accessibilityLabel(L10n.commonInReplyTo(sender?.disambiguatedDisplayName ?? senderID))
-
+                
                 Text(context.viewState.buildMessagePreview(formattedBody: formattedBody, plainBody: plainBody))
                     .font(.compound.bodyXS)
                     .foregroundColor(.compound.textSecondary)
@@ -167,18 +152,8 @@ struct TimelineThreadSummaryView: View {
             .lineLimit(1)
             .padding(.vertical, 7.0)
             .padding(.horizontal, 8.0)
-            .background(backgroundColor)
+            .background(Color.compound.bgSubtlePrimary)
             .cornerRadius(8)
-            .overlay(alignment: .leading) {
-                UnevenRoundedRectangle(
-                    topLeadingRadius: 8,
-                    bottomLeadingRadius: 8,
-                    bottomTrailingRadius: 0,
-                    topTrailingRadius: 0
-                )
-                .fill(Color.zero.threadAccentColor)
-                .frame(width: threadBorderWidth)
-            }
         }
     }
 }

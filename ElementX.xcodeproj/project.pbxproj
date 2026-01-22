@@ -9861,6 +9861,7 @@
 				18E9A75D2C9829970082DDA4 /* Resources */,
 				18E9A76B2C9829970082DDA4 /* Frameworks */,
 				18E9A78A2C9829970082DDA4 /* Embed Foundation Extensions */,
+				18E9A78C2C9829970082DDA4 /* ⚠️ SwiftLint */,
 				18E9A78D2C9829970082DDA4 /* 🧹 SwiftFormat */,
 				18E9A78E2C9829970082DDA4 /* Embed Frameworks */,
 			);
@@ -10525,6 +10526,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which sourcery >/dev/null; then\n    sourcery --config Tools/Sourcery/PreviewTestsConfig.yml\nelse\n    echo \"warning: Sourcery not installed, run swift run tools setup-project\"\nfi\n";
+		};
+		18E9A78C2C9829970082DDA4 /* ⚠️ SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "⚠️ SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		18E9A78D2C9829970082DDA4 /* 🧹 SwiftFormat */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -12,5 +12,4 @@ enum TimelineEventContent: Hashable {
     case message(EventBasedMessageTimelineItemContentType)
     case poll(question: String)
     case redacted
-    case encrypted
 }

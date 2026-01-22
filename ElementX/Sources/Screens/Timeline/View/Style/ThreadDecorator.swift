@@ -14,17 +14,13 @@ struct ThreadDecorator: View {
     var body: some View {
         Label {
             Text(L10n.commonThread)
-                .foregroundColor(.zero.threadAccentColor)
+                .foregroundColor(.compound.textPrimary)
                 .font(.zero.bodyXS)
         } icon: {
             CompoundIcon(\.threads, size: .xSmall, relativeTo: .compound.bodyXS)
-                .foregroundColor(.zero.threadAccentColor)
+                .foregroundColor(.compound.iconSecondary)
         }
         .labelStyle(.custom(spacing: 4))
-        .padding(.horizontal, 6)
-        .padding(.vertical, 2)
-        .background(.zero.threadChipBackground)
-        .cornerRadius(4)
     }
 }
 

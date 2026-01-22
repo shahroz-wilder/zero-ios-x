@@ -61,11 +61,4 @@ public struct ZeroColors {
     public let bgChatBubbleOutgoing = Asset.Colors.zeroChatBubbleOutgoing.swiftUIColor
     public let bgChatBubbleOutgoingSecondary = Color.init(hex: "#2B2B2B")
     public let bgChatBubbleIncoming = Asset.Colors.zeroChatBubbleIncoming.swiftUIColor
-
-    // MARK: - Thread Accent Colors
-
-    /// Thread accent color - teal (#01F4CB)
-    public let threadAccentColor = Asset.Colors.blue11.swiftUIColor
-    /// Thread chip background - 15% opacity teal
-    public let threadChipBackground = Asset.Colors.blue11.swiftUIColor.opacity(0.15)
 }
