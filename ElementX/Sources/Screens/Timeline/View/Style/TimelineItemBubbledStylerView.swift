@@ -152,7 +152,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             if context.viewState.areThreadsEnabled,
                !context.viewState.timelineKind.isThread,
                let threadSummary = timelineItem.properties.threadSummary {
-                TimelineThreadSummaryView(threadSummary: threadSummary) {
+                TimelineThreadSummaryView(threadSummary: threadSummary, isOutgoing: timelineItem.isOutgoing) {
                     context.send(viewAction: .displayThread(itemID: timelineItem.id))
                 }
                 .padding(5)
