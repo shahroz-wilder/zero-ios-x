@@ -843,7 +843,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                     .message(.text(.init(body: body)))
                 case .redacted:
                     .redacted
-                default:
+                case .unableToDecrypt:
+                    .encrypted
+                case .other:
                     .message(.text(.init(body: L10n.commonUnsupportedEvent)))
                 }
             default:
@@ -989,7 +991,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                     replyContent = .message(.text(.init(body: body)))
                 case .redacted:
                     replyContent = .redacted
-                default:
+                case .unableToDecrypt:
+                    replyContent = .encrypted
+                case .other:
                     replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
                 }
             case .failedToParseMessageLike(let msgType, let error):

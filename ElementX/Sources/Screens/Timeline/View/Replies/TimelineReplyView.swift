@@ -86,6 +86,11 @@ struct TimelineReplyView: View {
                               plainBody: L10n.commonMessageRemoved,
                               formattedBody: nil,
                               icon: .init(kind: .icon(\.delete), cornerRadii: iconCornerRadii))
+                case .encrypted:
+                    ReplyView(sender: sender,
+                              plainBody: L10n.commonWaitingForDecryptionKey,
+                              formattedBody: nil,
+                              icon: .init(kind: .icon(\.lock), cornerRadii: iconCornerRadii))
                 }
             default:
                 LoadingReplyView()

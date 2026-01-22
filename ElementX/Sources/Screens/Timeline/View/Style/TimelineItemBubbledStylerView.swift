@@ -202,12 +202,17 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .padding(.top, messageBubbleTopPadding)
     }
     
+    private var isThreadMessage: Bool {
+        !context.viewState.timelineKind.isThread && timelineItem.properties.isThreaded
+    }
+
     var messageBubble: some View {
         contentWithReply
             .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
                               insets: timelineItem.bubbleInsets,
-                              color: timelineItem.bubbleBackgroundColor(isRoomEncrypted: context.viewState.isEncryptedRoom))
+                              color: timelineItem.bubbleBackgroundColor(isRoomEncrypted: context.viewState.isEncryptedRoom),
+                              isThreaded: isThreadMessage)
     }
     
     @ViewBuilder
