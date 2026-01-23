@@ -41,6 +41,7 @@ enum HomeScreenCoordinatorAction {
     case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType, ZeroCurrency?)
     case searchUser
     case selectRoomAlias(roomAlias: String)
+    case openNFT(HomeScreenWalletNFTContent)
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
@@ -138,6 +139,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
                     actionsSubject.send(.startWalletTransaction(walletTransactionProtocol, type, meowPrice))
+                case .openNFT(let nft):
+                    actionsSubject.send(.openNFT(nft))
                 }
             }
             .store(in: &cancellables)

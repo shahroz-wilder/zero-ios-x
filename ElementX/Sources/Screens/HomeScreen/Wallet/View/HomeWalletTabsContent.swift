@@ -61,18 +61,14 @@ struct HomeWalletTabsContentView : View {
                     }
                 )
                 
-            case .account:
-                walletTabContentView(
-                    tabContent: WalletTabContent(
-                        items: context.viewState.visibleWalletNFTs,
-                        nextPageParams: context.viewState.walletNFTsNextPageParams,
-                        emptyMessage: "No NFTs",
-                        loadMoreAction: { context.send(viewAction: .loadMoreWalletNFTs) }
-                    ),
-                    selectedTab: selectedWalletTab,
-                    mediaProvider: context.mediaProvider,
-                    onTap: { _ in }
-                )
+            case .nft:
+                HomeWalletNFTContent(nftItems: context.viewState.visibleWalletNFTs,
+                                     nextPageParams: context.viewState.walletNFTsNextPageParams,
+                                     mediaProvider: context.mediaProvider,
+                                     loadMoreNFTs: { context.send(viewAction: .loadMoreWalletNFTs) },
+                                     onTap: { nft in context.send(viewAction: .openNFT(nft)) },
+                                     onCopyNFTId: { nft in context.send(viewAction: .copyNFTId(nft)) },
+                                     onOpenNFTTransaction: { nft in context.send(viewAction: .openNFTTransaction(nft)) })
             case .staking:
                 HomeWalletStakingContent(
                     stakingItems: context.viewState.visibleWalletStakings,

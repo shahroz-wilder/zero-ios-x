@@ -427,6 +427,8 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     presentSearchUserScreen()
                 case .selectRoomAlias(let roomAlias):
                     handleAppRoute(.roomAlias(roomAlias), animated: true)
+                case .openNFT(let nft):
+                    presentNFTDetailScreen(nft)
                 }
             }
             .store(in: &cancellables)
@@ -1026,6 +1028,15 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         zeroWalletTransactionsFlowCoordinator = flowCoordinator
         flowCoordinator.start()
+    }
+    
+    private func presentNFTDetailScreen(_ nft: HomeScreenWalletNFTContent) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = NFTDetailScreenCoordinator(parameters: .init(nft: nft))
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
     }
     
     func runDeleteAccountFlow() {
