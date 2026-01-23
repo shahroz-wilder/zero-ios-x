@@ -99,7 +99,7 @@ struct WalletNFTCard: View {
         }
         .buttonStyle(.plain)
         .overlay(alignment: .bottomTrailing) {
-            HStack(spacing: 8) {
+            HStack(spacing: 4) {
                 WalletNFTActionButton(
                     imageAsset: didCopyId ? Asset.Images.checkIcon : Asset.Images.iconCopy,
                     onTap: {
@@ -116,7 +116,7 @@ struct WalletNFTCard: View {
                     onTap: { onOpenNFTTransaction() }
                 )
             }
-            .padding(12)
+            .padding(4)
         }
     }
     
@@ -195,7 +195,7 @@ struct WalletNFTCard: View {
     }
 }
 
-private struct WalletNFTActionButton : View {
+struct WalletNFTActionButton : View {
     let imageAsset: ImageAsset
     let onTap: () -> Void
     
@@ -206,11 +206,12 @@ private struct WalletNFTActionButton : View {
                 .resizable()
                 .frame(width: 18, height: 18)
                 .foregroundStyle(.compound.iconSecondary)
+                .padding(6)
         }
     }
 }
 
-private struct WalletNFTPill: View {
+struct WalletNFTPill: View {
     let text: String
     
     var body: some View {

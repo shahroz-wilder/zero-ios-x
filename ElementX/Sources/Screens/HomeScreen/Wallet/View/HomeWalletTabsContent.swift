@@ -66,7 +66,7 @@ struct HomeWalletTabsContentView : View {
                                      nextPageParams: context.viewState.walletNFTsNextPageParams,
                                      mediaProvider: context.mediaProvider,
                                      loadMoreNFTs: { context.send(viewAction: .loadMoreWalletNFTs) },
-                                     onTap: { nft in },
+                                     onTap: { nft in context.send(viewAction: .openNFT(nft)) },
                                      onCopyNFTId: { nft in context.send(viewAction: .copyNFTId(nft)) },
                                      onOpenNFTTransaction: { nft in context.send(viewAction: .openNFTTransaction(nft)) })
             case .staking:

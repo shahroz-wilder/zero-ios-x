@@ -12,6 +12,7 @@ import SwiftUI
 
 enum HomeWalletViewModelAction {
     case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType, ZeroCurrency?)
+    case openNFT(HomeScreenWalletNFTContent)
 }
 
 enum HomeWalletViewAction {
@@ -28,6 +29,7 @@ enum HomeWalletViewAction {
     case unstakeAmount(String)
     case refreshWalletData
     
+    case openNFT(HomeScreenWalletNFTContent)
     case copyNFTId(HomeScreenWalletNFTContent)
     case openNFTTransaction(HomeScreenWalletNFTContent)
 }
@@ -281,20 +283,6 @@ extension HomeScreenWalletContent {
         )
     }
     
-    init(walletNFT: NFT) {
-        self.init(id: walletNFT.id,
-                  icon: walletNFT.imageUrl,
-                  header: nil,
-                  transactionAction: nil,
-                  transactionAddress: nil,
-                  title: walletNFT.collectionName ?? walletNFT.metadata.name ?? "",
-                  description: nil,
-                  actionPreText: nil,
-                  actionText: "0",
-                  actionPostText: nil,
-                  chainId: 0)
-    }
-    
     init(walletTransaction: WalletTransaction, meowPrice: ZeroCurrency?) {
         let isTransactionReceived = walletTransaction.action.lowercased() == "receive"
         
@@ -348,9 +336,9 @@ extension HomeScreenWalletNFTContent {
                   imageURL: try? nft.imageUrl?.asURL(),
                   tokenType: nft.tokenType,
                   quantity: nft.quantity,
-                  name: nft.metadata.name,
-                  description: nft.metadata.description,
-                  attributes: nft.metadata.attributes.map({ .init(id: "\($0.traitType)\($0.value)",
+                  name: nft.metadata?.name,
+                  description: nft.metadata?.description,
+                  attributes: nft.metadata?.attributes?.map({ .init(id: "\($0.traitType)\($0.value)",
                                                                   traitType: $0.traitType,
                                                                   value: $0.value) }))
     }

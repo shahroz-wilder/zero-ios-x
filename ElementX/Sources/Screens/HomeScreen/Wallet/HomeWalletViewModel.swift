@@ -76,6 +76,8 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
             unstakeAmount(amount)
         case .refreshWalletData:
             fetchWalletData()
+        case .openNFT(let nft):
+            actionsSubject.send(.openNFT(nft))
         case .copyNFTId(let nft):
             copyNFTId(nft)
         case .openNFTTransaction(let nft):
