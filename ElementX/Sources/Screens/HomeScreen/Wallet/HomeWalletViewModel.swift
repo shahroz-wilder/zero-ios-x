@@ -76,6 +76,10 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
             unstakeAmount(amount)
         case .refreshWalletData:
             fetchWalletData()
+        case .copyNFTId(let nft):
+            copyNFTId(nft)
+        case .openNFTTransaction(let nft):
+            openNFTTransaction(nft)
         }
     }
     
@@ -100,8 +104,10 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
                                                                                     nextPage: nil)
             async let transactionsResult = userSession.clientProxy.zeroClient.getWalletTransactions(walletAddress: walletAddress,
                                                                                          nextPage: nil)
+            async let nftsResult = userSession.clientProxy.zeroClient.getWalletNFTs(walletAddress: walletAddress,
+                                                                                         nextPage: nil)
             
-            let (meowPrice, tokens, transactions) = await (meowPriceResult, tokensResult, transactionsResult)
+            let (meowPrice, tokens, transactions, nfts) = await (meowPriceResult, tokensResult, transactionsResult, nftsResult)
             let newMeowPrice: ZeroCurrency? = {
                 if case .success(let price) = meowPrice { return price }
                 return nil
@@ -121,6 +127,13 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
                 }
                 return ([], nil)
             }()
+            let walletNFTs: ([HomeScreenWalletNFTContent], NextPageParams?) = {
+                if case .success(let response) = nfts {
+                    let contents = response.nfts.map { HomeScreenWalletNFTContent(nft: $0) }
+                    return (contents.uniqued(on: \.id), response.nextPageParams)
+                }
+                return ([], nil)
+            }()
             
             // Batch state updates on main actor
             await MainActor.run {
@@ -137,6 +150,10 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
                 if !walletTransactions.0.isEmpty {
                     state.walletTransactions = walletTransactions.0
                     state.walletTransactionsNextPageParams = walletTransactions.1
+                }
+                if !walletNFTs.0.isEmpty {
+                    state.walletNFTs = walletNFTs.0
+                    state.walletNFTsNextPageParams = walletNFTs.1
                 }
                 state.walletContentListMode = .content
             }
@@ -163,15 +180,14 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
     }
     
     private func loadMoreWalletNFTs() {
-        if let nextPageParams = state.walletTokenNextPageParams,
+        if let nextPageParams = state.walletNFTsNextPageParams,
            let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
             Task {
-                let result = await userSession.clientProxy.zeroClient.getWalletNFTs(walletAddress: walletAddress,
-                                                                         nextPage: nextPageParams)
+                let result = await userSession.clientProxy.zeroClient.getWalletNFTs(walletAddress: walletAddress, nextPage: nextPageParams)
                 if case .success(let walletNFTs) = result {
-                    var homeWalletContent: [HomeScreenWalletContent] = state.walletNFTs
+                    var homeWalletContent: [HomeScreenWalletNFTContent] = state.walletNFTs
                     for nft in walletNFTs.nfts {
-                        let content = HomeScreenWalletContent(walletNFT: nft)
+                        let content = HomeScreenWalletNFTContent(nft: nft)
                         homeWalletContent.append(content)
                     }
                     state.walletNFTs = homeWalletContent.uniqued(on: \.id)
@@ -456,6 +472,7 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
                     nil
                 }
                 state.bindings.stakePoolViewState = .failure(message)
+                
             }
         }
     }
@@ -463,6 +480,15 @@ class HomeWalletViewModel: HomeWalletViewModelType, HomeWalletViewModelProtocol,
     private func toSmallestUnit(amount: Double, decimals: Int) -> String {
         let decimalValue = Decimal(amount) * pow(Decimal(10), decimals)
         return NSDecimalNumber(decimal: decimalValue).stringValue
+    }
+    
+    private func copyNFTId(_ nft: HomeScreenWalletNFTContent) {
+        UIPasteboard.general.string = nft.id
+    }
+    
+    private func openNFTTransaction(_ nft: HomeScreenWalletNFTContent) {
+        guard let tokenUrl = nft.getTokenLink() else { return }
+        UIApplication.shared.open(tokenUrl)
     }
     
     // MARK: Zero Protcol Functions

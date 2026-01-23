@@ -1790,6 +1790,8 @@
 		7905F9AB2D676AB400C3A203 /* HomeChannelsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */; };
 		7905F9AD2D676BB000C3A203 /* HomeScreenChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */; };
 		7905F9AE2D676BB000C3A203 /* HomeScreenChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */; };
+		79071FAE2F23773200798FDF /* HomeWalletNFTContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79071FAD2F23772B00798FDF /* HomeWalletNFTContent.swift */; };
+		79071FAF2F23773200798FDF /* HomeWalletNFTContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79071FAD2F23772B00798FDF /* HomeWalletNFTContent.swift */; };
 		790922312E1DC8CF00833940 /* ZFinaliseCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922292E1DC8CF00833940 /* ZFinaliseCreateAccount.swift */; };
 		790922322E1DC8CF00833940 /* ZWalletTransferNFT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7909222E2E1DC8CF00833940 /* ZWalletTransferNFT.swift */; };
 		790922332E1DC8CF00833940 /* ZPostMeowAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7909222C2E1DC8CF00833940 /* ZPostMeowAmount.swift */; };
@@ -4006,6 +4008,7 @@
 		7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChannelApi.swift; sourceTree = "<group>"; };
 		7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChannelsContent.swift; sourceTree = "<group>"; };
 		7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenChannelCell.swift; sourceTree = "<group>"; };
+		79071FAD2F23772B00798FDF /* HomeWalletNFTContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletNFTContent.swift; sourceTree = "<group>"; };
 		790922282E1DC8CF00833940 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZCreateAccount.swift; sourceTree = "<group>"; };
 		790922292E1DC8CF00833940 /* ZFinaliseCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZFinaliseCreateAccount.swift; sourceTree = "<group>"; };
 		7909222A2E1DC8CF00833940 /* ZLinkMatrixUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLinkMatrixUser.swift; sourceTree = "<group>"; };
@@ -7439,6 +7442,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		79071FB02F238B3F00798FDF /* WalletNFTDetailScreen */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = WalletNFTDetailScreen;
+			sourceTree = "<group>";
+		};
 		790922302E1DC8CF00833940 /* Request */ = {
 			isa = PBXGroup;
 			children = (
@@ -7895,6 +7905,7 @@
 		79E290BB2EC7470600644784 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				79071FAD2F23772B00798FDF /* HomeWalletNFTContent.swift */,
 				7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */,
 				79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */,
 				799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */,
@@ -9461,6 +9472,7 @@
 				9688AEF931DE2C71683ACBC7 /* ThreadTimelineScreen */,
 				15D44FCA9475E660B7F56DB9 /* Timeline */,
 				93C7520ED23C9598BB144DBB /* UserProfileScreen */,
+				79071FB02F238B3F00798FDF /* WalletNFTDetailScreen */,
 				790922442E1DCB9D00833940 /* WalletTransactionScreen */,
 			);
 			path = Screens;
@@ -11469,6 +11481,7 @@
 				79DB42A42E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */,
 				18E9A57A2C9829970082DDA4 /* MediaFileHandleProxy.swift in Sources */,
 				18E9A57B2C9829970082DDA4 /* MediaLoader.swift in Sources */,
+				79071FAE2F23773200798FDF /* HomeWalletNFTContent.swift in Sources */,
 				18E9A57C2C9829970082DDA4 /* MediaLoaderProtocol.swift in Sources */,
 				18525D022CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */,
 				796CD43C2E536103000D6078 /* SpaceScreen.swift in Sources */,
@@ -13098,6 +13111,7 @@
 				19FE025AE9BA2959B6589B0D /* RoomMemberDetailsScreen.swift in Sources */,
 				899793EFC63DF93C3E0141E7 /* RoomMemberDetailsScreenCoordinator.swift in Sources */,
 				A816F7087C495D85048AC50E /* RoomMemberDetailsScreenModels.swift in Sources */,
+				79071FAF2F23773200798FDF /* HomeWalletNFTContent.swift in Sources */,
 				EAF2B3E6C6AEC4AD3A8BD454 /* RoomMemberDetailsScreenViewModel.swift in Sources */,
 				5B6E5AD224509E6C0B520D6E /* RoomMemberDetailsScreenViewModelProtocol.swift in Sources */,
 				6448F8D1D3CA4CD27BB4CADD /* RoomMemberProxy.swift in Sources */,

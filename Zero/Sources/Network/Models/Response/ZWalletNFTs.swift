@@ -19,6 +19,8 @@ struct NFT: Codable {
     let id: String
     let imageUrl: String?
     let isUnique: Bool
+    let tokenType: String?
+    let quantity: Int?
     let metadata: NFTMetadata
 }
 

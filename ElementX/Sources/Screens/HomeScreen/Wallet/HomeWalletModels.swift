@@ -27,6 +27,9 @@ enum HomeWalletViewAction {
     case stakeAmount(String)
     case unstakeAmount(String)
     case refreshWalletData
+    
+    case copyNFTId(HomeScreenWalletNFTContent)
+    case openNFTTransaction(HomeScreenWalletNFTContent)
 }
 
 enum HomeScreenWalletContentListMode: CustomStringConvertible {
@@ -61,7 +64,7 @@ struct HomeWalletViewState: BindableState {
     
     var walletTokens: [HomeScreenWalletContent] = []
     var walletTransactions: [HomeScreenWalletContent] = []
-    var walletNFTs: [HomeScreenWalletContent] = []
+    var walletNFTs: [HomeScreenWalletNFTContent] = []
     var walletStakings: [String: HomeScreenWalletStakingContent] = [:]
     
     var walletTokenNextPageParams: NextPageParams? = nil
@@ -84,9 +87,11 @@ struct HomeWalletViewState: BindableState {
         }
         return walletTransactions
     }
-    var visibleWalletNFTs: [HomeScreenWalletContent] {
+    var visibleWalletNFTs: [HomeScreenWalletNFTContent] {
         if walletContentListMode == .skeletons {
-            return placeholderWalletContent
+            return (1...20).map { _ in
+                HomeScreenWalletNFTContent.placeholder()
+            }
         }
         return walletNFTs
     }
@@ -189,6 +194,38 @@ struct HomeScreenWalletStakingContent: Identifiable, Equatable {
               chainId: 0)
     }
     
+}
+
+struct HomeScreenWalletNFTContent: Identifiable, Equatable {
+    let id: String
+    let collectionAddress: String
+    let collectionName: String?
+    let imageURL: URL?
+    let tokenType: String?
+    let quantity: Int?
+    
+    let name: String?
+    let description: String?
+    let attributes: [NFTCollectionAttribute]?
+    
+    static func placeholder() -> HomeScreenWalletNFTContent {
+        .init(id: UUID().uuidString,
+              collectionAddress: "",
+              collectionName: "",
+              imageURL: nil,
+              tokenType: "",
+              quantity: 0,
+              name: "",
+              description: "",
+              attributes: nil)
+    }
+    
+}
+
+struct NFTCollectionAttribute: Identifiable, Equatable {
+    let id: String
+    let traitType: String
+    let value: String
 }
 
 struct SelectedHomeWalletStakePool {
@@ -300,5 +337,27 @@ extension HomeScreenWalletStakingContent {
                   myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())",
                   pendingRewards: pendingRewards,
                   chainId: pool.chainId.rawValue)
+    }
+}
+
+extension HomeScreenWalletNFTContent {
+    init(nft: NFT) {
+        self.init(id: nft.id,
+                  collectionAddress: nft.collectionAddress,
+                  collectionName: nft.collectionName,
+                  imageURL: try? nft.imageUrl?.asURL(),
+                  tokenType: nft.tokenType,
+                  quantity: nft.quantity,
+                  name: nft.metadata.name,
+                  description: nft.metadata.description,
+                  attributes: nft.metadata.attributes.map({ .init(id: "\($0.traitType)\($0.value)",
+                                                                  traitType: $0.traitType,
+                                                                  value: $0.value) }))
+    }
+    
+    func getTokenLink() -> URL? {
+        let tokenHost = ZeroConstants.ZERO_WALLET_ZSCAN_LIVE_URL
+        let tokenUrl = tokenHost.appending("token/\(self.collectionAddress)/instance/\(self.id)")
+        return URL(string: tokenUrl)
     }
 }

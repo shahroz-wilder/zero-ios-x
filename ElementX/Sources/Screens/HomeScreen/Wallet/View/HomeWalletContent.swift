@@ -10,9 +10,9 @@ import SwiftUI
 
 enum HomeWalletTab: CaseIterable {
     case token
-    case transaction
-    case account
+    case nft
     case staking
+    case transaction
 }
 
 enum WalletAction: String, CaseIterable {
@@ -119,13 +119,13 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var walletTabsView: some View {
         ZStack(alignment: .trailing) {
-            SimpleTabButtonsView(tabs: [HomeWalletTab.token, HomeWalletTab.staking, HomeWalletTab.transaction],
+            SimpleTabButtonsView(tabs: HomeWalletTab.allCases,
                                  selectedTab: selectedTab,
                                  tabTitle: { tab in
                 switch tab {
                 case .token: return "Tokens"
                 case .transaction: return "Transactions"
-                case .account: return "Accounts"
+                case .nft: return "NFTs"
                 case .staking: return "Staking"
                 }
             },
