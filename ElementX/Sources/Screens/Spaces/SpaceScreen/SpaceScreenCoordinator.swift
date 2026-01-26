@@ -28,6 +28,8 @@ enum SpaceScreenCoordinatorAction {
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case displayRolesAndPermissions(roomProxy: JoinedRoomProxyProtocol)
+    case addExistingChildren
+    case displayCreateChildRoomFlow(space: SpaceServiceRoomProtocol)
 }
 
 final class SpaceScreenCoordinator: CoordinatorProtocol {
@@ -72,6 +74,10 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
             case .presentRolesAndPermissions(let roomProxy):
                 actionsSubject.send(.displayRolesAndPermissions(roomProxy: roomProxy))
+            case .addExistingChildren:
+                actionsSubject.send(.addExistingChildren)
+            case .displayCreateChildRoomFlow(let space):
+                actionsSubject.send(.displayCreateChildRoomFlow(space: space))
             }
         }
         .store(in: &cancellables)

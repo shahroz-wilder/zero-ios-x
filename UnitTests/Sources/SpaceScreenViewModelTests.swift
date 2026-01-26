@@ -31,7 +31,7 @@ class SpaceScreenViewModelTests: XCTestCase {
     func testInitialState() {
         setupViewModel()
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .idle)
         XCTAssertTrue(context.viewState.rooms.isEmpty)
         XCTAssertFalse(spaceRoomListProxy.paginateCalled)
     }
@@ -41,7 +41,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         let response = mockSpaceRooms.prefix(3)
         setupViewModel(paginationResponses: [Array(response)])
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .idle)
         XCTAssertTrue(context.viewState.rooms.isEmpty)
         XCTAssertFalse(spaceRoomListProxy.paginateCalled)
         XCTAssertFalse(response.isEmpty, "There should be some test rooms.")
@@ -52,7 +52,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the screen should show a paginating indicator.
-        XCTAssertTrue(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .paginating)
         XCTAssertEqual(spaceRoomListProxy.paginateCallsCount, 1)
         
         // When waiting for the pagination to finish.
@@ -60,7 +60,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then no more pagination requests should be made the the space rooms should be populated.
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .endReached)
         XCTAssertEqual(spaceRoomListProxy.paginateCallsCount, 1)
         XCTAssertEqual(context.viewState.rooms.map(\.id), response.map(\.id))
     }
@@ -71,14 +71,14 @@ class SpaceScreenViewModelTests: XCTestCase {
         let response2 = mockSpaceRooms.suffix(mockSpaceRooms.count - 3)
         setupViewModel(paginationResponses: [Array(response1), Array(response2)])
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .idle)
         XCTAssertTrue(context.viewState.rooms.isEmpty)
         XCTAssertFalse(spaceRoomListProxy.paginateCalled)
         XCTAssertFalse(response1.isEmpty, "There should be some test rooms.")
         XCTAssertFalse(response2.isEmpty, "There should be more test rooms.")
         
         // When the pagination is triggered.
-        let deferredIsPaginating = deferFulfillment(context.observe(\.viewState.isPaginating), transitionValues: [true, false, true, false])
+        let deferredIsPaginating = deferFulfillment(context.observe(\.viewState.paginationState), transitionValues: [.paginating, .idle, .paginating, .endReached])
         let deferredState = deferFulfillment(spaceRoomListProxy.paginationStatePublisher, keyPath: \.self, transitionValues: [.loading,
                                                                                                                               .idle(endReached: false),
                                                                                                                               .loading,
@@ -89,7 +89,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferredIsPaginating.fulfill()
         try await deferredState.fulfill()
         
-        XCTAssertFalse(context.viewState.isPaginating)
+        XCTAssertEqual(context.viewState.paginationState, .endReached)
         XCTAssertEqual(spaceRoomListProxy.paginateCallsCount, 2)
         XCTAssertEqual(context.viewState.rooms.map(\.id), mockSpaceRooms.map(\.id))
     }
@@ -234,6 +234,44 @@ class SpaceScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.visibleRooms.contains { $0.isSpace }, "Confirming should restore the hidden spaces when done.")
         
         XCTAssertEqual(spaceServiceProxy.removeChildFromCallsCount, 2, "Each selected room should have been removed.")
+        XCTAssertTrue(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
+    }
+    
+    func testManageRoomsRemovingChildrenWithFailure() async throws {
+        setupViewModel(initialSpaceRooms: mockSpaceRooms)
+        
+        context.send(viewAction: .manageChildren)
+        for room in context.viewState.visibleRooms {
+            context.send(viewAction: .spaceAction(.select(room)))
+        }
+        context.send(viewAction: .removeSelectedChildren)
+        
+        XCTAssertEqual(context.viewState.editMode, .transient, "Managing rooms should enable edit mode.")
+        XCTAssertEqual(context.viewState.visibleRooms.count, 3, "There should be 3 rooms to begin with.")
+        XCTAssertEqual(context.viewState.editModeSelectedIDs.count, 3, "All of the visible rooms should be selected.")
+        XCTAssertTrue(context.isPresentingRemoveChildrenConfirmation, "A confirmation prompt should be shown before removing children.")
+        
+        let successfulIDs = context.viewState.editModeSelectedIDs.prefix(1)
+        spaceServiceProxy.removeChildFromClosure = { childID, _ in
+            if successfulIDs.contains(childID) {
+                .success(())
+            } else {
+                .failure(.sdkError(SpaceServiceProxyMockError.generic))
+            }
+        }
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.visibleRooms.count)) { $0 == 2 }
+        let deferredFailure = deferFailure(context.observe(\.viewState.editMode), timeout: 1) { $0 == .inactive }
+        context.send(viewAction: .confirmRemoveSelectedChildren)
+        try await deferred.fulfill()
+        try await deferredFailure.fulfill()
+        
+        XCTAssertEqual(context.viewState.editMode, .transient, "The screen should remain in edit mode.")
+        XCTAssertEqual(context.viewState.visibleRooms.count, 2, "The removed rooms should no longer be listed for selection.")
+        XCTAssertEqual(context.viewState.editModeSelectedIDs.count, 2, "The removed rooms should no longer be selected.")
+        
+        XCTAssertEqual(spaceServiceProxy.removeChildFromCallsCount, 2, "Each selected room should have been removed.")
+        XCTAssertFalse(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
     }
     
     func testLeavingSpace() async throws {

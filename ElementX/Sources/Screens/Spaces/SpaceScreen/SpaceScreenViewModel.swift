@@ -57,19 +57,26 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         spaceRoomListProxy.paginationStatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] paginationState in
+                guard let self else { return }
+                
                 switch paginationState {
-                case .idle(let endReached):
-                    self?.state.isPaginating = false
-                    guard !endReached else { return }
+                case .idle(endReached: false):
+                    state.paginationState = .idle
                     Task { await spaceRoomListProxy.paginate() }
+                case .idle(endReached: true):
+                    state.paginationState = .endReached
                 case .loading:
-                    self?.state.isPaginating = true
+                    state.paginationState = .paginating
                 }
             }
             .store(in: &cancellables)
         
         selectedSpaceRoomPublisher
             .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$createSpaceEnabled
+            .weakAssign(to: \.state.canCreateRoom, on: self)
             .store(in: &cancellables)
         
         Task {
@@ -89,12 +96,14 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                             state.canEditBaseInfo = false
                             state.canEditRolesAndPermissions = false
                             state.canEditSecurityAndPrivacy = false
+                            state.canEditChildren = false
                             return
                         }
                         state.canEditBaseInfo = powerLevels.canOwnUserEditBaseInfo()
                         state.canEditRolesAndPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
                         state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy(isSpace: roomInfo.isSpace,
                                                                                                        joinRule: roomInfo.joinRule)
+                        state.canEditChildren = powerLevels.canOwnUser(sendStateEvent: .spaceChild)
                     }
                     .store(in: &cancellables)
             }
@@ -134,6 +143,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
         case .spaceSettings(let roomProxy):
             actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
+        case .addExistingRooms:
+            actionsSubject.send(.addExistingChildren)
         case .manageChildren:
             withAnimation(.easeOut(duration: 0.25).disabledDuringTests()) {
                 state.editMode = .transient
@@ -145,9 +156,12 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         case .finishManagingChildren:
             withAnimation(.easeOut(duration: 0.25).disabledDuringTests()) {
                 state.editMode = .inactive
+                state.editModeRemovedIDs = []
             } completion: {
                 self.state.editModeSelectedIDs.removeAll()
             }
+        case .createChildRoom:
+            Task { await createChildRoom() }
         }
     }
     
@@ -157,6 +171,16 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     }
     
     // MARK: - Private
+    
+    private func createChildRoom() async {
+        switch await spaceServiceProxy.spaceForIdentifier(spaceID: spaceRoomListProxy.id) {
+        case .success(.some(let space)):
+            actionsSubject.send(.displayCreateChildRoomFlow(space: space))
+        default:
+            MXLog.error("Unable to create child room: space not found")
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        }
+    }
     
     private func join(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
         state.joiningRoomIDs.insert(spaceServiceRoom.id)
@@ -186,15 +210,28 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
         state.bindings.isPresentingRemoveChildrenConfirmation = false
         
+        MXLog.info("Removing \(state.editModeSelectedIDs.count) children from space \(spaceRoomListProxy.id)")
+        
+        var removedIDs: [String] = [] // Using an intermediate array so the screen doesn't change until the operation finishes.
         for childID in state.editModeSelectedIDs {
             switch await spaceServiceProxy.removeChild(childID, from: spaceRoomListProxy.id) {
             case .success:
-                MXLog.info("Successfully removed \(childID) from \(spaceRoomListProxy.id)")
-            case .failure:
+                removedIDs.append(childID)
+            case .failure(let error):
+                MXLog.error("Failed removing room from space: \(error)")
                 showFailureIndicator()
+                
+                // Hide rooms that were successfully removed.
+                state.editModeSelectedIDs = state.editModeSelectedIDs.filter { !removedIDs.contains($0) }
+                state.editModeRemovedIDs.formUnion(removedIDs)
+                
                 return
             }
         }
+        
+        MXLog.info("\(state.editModeSelectedIDs.count) children removed from space \(spaceRoomListProxy.id)")
+        
+        await spaceRoomListProxy.resetAndWaitForFullReload(timeout: .seconds(10))
         
         process(viewAction: .finishManagingChildren)
     }

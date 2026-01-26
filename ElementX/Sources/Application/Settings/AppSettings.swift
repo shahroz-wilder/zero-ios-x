@@ -67,6 +67,7 @@ final class AppSettings {
         case linkPreviewsEnabled
         case focusEventOnNotificationTap
         case linkNewDeviceEnabled
+        case spaceFiltersEnabled
         
         case zeroAccessToken
         case zeroRewardsCredit
@@ -425,6 +426,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.linkNewDeviceEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkNewDeviceEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.spaceFiltersEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var spaceFiltersEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled

@@ -11,10 +11,16 @@ import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
+enum SpaceServiceProxyMockError: Error {
+    case generic
+}
+
 extension SpaceServiceProxyMock {
     struct Configuration {
         var topLevelSpaces: [SpaceServiceRoomProtocol] = []
+        var spaceFilters: [SpaceServiceFilter] = []
         var joinedParentSpaces: [SpaceServiceRoomProtocol] = []
+        var editableSpaces: [SpaceServiceRoomProtocol] = []
         var spaceRoomLists: [String: SpaceRoomListProxyMock] = [:]
         var leaveSpaceRooms: [LeaveSpaceRoom] = []
     }
@@ -23,7 +29,10 @@ extension SpaceServiceProxyMock {
         self.init()
         
         topLevelSpacesPublisher = .init(configuration.topLevelSpaces)
+        spaceFilterPublisher = .init(configuration.spaceFilters)
+        
         joinedParentsChildIDReturnValue = .success(configuration.joinedParentSpaces)
+        editableSpacesReturnValue = configuration.editableSpaces
         spaceRoomListSpaceIDClosure = { spaceID in
             if let spaceRoomList = configuration.spaceRoomLists[spaceID] {
                 .success(spaceRoomList)
@@ -31,6 +40,7 @@ extension SpaceServiceProxyMock {
                 .failure(.sdkError(ClientProxyMockError.generic))
             }
         }
+        
         leaveSpaceSpaceIDClosure = { spaceID in
             .success(LeaveSpaceHandleProxy(spaceID: spaceID,
                                            leaveHandle: LeaveSpaceHandleSDKMock(.init(rooms: configuration.leaveSpaceRooms))))
@@ -45,13 +55,21 @@ extension SpaceServiceProxyMock {
 
 extension SpaceServiceProxyMock.Configuration {
     static var populated: SpaceServiceProxyMock.Configuration {
+        let spaceFilters = [SpaceServiceRoomProtocol].mockJoinedSpaces.reduce(into: [SpaceServiceFilter]()) { partialResult, spaceRoom in
+            partialResult.append(SpaceServiceFilter(room: spaceRoom, level: 0, descendants: .init()))
+            partialResult.append(SpaceServiceFilter(room: spaceRoom, level: 1, descendants: .init()))
+        }
+                
         let spaceRoomLists = [SpaceServiceRoomProtocol].mockJoinedSpaces.map {
             ($0.id, SpaceRoomListProxyMock(.init(spaceServiceRoom: $0, initialSpaceRooms: .mockSpaceList)))
         }
+        
         let subSpaceRoomLists = [SpaceServiceRoomProtocol].mockSpaceList.map {
             ($0.id, SpaceRoomListProxyMock(.init(spaceServiceRoom: $0, initialSpaceRooms: .mockSingleRoom)))
         }
         
-        return .init(topLevelSpaces: .mockJoinedSpaces, spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists))
+        return .init(topLevelSpaces: .mockJoinedSpaces,
+                     spaceFilters: spaceFilters,
+                     spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists))
     }
 }

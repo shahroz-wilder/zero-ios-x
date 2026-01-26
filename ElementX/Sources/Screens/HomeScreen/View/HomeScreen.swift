@@ -143,8 +143,8 @@ struct HomeScreen: View {
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             settingsButton
+                .buttonStyle(.borderless)
         }
-        .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .principal) {
             Image(asset: Asset.Images.zeroWordmark)

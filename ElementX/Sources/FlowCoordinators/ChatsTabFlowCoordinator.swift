@@ -705,7 +705,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         let hostingController = UIHostingController(rootView: coordinator.toPresentable())
         hostingController.view.backgroundColor = .clear
         flowParameters.windowManager.globalSearchWindow.rootViewController = hostingController
-
+        
         flowParameters.windowManager.showGlobalSearch()
     }
     

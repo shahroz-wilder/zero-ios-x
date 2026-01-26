@@ -17,6 +17,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private var syncNameAndAlias = true
     @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
     
@@ -27,6 +28,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     }
     
     init(isSpace: Bool,
+         spaceSelectionMode: CreateRoomScreenSpaceSelectionMode?,
          shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
          analytics: AnalyticsService,
@@ -37,19 +39,38 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
+        var selectedSpace: SpaceServiceRoomProtocol?
+        var canSelectSpace = false
+        switch spaceSelectionMode {
+        case .editableSpacesList:
+            canSelectSpace = true
+        case .preSelected(let value):
+            selectedSpace = value
+        case .none:
+            break
+        }
+        
         let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
-                                                         selectedAccessType: .private)
+                                                         selectedAccessType: .private,
+                                                         selectedSpace: selectedSpace)
 
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
                                                                shouldShowCancelButton: shouldShowCancelButton,
                                                                roomName: "",
                                                                serverName: userSession.clientProxy.userIDServerName ?? "",
                                                                isKnockingFeatureEnabled: appSettings.knockingEnabled,
+                                                               canSelectSpace: canSelectSpace,
                                                                aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
                                                                bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
         setupBindings()
+        
+        if canSelectSpace {
+            Task {
+                state.editableSpaces = await userSession.clientProxy.spaceService.editableSpaces()
+            }
+        }
     }
     
     // MARK: - Public
@@ -114,9 +135,9 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         // Reset the state related to public rooms if the user choses the room to be empty
         context.$viewState
             .dropFirst()
-            .map(\.bindings.selectedAccessType)
+            .map(\.roomAccessType)
+            .filter(\.isVisibilityPrivate)
             .removeDuplicates()
-            .filter(\.isPrivate)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
@@ -135,7 +156,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                     return
                 }
                 
-                guard !state.bindings.selectedAccessType.isPrivate,
+                guard !state.roomAccessType.isVisibilityPrivate,
                       let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: aliasLocalPart,
                                                                      serverName: state.serverName) else {
                     // While is empty or private room we don't change or display the error
@@ -167,6 +188,18 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                 }
             }
             .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.availableAccessTypes)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] availableAccessTypes in
+                guard let self else { return }
+                if !availableAccessTypes.contains(state.bindings.selectedAccessType) {
+                    state.bindings.selectedAccessType = .private
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func createRoom() async {
@@ -176,7 +209,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         showLoadingIndicator()
         
         // Better to double check the errors also when trying to create the room
-        if !state.bindings.selectedAccessType.isPrivate {
+        if !state.roomAccessType.isVisibilityPrivate {
             guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.aliasLocalPart,
                                                                  serverName: state.serverName),
                 isRoomAliasFormatValid(alias: canonicalAlias) else {
@@ -224,11 +257,11 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         
         switch await userSession.clientProxy.createRoom(name: state.roomName,
                                                         topic: state.bindings.roomTopic.isBlank ? nil : state.bindings.roomTopic,
-                                                        accessType: state.bindings.selectedAccessType,
+                                                        accessType: state.roomAccessType,
                                                         isSpace: state.isSpace,
                                                         userIDs: [], // The invite users screen is shown next so we don't need to invite anyone right now.
                                                         avatarURL: avatarURL,
-                                                        aliasLocalPart: state.bindings.selectedAccessType.isPrivate ? nil : state.aliasLocalPart) {
+                                                        aliasLocalPart: state.roomAccessType.isVisibilityPrivate ? nil : state.aliasLocalPart) {
         case .success(let roomID):
             guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                 state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
@@ -240,13 +273,17 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             
             var spaceRoomListProxy: SpaceRoomListProxyProtocol?
             if state.isSpace {
-                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomProxy.id) {
+                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomID) {
                 case .success(let value):
                     spaceRoomListProxy = value
                 case .failure:
-                    MXLog.error("Failed to get space room list for newly created space with id: \(roomProxy.id)")
+                    MXLog.error("Failed to get space room list for newly created space with id: \(roomID)")
                     userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 }
+            }
+            
+            if let spaceID = state.bindings.selectedSpace?.id {
+                await addRoomToSpace(roomProxy: roomProxy, spaceID: spaceID)
             }
             
             actionsSubject.send(.createdRoom(roomProxy, spaceRoomListProxy))
@@ -254,6 +291,25 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
             state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                                  title: L10n.commonError,
                                                  message: L10n.screenStartChatErrorStartingChat)
+        }
+    }
+    
+    private func addRoomToSpace(roomProxy: JoinedRoomProxyProtocol, spaceID: String) async {
+        roomProxy.subscribeToRoomInfoUpdates()
+        let runner = ExpiringTaskRunner {
+            // Necessary to build the room cache so that the space can be added as a parent.
+            _ = await roomProxy.infoPublisher.values.first { $0.powerLevels != nil }
+        }
+        
+        do {
+            try await runner.run(timeout: .seconds(30))
+            if case .failure = await userSession.clientProxy.spaceService.addChild(roomProxy.id, to: spaceID) {
+                MXLog.error("Failed to add the created room with id: \(roomProxy.id) to the space with id: \(spaceID)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        } catch {
+            MXLog.error("Timed out waiting for power levels to load for room with id: \(roomProxy.id)")
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
         }
     }
     

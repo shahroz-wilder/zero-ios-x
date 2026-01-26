@@ -16,6 +16,8 @@ enum SpaceScreenViewModelAction {
     case presentRolesAndPermissions(roomProxy: JoinedRoomProxyProtocol)
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
+    case addExistingChildren
+    case displayCreateChildRoomFlow(space: SpaceServiceRoomProtocol)
 }
 
 struct SpaceScreenViewState: BindableState {
@@ -24,7 +26,7 @@ struct SpaceScreenViewState: BindableState {
     var permalink: URL?
     var roomProxy: JoinedRoomProxyProtocol?
     
-    var isPaginating = false
+    var paginationState: PaginationState = .idle
     var rooms: [SpaceServiceRoomProtocol]
     var selectedSpaceRoomID: String?
     var joiningRoomIDs: Set<String> = []
@@ -32,17 +34,24 @@ struct SpaceScreenViewState: BindableState {
     var canEditBaseInfo = false
     var canEditRolesAndPermissions = false
     var canEditSecurityAndPrivacy = false
+    var canEditChildren = false
+    var canCreateRoom = false
     
     var editMode: EditMode = .inactive
     var editModeSelectedIDs: Set<String> = []
+    var editModeRemovedIDs: Set<String> = []
     
     var bindings = SpaceScreenViewStateBindings()
+    
+    var shouldShowEmptyState: Bool {
+        rooms.isEmpty && paginationState == .endReached && canEditChildren
+    }
     
     var visibleRooms: [SpaceServiceRoomProtocol] {
         if editMode == .inactive {
             rooms
         } else {
-            rooms.filter { !$0.isSpace }
+            rooms.filter { !$0.isSpace && !editModeRemovedIDs.contains($0.id) }
         }
     }
     
@@ -65,6 +74,8 @@ enum SpaceScreenViewAction {
     case leaveSpace
     case spaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
+    case addExistingRooms
+    case createChildRoom
     case manageChildren
     case removeSelectedChildren
     case confirmRemoveSelectedChildren

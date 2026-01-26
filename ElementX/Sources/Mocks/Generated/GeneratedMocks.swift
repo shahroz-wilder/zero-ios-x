@@ -17091,6 +17091,41 @@ class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
         paginateCallsCount += 1
         await paginateClosure?()
     }
+    //MARK: - reset
+
+    var resetUnderlyingCallsCount = 0
+    var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() async -> Void)?
+
+    func reset() async {
+        resetCallsCount += 1
+        await resetClosure?()
+    }
 }
 class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never> {
@@ -17098,6 +17133,11 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
         set(value) { underlyingTopLevelSpacesPublisher = value }
     }
     var underlyingTopLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoomProtocol], Never>!
+    var spaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never> {
+        get { return underlyingSpaceFilterPublisher }
+        set(value) { underlyingSpaceFilterPublisher = value }
+    }
+    var underlyingSpaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never>!
 
     //MARK: - spaceRoomList
 
@@ -17377,6 +17417,70 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             return await joinedParentsChildIDClosure(childID)
         } else {
             return joinedParentsChildIDReturnValue
+        }
+    }
+    //MARK: - editableSpaces
+
+    var editableSpacesUnderlyingCallsCount = 0
+    var editableSpacesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editableSpacesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editableSpacesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editableSpacesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editableSpacesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var editableSpacesCalled: Bool {
+        return editableSpacesCallsCount > 0
+    }
+
+    var editableSpacesUnderlyingReturnValue: [SpaceServiceRoomProtocol]!
+    var editableSpacesReturnValue: [SpaceServiceRoomProtocol]! {
+        get {
+            if Thread.isMainThread {
+                return editableSpacesUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceServiceRoomProtocol]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editableSpacesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editableSpacesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editableSpacesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var editableSpacesClosure: (() async -> [SpaceServiceRoomProtocol])?
+
+    func editableSpaces() async -> [SpaceServiceRoomProtocol] {
+        editableSpacesCallsCount += 1
+        if let editableSpacesClosure = editableSpacesClosure {
+            return await editableSpacesClosure()
+        } else {
+            return editableSpacesReturnValue
         }
     }
     //MARK: - addChild
@@ -17901,17 +18005,17 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
     }
 }
 class TimelineItemProviderMock: TimelineItemProviderProtocol, @unchecked Sendable {
-    var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
+    var updatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
     }
-    var underlyingUpdatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never>!
+    var underlyingUpdatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never>!
     var itemProxies: [TimelineItemProxy] = []
-    var paginationState: PaginationState {
+    var paginationState: TimelinePaginationState {
         get { return underlyingPaginationState }
         set(value) { underlyingPaginationState = value }
     }
-    var underlyingPaginationState: PaginationState!
+    var underlyingPaginationState: TimelinePaginationState!
     var kind: TimelineKind {
         get { return underlyingKind }
         set(value) { underlyingKind = value }

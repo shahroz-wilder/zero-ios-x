@@ -22,22 +22,20 @@ struct SpaceScreen: View {
                                     mediaProvider: context.mediaProvider)
                 }
                 
-                rooms
+                if context.viewState.shouldShowEmptyState {
+                    emptyState
+                } else {
+                    rooms
+                }
             }
         }
         .environment(\.editMode, .constant(context.viewState.editMode))
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .toolbarRole(isEditModeActive ? .automatic : RoomHeaderView.toolbarRole)
+        .toolbarRole(RoomHeaderView.toolbarRole)
         .navigationTitle(context.viewState.space.name)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(isEditModeActive)
-        .toolbar {
-            if isEditModeActive {
-                editModeToolbar
-            } else {
-                toolbar
-            }
-        }
+        .toolbar { toolbar }
         .sheet(isPresented: $context.isPresentingRemoveChildrenConfirmation) {
             SpaceRemoveChildrenConfirmationView(spaceName: context.viewState.space.name) {
                 context.send(viewAction: .confirmRemoveSelectedChildren)
@@ -59,14 +57,47 @@ struct SpaceScreen: View {
             }
         }
         
-        if context.viewState.isPaginating {
+        if context.viewState.paginationState == .paginating {
             ProgressView()
                 .padding()
         }
     }
     
+    var emptyState: some View {
+        VStack(spacing: 24) {
+            TitleAndIcon(title: L10n.screenSpaceEmptyStateTitle,
+                         icon: \.room,
+                         iconStyle: .defaultSolid)
+                .padding(.horizontal, 24)
+            
+            VStack(spacing: 16) {
+                Button { context.send(viewAction: .addExistingRooms) } label: {
+                    Label(L10n.actionAddExistingRooms, icon: \.plus)
+                }
+                .buttonStyle(.compound(.primary))
+                
+                if context.viewState.canCreateRoom {
+                    Button(L10n.actionCreateRoom) {
+                        context.send(viewAction: .createChildRoom)
+                    }
+                    .buttonStyle(.compound(.secondary))
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+        .padding(.top, 40)
+    }
+    
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
+        if isEditModeActive {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.actionCancel, role: .cancel) {
+                    context.send(viewAction: .finishManagingChildren)
+                }
+            }
+        }
+        
         // Use the same trick as the RoomScreen for a leading title view that
         // also hides the navigation title.
         ToolbarItem(placement: .principal) {
@@ -83,60 +114,70 @@ struct SpaceScreen: View {
             }
         }
         
-        // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
-        // was crashing on iOS 26.0 when tapping the ShareLink as the popover presentation
-        // controller attempts to anchor itself to the button that is no longer visible.
-        ToolbarItem(placement: .primaryAction) {
-            Menu {
-                Section {
-                    if let roomProxy = context.viewState.roomProxy {
-                        Button { context.send(viewAction: .displayMembers(roomProxy: roomProxy)) } label: {
-                            Label(L10n.screenSpaceMenuActionMembers, icon: \.user)
-                        }
-                    }
-                    if let permalink = context.viewState.permalink {
-                        ShareLink(item: permalink) {
-                            Label(L10n.actionShare, icon: \.shareIos)
+        if isEditModeActive {
+            ToolbarItem(placement: .primaryAction) {
+                ToolbarButton(role: .destructive(title: L10n.actionRemove)) {
+                    context.send(viewAction: .removeSelectedChildren)
+                }
+                .disabled(context.viewState.editModeSelectedIDs.isEmpty)
+            }
+        } else {
+            // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
+            // was crashing on iOS 26.0 when tapping the ShareLink as the popover presentation
+            // controller attempts to anchor itself to the button that is no longer visible.
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    if context.viewState.canEditChildren {
+                        Section {
+                            if context.viewState.canCreateRoom {
+                                Button { context.send(viewAction: .createChildRoom) } label: {
+                                    Label(L10n.actionCreateRoom, icon: \.plus)
+                                }
+                            }
+                            Button { context.send(viewAction: .addExistingRooms) } label: {
+                                Label(L10n.actionAddExistingRooms, icon: \.room)
+                            }
+                            .accessibilityIdentifier(A11yIdentifiers.spaceScreen.addExistingRooms)
+                            
+                            Button { context.send(viewAction: .manageChildren) } label: {
+                                Label(L10n.actionManageRooms, icon: \.edit)
+                            }
                         }
                     }
                     
-                    if context.viewState.isSpaceManagementEnabled,
-                       let roomProxy = context.viewState.roomProxy {
-                        Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
-                            Label(L10n.commonSettings, icon: \.settings)
+                    Section {
+                        if let roomProxy = context.viewState.roomProxy {
+                            Button { context.send(viewAction: .displayMembers(roomProxy: roomProxy)) } label: {
+                                Label(L10n.screenSpaceMenuActionMembers, icon: \.user)
+                            }
+                            .accessibilityIdentifier(A11yIdentifiers.spaceScreen.viewMembers)
+                        }
+                        
+                        if let permalink = context.viewState.permalink {
+                            ShareLink(item: permalink) {
+                                Label(L10n.actionShare, icon: \.shareIos)
+                            }
+                        }
+                        
+                        if context.viewState.isSpaceManagementEnabled,
+                           let roomProxy = context.viewState.roomProxy {
+                            Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
+                                Label(L10n.commonSettings, icon: \.settings)
+                            }
                         }
                     }
-                }
-                
-                Section {
-                    Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
-                        Label(L10n.actionLeaveSpace, icon: \.leave)
+                    
+                    Section {
+                        Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
+                            Label(L10n.actionLeaveSpace, icon: \.leave)
+                        }
                     }
+                } label: {
+                    // Use an SF Symbol to match what ToolbarItemGroup(placement: .secondaryAction) would give us.
+                    Image(systemSymbol: .ellipsis)
                 }
-            } label: {
-                // Use an SF Symbol to match what ToolbarItemGroup(placement: .secondaryAction) would give us.
-                Image(systemSymbol: .ellipsis)
+                .accessibilityIdentifier(A11yIdentifiers.spaceScreen.moreMenu)
             }
-        }
-    }
-    
-    @ToolbarContentBuilder
-    var editModeToolbar: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel, role: .cancel) {
-                context.send(viewAction: .finishManagingChildren)
-            }
-        }
-        
-        ToolbarItem(placement: .principal) {
-            Text(L10n.commonSelectedCount(context.viewState.editModeSelectedIDs.count))
-        }
-        
-        ToolbarItem(placement: .primaryAction) {
-            ToolbarButton(role: .destructive(title: L10n.actionRemove)) {
-                context.send(viewAction: .removeSelectedChildren)
-            }
-            .disabled(context.viewState.editModeSelectedIDs.isEmpty)
         }
     }
 }
@@ -146,6 +187,7 @@ struct SpaceScreen: View {
 struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let managingViewModel = makeViewModel(isManagingRooms: true)
+    static let newSpaceViewModel = makeViewModel(isNewSpace: true)
     
     static var previews: some View {
         NavigationStack {
@@ -156,9 +198,21 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
             SpaceScreen(context: managingViewModel.context)
         }
         .previewDisplayName("Managing")
+        
+        NavigationStack {
+            SpaceScreen(context: newSpaceViewModel.context)
+        }
+        .previewDisplayName("New Space")
+        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState).map {
+            $0.canCreateRoom && $0.canEditChildren
+        })
     }
     
-    static func makeViewModel(isManagingRooms: Bool = false) -> SpaceScreenViewModel {
+    static func makeViewModel(isManagingRooms: Bool = false, isNewSpace: Bool = false) -> SpaceScreenViewModel {
+        let appSettings = AppSettings()
+        appSettings.spaceSettingsEnabled = true
+        appSettings.createSpaceEnabled = true
+        
         let spaceServiceRoom = SpaceServiceRoomMock(.init(id: "!eng-space:matrix.org",
                                                           name: "Engineering Team",
                                                           isSpace: true,
@@ -169,11 +223,11 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                                           canonicalAlias: "#engineering-team:element.io",
                                                           joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
         let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: spaceServiceRoom,
-                                                              initialSpaceRooms: .mockSpaceList))
+                                                              initialSpaceRooms: isNewSpace ? [] : .mockSpaceList))
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { _ in
-            .joined(JoinedRoomProxyMock(.init()))
+            .joined(JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)))
         }
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
@@ -181,7 +235,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: userSession,
-                                             appSettings: AppSettings(),
+                                             appSettings: appSettings,
                                              userIndicatorController: UserIndicatorControllerMock())
         
         if isManagingRooms {

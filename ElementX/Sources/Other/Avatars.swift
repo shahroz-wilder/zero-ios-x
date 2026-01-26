@@ -89,11 +89,7 @@ enum UserAvatarSizeOnScreen {
     var value: CGFloat {
         switch self {
         case .chats, .spaces:
-            if #available(iOS 26, *) {
-                return 40
-            } else {
-                return 32
-            }
+            return 32
         case .timeline:
             return 32
         case .readReceipt:
@@ -148,6 +144,7 @@ enum RoomAvatarSizeOnScreen {
     case chats
     case spaces
     case spaceSettings
+    case spaceFilters
     case authorizedSpaces
     case timeline
     case leaveSpace
@@ -162,6 +159,7 @@ enum RoomAvatarSizeOnScreen {
     case spaceAddRooms
     case spaceAddRoomsSelected
     case completionSuggestions
+    case createRoomSelectSpace
 
     var value: CGFloat {
         switch self {
@@ -169,7 +167,8 @@ enum RoomAvatarSizeOnScreen {
             return 40
 //            return 52
         case .timeline, .leaveSpace, .roomDirectorySearch,
-             .completionSuggestions, .authorizedSpaces:
+             .completionSuggestions, .authorizedSpaces, .createRoomSelectSpace,
+             .spaceFilters:
             return 32
         case .notificationSettings:
             return 30

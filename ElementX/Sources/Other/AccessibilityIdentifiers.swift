@@ -43,8 +43,11 @@ enum A11yIdentifiers {
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
     static let pollFormScreen = PollFormScreen()
     static let roomPollsHistoryScreen = RoomPollsHistoryScreen()
+    static let roomMembersListScreen = RoomMembersListScreen()
     static let manageRoomMemberSheet = ManageRoomMemberSheet()
     static let spacesScreen = SpacesScreen()
+    static let spaceScreen = SpaceScreen()
+    static let spaceAddRoomsScreen = SpaceAddRoomsScreen()
     static let linkNewDeviceScreen = LinkNewDeviceScreen()
     
     struct AlertInfo {
@@ -105,6 +108,7 @@ enum A11yIdentifiers {
         let userAvatar = "home_screen-user_avatar"
         let recoveryKeyConfirmationBannerContinue = "home_screen-recovery_key_confirmation_continue"
         let startChat = "home_screen-start_chat"
+        let spaceFilters = "home_screen-space_filters"
         
         let roomNamePrefix = "home_screen-room_name"
         func roomName(_ name: String) -> String {
@@ -303,6 +307,10 @@ enum A11yIdentifiers {
         let loadMore = "room_polls_history_screen-load_more"
     }
     
+    struct RoomMembersListScreen {
+        let invite = "room_members_list_screen-invite"
+    }
+    
     struct ManageRoomMemberSheet {
         let viewProfile = "manage_room_member_sheet-view_profile"
     }
@@ -314,6 +322,16 @@ enum A11yIdentifiers {
         func spaceRoomName(_ name: String) -> String {
             "\(roomNamePrefix):\(name)"
         }
+    }
+    
+    struct SpaceScreen {
+        let moreMenu = "space_screen-more_menu"
+        let addExistingRooms = "space_screen-add_existing_rooms"
+        let viewMembers = "space_screen-view_members"
+    }
+    
+    struct SpaceAddRoomsScreen {
+        let cancel = "space_add_rooms_screen-cancel"
     }
     
     struct LinkNewDeviceScreen {

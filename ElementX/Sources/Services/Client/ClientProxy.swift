@@ -531,7 +531,7 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
                     Self.standardSpaceCreationPowerLevelOverrides
                 }
             } else {
-                if accessType == .askToJoin {
+                if accessType.isAskToJoin {
                     Self.knockingRoomCreationPowerLevelOverrides
                 } else {
                     Self.roomCreationPowerLevelOverrides
@@ -1465,29 +1465,42 @@ private extension CreateRoomAccessType {
         switch self {
         case .public:
             false
-        case .askToJoin, .private:
+        default:
             true
         }
     }
     
     var visibility: RoomVisibility {
-        isPrivate ? .private : .public
+        isVisibilityPrivate ? .private : .public
     }
     
     var preset: RoomPreset {
-        isPrivate ? .privateChat : .publicChat
+        isVisibilityPrivate ? .privateChat : .publicChat
     }
     
     var historyVisibilityOverride: RoomHistoryVisibility? {
-        isPrivate ? .invited : nil
+        isVisibilityPrivate ? .invited : nil
     }
     
     var joinRuleOverride: JoinRule? {
         switch self {
         case .askToJoin:
             .knock
+        case .spaceMembers(let spaceID):
+            .restricted(rules: [.roomMembership(roomId: spaceID)])
+        case .askToJoinWithSpaceMembers(let spaceID):
+            .knockRestricted(rules: [.roomMembership(roomId: spaceID)])
         case .private, .public:
             nil
+        }
+    }
+    
+    var isAskToJoin: Bool {
+        switch self {
+        case .askToJoin, .askToJoinWithSpaceMembers:
+            true
+        default:
+            false
         }
     }
 }
