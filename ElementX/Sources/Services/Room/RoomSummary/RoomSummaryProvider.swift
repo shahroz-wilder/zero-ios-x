@@ -143,9 +143,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 rustFilters.append(.identifiers(identifiers: Array(roomIDs)))
             }
             
-            if !filters.contains(.lowPriority), appSettings.lowPriorityFilterEnabled {
-                rustFilters.append(.nonLowPriority)
-            }
+//            if !filters.contains(.lowPriority), appSettings.lowPriorityFilterEnabled {
+//                rustFilters.append(.nonLowPriority)
+//            }
             
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: rustFilters))
         case let .all(filters):

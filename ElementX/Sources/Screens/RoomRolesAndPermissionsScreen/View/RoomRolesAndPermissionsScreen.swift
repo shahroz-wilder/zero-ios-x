@@ -27,7 +27,7 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var rolesSection: some View {
         Section {
-            if context.viewState.ownPowerLevel.role == .creator {
+            if context.viewState.ownPowerLevel.role == .creator || context.viewState.ownPowerLevel.role == .administrator {
                 ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
                                             icon: \.admin),
                             details: administratorDetails,
@@ -44,14 +44,6 @@ struct RoomRolesAndPermissionsScreen: View {
                             context.send(viewAction: .editRoles(.moderators))
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
-            
-            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
-                                    icon: \.chatProblem),
-                    details: moderatorDetails,
-                    kind: .navigationLink {
-                        context.send(viewAction: .editRoles(.moderators))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
             
             if context.viewState.ownPowerLevel.role != .creator {
                 ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,

@@ -213,6 +213,7 @@ struct CreateRoomScreen: View {
             Section {
                 ForEach(context.viewState.availableAccessTypes, id: \.self) { accessType in
                     CreateRoomAccessRow(access: accessType,
+                                        spaceName: context.selectedSpace?.name ?? "",
                                         isSelected: context.selectedAccessType == accessType) {
                         context.selectedAccessType = accessType
                     }

@@ -199,7 +199,7 @@ struct RoomStateEventStringBuilder {
                 return isOutgoing ? L10n.stateEventRoomPinnedEventsUnpinnedByYou : L10n.stateEventRoomPinnedEventsUnpinned(displayName)
             }
         case .roomPowerLevels: // Long term we might show only the user changes, but we need an SDK filter to fix read receipts in that case.
-            return buildPowerLevelEventString(state: state, senderId: sender.id)
+            break
         case .policyRuleRoom, .policyRuleServer, .policyRuleUser: // No strings available.
             break
         case .roomAliases, .roomCanonicalAlias: // Doesn't provide the alias.
@@ -284,7 +284,7 @@ struct RoomStateEventStringBuilder {
                 return isOutgoing ? L10n.stateEventRoomPinnedEventsUnpinnedByYou : L10n.stateEventRoomPinnedEventsUnpinned(displayName)
             }
         case .roomPowerLevels: // Long term we might show only the user changes, but we need an SDK filter to fix read receipts in that case.
-            return buildPowerLevelEventString(state: state, senderId: sender?.matrixId)
+            break
         case .policyRuleRoom, .policyRuleServer, .policyRuleUser: // No strings available.
             break
         case .roomAliases, .roomCanonicalAlias: // Doesn't provide the alias.
@@ -304,49 +304,6 @@ struct RoomStateEventStringBuilder {
         }
         
         MXLog.verbose("Filtering timeline item for state: \(state)")
-        return nil
-    }
-    
-    private func buildPowerLevelEventString(state: OtherState, senderId: String?) -> String? {
-        if case .roomPowerLevels(let users, let previous) = state, let perviousState = previous {
-            var eventText = ""
-            if !users.isEmpty {
-                let byAdmin = senderId == userID
-                for user in users {
-                    if !eventText.isEmpty {
-                        eventText.append("\n")
-                    }
-                    let newLevel = user.value
-                    let oldLevel = perviousState[user.key] ?? 0
-                    switch (oldLevel, newLevel) {
-                    case (0, 50):
-                        eventText.append("\(user.key) was set as moderator")
-                    case (0, 100):
-                        eventText.append("\(user.key) was set as admin")
-                    case (50, 0):
-                        eventText.append("\(user.key) was removed as moderator")
-                    case (50, 100):
-                        eventText.append("\(user.key) was set as admin")
-                    case (100, 50):
-                        eventText.append("\(user.key) was set as moderator")
-                    case (100, 0):
-                        eventText.append("\(user.key) was removed as admin")
-                    default:
-                        eventText = ""
-                    }
-                    if byAdmin {
-                        eventText.append(" by admin.")
-                    }
-                }
-                if !eventText.isEmpty {
-                    return eventText
-                } else {
-                    return nil
-                }
-            } else {
-                return nil
-            }
-        }
         return nil
     }
 }

@@ -404,6 +404,7 @@ extension PreviewTests {
     }
 
     func testInviteFriendSettingsScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in InviteFriendSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
@@ -1411,6 +1412,7 @@ extension PreviewTests {
     }
 
     func testUserRewardsSettingsScreen() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in UserRewardsSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }

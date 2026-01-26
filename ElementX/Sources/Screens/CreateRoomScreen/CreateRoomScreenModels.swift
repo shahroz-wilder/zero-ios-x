@@ -148,3 +148,14 @@ enum CreateRoomScreenSpaceSelectionMode {
     case editableSpacesList
     case preSelected(SpaceServiceRoomProtocol)
 }
+
+extension CreateRoomScreenAccessType {
+    var isPrivate: Bool {
+        switch self {
+        case .private:
+            return true
+        default:
+            return false
+        }
+    }
+}

@@ -202,7 +202,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
         let activeZeroFilters = context.$viewState.map(\.bindings.filtersState.activeZeroFilter)
         isSearchFieldFocused
-            .combineLatest(searchQuery, activeFilters, spaceFilterSubject, activeZeroFilters)
+            .combineLatest(searchQuery, activeFilters, activeZeroFilters)
             .removeDuplicates { $0 == $1 }
             .sink { [weak self] isSearchFieldFocused, _, _, _ in
                 guard let self else { return }
