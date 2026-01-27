@@ -8,9 +8,11 @@
 import Compound
 import SwiftUI
 import Kingfisher
+import Combine
 
 struct CreateFeedScreen: View {
     @ObservedObject var context: CreateFeedScreenViewModel.Context
+    @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         CreateFeedContent(context: context)
@@ -19,11 +21,25 @@ struct CreateFeedScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .alert(item: $context.alertInfo)
+            .safeAreaInset(edge: .bottom) {
+                if let url = context.selectedFeedMediaUrl {
+                    MediaAttachmentBar(url: url) {
+                        context.send(viewAction: .deleteMedia)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.bottom, keyboardHeight > 0 ? keyboardHeight : 0)
+                    .animation(.easeOut(duration: 0.25), value: keyboardHeight)
+                }
+            }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .onReceive(Publishers.keyboardHeight) { height in
+                keyboardHeight = height
+            }
     }
     
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
-        if !context.feedText.isEmpty {
+        if context.viewState.canPost {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Post") {
                     context.send(viewAction: .createPost)
@@ -86,39 +102,50 @@ private struct CreateFeedContent: View {
             .padding()
             
             Spacer()
-            
-            if let mediaUrl = context.selectedFeedMediaUrl {
-                ZStack(alignment: .topTrailing) {
-                    KFImage(mediaUrl)
-                        .placeholder {
-                            CompoundIcon(\.playSolid)
-                        }
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                        .background(.black)
-                        .cornerRadius(6, corners: .allCorners)
-                        .padding(.vertical, 2)
-                        .padding(.horizontal, 8)
-                    Button {
-                        context.send(viewAction: .deleteMedia)
-                    } label: {
-                        CompoundIcon(\.close)
-                            .padding(2)
-                            .background(.Grey22)
-                            .foregroundStyle(.white)
-                            .clipShape(Circle())
-                            .frame(width: 6, height: 6)
-                    }
-                }
-                .padding(.vertical, 6)
-                .padding(.horizontal, 16)
-            }
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // Small delay for smooth focus
                 isTextEditorFocused = true  // Automatically focus when view appears
             }
+        }
+    }
+}
+
+private struct MediaAttachmentBar: View {
+    let url: URL
+    let onDeleteMedia: () -> Void
+    
+    var body: some View {
+        HStack {
+            Button {
+                onDeleteMedia()
+            } label: {
+                ZStack(alignment: .topTrailing) {
+                    KFImage(url)
+                        .placeholder {
+                            CompoundIcon(\.playSolid)
+                        }
+                        .onFailureView({
+                            CompoundIcon(\.playSolid)
+                        })
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 60, height: 60)
+                        .background(.black)
+                        .cornerRadius(6, corners: .allCorners)
+                        .padding(.vertical, 2)
+                        .padding(.horizontal, 8)
+                    
+                    CompoundIcon(\.close)
+                        .padding(2)
+                        .background(.Grey22)
+                        .foregroundStyle(.white)
+                        .clipShape(Circle())
+                        .frame(width: 6, height: 6)
+                }
+            }
+            
+            Spacer()
         }
     }
 }

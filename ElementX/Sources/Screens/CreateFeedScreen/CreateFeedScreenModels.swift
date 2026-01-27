@@ -14,6 +14,8 @@ struct CreateFeedScreenViewState: BindableState {
     
     var showCloseButton: Bool = true
     
+    var canPost: Bool { !bindings.feedText.isEmpty }
+    
     var bindings: CreateFeedScreenViewStateBindings
 }
 

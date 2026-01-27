@@ -102,21 +102,21 @@ struct FeedDetailsContent: View {
     private var addPostReplyView: some View {
         VStack(alignment: .leading) {
             if let mediaUrl = context.feedMedia {
-                ZStack(alignment: .topTrailing) {
-                    KFImage(mediaUrl)
-                        .placeholder {
-                            CompoundIcon(\.playSolid)
-                        }
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                        .background(.black)
-                        .cornerRadius(6, corners: .allCorners)
-                        .padding(.vertical, 2)
-                    
-                    Button {
-                        context.send(viewAction: .deleteMedia)
-                    } label: {
+                Button {
+                    context.send(viewAction: .deleteMedia)
+                } label: {
+                    ZStack(alignment: .topTrailing) {
+                        KFImage(mediaUrl)
+                            .placeholder {
+                                CompoundIcon(\.playSolid)
+                            }
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                            .background(.black)
+                            .cornerRadius(6, corners: .allCorners)
+                            .padding(.vertical, 2)
+                        
                         CompoundIcon(\.close)
                             .padding(2)
                             .background(.Grey22)
