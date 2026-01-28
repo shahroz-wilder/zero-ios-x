@@ -14,7 +14,9 @@ struct ImageRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: ImageRoomTimelineItem
     
-    var hasMediaCaption: Bool { timelineItem.content.caption != nil }
+    var hasMediaCaption: Bool {
+        timelineItem.content.caption != nil
+    }
     
     var captionColor: UIColor {
         timelineItem.isOutgoing

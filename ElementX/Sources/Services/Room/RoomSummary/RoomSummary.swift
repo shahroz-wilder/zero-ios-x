@@ -78,14 +78,15 @@ extension RoomSummary {
 }
 
 extension RoomSummary: CustomStringConvertible {
-    var description: String { """
-    RoomSummary: - id: \(id) \
-    - isDirect: \(isDirect) \
-    - unreadMessagesCount: \(unreadMessagesCount) \
-    - unreadMentionsCount: \(unreadMentionsCount) \
-    - unreadNotificationsCount: \(unreadNotificationsCount) \
-    - notificationMode: \(notificationMode?.rawValue ?? "nil")
-    """
+    var description: String {
+        """
+        RoomSummary: - id: \(id) \
+        - isDirect: \(isDirect) \
+        - unreadMessagesCount: \(unreadMessagesCount) \
+        - unreadMentionsCount: \(unreadMentionsCount) \
+        - unreadNotificationsCount: \(unreadNotificationsCount) \
+        - notificationMode: \(notificationMode?.rawValue ?? "nil")
+        """
     }
     
     /// Used where summaries are shown in a list e.g. message forwarding,
@@ -146,7 +147,7 @@ extension RoomSummary {
         isEncrypted = room.encryptionState() == .encrypted
     }
     
-    // This doesn't have to work properly for DM invites, the heroes are always empty
+    /// This doesn't have to work properly for DM invites, the heroes are always empty
     var avatar: RoomAvatar {
 //        guard !isTombstoned else {
 //            return .tombstoned

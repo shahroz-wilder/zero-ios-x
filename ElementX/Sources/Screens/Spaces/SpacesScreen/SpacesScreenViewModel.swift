@@ -85,7 +85,7 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
     
     // MARK: - Private
     
-    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
+    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoom) async {
         switch await spaceServiceProxy.spaceRoomList(spaceID: spaceServiceRoom.id) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))
@@ -97,7 +97,9 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
     
     // MARK: - Indicators
     
-    private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    private static var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
     
     private func showFailureIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,

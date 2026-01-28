@@ -63,5 +63,7 @@ extension [RoomMemberProxyProtocol] {
 }
 
 extension RoomMemberProxyProtocol {
-    var role: RoomRole { .init(powerLevel: powerLevel) }
+    var role: RoomRole {
+        .init(powerLevel: powerLevel)
+    }
 }

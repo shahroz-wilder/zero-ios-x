@@ -33,7 +33,9 @@ struct LoginScreenViewState: BindableState {
     var bindings = LoginScreenBindings()
     
     /// The types of login supported by the homeserver.
-    var loginMode: LoginMode { homeserver.loginMode }
+    var loginMode: LoginMode {
+        homeserver.loginMode
+    }
     
     var hasValidEmail: Bool {
         !bindings.username.isEmpty && ValidationUtil.shared.isValidEmail(bindings.username)

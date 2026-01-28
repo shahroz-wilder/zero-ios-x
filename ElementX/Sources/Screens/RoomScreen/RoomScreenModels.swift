@@ -85,18 +85,7 @@ struct RoomScreenViewState: BindableState {
             (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
-    var identityViolationDetails: RoomScreenFooterViewDetails?
-    var historyVisibleDetails: RoomScreenFooterViewDetails?
-    
-    var footerDetails: RoomScreenFooterViewDetails? {
-        if let identityViolationDetails {
-            return identityViolationDetails
-        }
-        guard canSendMessage else {
-            return nil
-        }
-        return historyVisibleDetails
-    }
+    var footerDetails: RoomScreenFooterViewDetails?
     
     var bindings = RoomScreenViewStateBindings()
 }
@@ -109,13 +98,11 @@ struct RoomScreenViewStateBindings {
 enum RoomScreenFooterViewAction {
     case resolvePinViolation(userID: String)
     case resolveVerificationViolation(userID: String)
-    case dismissHistoryVisibleAlert
 }
 
 enum RoomScreenFooterViewDetails {
     case pinViolation(member: RoomMemberProxyProtocol, learnMoreURL: URL)
     case verificationViolation(member: RoomMemberProxyProtocol, learnMoreURL: URL)
-    case historyVisible(learnMoreURL: URL)
 }
 
 enum PinnedEventsBannerState: Equatable {
@@ -208,9 +195,9 @@ enum PinnedEventsBannerState: Equatable {
         }
     }
     
-    // Note that if we are setting this value, this is definitely sent from the pinned events timeline
-    // so we can assume that the pinned events timeline is already loaded and we only need to set the
-    // selection for the loaded state
+    /// Note that if we are setting this value, this is definitely sent from the pinned events timeline
+    /// so we can assume that the pinned events timeline is already loaded and we only need to set the
+    /// selection for the loaded state
     mutating func setSelectedPinnedEventID(_ eventID: String) {
         switch self {
         case .loaded(var state):

@@ -28,12 +28,14 @@ enum LoginScreenCoordinatorAction {
     case verifyOtp(String)
 }
 
-// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
+/// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
 final class LoginScreenCoordinator: CoordinatorProtocol {
     private let parameters: LoginScreenCoordinatorParameters
     private var viewModel: LoginScreenViewModelProtocol
         
-    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
+    private var authenticationService: AuthenticationServiceProtocol {
+        parameters.authenticationService
+    }
 
     private let actionsSubject: PassthroughSubject<LoginScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()

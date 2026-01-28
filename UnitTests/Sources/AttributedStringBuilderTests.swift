@@ -32,7 +32,7 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testRenderHTMLStringWithPreCode() {
-        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.codeBlocks.rawValue) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(HTMLFixtures.code.rawValue) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -46,7 +46,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 13)
+        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 23)
     }
     
     func testRenderHTMLStringWithLink() {
@@ -356,7 +356,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(component.isBlockquote, "The reply quote should be a blockquote.")
+        XCTAssertTrue(component.type == .blockquote, "The reply quote should be a blockquote.")
     }
     
     func testMultipleGroupedBlockquotes() {
@@ -770,7 +770,7 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(String(attributedString.characters), "  1. A\n      • A1\n      • A2\n      • A3\n  2. B\n  3. C")
     }
     
-    // https://github.com/element-hq/element-x-ios/issues/4856
+    /// https://github.com/element-hq/element-x-ios/issues/4856
     func testNormalisedWhitespaces() {
         let html = """
         <a href="https://github.com/stefan">Stefan</a>      pushed

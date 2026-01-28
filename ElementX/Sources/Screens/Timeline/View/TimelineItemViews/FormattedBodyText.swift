@@ -57,7 +57,7 @@ struct FormattedBodyText: View {
                   boostFontSize: boostFontSize)
     }
     
-    // These is needed to create the slightly off inlined timestamp effect
+    /// These is needed to create the slightly off inlined timestamp effect
     private var additionalWhitespacesSuffix: String {
         .generateBreakableWhitespaceEnd(whitespaceCount: additionalWhitespacesCount, layoutDirection: layoutDirection)
     }
@@ -68,7 +68,6 @@ struct FormattedBodyText: View {
             .accessibilityLabel(Text(attributedString))
     }
     
-    @ViewBuilder
     var mainContent: some View {
         layout
             .tint(.compound.textLinkExternal)
@@ -81,39 +80,67 @@ struct FormattedBodyText: View {
                 // Ignore if the string contains only the layout correction
                 if String(component.attributedString.characters) == layoutDirection.isolateLayoutUnicodeString {
                     EmptyView()
-                } else if component.isBlockquote {
-                    // The rendered blockquote with a greedy width. The custom layout prevents the
-                    // infinite width from increasing the overall width of the view.
-                    MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 12.0)
-                        .overlay(alignment: .leading) {
-                            // User an overlay here so that the rectangle's infinite height doesn't take priority
-                            Capsule()
-                                .frame(width: 2.0)
-                                .padding(.leading, 5.0)
-                                .foregroundColor(.compound.textSecondary)
-                                .padding(.vertical, 2)
-                        }
-                        .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                 } else {
-                    MessageText(attributedString: component.attributedString)
+                    switch component.type {
+                    case .blockquote:
+                        // The rendered blockquote with a greedy width. The custom layout prevents the
+                        // infinite width from increasing the overall width of the view.
+                        MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 12.0)
+                            .overlay(alignment: .leading) {
+                                // User an overlay here so that the rectangle's infinite height doesn't take priority
+                                Capsule()
+                                    .frame(width: 2.0)
+                                    .padding(.leading, 5.0)
+                                    .foregroundColor(.compound.textSecondary)
+                                    .padding(.vertical, 2)
+                            }
+                            .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
+                    case .codeBlock:
+                        // The rendered codeblock with a greedy width (due to the scroll view). The custom
+                        // layout prevents the scroll view from increasing the overall width of the view.
+                        ScrollView(.horizontal) {
+                            MessageText(attributedString: component.attributedString)
+                                .padding([.horizontal, .top], 4)
+                                .padding(.bottom, 8)
+                        }
+                        .background(.compound._bgCodeBlock)
+                        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+                        .scrollIndicatorsFlash(onAppear: true)
                         .padding(.horizontal, 4)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                        .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
+                        .contextMenu {
+                            Button(L10n.actionCopy) {
+                                UIPasteboard.general.string = component.attributedString.string
+                            }
+                        }
+                    case .plainText:
+                        MessageText(attributedString: component.attributedString)
+                            .padding(.horizontal, 4)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
+                    }
                 }
             }
             
-            // Make a second iteration through the components adding fixed width blockquotes
+            // Make a second iteration through the components adding fixed width blockquotes/codeblocks
             // which are used for layout calculations but won't be rendered.
             ForEach(attributedComponents) { component in
-                if component.isBlockquote {
+                switch component.type {
+                case .blockquote:
                     MessageText(attributedString: component.attributedString.mergingAttributes(blockquoteAttributes))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 12.0)
-                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                         .hidden()
+                case .codeBlock:
+                    HiddenCodeBlockScrollView(attributedString: component.attributedString)
+                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
+                        .hidden()
+                case .plainText:
+                    EmptyView()
                 }
             }
         }
@@ -129,51 +156,102 @@ struct FormattedBodyText: View {
         
         return container
     }
+    
+    /// A self-sizing version of the code block component's view, necessary
+    /// because unlike quote bubbles, code blocks don't wrap when the space
+    /// is constrained.
+    private struct HiddenCodeBlockScrollView: View {
+        let attributedString: AttributedString
+        
+        @State private var maxSize: CGSize = .zero
+        
+        var body: some View {
+            ScrollView(.horizontal) {
+                MessageText(attributedString: attributedString)
+                    .padding([.horizontal, .top], 4)
+                    .padding(.bottom, 8)
+                    .onGeometryChange(for: CGSize.self) { $0.size } action: { maxSize = $0 }
+            }
+            .frame(maxWidth: maxSize.width)
+            .padding(.horizontal, 4)
+        }
+    }
 }
 
 // MARK: - Previews
 
 struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
+    static let attributedStringBuilder = AttributedStringBuilder(cacheKey: "FormattedBodyText", mentionBuilder: MentionBuilder())
     static var previews: some View {
-        body(AttributedStringBuilder(cacheKey: "FormattedBodyText", mentionBuilder: MentionBuilder()))
+        htmlFixtures
+        
+        basicText
             .previewLayout(.sizeThatFits)
+            .previewDisplayName("basicText")
+        
+        singleColumnComponents
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("singleColumnComponents")
+    }
+    
+    static var basicText: some View {
+        VStack(alignment: .leading, spacing: 4.0) {
+            FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
+                .bubbleBackground()
+            
+            FormattedBodyText(text: "Some plain text that's not an attributed component.")
+                .bubbleBackground()
+            
+            FormattedBodyText(text: "❤️", boostFontSize: true)
+                .bubbleBackground()
+        }
+        .padding()
+    }
+    
+    /// A preview to help ensure that none of the component types we support result
+    /// in a bubble's width becoming wider than the natural width of its contents.
+    @ViewBuilder
+    static var singleColumnComponents: some View {
+        let html = """
+        <blockquote>A</blockquote>
+        <pre><code>B</code></pre>
+        <p>C</p>
+        """
+        
+                            .background(.black)
+        if let attributedString = attributedStringBuilder.fromHTML(html) {
+            FormattedBodyText(attributedString: attributedString)
+                .bubbleBackground()
+                .padding(4.0)
+        }
     }
     
     @ViewBuilder
-    static func body(_ attributedStringBuilder: AttributedStringBuilderProtocol) -> some View {
-        let htmlStrings = HTMLFixtures.allCases.map(\.rawValue)
+    static var htmlFixtures: some View {
+        let htmlFixtures = HTMLFixtures.allCases
         
-        ScrollView {
-            VStack(alignment: .leading, spacing: 4.0) {
-                ForEach(htmlStrings, id: \.self) { htmlString in
-                    HStack(alignment: .top, spacing: 0) {
-                        Text(htmlString)
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            .padding(4.0)
-                        
-                        Divider()
-                            .background(.black)
-                        
-                        if let attributedString = attributedStringBuilder.fromHTML(htmlString, isClickable: false) {
-                            FormattedBodyText(attributedString: attributedString)
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                .bubbleBackground()
-                                .padding(4.0)
-                        }
-                    }
-                    .border(.black)
+        ForEach(htmlFixtures, id: \.rawValue) { htmlFixture in
+            HStack(alignment: .top, spacing: 0) {
+                let htmlString = htmlFixture.rawValue
+                Text(htmlString)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .padding(4.0)
+                
+                Divider()
+                    .background(.black)
+                
+                if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
+                    FormattedBodyText(attributedString: attributedString)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .bubbleBackground()
+                        .padding(4.0)
                 }
-                
-                FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
-                    .bubbleBackground()
-                
-                FormattedBodyText(text: "Some plain text that's not an attributed component.")
-                    .bubbleBackground()
-                
-                FormattedBodyText(text: "❤️", boostFontSize: true)
-                    .bubbleBackground()
             }
+            .fixedSize(horizontal: false, vertical: true)
+            .border(.black)
             .padding()
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("\(htmlFixture)")
         }
     }
 }

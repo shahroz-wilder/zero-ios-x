@@ -31,7 +31,7 @@ struct CreateRoomScreenViewState: BindableState {
     let isKnockingFeatureEnabled: Bool
     let canSelectSpace: Bool
     var aliasLocalPart: String
-    var editableSpaces: [SpaceServiceRoomProtocol] = []
+    var editableSpaces: [SpaceServiceRoom] = []
     var bindings: CreateRoomScreenViewStateBindings
     var avatarMediaInfo: MediaInfo? {
         didSet {
@@ -99,7 +99,7 @@ struct CreateRoomScreenViewState: BindableState {
 struct CreateRoomScreenViewStateBindings {
     var roomTopic: String
     var selectedAccessType: CreateRoomScreenAccessType
-    var selectedSpace: SpaceServiceRoomProtocol?
+    var selectedSpace: SpaceServiceRoom?
     
     var showAttachmentConfirmationDialog = false
     var showSpaceSelectionSheet = false
@@ -146,7 +146,7 @@ enum CreateRoomScreenAccessType {
 
 enum CreateRoomScreenSpaceSelectionMode {
     case editableSpacesList
-    case preSelected(SpaceServiceRoomProtocol)
+    case preSelected(SpaceServiceRoom)
 }
 
 extension CreateRoomScreenAccessType {

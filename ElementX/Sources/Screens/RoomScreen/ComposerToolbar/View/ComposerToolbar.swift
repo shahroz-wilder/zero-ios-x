@@ -129,7 +129,6 @@ struct ComposerToolbar: View {
         HStackLayout(alignment: .bottom, spacing: 5)
     }
     
-    @ViewBuilder
     private var mainTopBarContent: some View {
         ZStack(alignment: .bottom) {
             topBarLayout {

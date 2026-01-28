@@ -24,7 +24,10 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let zeroAuthApiProxy: ZeroAuthApiProxyProtocol
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
-    var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
+    var homeserver: CurrentValuePublisher<LoginHomeserver, Never> {
+        homeserverSubject.asCurrentValuePublisher()
+    }
+
     private(set) var flow: AuthenticationFlow
     
     init(userSessionStore: UserSessionStoreProtocol,

@@ -7,17 +7,16 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
 import MatrixRustSDK
 import MatrixRustSDKMocks
+import XCTest
 
 @MainActor
 class SpaceScreenViewModelTests: XCTestCase {
     var spaceRoomListProxy: SpaceRoomListProxyMock!
     var spaceServiceProxy: SpaceServiceProxyMock!
-    let mockSpaceRooms = [SpaceServiceRoomProtocol].mockSpaceList
+    let mockSpaceRooms = [SpaceServiceRoom].mockSpaceList
     var clientProxy: ClientProxyMock!
     var paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never> = .init(.idle(endReached: true))
     var rustLeaveHandle: LeaveSpaceHandleSDKMock!
@@ -178,7 +177,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         try await deferredState.fulfill()
     }
     
-    func testManageRoomsWithoutRemoving() async throws {
+    func testManageRoomsWithoutRemoving() throws {
         setupViewModel(initialSpaceRooms: mockSpaceRooms)
         XCTAssertEqual(context.viewState.editMode, .inactive)
         XCTAssertTrue(context.viewState.editModeSelectedIDs.isEmpty)
@@ -308,8 +307,8 @@ class SpaceScreenViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func setupViewModel(initialSpaceRooms: [SpaceServiceRoomProtocol] = [], paginationResponses: [[SpaceServiceRoomProtocol]] = []) {
-        spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true)),
+    private func setupViewModel(initialSpaceRooms: [SpaceServiceRoom] = [], paginationResponses: [[SpaceServiceRoom]] = []) {
+        spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoom.mock(isSpace: true),
                                                           initialSpaceRooms: initialSpaceRooms,
                                                           paginationStateSubject: paginationStateSubject,
                                                           paginationResponses: paginationResponses))

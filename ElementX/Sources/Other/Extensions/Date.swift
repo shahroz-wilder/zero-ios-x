@@ -91,8 +91,8 @@ extension Date {
 }
 
 private extension DateFormatter {
-    // There doesn't appear to be a way to get "Today" out of
-    // `Date.RelativeFormatStyle` so use the old way instead 😐
+    /// There doesn't appear to be a way to get "Today" out of
+    /// `Date.RelativeFormatStyle` so use the old way instead 😐
     static let relative: DateFormatter = {
         let formatter = DateFormatter()
         formatter.doesRelativeDateFormatting = true

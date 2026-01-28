@@ -7,9 +7,8 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class SpaceAddRoomsScreenViewModelTests: XCTestCase {
@@ -17,7 +16,9 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
     var spaceServiceProxy: SpaceServiceProxyMock!
     
     var viewModel: SpaceAddRoomsScreenViewModelProtocol!
-    var context: SpaceAddRoomsScreenViewModelType.Context { viewModel.context }
+    var context: SpaceAddRoomsScreenViewModelType.Context {
+        viewModel.context
+    }
     
     func testAddingChildRoom() async throws {
         setupViewModel()
@@ -93,7 +94,7 @@ class SpaceAddRoomsScreenViewModelTests: XCTestCase {
     
     func setupViewModel() {
         let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-        spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoomMock(.init(isSpace: true))))
+        spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoom.mock(isSpace: true)))
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentlyVisitedRoomsFilterReturnValue = .init(repeating: JoinedRoomProxyMock(.init()), count: 5)

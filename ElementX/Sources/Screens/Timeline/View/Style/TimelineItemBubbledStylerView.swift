@@ -19,8 +19,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
 
-    private var isDirectOneToOneRoom: Bool { context.viewState.isDirectOneToOneRoom }
-    private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
+    private var isDirectOneToOneRoom: Bool {
+        context.viewState.isDirectOneToOneRoom
+    }
+
+    private var isFocussed: Bool {
+        focussedEventID != nil && timelineItem.id.eventID == focussedEventID
+    }
+
     private var isPinned: Bool {
         guard context.viewState.timelineKind != .pinned,
               let eventID = timelineItem.id.eventID else {
@@ -210,13 +216,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                               color: timelineItem.bubbleBackgroundColor(isRoomEncrypted: context.viewState.isEncryptedRoom))
     }
     
-    @ViewBuilder
     var contentWithReply: some View {
         TimelineBubbleLayout(spacing: 8) {
             if !context.viewState.timelineKind.isThread, timelineItem.properties.isThreaded {
                 ThreadDecorator()
                     .padding(.leading, 4)
-                    .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                    .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
             }
             
             if let replyDetails = timelineItem.properties.replyDetails {
@@ -229,7 +234,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.black)
                     .cornerRadius(8)
-                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                    .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
                     .onTapGesture {
                         if context.viewState.timelineKind != .pinned {
                             context.send(viewAction: .focusOnEventID(replyDetails.eventID))
@@ -240,7 +245,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
-                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                     .hidden()
             }
             
@@ -279,7 +284,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             
             content()
-                .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
                 .cornerRadius(timelineItem.contentCornerRadius)
         }
     }

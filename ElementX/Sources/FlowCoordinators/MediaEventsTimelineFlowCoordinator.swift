@@ -21,7 +21,9 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     private let zeroAttachmentService: ZeroAttachmentService
     
-    private var userSession: UserSessionProtocol { flowParameters.userSession }
+    private var userSession: UserSessionProtocol {
+        flowParameters.userSession
+    }
     
     private let actionsSubject: PassthroughSubject<MediaEventsTimelineFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<MediaEventsTimelineFlowCoordinatorAction, Never> {

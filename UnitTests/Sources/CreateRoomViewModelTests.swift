@@ -7,9 +7,8 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class CreateRoomScreenViewModelTests: XCTestCase {
@@ -223,7 +222,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreateRoomInASelectedSpaceFromTheList() async throws {
-        let spaces = [SpaceServiceRoomProtocol].mockJoinedSpaces2
+        let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setup()
         
         context.send(viewAction: .updateRoomName("A"))
@@ -272,7 +271,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreateRoomInAnAlreadySelectedSpace() async throws {
-        let space = SpaceServiceRoomMock(.init(isSpace: true, joinRule: .private))
+        let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .private)
         setup(spacesSelectionMode: .preSelected(space))
         
         context.send(viewAction: .updateRoomName("A"))
@@ -306,8 +305,8 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments?.accessType, .spaceMembers(spaceID: space.id))
     }
     
-    func testCreateRoomInAnPublicSpaceAvailableTypes() async throws {
-        let space = SpaceServiceRoomMock(.init(isSpace: true, joinRule: .public))
+    func testCreateRoomInAnPublicSpaceAvailableTypes() {
+        let space = SpaceServiceRoom.mock(isSpace: true, joinRule: .public)
         setup(spacesSelectionMode: .preSelected(space))
         
         // Given a form with a blank topic.

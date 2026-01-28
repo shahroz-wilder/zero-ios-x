@@ -182,7 +182,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         }
     }
     
-    private func join(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
+    private func join(_ spaceServiceRoom: SpaceServiceRoom) async {
         state.joiningRoomIDs.insert(spaceServiceRoom.id)
         defer { state.joiningRoomIDs.remove(spaceServiceRoom.id) }
         
@@ -194,7 +194,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         // We don't want to show the space room after joining it this way 🤷‍♂️
     }
     
-    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoomProtocol) async {
+    private func selectSpace(_ spaceServiceRoom: SpaceServiceRoom) async {
         switch await spaceServiceProxy.spaceRoomList(spaceID: spaceServiceRoom.id) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))
@@ -270,8 +270,13 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
     // MARK: - Indicators
     
-    private static var removingIndicatorID: String { "\(Self.self)-Removing" }
-    private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    private static var removingIndicatorID: String {
+        "\(Self.self)-Removing"
+    }
+
+    private static var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
     
     private func showRemovingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.removingIndicatorID,

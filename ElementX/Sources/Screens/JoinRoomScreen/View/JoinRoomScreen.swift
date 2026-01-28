@@ -56,7 +56,6 @@ struct JoinRoomScreen: View {
         }
     }
     
-    @ViewBuilder
     private var defaultView: some View {
         VStack(spacing: 16) {
             RoomAvatarImage(avatar: context.viewState.avatar ?? .room(id: "", name: nil, avatarURL: nil),
@@ -133,7 +132,6 @@ struct JoinRoomScreen: View {
         }
     }
     
-    @ViewBuilder
     private var knockedView: some View {
         VStack(spacing: 16) {
             BigIcon(icon: \.checkCircleSolid, style: .successSolid)
@@ -150,7 +148,6 @@ struct JoinRoomScreen: View {
         }
     }
         
-    @ViewBuilder
     private var knockMessage: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
@@ -446,7 +443,7 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         }
         
         let source: JoinRoomScreenSource = if isSpace {
-            .space(SpaceServiceRoomMock(mode: mode))
+            .space(SpaceServiceRoom.mock(joinRoomScreenMode: mode))
         } else {
             .generic(roomID: "1", via: [])
         }
