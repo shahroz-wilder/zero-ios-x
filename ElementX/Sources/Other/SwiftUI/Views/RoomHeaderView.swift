@@ -38,7 +38,7 @@ struct RoomHeaderView: View {
             // you push a screen whilst the large title is visible on the room screen.
             content
                 // So take up as much space as possible, with a leading alignment for use in the default principal toolbar position
-                .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
+//                .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
                 .roomHeaderAction(action)
         }
     }
