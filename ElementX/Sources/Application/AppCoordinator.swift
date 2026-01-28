@@ -210,7 +210,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                         window.overrideUserInterfaceStyle = .dark
                     }
                 }
-            })
+        )
     }
     
     func handlePotentialPhishingAttempt(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool {

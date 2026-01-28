@@ -23,6 +23,7 @@ struct HomeScreenRoomList: View {
         }
     }
     
+    @ViewBuilder
     private var content: some View {
         let roomsList = context.viewState.visibleRooms
         

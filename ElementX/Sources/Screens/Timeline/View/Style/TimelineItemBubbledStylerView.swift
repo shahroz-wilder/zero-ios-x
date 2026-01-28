@@ -252,7 +252,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             if !timelineItem.isOutgoing, !isDirectOneToOneRoom, shouldShowSenderDetails {
                 Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                     .padding(.horizontal, 6)
-                    .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                    .layoutPriority(TimelineBubbleLayout.Priority.nonGreedyComponent)
                     .font(.zero.bodySMBold)
                     .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
                     .accessibilityHidden(true)
@@ -268,7 +268,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.black)
                     .cornerRadius(8)
-                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                    .layoutPriority(TimelineBubbleLayout.Priority.visibleGreedyComponent)
                     .onTapGesture {
                         if let url = linkPreview.linkURL {
                             openURL(url)
@@ -279,7 +279,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 TimelineLinkPreviewView(preview: linkPreview)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
-                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenGreedyComponent)
                     .hidden()
             }
             
