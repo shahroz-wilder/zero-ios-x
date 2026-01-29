@@ -251,6 +251,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 case .didLeaveSpace:
                     state.bindings.leaveSpaceViewModel = nil
                     actionsSubject.send(.leftRoom)
+                case .presentTransferOwnership:
+                    state.bindings.leaveSpaceViewModel = nil
+                    actionsSubject.send(.transferOwnership)
                 }
             }
             .store(in: &cancellables)

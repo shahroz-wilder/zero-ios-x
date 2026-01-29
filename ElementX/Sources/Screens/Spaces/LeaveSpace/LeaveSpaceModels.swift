@@ -11,6 +11,7 @@ enum LeaveSpaceViewAction {
     case selectAll
     case toggleRoom(roomID: String)
     case rolesAndPermissions
+    case transferOwnership
     case cancel
 }
 
@@ -21,7 +22,8 @@ struct LeaveSpaceViewState: BindableState {
     
     var title: String {
         switch leaveHandle.mode {
-        case .spaceNeedsNewOwner: L10n.screenLeaveSpaceTitleLastAdmin(spaceName)
+        case .spaceNeedsNewOwner(let useTransferOwnershipFlow):
+            useTransferOwnershipFlow ? L10n.leaveRoomAlertSelectNewOwnerTitle : L10n.screenLeaveSpaceTitleLastAdmin(spaceName)
         default: L10n.screenLeaveSpaceTitle(spaceName)
         }
     }
@@ -31,7 +33,8 @@ struct LeaveSpaceViewState: BindableState {
         case .manyRooms: L10n.screenLeaveSpaceSubtitle
         case .roomsNeedNewOwner: L10n.screenLeaveSpaceSubtitleOnlyLastAdmin
         case .noRooms: nil
-        case .spaceNeedsNewOwner: L10n.screenLeaveSpaceSubtitleLastAdmin
+        case .spaceNeedsNewOwner(let useTransferOwnershipFlow):
+            useTransferOwnershipFlow ? L10n.screenLeaveSpaceSubtitleLastOwner(spaceName) : L10n.screenLeaveSpaceSubtitleLastAdmin
         }
     }
     
@@ -44,5 +47,6 @@ struct LeaveSpaceViewState: BindableState {
 enum LeaveSpaceViewModelAction {
     case didLeaveSpace
     case presentRolesAndPermissions
+    case presentTransferOwnership
     case didCancel
 }

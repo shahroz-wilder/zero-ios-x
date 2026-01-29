@@ -152,9 +152,6 @@ struct SecurityAndPrivacyScreen: View {
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomHistorySectionHeader)
                 .compoundListSectionHeader()
-        } footer: {
-            Text(context.viewState.strings.historySectionFooterString)
-                .compoundListSectionFooter()
         }
     }
     

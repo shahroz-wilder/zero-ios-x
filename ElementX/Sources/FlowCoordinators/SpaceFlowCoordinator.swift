@@ -55,6 +55,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case space
         /// The user is adding rooms to the space.
         case addingRooms
+        /// The user is transferring their ownership of the space.
+        case transferOwnership
         /// A child (space) flow is in progress.
         case presentingChild(childSpaceID: String, previousState: State)
         /// A room flow is in progress
@@ -86,6 +88,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case addRooms
         /// The user finished adding rooms to this space.
         case dismissedAddRooms
+        
+        /// Allow the user to transfer their ownership of the space.
+        case presentTransferOwnership
+        /// The user finished transferring their ownership of the space.
+        case dismissedTransferOwnership
         
         /// Request the presentation of a child space flow.
         ///
@@ -161,6 +168,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case .addingRooms:
             navigationStackCoordinator.setSheetCoordinator(nil)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
+        case .transferOwnership:
+            navigationStackCoordinator.setSheetCoordinator(nil)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         case .presentingChild:
             childSpaceFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
@@ -205,6 +215,12 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             self?.presentSpaceAddRoomsScreen()
         }
         stateMachine.addRoutes(event: .dismissedAddRooms, transitions: [.addingRooms => .space])
+        
+        stateMachine.addRoutes(event: .presentTransferOwnership, transitions: [.space => .transferOwnership]) { [weak self] context in
+            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
+            self.presentTransferOwnershipScreen(roomProxy: roomProxy)
+        }
+        stateMachine.addRoutes(event: .dismissedTransferOwnership, transitions: [.transferOwnership => .space])
         
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .startChildFlow else { return nil }
@@ -349,6 +365,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.addRooms)
                 case .displayCreateChildRoomFlow(let space):
                     stateMachine.tryEvent(.startCreateChildRoomFlow, userInfo: space)
+                case .displayTransferOwnership(let roomProxy):
+                    stateMachine.tryEvent(.presentTransferOwnership, userInfo: roomProxy)
                 }
             }
             .store(in: &cancellables)
@@ -436,6 +454,28 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         stackCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissedAddRooms)
+        }
+    }
+    
+    private func presentTransferOwnershipScreen(roomProxy: JoinedRoomProxyProtocol) {
+        let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
+                                                                    roomProxy: roomProxy,
+                                                                    mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    analytics: flowParameters.analytics)
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .complete:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedTransferOwnership)
         }
     }
     
