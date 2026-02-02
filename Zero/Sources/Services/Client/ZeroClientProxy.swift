@@ -15,6 +15,7 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
     private let appSettings: AppSettings
     private let userID: String
     private let zeroApiProxy: ZeroApiProxyProtocol
+    private let matrixApiProxy: MatrixApiProxyProtocol?
     private let client: ClientProtocol
     
     private var delegate: ZeroClientProxyDelegate?
@@ -68,6 +69,7 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
         self.appSettings = appSettings
         
         zeroApiProxy = ZeroApiProxy(appSettings: appSettings)
+        matrixApiProxy = MatrixApiProxy(matrixClient: client)
         
         let allCachedUsers = matrixUserService.getAllCachedUsers()
         homeRoomSummariesUsersSubject.send(allCachedUsers)
@@ -954,6 +956,57 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
             }
         } catch {
             MXLog.error("Failed to verify password: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    // MARK: - MATRIX APIS
+    
+    func resetExistingBackup() async -> Result<Void, ZeroClientProxyError> {
+        guard let matrixApiProxy else { return .failure(.matrixApiClientNotInitialised) }
+        
+        let backupVersionResult = await getKeyBackupVersion()
+        switch backupVersionResult {
+        case .success(let backup):
+            let deleteResult = await deleteBackupVersion(version: backup.version)
+            switch deleteResult {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        case .failure(let failure):
+            return .failure(.zeroError(failure))
+        }
+    }
+    
+    private func getKeyBackupVersion() async -> Result<MatrixBackupVersion, ZeroClientProxyError> {
+        do {
+            guard let matrixApiProxy else { return .failure(.matrixApiClientNotInitialised) }
+            let result = try await matrixApiProxy.e2eEncryptionApi.getBackupVersion()
+            switch result {
+            case .success(let backupVersion):
+                return .success(backupVersion)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to retrieve key backup version: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    private func deleteBackupVersion(version: String) async -> Result<Void, ZeroClientProxyError> {
+        do {
+            guard let matrixApiProxy else { return .failure(.matrixApiClientNotInitialised) }
+            let result = try await matrixApiProxy.e2eEncryptionApi.deleteBackupVersion(version: version)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
             return .failure(.zeroError(error))
         }
     }

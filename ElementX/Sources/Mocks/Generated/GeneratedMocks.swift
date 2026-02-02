@@ -25233,5 +25233,69 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
             return loadFileFromMediaIdKeyReturnValue
         }
     }
+    //MARK: - resetExistingBackup
+
+    var resetExistingBackupUnderlyingCallsCount = 0
+    var resetExistingBackupCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetExistingBackupUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetExistingBackupUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetExistingBackupUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetExistingBackupUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetExistingBackupCalled: Bool {
+        return resetExistingBackupCallsCount > 0
+    }
+
+    var resetExistingBackupUnderlyingReturnValue: Result<Void, ZeroClientProxyError>!
+    var resetExistingBackupReturnValue: Result<Void, ZeroClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return resetExistingBackupUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ZeroClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetExistingBackupUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetExistingBackupUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetExistingBackupUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var resetExistingBackupClosure: (() async -> Result<Void, ZeroClientProxyError>)?
+
+    func resetExistingBackup() async -> Result<Void, ZeroClientProxyError> {
+        resetExistingBackupCallsCount += 1
+        if let resetExistingBackupClosure = resetExistingBackupClosure {
+            return await resetExistingBackupClosure()
+        } else {
+            return resetExistingBackupReturnValue
+        }
+    }
 }
 // swiftlint:enable all

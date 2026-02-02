@@ -314,6 +314,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func attemptStartingOnboarding() {
         MXLog.info("Attempting to start onboarding")
+
+        // Don't start onboarding if an encryption reset is in progress from the settings flow.
+        // The reset process temporarily changes the verification state to unverified, which would
+        // otherwise trigger onboarding and dismiss the settings sheet mid-flow.
+        if settingsFlowCoordinator?.isEncryptionResetInProgress == true {
+            MXLog.info("Skipping onboarding: encryption reset is in progress")
+            return
+        }
+
         checkAndProceed(execute: {
             if self.onboardingFlowCoordinator.shouldStart {
                 self.clearRoute(animated: false)

@@ -36,6 +36,7 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = SecureBackupScreenViewModel(secureBackupController: parameters.clientProxy.secureBackupController,
+                                                clientProxy: parameters.clientProxy,
                                                 userIndicatorController: parameters.userIndicatorController,
                                                 chatBackupDetailsURL: parameters.appSettings.chatBackupDetailsURL)
     }

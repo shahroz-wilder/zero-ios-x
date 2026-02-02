@@ -64,7 +64,12 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     // periphery: ignore - used to store the coordinator to avoid deallocation
     private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
-    
+
+    /// Indicates if an encryption reset flow is currently in progress
+    var isEncryptionResetInProgress: Bool {
+        encryptionResetFlowCoordinator != nil
+    }
+
     private let actionsSubject: PassthroughSubject<EncryptionSettingsFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<EncryptionSettingsFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()

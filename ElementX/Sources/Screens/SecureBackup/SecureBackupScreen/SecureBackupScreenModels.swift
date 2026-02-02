@@ -34,4 +34,6 @@ enum SecureBackupScreenViewAction {
     case recoveryKey
     case forceResetKey
     case keyStorageToggled(Bool)
+    
+    case checkExistingBackup
 }

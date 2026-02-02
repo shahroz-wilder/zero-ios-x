@@ -1977,6 +1977,12 @@
 		792E92AB2E5DB8F200C88D7B /* ManageWalletsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92A92E5DB8EE00C88D7B /* ManageWalletsCoordinator.swift */; };
 		792E92AD2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */; };
 		792E92AE2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */; };
+		7930BD5C2F3126AD00864F74 /* MatrixE2EEncryptionApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7930BD5B2F3126A000864F74 /* MatrixE2EEncryptionApi.swift */; };
+		7930BD5D2F3126AD00864F74 /* MatrixE2EEncryptionApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7930BD5B2F3126A000864F74 /* MatrixE2EEncryptionApi.swift */; };
+		7930BD5F2F31279200864F74 /* MatrixBackupVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7930BD5E2F31278F00864F74 /* MatrixBackupVersion.swift */; };
+		7930BD602F31279200864F74 /* MatrixBackupVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7930BD5E2F31278F00864F74 /* MatrixBackupVersion.swift */; };
+		7930BD632F312A3E00864F74 /* MatrixApiProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7930BD622F312A3600864F74 /* MatrixApiProxy.swift */; };
+		7930BD642F312A3E00864F74 /* MatrixApiProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7930BD622F312A3600864F74 /* MatrixApiProxy.swift */; };
 		7930F8F52EF41D5600493495 /* QRCodeErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3082001D373607455CB08A1 /* QRCodeErrorView.swift */; };
 		7931B1532F27E6600032FBEE /* Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1912062B53CE95E6F700DA60 /* Pagination.swift */; };
 		7931B1542F27E6D40032FBEE /* ChatsSpaceFiltersScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859F51637DA710BBE7B70D6D /* ChatsSpaceFiltersScreenViewModel.swift */; };
@@ -4104,6 +4110,9 @@
 		792E92A62E5DB8E800C88D7B /* ManageWalletsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageWalletsModels.swift; sourceTree = "<group>"; };
 		792E92A92E5DB8EE00C88D7B /* ManageWalletsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageWalletsCoordinator.swift; sourceTree = "<group>"; };
 		792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletListResponse.swift; sourceTree = "<group>"; };
+		7930BD5B2F3126A000864F74 /* MatrixE2EEncryptionApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixE2EEncryptionApi.swift; sourceTree = "<group>"; };
+		7930BD5E2F31278F00864F74 /* MatrixBackupVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixBackupVersion.swift; sourceTree = "<group>"; };
+		7930BD622F312A3600864F74 /* MatrixApiProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixApiProxy.swift; sourceTree = "<group>"; };
 		793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenModel.swift; sourceTree = "<group>"; };
 		793899C82DEF991F00980991 /* ReferAFriendSettingsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenViewModel.swift; sourceTree = "<group>"; };
@@ -5459,6 +5468,7 @@
 		184D6FC52C7D8563006266D8 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				7930BD622F312A3600864F74 /* MatrixApiProxy.swift */,
 				795A0C852D77EB94000928B7 /* ZeroApiProxy.swift */,
 				795A0C882D784534000928B7 /* ZeroAuthApiProxy.swift */,
 				18D46BA32D2DAC93009F4041 /* State */,
@@ -5480,6 +5490,7 @@
 		184D6FCB2C7D8A97006266D8 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				7930BD5A2F31269500864F74 /* Matrix */,
 				189E88512D0CA773002FA063 /* ZeroAccountApi.swift */,
 				18E99FF32C944F670082DDA4 /* ZeroAttachmentApi.swift */,
 				184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */,
@@ -5510,6 +5521,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				7930BD612F31279600864F74 /* Matrix */,
 				79AAF6E92EC1DA60008F2FB3 /* ZAuthenticationChallenge.swift */,
 				1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */,
 				7994E5642DD52B3F005F7039 /* YoutubeLinkMetaData.swift */,
@@ -7702,6 +7714,22 @@
 				792E929D2E5DB8B800C88D7B /* ManageWalletsScreen.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		7930BD5A2F31269500864F74 /* Matrix */ = {
+			isa = PBXGroup;
+			children = (
+				7930BD5B2F3126A000864F74 /* MatrixE2EEncryptionApi.swift */,
+			);
+			path = Matrix;
+			sourceTree = "<group>";
+		};
+		7930BD612F31279600864F74 /* Matrix */ = {
+			isa = PBXGroup;
+			children = (
+				7930BD5E2F31278F00864F74 /* MatrixBackupVersion.swift */,
+			);
+			path = Matrix;
 			sourceTree = "<group>";
 		};
 		793899C12DEF969A00980991 /* ReferAFriend */ = {
@@ -11313,6 +11341,7 @@
 				79B04C422DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */,
 				79AB3A962E252CF200E94E54 /* PostLinkPreview.swift in Sources */,
 				79C6F7282DF82462003CEBB9 /* DeactivateAccountScreenViewModel.swift in Sources */,
+				7930BD602F31279200864F74 /* MatrixBackupVersion.swift in Sources */,
 				18E9A4E92C9829970082DDA4 /* EmojiPickerScreenModels.swift in Sources */,
 				18E9A4EA2C9829970082DDA4 /* EmojiPickerScreenViewModel.swift in Sources */,
 				79C6F72B2DF82746003CEBB9 /* AuthenticationStartScreenViewModel.swift in Sources */,
@@ -11904,6 +11933,7 @@
 				18E9A6512C9829970082DDA4 /* RoomMessageEventStringBuilder.swift in Sources */,
 				18E9A6522C9829970082DDA4 /* RoomModerationRole.swift in Sources */,
 				18E9A6532C9829970082DDA4 /* RoomNotificationModeProxy.swift in Sources */,
+				7930BD5D2F3126AD00864F74 /* MatrixE2EEncryptionApi.swift in Sources */,
 				18E9A6542C9829970082DDA4 /* RoomNotificationSettingsCustomSectionView.swift in Sources */,
 				18E9A6552C9829970082DDA4 /* RoomNotificationSettingsProxy.swift in Sources */,
 				18E9A6562C9829970082DDA4 /* RoomNotificationSettingsProxyMock.swift in Sources */,
@@ -12022,6 +12052,7 @@
 				79B714892EEBCEA200EBD34C /* LinkNewDeviceScreenModels.swift in Sources */,
 				18E9A6A62C9829970082DDA4 /* SecureBackupScreenViewModel.swift in Sources */,
 				79343C812E5CA7F600ED9976 /* ZeroConstants.swift in Sources */,
+				7930BD632F312A3E00864F74 /* MatrixApiProxy.swift in Sources */,
 				18E9A6A72C9829970082DDA4 /* SecureBackupScreenViewModelProtocol.swift in Sources */,
 				18E9A6A82C9829970082DDA4 /* SeparatorRoomTimelineItem.swift in Sources */,
 				7947A70F2EE05EF7006B8836 /* ManageAuthorizedSpacesScreenViewModelProtocol.swift in Sources */,
@@ -12625,6 +12656,7 @@
 				0F81DEE3E02A6549B20DF09A /* DeactivateAccountScreenViewModelProtocol.swift in Sources */,
 				68B2DD307C57ECFABBB05323 /* DeclineAndBlockScreen.swift in Sources */,
 				41D03E23B5DC6D633632E4D8 /* DeclineAndBlockScreenCoordinator.swift in Sources */,
+				7930BD5F2F31279200864F74 /* MatrixBackupVersion.swift in Sources */,
 				C02E295B34725A1688FCF5F0 /* DeclineAndBlockScreenModels.swift in Sources */,
 				0743CF689EBDAAF1CC0B4283 /* DeclineAndBlockScreenViewModel.swift in Sources */,
 				F7DA19B5122AD8FA8F91B753 /* DeclineAndBlockScreenViewModelProtocol.swift in Sources */,
@@ -13402,6 +13434,7 @@
 				79E1E7F02DFB6C8700195CF0 /* HomeTabBottomSpace.swift in Sources */,
 				F08F7BC07CA9AEF5CD157918 /* Snapshotting.swift in Sources */,
 				8BC8EF6705A78946C1F22891 /* SoftLogoutScreen.swift in Sources */,
+				7930BD5C2F3126AD00864F74 /* MatrixE2EEncryptionApi.swift in Sources */,
 				A3A7A05E8F9B7EB0E1A09A2A /* SoftLogoutScreenCoordinator.swift in Sources */,
 				F86102DC2C68BBBB0521BAAE /* SoftLogoutScreenModels.swift in Sources */,
 				797751852DDB2522006CF62D /* ZPostUserProfile.swift in Sources */,
@@ -13618,6 +13651,7 @@
 				793899CC2DEF994200980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */,
 				79281A7C2E6A339400D86DD6 /* ForgotPasswordScreenViewModelProtocol.swift in Sources */,
+				7930BD642F312A3E00864F74 /* MatrixApiProxy.swift in Sources */,
 				F7BC744FFA7FE248FAE7F570 /* UserIndicatorToastView.swift in Sources */,
 				790A473C2E6A41950033604D /* OtpVerificationScreenViewModelProtocol.swift in Sources */,
 				79DB42A52E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */,
@@ -13995,7 +14029,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.26.9;
+				MARKETING_VERSION = 0.27.0;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -14031,7 +14065,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.26.9;
+				MARKETING_VERSION = 0.27.0;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

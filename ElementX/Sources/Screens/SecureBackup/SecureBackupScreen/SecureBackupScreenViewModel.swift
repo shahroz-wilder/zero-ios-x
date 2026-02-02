@@ -14,6 +14,7 @@ typealias SecureBackupScreenViewModelType = StateStoreViewModelV2<SecureBackupSc
 class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackupScreenViewModelProtocol {
     private let secureBackupController: SecureBackupControllerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let zeroClientProxy: ZeroClientProxyProtocol
     
     private var actionsSubject: PassthroughSubject<SecureBackupScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupScreenViewModelAction, Never> {
@@ -21,9 +22,11 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     }
 
     init(secureBackupController: SecureBackupControllerProtocol,
+         clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          chatBackupDetailsURL: URL) {
         self.secureBackupController = secureBackupController
+        self.zeroClientProxy = clientProxy.zeroClient
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(chatBackupDetailsURL: chatBackupDetailsURL,
@@ -64,6 +67,8 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
             default:
                 break
             }
+        case .checkExistingBackup:
+            checkandVerifyExistingBackup()
         }
     }
     
@@ -81,6 +86,22 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
         }
         
         userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+    }
+    
+    private func checkandVerifyExistingBackup() {
+        Task {
+            let loadingIndicatorIdentifier = "SecureBackupScreenLoading"
+            userIndicatorController.submitIndicator(.init(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+            defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
+            
+            let result = await zeroClientProxy.resetExistingBackup()
+            switch result {
+            case .success:
+                break
+            case .failure(let failure):
+                print("Error resetting key backup version: \(failure)")
+            }
+        }
     }
 }
 

@@ -28,6 +28,13 @@ struct SecureBackupScreen: View {
                 }
             }
         }
+        .task {
+            if context.viewState.recoveryState != .incomplete,
+               context.viewState.keyBackupState == .unknown {
+//                context.send(viewAction: .checkExistingBackup)
+                context.send(viewAction: .forceResetKey)
+            }
+        }
         .zeroList()
         .navigationTitle(L10n.commonEncryption)
         .navigationBarTitleDisplayMode(.inline)
@@ -173,6 +180,7 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
         backupController.underlyingRecoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
         return SecureBackupScreenViewModel(secureBackupController: backupController,
+                                           clientProxy: ClientProxyMock(),
                                            userIndicatorController: UserIndicatorControllerMock(),
                                            chatBackupDetailsURL: .sharedPublicDirectory)
     }

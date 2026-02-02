@@ -15,6 +15,10 @@ enum ZeroClientProxyError: Error {
     
     case insufficientGasBalance
     case insufficientMeowBalance
+    
+    case matrixApiClientNotInitialised
+    
+    
 }
 
 // sourcery: AutoMockable
@@ -163,4 +167,8 @@ protocol ZeroClientProxyProtocol: AnyObject {
     func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, ZeroClientProxyError>
     
     func loadFileFromMediaId(_ mediaId: String, key: String) async throws -> Result<URL, ZeroClientProxyError>
+    
+    // MARK: - MATRIX APIS
+    
+    func resetExistingBackup() async -> Result<Void, ZeroClientProxyError>
 }

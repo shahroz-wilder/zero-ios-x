@@ -40,7 +40,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     var actions: AnyPublisher<SettingsFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
+
+    /// Indicates if an encryption reset flow is currently in progress
+    var isEncryptionResetInProgress: Bool {
+        encryptionSettingsFlowCoordinator?.isEncryptionResetInProgress ?? false
+    }
+
     init(appLockService: AppLockServiceProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
