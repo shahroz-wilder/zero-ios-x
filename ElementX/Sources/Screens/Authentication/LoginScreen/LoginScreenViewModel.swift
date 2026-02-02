@@ -122,18 +122,15 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
         startLoading(isInteractionBlocking: true)
         
         Task {
-            analytics.signpost.beginLogin()
             switch await authenticationService.login(username: state.bindings.username,
                                                      password: state.bindings.password,
                                                      initialDeviceName: UIDevice.current.initialDeviceName,
                                                      deviceID: nil) {
             case .success(let userSession):
                 actionsSubject.send(.signedIn(userSession))
-                analytics.signpost.endLogin()
                 stopLoading()
             case .failure(let error):
                 stopLoading()
-                analytics.signpost.endLogin()
                 handleError(error)
             }
         }
@@ -224,11 +221,9 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
                                                              deviceID: nil) {
             case .success(let userSession):
                 actionsSubject.send(.signedIn(userSession))
-                analytics.signpost.endLogin()
                 stopLoading()
             case .failure(let error):
                 stopLoading()
-                analytics.signpost.endLogin()
                 handleError(error)
             }
         }

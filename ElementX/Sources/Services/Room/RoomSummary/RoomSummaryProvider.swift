@@ -61,7 +61,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
-         roomListPageSize: UInt32 = 200,
+         roomListPageSize: UInt32 = 100,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings,
          zeroUsersService: ZeroMatrixUsersService) {

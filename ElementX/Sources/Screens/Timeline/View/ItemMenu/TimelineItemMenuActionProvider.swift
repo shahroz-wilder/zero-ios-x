@@ -171,6 +171,6 @@ struct TimelineItemMenuActionProvider {
     }
     
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {
-        item.isOutgoing ? canCurrentUserRedactSelf : canCurrentUserRedactOthers && !isDM
+        item.isOutgoing ? canCurrentUserRedactSelf : canCurrentUserRedactOthers
     }
 }

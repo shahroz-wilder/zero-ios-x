@@ -113,8 +113,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         zeroAttachmentService = ZeroAttachmentService(appSettings: flowParameters.appSettings)
         
         setupStateMachine()
-        
-        flowParameters.analytics.signpost.beginRoomFlow(roomID)
     }
         
     // MARK: - FlowCoordinatorProtocol
@@ -131,6 +129,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         switch appRoute {
         case .room(let roomID, let via):
+            flowParameters.analytics.signpost.startTransaction(.openRoom)
             Task {
                 await handleRoomRoute(roomID: roomID, via: via, animated: animated)
             }
@@ -902,7 +901,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         } else {
             actionsSubject.send(.finished)
         }
-        flowParameters.analytics.signpost.endRoomFlow()
     }
     
     private func presentRoomDetails(isRoot: Bool, animated: Bool) async {

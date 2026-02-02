@@ -170,6 +170,7 @@ struct RoomScreen: View {
                            showProSubscriptionBadge: context.viewState.showProSubscriptionBadge,
                            isRoomDirect: context.viewState.isRoomDirect,
                            dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
+                           roomHistorySharingState: context.viewState.roomHistorySharingState,
                            mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .displayRoomDetails)
             }

@@ -88,23 +88,17 @@ struct SecureBackupScreen: View {
                     }
                 }))
                 
-                ZeroListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionChange,
-                                          description: L10n.screenChatBackupRecoveryActionChangeDescription),
-                            kind: .navigationLink { context.send(viewAction: .recoveryKey) })
-                .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
-//                ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
-//                                            description: L10n.screenChatBackupRecoveryActionChangeDescription,
-//                                            icon: \.key,
-//                                            iconAlignment: .top),
-//                            kind: .navigationLink { context.send(viewAction: .recoveryKey) })
-//                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
+                ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
+                                        description: L10n.screenChatBackupRecoveryActionChangeDescription,
+                                        icon: \.key),
+                        kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .disabled:
                 ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
-                                            description: L10n.screenChatBackupRecoveryActionChangeDescription,
-                                            icon: \.key,
-                                            iconAlignment: .top),
-                            details: .icon(BadgeView(size: 10)),
-                            kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                                        description: L10n.screenChatBackupRecoveryActionChangeDescription,
+                                        icon: \.key),
+                        details: .icon(BadgeView(size: 10)),
+                        kind: .navigationLink { context.send(viewAction: .recoveryKey) })
                     .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .incomplete:
                 ZeroListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionConfirm),

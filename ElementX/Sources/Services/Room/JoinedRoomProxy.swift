@@ -20,6 +20,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let room: RoomProtocol
     private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
     private let zeroChatApi: ZeroChatApiProtocol
     private let zeroUsersService: ZeroMatrixUsersService
     
@@ -84,17 +85,20 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
          appSettings: AppSettings,
+         analyticsService: AnalyticsService,
          zeroChatApi: ZeroChatApiProtocol,
          zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListService = roomListService
         self.room = room
         self.appSettings = appSettings
+        self.analyticsService = analyticsService
         self.zeroChatApi = zeroChatApi
         self.zeroUsersService = zeroUsersService
         
         let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar))
         
+        let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
         timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
                                                                                                          filter: .eventTypeFilter(filter: excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
@@ -105,6 +109,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                            kind: .live,
                                            isRoomChannel: room.isAChannel(),
                                            zeroChatApi: zeroChatApi)
+        openRoomSpan?.finish()
         
         Task {
             await updateMembers()
@@ -162,6 +167,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
+            let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .notificationToMessage)
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID,
                                                                                                           numContextEvents: numberOfEvents,
                                                                                                           hideThreadedEvents: appSettings.threadsEnabled),
@@ -170,6 +176,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             dateDividerMode: .daily,
                                                                                             trackReadReceipts: .disabled,
                                                                                             reportUtds: true))
+            openRoomSpan?.finish()
             
             return .success(TimelineProxy(timeline: sdkTimeline,
                                           roomId: room.id(),

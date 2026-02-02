@@ -12,10 +12,12 @@ import Foundation
 import MatrixRustSDK
 import OrderedCollections
 
+// swiftlint:disable:next type_body_length
 class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
     private let client: ClientProtocol
     private let networkMonitor: NetworkMonitorProtocol
     private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
     
     let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
@@ -37,7 +39,10 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
     private var verificationStateListenerTaskHandle: TaskHandle?
     
     // periphery:ignore - required for instance retention in the rust codebase
-    private var sendQueueListenerTaskHandle: TaskHandle?
+    private var sendQueueStatusListenerTaskHandle: TaskHandle?
+    
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var sendQueueUpdatesListenerTaskHandle: TaskHandle?
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var mediaPreviewConfigListenerTaskHandle: TaskHandle?
@@ -188,10 +193,12 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
-         appSettings: AppSettings) async throws {
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService) async throws {
         self.client = client
         self.networkMonitor = networkMonitor
         self.appSettings = appSettings
+        self.analyticsService = analyticsService
         
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
@@ -251,9 +258,20 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
             Task { await self?.updateVerificationState(verificationState) }
         })
         
-        sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener { [weak self] roomID, error in
+        sendQueueStatusListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener { [weak self] roomID, error in
             MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
             self?.sendQueueStatusSubject.send(false)
+        })
+        
+        sendQueueUpdatesListenerTaskHandle = try? await client.subscribeToSendQueueUpdates(listener: SDKListener { _, update in
+            switch update {
+            case .newLocalEvent(let transactionID):
+                analyticsService.signpost.startTransaction(.sendMessage(uuid: transactionID))
+            case .sentEvent(let transactionID, _):
+                analyticsService.signpost.finishTransaction(.sendMessage(uuid: transactionID))
+            default:
+                break
+            }
         })
         
         sendQueueStatusSubject
@@ -1208,6 +1226,7 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           room: room,
                                                           appSettings: appSettings,
+                                                          analyticsService: analyticsService,
                                                           zeroChatApi: zeroClient.chatApi,
                                                           zeroUsersService: zeroClient.matrixUserService)
                 

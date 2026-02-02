@@ -259,7 +259,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         showFocusLoadingIndicator()
-        defer { hideFocusLoadingIndicator() }
+        defer {
+            hideFocusLoadingIndicator()
+        }
         
         switch await timelineController.focusOnEvent(eventID, timelineSize: Constants.detachedTimelineSize) {
         case .success:
@@ -322,6 +324,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             focussedEvent.appearance = .hasAppeared
             state.timelineState.focussedEvent = focussedEvent
             hideFocusLoadingIndicator()
+            analyticsService.signpost.finishTransaction(.notificationToMessage)
         }
     }
     
@@ -431,6 +434,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 switch callback {
                 case .updatedTimelineItems(let updatedItems, let isSwitchingTimelines):
                     buildTimelineViews(timelineItems: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
+                    
+                    if !updatedItems.isEmpty {
+                        analyticsService.signpost.finishTransaction(.openRoom)
+                    }
                 case .paginationState(let paginationState):
                     if state.timelineState.paginationState != paginationState {
                         state.timelineState.paginationState = paginationState

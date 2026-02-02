@@ -17,6 +17,7 @@ struct RoomHeaderView: View {
     let showProSubscriptionBadge: Bool
     let isRoomDirect: Bool
     var dmRecipientVerificationState: UserIdentityVerificationState?
+    var roomHistorySharingState: RoomHistorySharingState?
     
     let mediaProvider: MediaProviderProtocol?
     
@@ -74,6 +75,11 @@ struct RoomHeaderView: View {
                 if let dmRecipientVerificationState {
                     VerificationBadge(verificationState: dmRecipientVerificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
                 }
+                
+                if let historySharingIcon {
+                    CompoundIcon(historySharingIcon, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.iconInfoPrimary)
+                }
             }
         }
     }
@@ -84,6 +90,14 @@ struct RoomHeaderView: View {
                         avatarSize: .room(on: .timeline),
                         mediaProvider: mediaProvider)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
+    }
+    
+    private var historySharingIcon: KeyPath<CompoundIcons, Image>? {
+        switch roomHistorySharingState {
+        case .shared: \.history
+        case .worldReadable: \.userProfileSolid
+        case .none: nil
+        }
     }
 }
 
@@ -118,13 +132,18 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
             makeHeader(avatarURL: .mockMXCAvatar,
                        roomSubtitle: "Subtitle",
                        verificationState: .verified)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingState: .shared)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingState: .worldReadable)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified, historySharingState: .shared)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verificationViolation, historySharingState: .worldReadable)
         }
         .previewLayout(.sizeThatFits)
     }
     
     static func makeHeader(avatarURL: URL?,
                            roomSubtitle: String? = nil,
-                           verificationState: UserIdentityVerificationState) -> some View {
+                           verificationState: UserIdentityVerificationState,
+                           historySharingState: RoomHistorySharingState? = nil) -> some View {
         RoomHeaderView(roomName: "Some Room name",
                        roomSubtitle: nil,
                        roomAvatar: .room(id: "1",
@@ -133,6 +152,8 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        showProSubscriptionBadge: false,
                        isRoomDirect: false,
                        dmRecipientVerificationState: verificationState,
+                       roomHistorySharingState: historySharingState,
+                       
                        mediaProvider: MediaProviderMock(configuration: .init())) { }
             .padding()
     }

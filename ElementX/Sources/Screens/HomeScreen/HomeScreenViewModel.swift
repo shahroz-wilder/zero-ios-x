@@ -395,8 +395,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             return
         }
         
-        analyticsService.signpost.beginFirstRooms()
-        
         roomSummaryProvider.statePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
@@ -431,7 +429,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         
         if roomListMode == .rooms, state.roomListMode == .skeletons {
-            analyticsService.signpost.endFirstRooms()
+            analyticsService.signpost.finishTransaction(.cachedRoomList)
         }
         
         state.roomListMode = roomListMode
