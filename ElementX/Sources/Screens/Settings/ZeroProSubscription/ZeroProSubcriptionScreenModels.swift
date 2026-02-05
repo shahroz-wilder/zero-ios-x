@@ -12,9 +12,11 @@ struct ZeroProSubcriptionScreenViewState: BindableState {
     var currentUser: ZCurrentUser?
     var isZeroProSubscriber: Bool = false
     var canPurchaseSubscription: Bool = false
-    
+    /// Indicates if the current user owns the StoreKit subscription (matched by appAccountToken)
+    var isSubscriptionOwnedByCurrentUser: Bool = false
+
     var subscriptionExpiration: Date?
-    
+
     var bindings: ZeroProSubcriptionScreenBindings
 }
 
@@ -24,4 +26,5 @@ struct ZeroProSubcriptionScreenBindings {
 
 enum ZeroProSubcriptionScreenViewAction {
     case purchaseSubscriptionTapped
+    case restorePurchasesTapped
 }

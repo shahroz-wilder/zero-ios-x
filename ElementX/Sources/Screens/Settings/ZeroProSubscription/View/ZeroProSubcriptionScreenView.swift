@@ -67,6 +67,7 @@ struct ZeroProSubcriptionScreenView: View {
                         if context.viewState.canPurchaseSubscription {
                             subscribeToZeroProButton
                         }
+                        restorePurchasesButton
                     }
                     
                     Spacer(minLength: 20)
@@ -93,6 +94,16 @@ struct ZeroProSubcriptionScreenView: View {
             showZeroSubscriptionModal.toggle()
         }
         .padding(.vertical, 8)
+    }
+
+    private var restorePurchasesButton: some View {
+        Button {
+            context.send(viewAction: .restorePurchasesTapped)
+        } label: {
+            Text("Restore Purchases")
+                .font(.zero.bodyMD)
+                .foregroundStyle(.zero.bgAccentRest)
+        }
     }
     
     private var manageZeroProSubscription: some View {

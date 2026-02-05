@@ -839,6 +839,7 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         do {
             appSettings.zeroLoggedInUser = ZCurrentUser.placeholder
             BadgeManager.shared.clearBadgeAndNotifications()
+            zeroClient.clearSubscriptionCache()
             try await client.logout()
         } catch {
             MXLog.error("Failed logging out with error: \(error)")

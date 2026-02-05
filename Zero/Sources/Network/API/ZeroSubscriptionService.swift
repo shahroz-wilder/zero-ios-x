@@ -11,19 +11,25 @@ import StoreKit
 
 protocol ZeroSubscriptionServiceProtocol {
     func syncSubscriptions() async
-    
+
     func fetchZeroSubscriptionSKU() async throws -> Product?
-    
-    func subscribeToZeroPro(sku: Product, metaData: [String: String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?)
-    
-    func getSubscriptionExpirationDate(product: Product) async -> Date?
+
+    func subscribeToZeroPro(sku: Product, appAccountToken: UUID) async throws -> (Product.PurchaseResult, StoreKit.Transaction?)
+
+    func getSubscriptionExpirationDate(product: Product, appAccountToken: UUID) async -> Date?
+
+    func isSubscriptionOwnedByUser(product: Product, appAccountToken: UUID) async -> Bool
+
+    func restorePurchases() async throws
+
+    func clearCache()
 }
 
 class ZeroSubscriptionService: ZeroSubscriptionServiceProtocol {
-    
-    private let storeContext: StoreContext
+
+    private var storeContext: StoreContext
     private let storeService: StandardStoreService
-    
+
     init() {
         let products = ZeroSubscriptions.allCases
         storeContext = StoreContext()
@@ -44,11 +50,8 @@ class ZeroSubscriptionService: ZeroSubscriptionServiceProtocol {
         return products.first
     }
     
-    func subscribeToZeroPro(sku: Product, metaData: [String : String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
-        var options: Set<Product.PurchaseOption> = []
-        if !metaData.isEmpty {
-            metaData.forEach { options.insert(.custom(key: $0.key, value: $0.value)) }
-        }
+    func subscribeToZeroPro(sku: Product, appAccountToken: UUID) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
+        let options: Set<Product.PurchaseOption> = [.appAccountToken(appAccountToken)]
         let result = try await storeService.purchase(sku, options: options)
         if case .success(_) = result.0 {
             await syncSubscriptions()
@@ -56,33 +59,62 @@ class ZeroSubscriptionService: ZeroSubscriptionServiceProtocol {
         return result
     }
     
-    func getSubscriptionExpirationDate(product: Product) async -> Date? {
+    func getSubscriptionExpirationDate(product: Product, appAccountToken: UUID) async -> Date? {
         guard let subscription = product.subscription else {
-            // Not a subscription product
             return nil
         }
 
         do {
-            // Get the subscription statuses (usually only one active status per group)
             let statuses = try await subscription.status
-            // Find the active status (example: choosing the highest level of service)
+            // Find active status that belongs to this user (matching appAccountToken)
             if let activeStatus = statuses.first(where: { status in
-                switch status.state {
-                case .subscribed, .inBillingRetryPeriod, .inGracePeriod:
-                    return true
-                default:
+                guard case .subscribed = status.state,
+                      case .verified(let transaction) = status.transaction,
+                      transaction.appAccountToken == appAccountToken else {
                     return false
                 }
+                return true
             }) {
-                // Verify the transaction
                 let transaction = try checkVerified(activeStatus.transaction)
-                // The expirationDate is the next billing date
                 return transaction.expirationDate
             }
         } catch {
-            print("Error fetching subscription status: \(error)")
+            MXLog.error("Error fetching subscription status: \(error)")
         }
         return nil
+    }
+
+    func isSubscriptionOwnedByUser(product: Product, appAccountToken: UUID) async -> Bool {
+        guard let subscription = product.subscription else {
+            return false
+        }
+
+        do {
+            let statuses = try await subscription.status
+            return statuses.contains { status in
+                switch status.state {
+                case .subscribed, .inBillingRetryPeriod, .inGracePeriod:
+                    if case .verified(let transaction) = status.transaction {
+                        return transaction.appAccountToken == appAccountToken
+                    }
+                    return false
+                default:
+                    return false
+                }
+            }
+        } catch {
+            MXLog.error("Error checking subscription ownership: \(error)")
+            return false
+        }
+    }
+
+    func restorePurchases() async throws {
+        try await AppStore.sync()
+        await syncSubscriptions()
+    }
+
+    func clearCache() {
+        storeContext = StoreContext()
     }
 
     // A simple helper function to unwrap the VerificationResult

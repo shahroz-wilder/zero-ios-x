@@ -971,14 +971,26 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
         return try await zeroApiProxy.subscriptionApi.fetchZeroSubscriptionSKU()
     }
     
-    func subscribeToZeroPro(sku: Product, metaData: [String : String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
-        return try await zeroApiProxy.subscriptionApi.subscribeToZeroPro(sku: sku, metaData: metaData)
+    func subscribeToZeroPro(sku: Product, appAccountToken: UUID) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
+        return try await zeroApiProxy.subscriptionApi.subscribeToZeroPro(sku: sku, appAccountToken: appAccountToken)
     }
-    
-    func getSubscriptionExpirationDate(product: Product) async -> Date? {
-        return await zeroApiProxy.subscriptionApi.getSubscriptionExpirationDate(product: product)
+
+    func getSubscriptionExpirationDate(product: Product, appAccountToken: UUID) async -> Date? {
+        return await zeroApiProxy.subscriptionApi.getSubscriptionExpirationDate(product: product, appAccountToken: appAccountToken)
     }
-    
+
+    func isSubscriptionOwnedByUser(product: Product, appAccountToken: UUID) async -> Bool {
+        return await zeroApiProxy.subscriptionApi.isSubscriptionOwnedByUser(product: product, appAccountToken: appAccountToken)
+    }
+
+    func restorePurchases() async throws {
+        try await zeroApiProxy.subscriptionApi.restorePurchases()
+    }
+
+    func clearSubscriptionCache() {
+        zeroApiProxy.subscriptionApi.clearCache()
+    }
+
     // MARK: - MATRIX APIS
     
     func resetExistingBackup() async -> Result<Void, ZeroClientProxyError> {

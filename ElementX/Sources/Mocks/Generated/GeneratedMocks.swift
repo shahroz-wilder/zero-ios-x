@@ -25339,16 +25339,16 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - subscribeToZeroPro
 
-    var subscribeToZeroProSkuMetaDataThrowableError: Error?
-    var subscribeToZeroProSkuMetaDataUnderlyingCallsCount = 0
-    var subscribeToZeroProSkuMetaDataCallsCount: Int {
+    var subscribeToZeroProSkuAppAccountTokenThrowableError: Error?
+    var subscribeToZeroProSkuAppAccountTokenUnderlyingCallsCount = 0
+    var subscribeToZeroProSkuAppAccountTokenCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return subscribeToZeroProSkuMetaDataUnderlyingCallsCount
+                return subscribeToZeroProSkuAppAccountTokenUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToZeroProSkuMetaDataUnderlyingCallsCount
+                    returnValue = subscribeToZeroProSkuAppAccountTokenUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -25356,29 +25356,29 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                subscribeToZeroProSkuMetaDataUnderlyingCallsCount = newValue
+                subscribeToZeroProSkuAppAccountTokenUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToZeroProSkuMetaDataUnderlyingCallsCount = newValue
+                    subscribeToZeroProSkuAppAccountTokenUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var subscribeToZeroProSkuMetaDataCalled: Bool {
-        return subscribeToZeroProSkuMetaDataCallsCount > 0
+    var subscribeToZeroProSkuAppAccountTokenCalled: Bool {
+        return subscribeToZeroProSkuAppAccountTokenCallsCount > 0
     }
-    var subscribeToZeroProSkuMetaDataReceivedArguments: (sku: Product, metaData: [String: String])?
-    var subscribeToZeroProSkuMetaDataReceivedInvocations: [(sku: Product, metaData: [String: String])] = []
+    var subscribeToZeroProSkuAppAccountTokenReceivedArguments: (sku: Product, appAccountToken: UUID)?
+    var subscribeToZeroProSkuAppAccountTokenReceivedInvocations: [(sku: Product, appAccountToken: UUID)] = []
 
-    var subscribeToZeroProSkuMetaDataUnderlyingReturnValue: (Product.PurchaseResult, StoreKit.Transaction?)!
-    var subscribeToZeroProSkuMetaDataReturnValue: (Product.PurchaseResult, StoreKit.Transaction?)! {
+    var subscribeToZeroProSkuAppAccountTokenUnderlyingReturnValue: (Product.PurchaseResult, StoreKit.Transaction?)!
+    var subscribeToZeroProSkuAppAccountTokenReturnValue: (Product.PurchaseResult, StoreKit.Transaction?)! {
         get {
             if Thread.isMainThread {
-                return subscribeToZeroProSkuMetaDataUnderlyingReturnValue
+                return subscribeToZeroProSkuAppAccountTokenUnderlyingReturnValue
             } else {
                 var returnValue: (Product.PurchaseResult, StoreKit.Transaction?)? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToZeroProSkuMetaDataUnderlyingReturnValue
+                    returnValue = subscribeToZeroProSkuAppAccountTokenUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -25386,42 +25386,42 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                subscribeToZeroProSkuMetaDataUnderlyingReturnValue = newValue
+                subscribeToZeroProSkuAppAccountTokenUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToZeroProSkuMetaDataUnderlyingReturnValue = newValue
+                    subscribeToZeroProSkuAppAccountTokenUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var subscribeToZeroProSkuMetaDataClosure: ((Product, [String: String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?))?
+    var subscribeToZeroProSkuAppAccountTokenClosure: ((Product, UUID) async throws -> (Product.PurchaseResult, StoreKit.Transaction?))?
 
-    func subscribeToZeroPro(sku: Product, metaData: [String: String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
-        if let error = subscribeToZeroProSkuMetaDataThrowableError {
+    func subscribeToZeroPro(sku: Product, appAccountToken: UUID) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
+        if let error = subscribeToZeroProSkuAppAccountTokenThrowableError {
             throw error
         }
-        subscribeToZeroProSkuMetaDataCallsCount += 1
-        subscribeToZeroProSkuMetaDataReceivedArguments = (sku: sku, metaData: metaData)
+        subscribeToZeroProSkuAppAccountTokenCallsCount += 1
+        subscribeToZeroProSkuAppAccountTokenReceivedArguments = (sku: sku, appAccountToken: appAccountToken)
         DispatchQueue.main.async {
-            self.subscribeToZeroProSkuMetaDataReceivedInvocations.append((sku: sku, metaData: metaData))
+            self.subscribeToZeroProSkuAppAccountTokenReceivedInvocations.append((sku: sku, appAccountToken: appAccountToken))
         }
-        if let subscribeToZeroProSkuMetaDataClosure = subscribeToZeroProSkuMetaDataClosure {
-            return try await subscribeToZeroProSkuMetaDataClosure(sku, metaData)
+        if let subscribeToZeroProSkuAppAccountTokenClosure = subscribeToZeroProSkuAppAccountTokenClosure {
+            return try await subscribeToZeroProSkuAppAccountTokenClosure(sku, appAccountToken)
         } else {
-            return subscribeToZeroProSkuMetaDataReturnValue
+            return subscribeToZeroProSkuAppAccountTokenReturnValue
         }
     }
     //MARK: - getSubscriptionExpirationDate
 
-    var getSubscriptionExpirationDateProductUnderlyingCallsCount = 0
-    var getSubscriptionExpirationDateProductCallsCount: Int {
+    var getSubscriptionExpirationDateProductAppAccountTokenUnderlyingCallsCount = 0
+    var getSubscriptionExpirationDateProductAppAccountTokenCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getSubscriptionExpirationDateProductUnderlyingCallsCount
+                return getSubscriptionExpirationDateProductAppAccountTokenUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getSubscriptionExpirationDateProductUnderlyingCallsCount
+                    returnValue = getSubscriptionExpirationDateProductAppAccountTokenUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -25429,29 +25429,29 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getSubscriptionExpirationDateProductUnderlyingCallsCount = newValue
+                getSubscriptionExpirationDateProductAppAccountTokenUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getSubscriptionExpirationDateProductUnderlyingCallsCount = newValue
+                    getSubscriptionExpirationDateProductAppAccountTokenUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getSubscriptionExpirationDateProductCalled: Bool {
-        return getSubscriptionExpirationDateProductCallsCount > 0
+    var getSubscriptionExpirationDateProductAppAccountTokenCalled: Bool {
+        return getSubscriptionExpirationDateProductAppAccountTokenCallsCount > 0
     }
-    var getSubscriptionExpirationDateProductReceivedProduct: Product?
-    var getSubscriptionExpirationDateProductReceivedInvocations: [Product] = []
+    var getSubscriptionExpirationDateProductAppAccountTokenReceivedArguments: (product: Product, appAccountToken: UUID)?
+    var getSubscriptionExpirationDateProductAppAccountTokenReceivedInvocations: [(product: Product, appAccountToken: UUID)] = []
 
-    var getSubscriptionExpirationDateProductUnderlyingReturnValue: Date?
-    var getSubscriptionExpirationDateProductReturnValue: Date? {
+    var getSubscriptionExpirationDateProductAppAccountTokenUnderlyingReturnValue: Date?
+    var getSubscriptionExpirationDateProductAppAccountTokenReturnValue: Date? {
         get {
             if Thread.isMainThread {
-                return getSubscriptionExpirationDateProductUnderlyingReturnValue
+                return getSubscriptionExpirationDateProductAppAccountTokenUnderlyingReturnValue
             } else {
                 var returnValue: Date?? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getSubscriptionExpirationDateProductUnderlyingReturnValue
+                    returnValue = getSubscriptionExpirationDateProductAppAccountTokenUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -25459,27 +25459,171 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getSubscriptionExpirationDateProductUnderlyingReturnValue = newValue
+                getSubscriptionExpirationDateProductAppAccountTokenUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getSubscriptionExpirationDateProductUnderlyingReturnValue = newValue
+                    getSubscriptionExpirationDateProductAppAccountTokenUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getSubscriptionExpirationDateProductClosure: ((Product) async -> Date?)?
+    var getSubscriptionExpirationDateProductAppAccountTokenClosure: ((Product, UUID) async -> Date?)?
 
-    func getSubscriptionExpirationDate(product: Product) async -> Date? {
-        getSubscriptionExpirationDateProductCallsCount += 1
-        getSubscriptionExpirationDateProductReceivedProduct = product
+    func getSubscriptionExpirationDate(product: Product, appAccountToken: UUID) async -> Date? {
+        getSubscriptionExpirationDateProductAppAccountTokenCallsCount += 1
+        getSubscriptionExpirationDateProductAppAccountTokenReceivedArguments = (product: product, appAccountToken: appAccountToken)
         DispatchQueue.main.async {
-            self.getSubscriptionExpirationDateProductReceivedInvocations.append(product)
+            self.getSubscriptionExpirationDateProductAppAccountTokenReceivedInvocations.append((product: product, appAccountToken: appAccountToken))
         }
-        if let getSubscriptionExpirationDateProductClosure = getSubscriptionExpirationDateProductClosure {
-            return await getSubscriptionExpirationDateProductClosure(product)
+        if let getSubscriptionExpirationDateProductAppAccountTokenClosure = getSubscriptionExpirationDateProductAppAccountTokenClosure {
+            return await getSubscriptionExpirationDateProductAppAccountTokenClosure(product, appAccountToken)
         } else {
-            return getSubscriptionExpirationDateProductReturnValue
+            return getSubscriptionExpirationDateProductAppAccountTokenReturnValue
         }
+    }
+    //MARK: - isSubscriptionOwnedByUser
+
+    var isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingCallsCount = 0
+    var isSubscriptionOwnedByUserProductAppAccountTokenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var isSubscriptionOwnedByUserProductAppAccountTokenCalled: Bool {
+        return isSubscriptionOwnedByUserProductAppAccountTokenCallsCount > 0
+    }
+    var isSubscriptionOwnedByUserProductAppAccountTokenReceivedArguments: (product: Product, appAccountToken: UUID)?
+    var isSubscriptionOwnedByUserProductAppAccountTokenReceivedInvocations: [(product: Product, appAccountToken: UUID)] = []
+
+    var isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingReturnValue: Bool!
+    var isSubscriptionOwnedByUserProductAppAccountTokenReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isSubscriptionOwnedByUserProductAppAccountTokenUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var isSubscriptionOwnedByUserProductAppAccountTokenClosure: ((Product, UUID) async -> Bool)?
+
+    func isSubscriptionOwnedByUser(product: Product, appAccountToken: UUID) async -> Bool {
+        isSubscriptionOwnedByUserProductAppAccountTokenCallsCount += 1
+        isSubscriptionOwnedByUserProductAppAccountTokenReceivedArguments = (product: product, appAccountToken: appAccountToken)
+        DispatchQueue.main.async {
+            self.isSubscriptionOwnedByUserProductAppAccountTokenReceivedInvocations.append((product: product, appAccountToken: appAccountToken))
+        }
+        if let isSubscriptionOwnedByUserProductAppAccountTokenClosure = isSubscriptionOwnedByUserProductAppAccountTokenClosure {
+            return await isSubscriptionOwnedByUserProductAppAccountTokenClosure(product, appAccountToken)
+        } else {
+            return isSubscriptionOwnedByUserProductAppAccountTokenReturnValue
+        }
+    }
+    //MARK: - restorePurchases
+
+    var restorePurchasesThrowableError: Error?
+    var restorePurchasesUnderlyingCallsCount = 0
+    var restorePurchasesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return restorePurchasesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = restorePurchasesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                restorePurchasesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    restorePurchasesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var restorePurchasesCalled: Bool {
+        return restorePurchasesCallsCount > 0
+    }
+    var restorePurchasesClosure: (() async throws -> Void)?
+
+    func restorePurchases() async throws {
+        if let error = restorePurchasesThrowableError {
+            throw error
+        }
+        restorePurchasesCallsCount += 1
+        try await restorePurchasesClosure?()
+    }
+    //MARK: - clearSubscriptionCache
+
+    var clearSubscriptionCacheUnderlyingCallsCount = 0
+    var clearSubscriptionCacheCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearSubscriptionCacheUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearSubscriptionCacheUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearSubscriptionCacheUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearSubscriptionCacheUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var clearSubscriptionCacheCalled: Bool {
+        return clearSubscriptionCacheCallsCount > 0
+    }
+    var clearSubscriptionCacheClosure: (() -> Void)?
+
+    func clearSubscriptionCache() {
+        clearSubscriptionCacheCallsCount += 1
+        clearSubscriptionCacheClosure?()
     }
     //MARK: - resetExistingBackup
 

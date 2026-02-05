@@ -172,13 +172,19 @@ protocol ZeroClientProxyProtocol: AnyObject {
     // MARK: - ZERO SUBSCRIPTION
     
     func syncSubscriptions() async
-    
+
     func fetchZeroSubscriptionSKU() async throws -> Product?
-    
-    func subscribeToZeroPro(sku: Product, metaData: [String: String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?)
-    
-    func getSubscriptionExpirationDate(product: Product) async -> Date?
-    
+
+    func subscribeToZeroPro(sku: Product, appAccountToken: UUID) async throws -> (Product.PurchaseResult, StoreKit.Transaction?)
+
+    func getSubscriptionExpirationDate(product: Product, appAccountToken: UUID) async -> Date?
+
+    func isSubscriptionOwnedByUser(product: Product, appAccountToken: UUID) async -> Bool
+
+    func restorePurchases() async throws
+
+    func clearSubscriptionCache()
+
     // MARK: - MATRIX APIS
     
     func resetExistingBackup() async -> Result<Void, ZeroClientProxyError>
