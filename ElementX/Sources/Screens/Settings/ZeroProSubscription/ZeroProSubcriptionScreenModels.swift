@@ -13,6 +13,8 @@ struct ZeroProSubcriptionScreenViewState: BindableState {
     var isZeroProSubscriber: Bool = false
     var canPurchaseSubscription: Bool = false
     
+    var subscriptionExpiration: Date?
+    
     var bindings: ZeroProSubcriptionScreenBindings
 }
 

@@ -68,6 +68,8 @@ struct ZeroProSubcriptionScreenView: View {
                             subscribeToZeroProButton
                         }
                     }
+                    
+                    Spacer(minLength: 20)
                 }
                 .frame(maxWidth: .infinity)
             }))
@@ -87,16 +89,8 @@ struct ZeroProSubcriptionScreenView: View {
     }
     
     private var subscribeToZeroProButton: some View {
-        Button(action: { showZeroSubscriptionModal.toggle() }) {
-            Text("Subscribe to ZERO Pro")
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.black)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.zero.bgAccentRest)
-                )
+        ZeroPrimaryButton(title: "Subscribe to ZERO Pro") {
+            showZeroSubscriptionModal.toggle()
         }
         .padding(.vertical, 8)
     }
@@ -104,7 +98,7 @@ struct ZeroProSubcriptionScreenView: View {
     private var manageZeroProSubscription: some View {
         VStack(alignment: .leading) {
             Text("Manage your subscription")
-                .font(.zero.bodyLG)
+                .font(.zero.bodyMD)
                 .foregroundStyle(.compound.textPrimary)
             
             Text("Review terms or manage your subscription.")
@@ -117,24 +111,26 @@ struct ZeroProSubcriptionScreenView: View {
                         .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                     
-                    Text("$\(ZeroConstants.ZERO_PRO_SUBSCRIPTION_USD) / month")
-                        .font(.zero.bodyLG)
+                    Text("$\(ZeroConstants.ZERO_PRO_SUBSCRIPTION_USD.description) / month")
+                        .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textPrimary)
                 }
                 
                 Spacer()
                 
-                VStack(alignment: .leading) {
-                    Text("Next billing date")
-                        .font(.zero.bodyMD)
-                        .foregroundStyle(.compound.textSecondary)
-                    
-                    Text("24 Feb, 2026")
-                        .font(.zero.bodyLG)
-                        .foregroundStyle(.compound.textPrimary)
+                if let expirationDate = context.viewState.subscriptionExpiration {
+                    VStack(alignment: .leading) {
+                        Text("Next billing date")
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                        
+                        Text(expirationDate.formatted(date: .abbreviated, time: .omitted))
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textPrimary)
+                    }
                 }
             }
-            .padding(.vertical, 6)
+            .padding(.vertical, 10)
         }
     }
 }
@@ -147,6 +143,7 @@ private struct ZeroSubscriptionModalView : View {
             Text("ZERO Pro Subscription")
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.compound.textPrimary)
+                .padding(.vertical, 6)
             
             VStack(alignment: .leading) {
                 HStack {
@@ -172,20 +169,11 @@ private struct ZeroSubscriptionModalView : View {
                     .stroke(.zero.bgAccentRest)
             )
             
-            Button(action: { onSubscribe() }) {
-                Text("Subscribe")
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.black)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.zero.bgAccentRest)
-                    )
+            ZeroPrimaryButton(title: "Subscribe") {
+                onSubscribe()
             }
             .padding(.vertical, 8)
         }
         .padding()
-        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
     }
 }

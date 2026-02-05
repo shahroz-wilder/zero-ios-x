@@ -10,6 +10,7 @@ import CallKit
 import Foundation
 import LocalAuthentication
 import Photos
+import StoreKit
 
 {% for import in argument.autoMockableImports %}
 import {{ import }}

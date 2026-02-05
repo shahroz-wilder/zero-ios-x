@@ -10,6 +10,7 @@ import Foundation
 import OrderedCollections
 
 import MatrixRustSDK
+import StoreKit
 
 class ZeroClientProxy: ZeroClientProxyProtocol {
     private let appSettings: AppSettings
@@ -958,6 +959,24 @@ class ZeroClientProxy: ZeroClientProxyProtocol {
             MXLog.error("Failed to verify password: \(error)")
             return .failure(.zeroError(error))
         }
+    }
+    
+    // MARK: - ZERO SUBSCRIPTION
+    
+    func syncSubscriptions() async {
+        await zeroApiProxy.subscriptionApi.syncSubscriptions()
+    }
+    
+    func fetchZeroSubscriptionSKU() async throws -> Product? {
+        return try await zeroApiProxy.subscriptionApi.fetchZeroSubscriptionSKU()
+    }
+    
+    func subscribeToZeroPro(sku: Product, metaData: [String : String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
+        return try await zeroApiProxy.subscriptionApi.subscribeToZeroPro(sku: sku, metaData: metaData)
+    }
+    
+    func getSubscriptionExpirationDate(product: Product) async -> Date? {
+        return await zeroApiProxy.subscriptionApi.getSubscriptionExpirationDate(product: product)
     }
     
     // MARK: - MATRIX APIS

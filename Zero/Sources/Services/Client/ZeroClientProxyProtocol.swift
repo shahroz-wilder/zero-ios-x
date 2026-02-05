@@ -7,6 +7,7 @@
 
 import Foundation
 import MatrixRustSDK
+import StoreKit
 
 enum ZeroClientProxyError: Error {
     case zeroError(Error)
@@ -167,6 +168,16 @@ protocol ZeroClientProxyProtocol: AnyObject {
     func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, ZeroClientProxyError>
     
     func loadFileFromMediaId(_ mediaId: String, key: String) async throws -> Result<URL, ZeroClientProxyError>
+    
+    // MARK: - ZERO SUBSCRIPTION
+    
+    func syncSubscriptions() async
+    
+    func fetchZeroSubscriptionSKU() async throws -> Product?
+    
+    func subscribeToZeroPro(sku: Product, metaData: [String: String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?)
+    
+    func getSubscriptionExpirationDate(product: Product) async -> Date?
     
     // MARK: - MATRIX APIS
     

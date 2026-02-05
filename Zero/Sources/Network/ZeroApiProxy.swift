@@ -21,6 +21,7 @@ protocol ZeroApiProxyProtocol {
     var metaDataApi: ZeroMetaDataApiProtocol { get }
     var postUserApi: ZeroPostUserApiProtocol { get }
     var stakingApi: ZeroStakingApiProtocol { get }
+    var subscriptionApi: ZeroSubscriptionServiceProtocol { get }
 }
 
 class ZeroApiProxy: ZeroApiProxyProtocol {
@@ -38,6 +39,7 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
     let metaDataApi: ZeroMetaDataApiProtocol
     let postUserApi: ZeroPostUserApiProtocol
     let stakingApi: ZeroStakingApiProtocol
+    let subscriptionApi: ZeroSubscriptionServiceProtocol
     
     init(appSettings: AppSettings) {
         /// Configure Zero Utlils, Services and APIs
@@ -55,5 +57,6 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
         metaDataApi = ZeroMetaDataApi(appSettings: appSettings)
         postUserApi = ZeroPostUserApi(appSettings: appSettings)
         stakingApi = ZeroStakingApi(appSettings: appSettings)
+        subscriptionApi = ZeroSubscriptionService()
     }
 }

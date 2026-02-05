@@ -13,6 +13,7 @@ import CallKit
 import Foundation
 import LocalAuthentication
 import Photos
+import StoreKit
 
 class AnalyticsClientMock: AnalyticsClientProtocol, @unchecked Sendable {
     var isRunning: Bool {
@@ -25231,6 +25232,253 @@ class ZeroClientProxyMock: ZeroClientProxyProtocol, @unchecked Sendable {
             return try await loadFileFromMediaIdKeyClosure(mediaId, key)
         } else {
             return loadFileFromMediaIdKeyReturnValue
+        }
+    }
+    //MARK: - syncSubscriptions
+
+    var syncSubscriptionsUnderlyingCallsCount = 0
+    var syncSubscriptionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return syncSubscriptionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = syncSubscriptionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                syncSubscriptionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    syncSubscriptionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var syncSubscriptionsCalled: Bool {
+        return syncSubscriptionsCallsCount > 0
+    }
+    var syncSubscriptionsClosure: (() async -> Void)?
+
+    func syncSubscriptions() async {
+        syncSubscriptionsCallsCount += 1
+        await syncSubscriptionsClosure?()
+    }
+    //MARK: - fetchZeroSubscriptionSKU
+
+    var fetchZeroSubscriptionSKUThrowableError: Error?
+    var fetchZeroSubscriptionSKUUnderlyingCallsCount = 0
+    var fetchZeroSubscriptionSKUCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchZeroSubscriptionSKUUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZeroSubscriptionSKUUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZeroSubscriptionSKUUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZeroSubscriptionSKUUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchZeroSubscriptionSKUCalled: Bool {
+        return fetchZeroSubscriptionSKUCallsCount > 0
+    }
+
+    var fetchZeroSubscriptionSKUUnderlyingReturnValue: Product?
+    var fetchZeroSubscriptionSKUReturnValue: Product? {
+        get {
+            if Thread.isMainThread {
+                return fetchZeroSubscriptionSKUUnderlyingReturnValue
+            } else {
+                var returnValue: Product?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZeroSubscriptionSKUUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZeroSubscriptionSKUUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZeroSubscriptionSKUUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchZeroSubscriptionSKUClosure: (() async throws -> Product?)?
+
+    func fetchZeroSubscriptionSKU() async throws -> Product? {
+        if let error = fetchZeroSubscriptionSKUThrowableError {
+            throw error
+        }
+        fetchZeroSubscriptionSKUCallsCount += 1
+        if let fetchZeroSubscriptionSKUClosure = fetchZeroSubscriptionSKUClosure {
+            return try await fetchZeroSubscriptionSKUClosure()
+        } else {
+            return fetchZeroSubscriptionSKUReturnValue
+        }
+    }
+    //MARK: - subscribeToZeroPro
+
+    var subscribeToZeroProSkuMetaDataThrowableError: Error?
+    var subscribeToZeroProSkuMetaDataUnderlyingCallsCount = 0
+    var subscribeToZeroProSkuMetaDataCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToZeroProSkuMetaDataUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToZeroProSkuMetaDataUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToZeroProSkuMetaDataUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToZeroProSkuMetaDataUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var subscribeToZeroProSkuMetaDataCalled: Bool {
+        return subscribeToZeroProSkuMetaDataCallsCount > 0
+    }
+    var subscribeToZeroProSkuMetaDataReceivedArguments: (sku: Product, metaData: [String: String])?
+    var subscribeToZeroProSkuMetaDataReceivedInvocations: [(sku: Product, metaData: [String: String])] = []
+
+    var subscribeToZeroProSkuMetaDataUnderlyingReturnValue: (Product.PurchaseResult, StoreKit.Transaction?)!
+    var subscribeToZeroProSkuMetaDataReturnValue: (Product.PurchaseResult, StoreKit.Transaction?)! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToZeroProSkuMetaDataUnderlyingReturnValue
+            } else {
+                var returnValue: (Product.PurchaseResult, StoreKit.Transaction?)? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToZeroProSkuMetaDataUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToZeroProSkuMetaDataUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToZeroProSkuMetaDataUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var subscribeToZeroProSkuMetaDataClosure: ((Product, [String: String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?))?
+
+    func subscribeToZeroPro(sku: Product, metaData: [String: String]) async throws -> (Product.PurchaseResult, StoreKit.Transaction?) {
+        if let error = subscribeToZeroProSkuMetaDataThrowableError {
+            throw error
+        }
+        subscribeToZeroProSkuMetaDataCallsCount += 1
+        subscribeToZeroProSkuMetaDataReceivedArguments = (sku: sku, metaData: metaData)
+        DispatchQueue.main.async {
+            self.subscribeToZeroProSkuMetaDataReceivedInvocations.append((sku: sku, metaData: metaData))
+        }
+        if let subscribeToZeroProSkuMetaDataClosure = subscribeToZeroProSkuMetaDataClosure {
+            return try await subscribeToZeroProSkuMetaDataClosure(sku, metaData)
+        } else {
+            return subscribeToZeroProSkuMetaDataReturnValue
+        }
+    }
+    //MARK: - getSubscriptionExpirationDate
+
+    var getSubscriptionExpirationDateProductUnderlyingCallsCount = 0
+    var getSubscriptionExpirationDateProductCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getSubscriptionExpirationDateProductUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getSubscriptionExpirationDateProductUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getSubscriptionExpirationDateProductUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getSubscriptionExpirationDateProductUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getSubscriptionExpirationDateProductCalled: Bool {
+        return getSubscriptionExpirationDateProductCallsCount > 0
+    }
+    var getSubscriptionExpirationDateProductReceivedProduct: Product?
+    var getSubscriptionExpirationDateProductReceivedInvocations: [Product] = []
+
+    var getSubscriptionExpirationDateProductUnderlyingReturnValue: Date?
+    var getSubscriptionExpirationDateProductReturnValue: Date? {
+        get {
+            if Thread.isMainThread {
+                return getSubscriptionExpirationDateProductUnderlyingReturnValue
+            } else {
+                var returnValue: Date?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getSubscriptionExpirationDateProductUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getSubscriptionExpirationDateProductUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getSubscriptionExpirationDateProductUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getSubscriptionExpirationDateProductClosure: ((Product) async -> Date?)?
+
+    func getSubscriptionExpirationDate(product: Product) async -> Date? {
+        getSubscriptionExpirationDateProductCallsCount += 1
+        getSubscriptionExpirationDateProductReceivedProduct = product
+        DispatchQueue.main.async {
+            self.getSubscriptionExpirationDateProductReceivedInvocations.append(product)
+        }
+        if let getSubscriptionExpirationDateProductClosure = getSubscriptionExpirationDateProductClosure {
+            return await getSubscriptionExpirationDateProductClosure(product)
+        } else {
+            return getSubscriptionExpirationDateProductReturnValue
         }
     }
     //MARK: - resetExistingBackup

@@ -2238,6 +2238,8 @@
 		79B2A79C2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */; };
 		79B2A79D2E2AFC9400A76430 /* ZeroCustomLogsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */; };
 		79B3120F2F12891400D55EA1 /* LinkNewDeviceServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA257D747DD7E6FFA5C2BE2D /* LinkNewDeviceServiceMock.swift */; };
+		79B318622F3477100006A79C /* ZeroSubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B318612F3476F80006A79C /* ZeroSubscriptionService.swift */; };
+		79B318632F3477100006A79C /* ZeroSubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B318612F3476F80006A79C /* ZeroSubscriptionService.swift */; };
 		79B714882EEBCE9E00EBD34C /* LinkNewDeviceScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA49F233E193590274FD19F /* LinkNewDeviceScreenCoordinator.swift */; };
 		79B714892EEBCEA200EBD34C /* LinkNewDeviceScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D09290C6791D6EF04F569E /* LinkNewDeviceScreenModels.swift */; };
 		79B7148A2EEBCEA600EBD34C /* LinkNewDeviceScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3DA6959C041E212A718DD3 /* LinkNewDeviceScreenViewModel.swift */; };
@@ -4196,6 +4198,7 @@
 		79B2A7942E2A856200A76430 /* UserRewardsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRewardsProtocol.swift; sourceTree = "<group>"; };
 		79B2A7982E2A885700A76430 /* FeedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProtocol.swift; sourceTree = "<group>"; };
 		79B2A79B2E2AFC8200A76430 /* ZeroCustomLogsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCustomLogsService.swift; sourceTree = "<group>"; };
+		79B318612F3476F80006A79C /* ZeroSubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSubscriptionService.swift; sourceTree = "<group>"; };
 		79BBCD842E8C06A60043CB6A /* BadgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
 		79C25B522E25A1EE00936A5D /* FeedMediaPreFetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreFetchService.swift; sourceTree = "<group>"; };
 		79C25B552E25A21600936A5D /* FeedMediaPreFetchProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreFetchProtocol.swift; sourceTree = "<group>"; };
@@ -5503,6 +5506,7 @@
 				797751812DDB2499006CF62D /* ZeroPostUserApi.swift */,
 				790935792E42519B003423D7 /* ZeroStakingApi.swift */,
 				18D5D9A62CEB576B00107940 /* ZeroRewardApi.swift */,
+				79B318612F3476F80006A79C /* ZeroSubscriptionService.swift */,
 				1882EB782C8F84BD001DA2A9 /* ZeroUserApi.swift */,
 				794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */,
 			);
@@ -11685,6 +11689,7 @@
 				18E9A5B62C9829970082DDA4 /* NotificationSettingsEditScreenModels.swift in Sources */,
 				18E9A5B72C9829970082DDA4 /* NotificationSettingsEditScreenRoomCell.swift in Sources */,
 				18D4679C2D109AD000861AA6 /* KnockRequestProxy.swift in Sources */,
+				79B318632F3477100006A79C /* ZeroSubscriptionService.swift in Sources */,
 				18D467A32D109B6200861AA6 /* TimelineMediaPreviewDetailsView.swift in Sources */,
 				18E9A5B82C9829970082DDA4 /* NotificationSettingsEditScreenViewModel.swift in Sources */,
 				18E9A5B92C9829970082DDA4 /* NotificationSettingsEditScreenViewModelProtocol.swift in Sources */,
@@ -13415,6 +13420,7 @@
 				5710AAB27D5D866292C1FE06 /* SessionVerificationScreenModels.swift in Sources */,
 				601AB75BD52B0B4276CEB84A /* SessionVerificationScreenStateMachine.swift in Sources */,
 				790393772D4CDE4B0022E293 /* ZPosts.swift in Sources */,
+				79B318622F3477100006A79C /* ZeroSubscriptionService.swift in Sources */,
 				18AF615B2CF85B7100921644 /* ZeroListRowLabelStyle.swift in Sources */,
 				4A8287E5281B44A8754BE509 /* SessionVerificationScreenViewModel.swift in Sources */,
 				762DB0973865293F0C3D3D7B /* SessionVerificationScreenViewModelProtocol.swift in Sources */,

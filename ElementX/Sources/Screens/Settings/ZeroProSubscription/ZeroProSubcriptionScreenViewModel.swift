@@ -7,7 +7,6 @@
 
 import Combine
 import SwiftUI
-import StoreKitPlus
 import StoreKit
 
 typealias ZeroProSubcriptionScreenViewModelType = StateStoreViewModel<ZeroProSubcriptionScreenViewState, ZeroProSubcriptionScreenViewAction>
@@ -15,17 +14,13 @@ typealias ZeroProSubcriptionScreenViewModelType = StateStoreViewModel<ZeroProSub
 class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, ZeroProSubcriptionScreenViewModelProtocol {
     
     private let clientProxy: ClientProxyProtocol
-    private let storeContext: StoreContext
-    private let storeService: StandardStoreService
+    private let zeroClientProxy: ZeroClientProxyProtocol
     
     private var zeroProSubscriptionProduct: Product?
     
     init(userSession: UserSessionProtocol) {
         self.clientProxy = userSession.clientProxy
-        // Initialize StoreKit
-        let products = ZeroSubscriptions.allCases
-        storeContext = StoreContext()
-        storeService = StandardStoreService(products: products)
+        self.zeroClientProxy = userSession.clientProxy.zeroClient
         
         super.init(
             initialViewState: .init(bindings: .init())
@@ -39,9 +34,6 @@ class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, 
             }
             .store(in: &cancellables)
         
-        // Sync StoreKit
-        syncStoreKit()
-        
         // Fetch Zero Pro Subscription Product
         fetchZeroProSubscription()
     }
@@ -53,23 +45,13 @@ class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, 
         }
     }
     
-    private func syncStoreKit() {
-        Task {
-            do {
-                try await storeService.syncStoreData(to: storeContext)
-            } catch {
-                MXLog.error("Failed to sync store data: \(error)")
-            }
-        }
-    }
-    
     private func fetchZeroProSubscription() {
         Task {
             do {
-                let products = try await storeService.getProducts()
-                if let zeroProSubscription = products.first {
+                if let zeroProSubscription = try await zeroClientProxy.fetchZeroSubscriptionSKU() {
                     zeroProSubscriptionProduct = zeroProSubscription
                     state.canPurchaseSubscription = true
+                    await fetchSubscriptionExpiration(zeroProSubscription)
                 } else {
                     state.canPurchaseSubscription = false
                 }
@@ -80,21 +62,24 @@ class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, 
         }
     }
     
+    private func fetchSubscriptionExpiration(_ zeroProSubscription: Product) async {
+        state.subscriptionExpiration = await zeroClientProxy.getSubscriptionExpirationDate(product: zeroProSubscription)
+    }
+    
     private func purchaseZeroProSubscription() {
         guard let zeroProSubscriptionProduct else {
             return
         }
         Task {
             do {
-                var options: Set<Product.PurchaseOption> = []
+                var metaData: [String: String] = [:]
                 if let currentUser = state.currentUser {
-                    options.insert(.custom(key: "user_id", value: currentUser.id.rawValue))
+                    metaData["user_id"] = currentUser.id.rawValue
                 }
-                let result = try await storeService.purchase(zeroProSubscriptionProduct, options: options)
+                let result = try await zeroClientProxy.subscribeToZeroPro(sku: zeroProSubscriptionProduct, metaData: metaData)
                 if case .success(_) = result.0 {
                     clientProxy.zeroClient.fetchZCurrentUser()
                 }
-                syncStoreKit()
             } catch {
                 MXLog.error("Failed to purchase zero pro subscription: \(error)")
             }
