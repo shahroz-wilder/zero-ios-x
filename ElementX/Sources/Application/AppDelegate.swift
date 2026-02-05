@@ -33,17 +33,17 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         BadgeManager.shared.clearBadgeAndNotifications()
         return true
     }
-
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
 //        print("\n\nDeviceToken *****:")
 //        print(deviceToken.reduce("", { $0 + String(format: "%02X", $1) }))
         callbacks.send(.registeredNotifications(deviceToken: deviceToken))
     }
-
+    
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         callbacks.send(.failedToRegisteredNotifications(error: error))
     }
-
+    
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         orientationLock
     }
