@@ -163,6 +163,7 @@ struct HomeScreenViewState: BindableState {
     
     var spaceFiltersEnabled = false
     
+    var shouldShowSpaceFilters = false
     var selectedSpaceFilter: SpaceServiceFilter?
     
     var shouldShowInActiveChatsTab: Bool = false

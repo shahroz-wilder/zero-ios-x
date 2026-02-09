@@ -405,7 +405,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     
     static let selectedSpaceViewModel = makeViewModel(selectionMode: .preSelected(SpaceServiceRoom.mock(name: "Awesome Space",
                                                                                                         isSpace: true,
-                                                                                                        joinRule: .private)))
+                                                                                                        joinRule: .invite)))
     
     static let selectedSpaceWithListViewModel = {
         let viewModel = makeViewModel()
@@ -417,7 +417,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         let viewModel = makeViewModel(isKnockingEnabled: true,
                                       selectionMode: .preSelected(SpaceServiceRoom.mock(name: "Awesome Space",
                                                                                         isSpace: true,
-                                                                                        joinRule: .private)))
+                                                                                        joinRule: .invite)))
         viewModel.context.selectedAccessType = .askToJoinWithSpaceMembers
         return viewModel
     }()

@@ -133,7 +133,7 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     }
 
     var joinRule: JoinRule? {
-        roomInfo.joinRule
+        roomInfo.joinRule.map(JoinRule.init)
     }
 
     var historyVisibility: RoomHistoryVisibility {
@@ -168,7 +168,7 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var joinedMembersCount: Int { Int(roomPreviewInfo.numJoinedMembers) }
     
     var joinRule: JoinRule? {
-        roomPreviewInfo.joinRule
+        roomPreviewInfo.joinRule.map(JoinRule.init)
     }
 
     var membership: Membership? {

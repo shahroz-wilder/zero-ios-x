@@ -232,6 +232,19 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
         delegateHandle = try client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
             self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+        } backgroundTaskErrorCallback: { error in
+            switch error {
+            case .panic(let message, let backtrace):
+                MXLog.error("Received background task panic: \(message ?? "Missing message")\nBacktrace:\n\(backtrace ?? "Missing backtrace")")
+                
+                if AppSettings.appBuildType == .debug || AppSettings.appBuildType == .nightly {
+                    fatalError(message ?? "")
+                }
+            case .error(let error):
+                MXLog.error("Received background task error: \(error)")
+            case .earlyTermination:
+                MXLog.error("Received background task early termination")
+            }
         })
         
         try await client.setUtdDelegate(utdDelegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
@@ -1351,9 +1364,12 @@ class ClientProxy: ClientProxyProtocol, ZeroClientProxyDelegate {
 
 private final class ClientDelegateWrapper: ClientDelegate {
     private let authErrorCallback: @Sendable (Bool) -> Void
+    private let backgroundTaskErrorCallback: @Sendable (MatrixRustSDK.BackgroundTaskFailureReason) -> Void
     
-    init(authErrorCallback: @escaping @Sendable (Bool) -> Void) {
+    init(authErrorCallback: @escaping @Sendable (Bool) -> Void,
+         backgroundTaskErrorCallback: @escaping @Sendable (MatrixRustSDK.BackgroundTaskFailureReason) -> Void) {
         self.authErrorCallback = authErrorCallback
+        self.backgroundTaskErrorCallback = backgroundTaskErrorCallback
     }
     
     // MARK: - ClientDelegate
@@ -1365,6 +1381,10 @@ private final class ClientDelegateWrapper: ClientDelegate {
     
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
+    }
+    
+    func onBackgroundTaskErrorReport(taskName: String, error: MatrixRustSDK.BackgroundTaskFailureReason) {
+        backgroundTaskErrorCallback(error)
     }
 }
 
@@ -1505,9 +1525,9 @@ private extension CreateRoomAccessType {
         case .askToJoin:
             .knock
         case .spaceMembers(let spaceID):
-            .restricted(rules: [.roomMembership(roomId: spaceID)])
+            .restricted(rules: [.roomMembership(roomID: spaceID)])
         case .askToJoinWithSpaceMembers(let spaceID):
-            .knockRestricted(rules: [.roomMembership(roomId: spaceID)])
+            .knockRestricted(rules: [.roomMembership(roomID: spaceID)])
         case .private, .public:
             nil
         }

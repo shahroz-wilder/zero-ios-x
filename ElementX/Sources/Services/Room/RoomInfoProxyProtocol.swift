@@ -94,7 +94,7 @@ extension RoomInfoProxyProtocol {
         }
         
         return switch joinRule {
-        case .invite, .knock, .restricted, .knockRestricted, .private:
+        case .invite, .knock, .restricted, .knockRestricted:
             true
         case .public:
             false

@@ -100,7 +100,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
         timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
-                                                                                                         filter: .eventTypeFilter(filter: excludedEventsFilter),
+                                                                                                         filter: .eventFilter(filter: excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
                                                                                                          trackReadReceipts: .messageLikeEvents,
@@ -170,7 +170,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .notificationToMessage)
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID,
                                                                                                           numContextEvents: numberOfEvents,
-                                                                                                          hideThreadedEvents: appSettings.threadsEnabled),
+                                                                                                          threadMode: .automatic(hideThreadedEvents: appSettings.threadsEnabled)),
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
@@ -236,7 +236,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         do {
             let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
             case .live: .live(hideThreadedEvents: false)
-            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, hideThreadedEvents: false)
+            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, threadMode: .automatic(hideThreadedEvents: false))
             case .thread(let eventID): .thread(rootEventId: eventID)
             case .pinned: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10)
             }
@@ -525,7 +525,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func updateJoinRule(_ rule: JoinRule) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.updateJoinRules(newRule: rule)
+            try await room.updateJoinRules(newRule: rule.rustValue)
             return .success(())
         } catch {
             MXLog.error("Failed updating join rule with error: \(error)")
@@ -838,7 +838,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    private let excludedEventsFilter: TimelineEventTypeFilter = {
+    private let excludedEventsFilter: TimelineEventFilter = {
         var stateEventFilters: [StateEventType] = [.roomAliases,
                                                    .roomCanonicalAlias,
                                                    .roomGuestAccess,
@@ -853,7 +853,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                    .policyRuleRoom,
                                                    .policyRuleServer,
                                                    .policyRuleUser]
-        return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
+        
+        return .excludeEventTypes(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
     }()
 }
 
