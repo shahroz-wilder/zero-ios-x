@@ -127,11 +127,11 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         state.bindings.alertInfo = .init(id: .unsavedChanges,
                                          title: L10n.dialogUnsavedChangesTitle,
                                          message: L10n.dialogUnsavedChangesDescription,
-                                         primaryButton: .init(title: L10n.actionSave) { Task { await self.saveUserDetails(shouldDismiss: true) } },
+                                         primaryButton: .init(title: L10n.actionSave) { Task { await self.saveUserDetails() } },
                                          secondaryButton: .init(title: L10n.actionDiscard, role: .cancel) { self.actionsSubject.send(.dismiss) })
     }
     
-    private func saveUserDetails(shouldDismiss: Bool = false) async {
+    private func saveUserDetails() async {
         let userIndicatorID = UUID().uuidString
         defer {
             userIndicatorController.retractIndicatorWithId(userIndicatorID)
@@ -166,9 +166,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                 try await group.waitForAll()
             }
             
-            if shouldDismiss {
-                actionsSubject.send(.dismiss)
-            }
+            actionsSubject.send(.dismiss)
         } catch {
             userIndicatorController.alertInfo = .init(id: .init(),
                                                       title: L10n.screenEditProfileErrorTitle,
